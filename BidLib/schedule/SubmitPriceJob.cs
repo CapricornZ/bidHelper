@@ -138,11 +138,20 @@ namespace tobid.scheduler.jobs
                     SubmitPriceJob.executeCount++;
                     logger.Debug("trigger Fired");
 
-                    if (SubmitPriceJob.price != 0)
-                        this.givePrice(SubmitPriceJob.operation.give, price: SubmitPriceJob.price);//出价;
-                    else
-                        this.giveDeltaPrice(SubmitPriceJob.operation.give, delta:SubmitPriceJob.bidOperation.price);//出价
-                    this.submit(this.EndPoint, SubmitPriceJob.operation.submit);//提交
+                    Boolean success = false;
+                    int submitCount = 0;
+                    while (!success && submitCount < 3) {//1次出价，2次重试
+
+                        submitCount++;
+                        if (SubmitPriceJob.price != 0)
+                            this.givePrice(SubmitPriceJob.operation.give, price: SubmitPriceJob.price);//出价;
+                        else{
+                            int delta = SubmitPriceJob.bidOperation.price > 300 ? 
+                                SubmitPriceJob.bidOperation.price-(submitCount-1)*100 : SubmitPriceJob.bidOperation.price;
+                            this.giveDeltaPrice(SubmitPriceJob.operation.give, delta: delta);//出价
+                        }
+                        success = this.submit(this.EndPoint, SubmitPriceJob.operation.submit);//提交
+                    }
                 }
 
                 Monitor.Exit(SubmitPriceJob.lockObj);
