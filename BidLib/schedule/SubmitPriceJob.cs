@@ -240,8 +240,8 @@ namespace tobid.scheduler.jobs
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
             int price = Int32.Parse(txtPrice);
             price += delta;
-            txtPrice = String.Format("{0:D}", price);
             logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
+            txtPrice = String.Format("{0:D}", price);
 
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             for (int i = 0; i < txtPrice.Length; i++)
