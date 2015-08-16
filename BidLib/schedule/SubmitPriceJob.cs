@@ -151,6 +151,7 @@ namespace tobid.scheduler.jobs
                             this.giveDeltaPrice(SubmitPriceJob.operation.give, delta: delta);//出价
                         }
                         success = this.submit(this.EndPoint, SubmitPriceJob.operation.submit);//提交
+                        logger.InfoFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
                     }
                 }
 
@@ -215,16 +216,9 @@ namespace tobid.scheduler.jobs
         private void giveDeltaPrice(GivePrice givePrice, int delta)
         {
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
-            logger.Info("\tBEGIN identify PRICE...");
-            byte[] content = new ScreenUtil().screenCaptureAsByte(givePrice.price.x, givePrice.price.y, 52, 18);
-            String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
-            int price = Int32.Parse(txtPrice);
-            price += delta;
-            txtPrice = String.Format("{0:D}", price);
-            logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
-
             //INPUT BOX
-            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
+
+            logger.Info("\tBEGIN make PRICE blank...");
             ScreenUtil.SetCursorPos(givePrice.inputBox.x, givePrice.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -239,7 +233,17 @@ namespace tobid.scheduler.jobs
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
+            logger.Info("\tEND   make PRICE blank...");
 
+            logger.Info("\tBEGIN identify PRICE...");
+            byte[] content = new ScreenUtil().screenCaptureAsByte(givePrice.price.x, givePrice.price.y, 52, 18);
+            String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+            int price = Int32.Parse(txtPrice);
+            price += delta;
+            txtPrice = String.Format("{0:D}", price);
+            logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
+
+            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             for (int i = 0; i < txtPrice.Length; i++)
             {
                 System.Threading.Thread.Sleep(50);
