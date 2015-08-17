@@ -232,11 +232,13 @@ namespace tobid.util.orc
             it = it.changeToGrayImage().changeToBlackWhiteImage();
             if (minNearSpots != 0)
                 it = it.removeBadBlock(1, 1, this.minNearSpots);
+            it.Image.Save(@"e:\p.bmp");
             for (int i = 0; i < this.offsetX.Length; i++)
             {
                 Rectangle cloneRect = new Rectangle(this.offsetX[i] + x, this.offsetY + y, this.width, this.height);
                 Bitmap subImg = it.Image.Clone(cloneRect, it.Image.PixelFormat);
                 this.subImgs.Add(subImg);
+                subImg.Save(String.Format(@"e:\p{0}.bmp", i));
                 String s = OrcUtil.getSingleChar(subImg, this.dict);
                 sb.Append(s);
             }

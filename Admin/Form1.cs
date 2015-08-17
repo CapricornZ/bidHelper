@@ -41,6 +41,8 @@ namespace Admin {
         private PictureBox[] pictureSubs;
 
         private String m_endPoint;
+
+        private IOrc m_orcLogin;
         private IOrc m_orcCaptcha;
         private IOrc m_orcCaptchaLoading;
         private IOrc[] m_orcCaptchaTip;
@@ -86,6 +88,7 @@ namespace Admin {
             IGlobalConfig configResource = Resource.getInstance(this.m_endPoint);//加载配置
 
             this.Text = configResource.tag;
+            this.m_orcLogin = configResource.Login;
             this.m_orcCaptcha = configResource.Captcha;//验证码
             this.m_orcPrice = configResource.Price;//价格识别
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
@@ -293,7 +296,7 @@ namespace Admin {
         #region 拍ACTION
         private void givePrice(String URL, GivePrice points, int deltaPrice) {
 
-            logger.InfoFormat("BEGIN 出价格(delta : {0})", deltaPrice);
+            logger.WarnFormat("BEGIN 出价格(delta : {0})", deltaPrice);
             byte[] content = new ScreenUtil().screenCaptureAsByte(points.price.x, points.price.y, 52, 18);
             this.pictureBox2.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             logger.Info("\tBEGIN identify Price");
@@ -336,7 +339,7 @@ namespace Admin {
 
         private void subimt(String URL, SubmitPrice points, CaptchaInput inputType) {
 
-            logger.InfoFormat("BEGIN 验证码({0})", inputType);
+            logger.WarnFormat("BEGIN 验证码({0})", inputType);
 
             ScreenUtil.SetCursorPos(points.inputBox.x, points.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -373,13 +376,13 @@ namespace Admin {
 
             logger.InfoFormat("\tBEGIN input ACTIVE CAPTCHA [{0}]", inputType);
             String strActive = "";
-            if (CaptchaInput.LEFT == inputType) {
+            if (CaptchaInput.LEFT == inputType)
                 strActive = txtCaptcha.Substring(0, 4);
-            } else if (CaptchaInput.MIDDLE == inputType) {
+            else if (CaptchaInput.MIDDLE == inputType)
                 strActive = txtCaptcha.Substring(1, 4);
-            } else if (CaptchaInput.RIGHT == inputType) {
-                strActive = txtCaptcha.Substring(2, 4);                
-            }
+            else if (CaptchaInput.RIGHT == inputType)
+                strActive = txtCaptcha.Substring(2, 4);
+
             for (int i = 0; i < strActive.Length; i++) {
                 ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
                 System.Threading.Thread.Sleep(50);
@@ -391,7 +394,7 @@ namespace Admin {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dr == DialogResult.OK) {
-                    logger.InfoFormat("用户选择确定出价");
+                    logger.Info("用户选择确定出价");
                     ScreenUtil.SetCursorPos(points.buttons[0].x, points.buttons[0].y);//确定按钮
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -399,7 +402,7 @@ namespace Admin {
                     ScreenUtil.SetCursorPos(points.buttons[0].x + 188 / 2, points.buttons[0].y - 10);//确定按钮
                     //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 } else {
-                    logger.InfoFormat("用户选择取消出价");
+                    logger.Warn("用户选择取消出价");
                     ScreenUtil.SetCursorPos(points.buttons[0].x + 188, points.buttons[0].y);//取消按钮
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 }
@@ -408,5 +411,85 @@ namespace Admin {
         }
         #endregion
 
+        static void ie_DocumentComplete(object pDisp, ref object URL) {
+
+            DocComplete.Set();
+            //"testBtnConfirm";
+            //"protocolBtnConfirm";
+            //mshtml.IHTMLDocument2 doc2 = (mshtml.IHTMLDocument2)Browser.Document;
+            //mshtml.IHTMLElement confirm1 = doc2.all.item("testBtnConfirm") as mshtml.IHTMLElement;
+            //confirm1.click();
+            //System.Threading.Thread.Sleep(1000);
+
+            //mshtml.IHTMLElement confirm2 = doc2.all.item("protocolBtnConfirm") as mshtml.IHTMLElement;
+            //confirm2.click();
+            //System.Threading.Thread.Sleep(1000);
+        }
+
+        private static System.Threading.AutoResetEvent DocComplete = new System.Threading.AutoResetEvent(false);
+        private void button7_Click(object sender, EventArgs e) {
+
+            System.Diagnostics.Process[] myProcesses;
+            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
+            foreach (System.Diagnostics.Process instance in myProcesses) {
+                instance.Kill();
+            }
+
+            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Threading.Thread.Sleep(1000);
+
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.Contains("about:blank")) {
+
+                    Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
+                    //Browser.Navigate("https://paimai.alltobid.com/bid/2015081501/login.htm");
+                    Browser.Navigate("http://192.168.1.18/chapta.ws/command/login.do");
+                    DocComplete.WaitOne();
+                    //"testBtnConfirm";
+                    //"protocolBtnConfirm";
+                    mshtml.IHTMLDocument2 doc2 = (mshtml.IHTMLDocument2)Browser.Document;
+                    mshtml.IHTMLElement confirm1 = doc2.all.item("testBtnConfirm") as mshtml.IHTMLElement;
+                    if(null != confirm1)
+                        confirm1.click();
+                    System.Threading.Thread.Sleep(1000);
+
+                    mshtml.IHTMLElement confirm2 = doc2.all.item("protocolBtnConfirm") as mshtml.IHTMLElement;
+                    if(null != confirm2)
+                        confirm2.click();
+                    System.Threading.Thread.Sleep(1000);
+
+                    //"bidnumber";
+                    //"bidpassword";
+                    //"idcard";
+                    //"imagenumber";
+                    //"imgcode";
+                    //"btnlogin";
+                    mshtml.IHTMLElement imgCode = doc2.images.item("imgcode") as mshtml.IHTMLElement;
+                    mshtml.HTMLBody body = doc2.body as mshtml.HTMLBody;
+                    mshtml.IHTMLControlRange rang = body.createControlRange() as mshtml.IHTMLControlRange;
+                    mshtml.IHTMLControlElement img = imgCode as mshtml.IHTMLControlElement;
+                    rang.add(img);
+                    rang.execCommand("Copy", false, null);  //拷贝到内存
+                    Image numImage = Clipboard.GetImage();
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    numImage.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    String strCaptcha = this.m_orcLogin.IdentifyStringFromPic(new Bitmap(ms), 5);
+
+                    mshtml.IHTMLElementCollection inputs = (mshtml.IHTMLElementCollection)doc2.all.tags("INPUT");
+                    mshtml.HTMLInputElement input1 = (mshtml.HTMLInputElement)inputs.item("bidnumber");
+                    input1.value = "52869259";
+                    mshtml.HTMLInputElement input2 = (mshtml.HTMLInputElement)inputs.item("bidpassword");
+                    input2.value = "3621";
+                    mshtml.HTMLInputElement input3 = (mshtml.HTMLInputElement)inputs.item("idcard");
+                    input3.value = "ryo_hune";
+                    mshtml.HTMLInputElement input4 = (mshtml.HTMLInputElement)inputs.item("imagenumber");
+                    input4.value = strCaptcha;
+
+                    mshtml.IHTMLElement loginBtn = doc2.all.item("btnlogin") as mshtml.IHTMLElement;
+                    //loginBtn.click();
+                }
+            }
+        }
     }
 }

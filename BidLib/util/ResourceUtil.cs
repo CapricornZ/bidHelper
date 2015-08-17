@@ -20,11 +20,13 @@ namespace tobid.util
         IOrc Loading { get; }
         IOrc[] Tips { get; }
         IOrc Captcha { get; }
+        IOrc Login { get; }
     }
 
     public class Resource : IGlobalConfig
     {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Resource));
+        private orc.IOrc m_login;
         private orc.IOrc m_captcha;
         private orc.IOrc m_price;
         private orc.IOrc m_loading;
@@ -68,6 +70,7 @@ namespace tobid.util
             IDictionary<Bitmap, String> dictTips = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictTipsNo = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictCaptcha = new Dictionary<Bitmap, String>();
+            IDictionary<Bitmap, String> dictLogin = new Dictionary<Bitmap, String>();
 
             ZipInputStream zip = new ZipInputStream(stream);
             ZipEntry entry = null;
@@ -97,8 +100,9 @@ namespace tobid.util
                         dictPrice.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("loading/"))
                         dictLoading.Add(bitmap, array[array.Length - 2]);
-                    else if (entry.Name.ToLower().StartsWith("captcha.tip/"))
-                    {
+                    else if (entry.Name.ToLower().StartsWith("login/"))
+                        dictLogin.Add(bitmap, array[array.Length - 2]);
+                    else if (entry.Name.ToLower().StartsWith("captcha.tip/")) {
                         if (entry.Name.ToLower().StartsWith("captcha.tip/no/"))
                             dictTipsNo.Add(bitmap, array[array.Length - 2]);
                         else
@@ -108,6 +112,7 @@ namespace tobid.util
             }
 
             rtn.m_tag = global.tag;
+            rtn.m_login = OrcUtil.getInstance(global.login, dictLogin);
             rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_tips = new IOrc[]{
@@ -119,10 +124,13 @@ namespace tobid.util
             return rtn;
         }
 
+        #region IGlobalConfig接口
         public String tag { get { return this.m_tag; } }
         public IOrc Price { get { return this.m_price; } }
         public IOrc Loading { get { return this.m_loading; } }
         public IOrc[] Tips { get { return this.m_tips; } }
         public IOrc Captcha { get { return this.m_captcha; } }
+        public IOrc Login { get { return this.m_login; } }
+        #endregion
     }
 }

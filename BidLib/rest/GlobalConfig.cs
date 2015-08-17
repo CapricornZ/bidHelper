@@ -39,5 +39,6 @@ namespace tobid.rest
         public OrcTipConfig tips1 { get { return this.orcConfigs[2] as OrcTipConfig; } }
         public OrcConfig loading { get { return this.orcConfigs[3] as OrcConfig; } }
         public OrcConfig captcha { get { return this.orcConfigs[4] as OrcConfig; } }
+        public OrcConfig login { get { return this.orcConfigs[5] as OrcConfig; } }
     }
 }

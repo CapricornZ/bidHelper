@@ -242,6 +242,7 @@
             this.button7.TabIndex = 11;
             this.button7.Text = "Sync2Server";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button6
             // 

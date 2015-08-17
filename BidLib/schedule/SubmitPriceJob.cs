@@ -136,7 +136,7 @@ namespace tobid.scheduler.jobs
                     //TODO:这里可以加入逻辑，如果this.submit成功，SubmitPriceJob.executeCount++。
                     //这样在下一秒可以自动执行一次未成功的出价。但是DeltaPrice应该-=100，同时需要保证DeltaPrice>=+300
                     SubmitPriceJob.executeCount++;
-                    logger.Debug("trigger Fired");
+                    logger.Warn("trigger Fired");
 
                     Boolean success = false;
                     int submitCount = 0;
@@ -151,7 +151,7 @@ namespace tobid.scheduler.jobs
                             this.giveDeltaPrice(SubmitPriceJob.operation.give, delta: delta);//出价
                         }
                         success = this.submit(this.EndPoint, SubmitPriceJob.operation.submit);//提交
-                        logger.InfoFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
+                        logger.WarnFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
                     }
                 }
 

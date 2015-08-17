@@ -210,7 +210,7 @@ namespace Helper
             logger.InfoFormat("BEGIN givePRICE({0})", txtPrice);
 
             //INPUT BOX
-            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
+            logger.WarnFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(bid.give.inputBox.x, bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -272,7 +272,7 @@ namespace Helper
             txtPrice = String.Format("{0:D}", price);
 
             //INPUT BOX
-            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
+            logger.WarnFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(bid.give.inputBox.x, bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
