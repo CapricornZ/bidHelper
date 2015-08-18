@@ -19,7 +19,16 @@ namespace tobid.rest.position
     /// <summary>
     /// 出价的坐标
     /// </summary>
-    public class GivePrice
+    public class GivePriceStep1 {
+
+        public Position[] inputBox { get; set; }
+        public Position button { get; set; }
+    }
+
+    /// <summary>
+    /// 出价的坐标
+    /// </summary>
+    public class GivePriceStep2
     {
         public Position price { get; set; }
         public Position inputBox { get; set; }
@@ -36,12 +45,17 @@ namespace tobid.rest.position
         public Position[] buttons { get; set; }
     }
 
+    public class Login {
+        public GivePriceStep1 give { get; set; }
+        public SubmitPrice submit { get; set; }
+    }
+
     /// <summary>
     /// 竞价坐标
     /// </summary>
     public class Bid
     {
-        public GivePrice give { get; set; }
+        public GivePriceStep2 give { get; set; }
         public SubmitPrice submit { get; set; }
     }
 }

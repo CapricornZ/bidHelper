@@ -44,17 +44,6 @@ namespace tobid.rest
     }
 
     /// <summary>
-    /// 第二阶段出价
-    /// </summary>
-    public class BidOperation : Operation
-    {
-        /// <summary>
-        /// 原价基础上Delta价格
-        /// </summary>
-        public int price { get; set; }
-    }
-
-    /// <summary>
     /// 登录
     /// </summary>
     public class LoginOperation : Operation
@@ -69,6 +58,19 @@ namespace tobid.rest
     /// </summary>
     public class Step1Operation : Operation
     {
+        /// <summary>
+        /// 第一阶段实际价格
+        /// </summary>
+        public int price { get; set; }
+    }
+
+    /// <summary>
+    /// 第二阶段出价
+    /// </summary>
+    public class Step2Operation : Operation {
+        /// <summary>
+        /// 原价基础上Delta价格
+        /// </summary>
         public int price { get; set; }
     }
 }

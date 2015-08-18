@@ -41,7 +41,6 @@
             this.btnCheckPrice = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.textURL = new System.Windows.Forms.TextBox();
@@ -52,6 +51,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub5)).BeginInit();
@@ -236,23 +236,13 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(138, 42);
+            this.button7.Location = new System.Drawing.Point(57, 43);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.Size = new System.Drawing.Size(93, 23);
             this.button7.TabIndex = 11;
-            this.button7.Text = "Sync2Server";
+            this.button7.Text = "配置阶段(&1)...";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(57, 42);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 10;
-            this.button6.Text = "配置坐标...";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button_ConfigBid_Click);
             // 
             // radioButton2
             // 
@@ -346,6 +336,16 @@
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(156, 43);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(98, 23);
+            this.button6.TabIndex = 10;
+            this.button6.Text = "配置阶段(&2)...";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button_ConfigBid_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,7 +400,6 @@
         private System.Windows.Forms.Button btnCheckPrice;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.TextBox textURL;
@@ -411,6 +410,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Button button6;
     }
 }
 

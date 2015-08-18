@@ -25,7 +25,7 @@ namespace tobid.scheduler.jobs
         private static Object lockObj = new Object();
 
         private static int price = 0;
-        private static BidOperation bidOperation;
+        private static Step2Operation bidOperation;
         private static int executeCount = 1;
         private static Bid operation = null;
 
@@ -44,9 +44,9 @@ namespace tobid.scheduler.jobs
             this.m_orcCaptcha = orcCaptcha;
         }
 
-        public static BidOperation getConfig()
+        public static Step2Operation getConfig()
         {
-            BidOperation ops = new BidOperation();
+            Step2Operation ops = new Step2Operation();
             ops.expireTime = SubmitPriceJob.bidOperation.expireTime;
             ops.startTime = SubmitPriceJob.bidOperation.startTime;
             ops.content = SubmitPriceJob.bidOperation.content;
@@ -62,7 +62,7 @@ namespace tobid.scheduler.jobs
             return SubmitPriceJob.operation;
         }
 
-        public static Boolean setConfig(int Price, BidOperation operation)
+        public static Boolean setConfig(int Price, Step2Operation operation)
         {
             logger.Info("setConfig {...}");
             Boolean rtn = false;
@@ -90,7 +90,7 @@ namespace tobid.scheduler.jobs
             return rtn;
         }
 
-        public static Boolean setConfig(BidOperation operation)
+        public static Boolean setConfig(Step2Operation operation)
         {
             logger.Info("setConfig {...}");
             Boolean rtn = false;
@@ -168,7 +168,7 @@ namespace tobid.scheduler.jobs
         /// </summary>
         /// <param name="givePrice">坐标</param>
         /// <param name="price">绝对价</param>
-        private void givePrice(GivePrice givePrice, int price)
+        private void givePrice(GivePriceStep2 givePrice, int price)
         {
             logger.InfoFormat("BEGIN givePRICE(price : {0})", price);
             logger.Info("\tBEGIN identify PRICE...");
@@ -213,7 +213,7 @@ namespace tobid.scheduler.jobs
         /// </summary>
         /// <param name="givePrice">坐标</param>
         /// <param name="delta">差价</param>
-        private void giveDeltaPrice(GivePrice givePrice, int delta)
+        private void giveDeltaPrice(GivePriceStep2 givePrice, int delta)
         {
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
             //INPUT BOX

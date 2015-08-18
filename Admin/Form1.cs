@@ -49,6 +49,7 @@ namespace Admin {
         private IOrc m_orcPrice;
         private CaptchaUtil m_orcCaptchaTipsUtil;
         private BidForm m_bidForm;
+        private LogForm m_loginForm;
 
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceThread;
@@ -84,6 +85,7 @@ namespace Admin {
             Form.CheckForIllegalCrossThreadCalls = false;
             this.textURL.Text = this.m_endPoint;
             this.m_bidForm = new BidForm();
+            this.m_loginForm = new LogForm();
 
             IGlobalConfig configResource = Resource.getInstance(this.m_endPoint);//加载配置
 
@@ -243,13 +245,6 @@ namespace Admin {
             
         }
 
-        private void button_ConfigBid_Click(object sender, EventArgs e) {
-
-            this.m_bidForm.endPoint = this.textURL.Text;
-            this.m_bidForm.ShowDialog(this);
-            this.m_bidForm.BringToFront();
-        }
-
         private void receiveOperation(Operation operation) {
             try {
                 //ShowInfoJob showInfo = new ShowInfoJob("MESSAGE!");
@@ -260,7 +255,7 @@ namespace Admin {
             }
 
             if (null != operation) {
-                BidOperation bidOps = (BidOperation)operation;
+                Step2Operation bidOps = (Step2Operation)operation;
                 Bid bid = Newtonsoft.Json.JsonConvert.DeserializeObject<Bid>(operation.content);
                 this.m_bidForm.bid = bid;
                 this.toolStripStatusLabel1.Text = String.Format("配置：+{5} @[{4}], 价格[{0},{1}], 校验码[{2},{3}]", bid.give.price.x, bid.give.price.y, bid.submit.captcha[0].x, bid.submit.captcha[0].y, operation.startTime, bidOps.price);
@@ -294,7 +289,7 @@ namespace Admin {
 
 
         #region 拍ACTION
-        private void givePrice(String URL, GivePrice points, int deltaPrice) {
+        private void givePrice(String URL, GivePriceStep2 points, int deltaPrice) {
 
             logger.WarnFormat("BEGIN 出价格(delta : {0})", deltaPrice);
             byte[] content = new ScreenUtil().screenCaptureAsByte(points.price.x, points.price.y, 52, 18);
@@ -426,70 +421,19 @@ namespace Admin {
             //System.Threading.Thread.Sleep(1000);
         }
 
+        private void button_ConfigBid_Click(object sender, EventArgs e) {
+
+            this.m_bidForm.endPoint = this.textURL.Text;
+            this.m_bidForm.ShowDialog(this);
+            this.m_bidForm.BringToFront();
+        }
+
         private static System.Threading.AutoResetEvent DocComplete = new System.Threading.AutoResetEvent(false);
         private void button7_Click(object sender, EventArgs e) {
 
-            System.Diagnostics.Process[] myProcesses;
-            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
-            foreach (System.Diagnostics.Process instance in myProcesses) {
-                instance.Kill();
-            }
-
-            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
-            System.Threading.Thread.Sleep(1000);
-
-            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
-            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
-                if (Browser.LocationURL.Contains("about:blank")) {
-
-                    Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
-                    //Browser.Navigate("https://paimai.alltobid.com/bid/2015081501/login.htm");
-                    Browser.Navigate("http://192.168.1.18/chapta.ws/command/login.do");
-                    DocComplete.WaitOne();
-                    //"testBtnConfirm";
-                    //"protocolBtnConfirm";
-                    mshtml.IHTMLDocument2 doc2 = (mshtml.IHTMLDocument2)Browser.Document;
-                    mshtml.IHTMLElement confirm1 = doc2.all.item("testBtnConfirm") as mshtml.IHTMLElement;
-                    if(null != confirm1)
-                        confirm1.click();
-                    System.Threading.Thread.Sleep(1000);
-
-                    mshtml.IHTMLElement confirm2 = doc2.all.item("protocolBtnConfirm") as mshtml.IHTMLElement;
-                    if(null != confirm2)
-                        confirm2.click();
-                    System.Threading.Thread.Sleep(1000);
-
-                    //"bidnumber";
-                    //"bidpassword";
-                    //"idcard";
-                    //"imagenumber";
-                    //"imgcode";
-                    //"btnlogin";
-                    mshtml.IHTMLElement imgCode = doc2.images.item("imgcode") as mshtml.IHTMLElement;
-                    mshtml.HTMLBody body = doc2.body as mshtml.HTMLBody;
-                    mshtml.IHTMLControlRange rang = body.createControlRange() as mshtml.IHTMLControlRange;
-                    mshtml.IHTMLControlElement img = imgCode as mshtml.IHTMLControlElement;
-                    rang.add(img);
-                    rang.execCommand("Copy", false, null);  //拷贝到内存
-                    Image numImage = Clipboard.GetImage();
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    numImage.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                    String strCaptcha = this.m_orcLogin.IdentifyStringFromPic(new Bitmap(ms), 5);
-
-                    mshtml.IHTMLElementCollection inputs = (mshtml.IHTMLElementCollection)doc2.all.tags("INPUT");
-                    mshtml.HTMLInputElement input1 = (mshtml.HTMLInputElement)inputs.item("bidnumber");
-                    input1.value = "52869259";
-                    mshtml.HTMLInputElement input2 = (mshtml.HTMLInputElement)inputs.item("bidpassword");
-                    input2.value = "3621";
-                    mshtml.HTMLInputElement input3 = (mshtml.HTMLInputElement)inputs.item("idcard");
-                    input3.value = "ryo_hune";
-                    mshtml.HTMLInputElement input4 = (mshtml.HTMLInputElement)inputs.item("imagenumber");
-                    input4.value = strCaptcha;
-
-                    mshtml.IHTMLElement loginBtn = doc2.all.item("btnlogin") as mshtml.IHTMLElement;
-                    //loginBtn.click();
-                }
-            }
+            this.m_loginForm.endPoint = this.textURL.Text;
+            this.m_loginForm.ShowDialog(this);
+            this.m_loginForm.BringToFront();
         }
     }
 }

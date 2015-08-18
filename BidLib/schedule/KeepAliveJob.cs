@@ -55,9 +55,9 @@ namespace tobid.scheduler.jobs
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {
-                    if (operation is tobid.rest.BidOperation)
+                    if (operation is tobid.rest.Step2Operation)
                     {
-                        if (SubmitPriceJob.setConfig(operation as BidOperation))
+                        if (SubmitPriceJob.setConfig(operation as Step2Operation))
                             this.receiveOperation(operation);
                     }
                     else if (operation is tobid.rest.LoginOperation)

@@ -187,7 +187,7 @@ namespace Helper
         }
 
         private void receiveOperation(Operation operation) {
-            BidOperation bid = operation as BidOperation;
+            Step2Operation bid = operation as Step2Operation;
             if (null != bid) {
                 this.textBox1.Text = bid.startTime.ToString("MM/dd HH:mm:ss");
                 this.textBox2.Text = String.Format("+{0}", bid.price);
@@ -476,7 +476,7 @@ namespace Helper
             DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
                 messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
-                BidOperation bidOps = SubmitPriceJob.getConfig();
+                Step2Operation bidOps = SubmitPriceJob.getConfig();
                 bidOps.updateTime = DateTime.Now;
                 bidOps.startTime = this.dateTimePicker1.Value;
                 bidOps.expireTime = bidOps.startTime.AddHours(1);

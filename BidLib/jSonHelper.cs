@@ -32,7 +32,7 @@ namespace tobid.rest.json
             JValue category = (JValue)this.GetType("type", jObject);
             String value = category.ToString();
             if ("BID".Equals(value))
-                return new BidOperation();
+                return new Step2Operation();
             else if ("LOGIN".Equals(value))
                 return new LoginOperation();
             else if ("STEP1".Equals(value))
