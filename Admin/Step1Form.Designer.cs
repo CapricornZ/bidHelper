@@ -1,5 +1,5 @@
 ﻿namespace Admin {
-    partial class LogForm {
+    partial class Step1Form {
         /// <summary>
         /// Required designer variable.
         /// </summary>

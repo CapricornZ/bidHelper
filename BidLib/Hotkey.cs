@@ -17,7 +17,10 @@ namespace tobid.util
             Alt = 1,
             Ctrl = 2,
             Shift = 4,
-            WindowsKey = 8
+            WindowsKey = 8,
+            CtrlShift = 6,
+            CtrlAlt = 3,
+            AltShift = 5
         }
 
         [DllImport("user32.dll", SetLastError = true)]

@@ -49,8 +49,8 @@ namespace Admin {
         private IOrc[] m_orcCaptchaTip;
         private IOrc m_orcPrice;
         private CaptchaUtil m_orcCaptchaTipsUtil;
-        private BidForm m_bidForm;
-        private LogForm m_loginForm;
+        private Step2Form m_bidForm;
+        private Step1Form m_loginForm;
 
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceThread;
@@ -86,8 +86,8 @@ namespace Admin {
             System.Console.WriteLine(logger.IsDebugEnabled);
             Form.CheckForIllegalCrossThreadCalls = false;
             this.textURL.Text = this.m_endPoint;
-            this.m_bidForm = new BidForm();
-            this.m_loginForm = new LogForm();
+            this.m_bidForm = new Step2Form();
+            this.m_loginForm = new Step1Form();
 
             IGlobalConfig configResource = Resource.getInstance(this.m_endPoint);//加载配置
 
@@ -125,7 +125,7 @@ namespace Admin {
             Hotkey.RegisterHotKey(this.Handle, 120, Hotkey.KeyModifiers.Ctrl, Keys.Up);
             Hotkey.RegisterHotKey(this.Handle, 122, Hotkey.KeyModifiers.Ctrl, Keys.Right);
             Hotkey.RegisterHotKey(this.Handle, 123, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
-            Hotkey.RegisterHotKey(this.Handle, 155, Hotkey.KeyModifiers.Ctrl, Keys.C);
+            Hotkey.RegisterHotKey(this.Handle, 155, Hotkey.KeyModifiers.CtrlShift, Keys.Enter);
         }
 
         protected override void WndProc(ref Message m) {
@@ -178,7 +178,7 @@ namespace Admin {
                             this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.AUTO);
                             break;
                         case 155://CTRL+C
-                            logger.Info("HOT KEY [CTRL+C]");
+                            logger.Info("HOT KEY [CTRL+SHIFT+ENTER]");
                             this.textPosition.Text = this.textMousePos.Text;
                             break;
                     }

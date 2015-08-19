@@ -1,5 +1,5 @@
 ﻿namespace Admin {
-    partial class BidForm {
+    partial class Step2Form {
         /// <summary>
         /// Required designer variable.
         /// </summary>
