@@ -18,7 +18,8 @@ using tobid.scheduler.jobs;
 namespace Admin {
 
     enum CaptchaInput {
-        LEFT, MIDDLE, RIGHT
+        LEFT, MIDDLE, RIGHT,
+        AUTO
     }
 
     public partial class Form1 : Form {
@@ -71,6 +72,7 @@ namespace Admin {
             Hotkey.UnregisterHotKey(this.Handle, 121);
             Hotkey.UnregisterHotKey(this.Handle, 120);
             Hotkey.UnregisterHotKey(this.Handle, 122);
+            Hotkey.UnregisterHotKey(this.Handle, 123);
             Hotkey.UnregisterHotKey(this.Handle, 155);
 
             if (null != this.keepAliveThread)
@@ -108,7 +110,7 @@ namespace Admin {
 
             //Action任务配置
             SchedulerConfiguration config1S = new SchedulerConfiguration(1000);
-            config1S.Job = new SubmitPriceJob(this.m_endPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, m_orcCaptcha);
+            config1S.Job = new SubmitPriceStep2Job(this.m_endPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, m_orcCaptcha);
             m_schedulerSubmit = new Scheduler(config1S);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
@@ -122,8 +124,8 @@ namespace Admin {
             Hotkey.RegisterHotKey(this.Handle, 121, Hotkey.KeyModifiers.Ctrl, Keys.Left);
             Hotkey.RegisterHotKey(this.Handle, 120, Hotkey.KeyModifiers.Ctrl, Keys.Up);
             Hotkey.RegisterHotKey(this.Handle, 122, Hotkey.KeyModifiers.Ctrl, Keys.Right);
-            Hotkey.RegisterHotKey(this.Handle, 155, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
-
+            Hotkey.RegisterHotKey(this.Handle, 123, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
+            Hotkey.RegisterHotKey(this.Handle, 155, Hotkey.KeyModifiers.Ctrl, Keys.C);
         }
 
         protected override void WndProc(ref Message m) {
@@ -171,8 +173,12 @@ namespace Admin {
                             logger.Info("HOT KEY [CTRL+RIGHT]");
                             this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.RIGHT);
                             break;
-                        case 155://ENTER
+                        case 123://CTRL+ENTER
                             logger.Info("HOT KEY [CTRL+ENTER]");
+                            this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.AUTO);
+                            break;
+                        case 155://CTRL+C
+                            logger.Info("HOT KEY [CTRL+C]");
                             this.textPosition.Text = this.textMousePos.Text;
                             break;
                     }
@@ -256,7 +262,7 @@ namespace Admin {
 
             if (null != operation) {
                 Step2Operation bidOps = (Step2Operation)operation;
-                Bid bid = Newtonsoft.Json.JsonConvert.DeserializeObject<Bid>(operation.content);
+                BidStep2 bid = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep2>(operation.content);
                 this.m_bidForm.bid = bid;
                 this.toolStripStatusLabel1.Text = String.Format("配置：+{5} @[{4}], 价格[{0},{1}], 校验码[{2},{3}]", bid.give.price.x, bid.give.price.y, bid.submit.captcha[0].x, bid.submit.captcha[0].y, operation.startTime, bidOps.price);
             }
@@ -318,13 +324,13 @@ namespace Admin {
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
 
             for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(100);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
             }
             logger.Info("\tEND   input PRICE");
 
             //点击出价
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(100);
             logger.Info("\tBEGIN click button[出价]");
             ScreenUtil.SetCursorPos(points.button.x, points.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -354,10 +360,13 @@ namespace Admin {
             logger.Info("\tEND   make INPUTBOX blank");
 
             byte[] content = new ScreenUtil().screenCaptureAsByte(points.captcha[0].x, points.captcha[0].y, 128, 28);
+            byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(points.captcha[1].x, points.captcha[1].y, 112, 16);
             Bitmap bitmap = new Bitmap(new MemoryStream(content));
             this.pictureBox1.Image = bitmap;
             String strLoading = this.m_orcCaptchaLoading.IdentifyStringFromPic(bitmap);
             logger.InfoFormat("LOADING : {0}", strLoading);
+
+            
             //if ("正在获取校验码".Equals(strLoading)) {
             //    logger.InfoFormat("正在获取校验码，关闭&打开窗口重新获取");
             //    ScreenUtil.SetCursorPos(points.buttons[0].x + 188, points.buttons[0].y);//取消按钮
@@ -369,7 +378,7 @@ namespace Admin {
             String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(bitmap);
             logger.InfoFormat("\tEND   identify Captcha : [{0}]", txtCaptcha);
 
-            logger.InfoFormat("\tBEGIN input ACTIVE CAPTCHA [{0}]", inputType);
+            logger.Info("\tBEGIN input ACTIVE CAPTCHA");
             String strActive = "";
             if (CaptchaInput.LEFT == inputType)
                 strActive = txtCaptcha.Substring(0, 4);
@@ -377,15 +386,16 @@ namespace Admin {
                 strActive = txtCaptcha.Substring(1, 4);
             else if (CaptchaInput.RIGHT == inputType)
                 strActive = txtCaptcha.Substring(2, 4);
+            else if (CaptchaInput.AUTO == inputType)
+                strActive = this.m_orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new MemoryStream(binaryTips)));
 
             for (int i = 0; i < strActive.Length; i++) {
                 ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(100);
             }
             logger.InfoFormat("\tEND   input ACTIVE CAPTCHA [{0}]", strActive);
 
             {
-                System.Threading.Thread.Sleep(50);
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dr == DialogResult.OK) {
@@ -409,16 +419,6 @@ namespace Admin {
         static void ie_DocumentComplete(object pDisp, ref object URL) {
 
             DocComplete.Set();
-            //"testBtnConfirm";
-            //"protocolBtnConfirm";
-            //mshtml.IHTMLDocument2 doc2 = (mshtml.IHTMLDocument2)Browser.Document;
-            //mshtml.IHTMLElement confirm1 = doc2.all.item("testBtnConfirm") as mshtml.IHTMLElement;
-            //confirm1.click();
-            //System.Threading.Thread.Sleep(1000);
-
-            //mshtml.IHTMLElement confirm2 = doc2.all.item("protocolBtnConfirm") as mshtml.IHTMLElement;
-            //confirm2.click();
-            //System.Threading.Thread.Sleep(1000);
         }
 
         private void button_ConfigBid_Click(object sender, EventArgs e) {

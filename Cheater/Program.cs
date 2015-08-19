@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Cheater {
     static class Program {
@@ -10,9 +11,12 @@ namespace Cheater {
         /// </summary>
         [STAThread]
         static void Main() {
+
+            String endPoint = ConfigurationManager.AppSettings["ENDPOINT"];
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form1(endPoint));
         }
     }
 }

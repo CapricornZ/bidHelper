@@ -41,6 +41,7 @@
             this.btnCheckPrice = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.textURL = new System.Windows.Forms.TextBox();
@@ -51,7 +52,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button6 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub5)).BeginInit();
@@ -229,7 +229,7 @@
             this.groupBox3.Controls.Add(this.textURL);
             this.groupBox3.Location = new System.Drawing.Point(12, 96);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(505, 76);
+            this.groupBox3.Size = new System.Drawing.Size(311, 76);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "配置项(ADM)";
@@ -243,6 +243,16 @@
             this.button7.Text = "配置阶段(&1)...";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(156, 43);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(98, 23);
+            this.button6.TabIndex = 10;
+            this.button6.Text = "配置阶段(&2)...";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button_ConfigBid_Click);
             // 
             // radioButton2
             // 
@@ -335,16 +345,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(514, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(156, 43);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(98, 23);
-            this.button6.TabIndex = 10;
-            this.button6.Text = "配置阶段(&2)...";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button_ConfigBid_Click);
             // 
             // Form1
             // 

@@ -19,7 +19,8 @@ using tobid.scheduler.jobs;
 namespace Helper
 {
     enum CaptchaInput {
-        LEFT, MIDDLE, RIGHT
+        LEFT, MIDDLE, RIGHT,
+        AUTO
     }
 
     public partial class Form1 : Form
@@ -45,12 +46,10 @@ namespace Helper
         private CaptchaUtil m_orcCaptchaTipsUtil;
 
         private Scheduler m_schedulerKeepAlive;
-        private Scheduler m_schedulerSubmit;
-        private Scheduler m_schedulerLogin;
+        private Scheduler m_schedulerSubmitStep2;
 
         private System.Threading.Thread keepAliveThread;
-        private System.Threading.Thread submitPriceThread;
-        private System.Threading.Thread loginThread;
+        private System.Threading.Thread submitPriceStep2Thread;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -63,8 +62,8 @@ namespace Helper
             if (null != this.keepAliveThread && (this.keepAliveThread.ThreadState == System.Threading.ThreadState.Running || this.keepAliveThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
                 this.keepAliveThread.Abort();
 
-            if (null != this.submitPriceThread && (this.submitPriceThread.ThreadState == System.Threading.ThreadState.Running || this.submitPriceThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
-                this.submitPriceThread.Abort();
+            if (null != this.submitPriceStep2Thread && (this.submitPriceStep2Thread.ThreadState == System.Threading.ThreadState.Running || this.submitPriceStep2Thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
+                this.submitPriceStep2Thread.Abort();
 
             Hotkey.UnregisterHotKey(this.Handle, 103);
             Hotkey.UnregisterHotKey(this.Handle, 104);
@@ -77,6 +76,8 @@ namespace Helper
             Hotkey.UnregisterHotKey(this.Handle, 201);
             Hotkey.UnregisterHotKey(this.Handle, 202);
             Hotkey.UnregisterHotKey(this.Handle, 203);
+            Hotkey.UnregisterHotKey(this.Handle, 204);
+
             logger.Info("Application Form Closed");
         }
 
@@ -107,9 +108,9 @@ namespace Helper
             this.m_schedulerKeepAlive = new Scheduler(config1M);
 
             //Action任务配置
-            SchedulerConfiguration config1S = new SchedulerConfiguration(1000);
-            config1S.Job = new SubmitPriceJob(this.EndPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
-            m_schedulerSubmit = new Scheduler(config1S);
+            SchedulerConfiguration configStep2 = new SchedulerConfiguration(1000);
+            configStep2.Job = new SubmitPriceStep2Job(this.EndPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
+            m_schedulerSubmitStep2 = new Scheduler(configStep2);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
             Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
@@ -122,6 +123,7 @@ namespace Helper
             Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
             Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
             Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
+            Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
         }
 
         /// <summary>
@@ -135,50 +137,54 @@ namespace Helper
                     switch (m.WParam.ToInt32()) {
                         case 103://CTRL+3
                             logger.Info("HOT KEY CTRL + 3 (103)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 300);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 104://CTRL+4
                             logger.Info("HOT KEY CTRL + 4 (104)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 400);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 400);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 105://CTRL+5
                             logger.Info("HOT KEY CTRL + 5 (105)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 500);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 500);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 106://CTRL+6
                             logger.Info("HOT KEY CTRL + 6 (106)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 600);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 600);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 107://CTRL+7
                             logger.Info("HOT KEY CTRL + 7 (107)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 700);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 700);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 108://CTRL+8
                             logger.Info("HOT KEY CTRL + 8 (108)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 800);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 800);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 109://CTRL+9
                             logger.Info("HOT KEY CTRL + 9 (109)");
-                            this.giveDeltaPrice(SubmitPriceJob.getPosition(), 900);
+                            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 900);
                             ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 201://LEFT
                             logger.Info("HOT KEY CTRL + LEFT (201)");
-                            this.submit(this.EndPoint, SubmitPriceJob.getPosition(), CaptchaInput.LEFT);
+                            this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
                             break;
                         case 202://UP
                             logger.Info("HOT KEY CTRL + UP (202)");
-                            this.submit(this.EndPoint, SubmitPriceJob.getPosition(), CaptchaInput.MIDDLE);
+                            this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.MIDDLE);
                             break;
                         case 203://RIGHT
                             logger.Info("HOT KEY CTRL + RIGIHT (203)");
-                            this.submit(this.EndPoint, SubmitPriceJob.getPosition(), CaptchaInput.RIGHT);
+                            this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.RIGHT);
+                            break;
+                        case 204://ENTER
+                            logger.Info("HOT KEY CTRL + ENTER (204)");
+                            this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.AUTO);
                             break;
                     }
                     break;
@@ -205,7 +211,7 @@ namespace Helper
         /// </summary>
         /// <param name="givePrice">坐标</param>
         /// <param name="price">绝对价</param>
-        private void givePrice(tobid.rest.position.Bid bid, String txtPrice) {
+        private void givePrice(tobid.rest.position.BidStep2 bid, String txtPrice) {
 
             logger.InfoFormat("BEGIN givePRICE({0})", txtPrice);
 
@@ -227,14 +233,14 @@ namespace Helper
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
 
             for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(100);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
             }
             logger.Info("\tEND   input PRICE");
 
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(100);
             ScreenUtil.SetCursorPos(bid.give.button.x, bid.give.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");
@@ -243,7 +249,7 @@ namespace Helper
             //启动线程截校验码
             System.Threading.Thread loading = new System.Threading.Thread(delegate() {
                 ScreenUtil screen = new ScreenUtil();
-                for (int i = 0; i < 30; i++)//3秒钟
+                for (int i = 0; i < 50; i++)//5秒钟
                 {
                     logger.Info("LOADING captcha...");
                     byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[0].x, bid.submit.captcha[0].y, 128, 28);
@@ -260,7 +266,7 @@ namespace Helper
         /// </summary>
         /// <param name="givePrice">坐标</param>
         /// <param name="delta">差价</param>
-        private void giveDeltaPrice(tobid.rest.position.Bid bid, int delta) {
+        private void giveDeltaPrice(tobid.rest.position.BidStep2 bid, int delta) {
 
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
             logger.Info("\tBEGIN identify PRICE...");
@@ -289,14 +295,14 @@ namespace Helper
             System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
 
             for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(100);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
             }
             logger.Info("\tEND   input PRICE");
 
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(100);
             ScreenUtil.SetCursorPos(bid.give.button.x, bid.give.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");
@@ -305,7 +311,7 @@ namespace Helper
             //启动线程截校验码
             System.Threading.Thread loading = new System.Threading.Thread(delegate() {
                 ScreenUtil screen = new ScreenUtil();
-                for (int i = 0; i < 30; i++)//3秒钟
+                for (int i = 0; i < 50; i++)//5秒钟
                 {
                     logger.Info("LOADING captcha...");
                     byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[0].x, bid.submit.captcha[0].y, 128, 28);
@@ -317,14 +323,14 @@ namespace Helper
             this.textInputCaptcha.Focus();
         }
 
-        private void closeDialog(tobid.rest.position.Bid bid) {
+        private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
             logger.Info("关闭校验码窗口");
             ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188, bid.submit.buttons[0].y);//取消按钮
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
         }
 
-        private void submit(tobid.rest.position.Bid bid, String activeCaptcha) {
+        private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
 
             logger.InfoFormat("BEGIN submitCAPTCHA({0})", activeCaptcha);
 
@@ -349,7 +355,7 @@ namespace Helper
             {
                 for (int i = 0; i < activeCaptcha.Length; i++) {
                     ScreenUtil.keybd_event(ScreenUtil.keycode[activeCaptcha[i].ToString()], 0, 0, 0);
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(100);
                 }
             }
             logger.Info("\tEND   input CAPTCHA");
@@ -371,7 +377,7 @@ namespace Helper
         /// <param name="bid"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        private Boolean submit(String URL, tobid.rest.position.Bid bid, CaptchaInput input) {
+        private Boolean submit(String URL, tobid.rest.position.BidStep2 bid, CaptchaInput input) {
 
             logger.InfoFormat("BEGIN submitCAPTCHA({0})", input);
             logger.Info("\tBEGIN make INPUT blank");
@@ -404,21 +410,31 @@ namespace Helper
             logger.Info("\tBEGIN input CAPTCHA");
             {
                 if (CaptchaInput.LEFT == input) {
+
                     for (int i = 0; i <= 3; i++) {
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                        System.Threading.Thread.Sleep(50);
+                        System.Threading.Thread.Sleep(100);
                     }
                 }
                 if (CaptchaInput.MIDDLE == input) {
+
                     for (int i = 1; i <= 4; i++) {
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                        System.Threading.Thread.Sleep(50);
+                        System.Threading.Thread.Sleep(100);
                     }
                 }
                 if (CaptchaInput.RIGHT == input) {
+
                     for (int i = 2; i <= 5; i++) {
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                        System.Threading.Thread.Sleep(50);
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+                if (CaptchaInput.AUTO == input) {
+
+                    for (int i = 0; i < txtActive.Length; i++) {
+                        ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
+                        System.Threading.Thread.Sleep(100);
                     }
                 }
             }
@@ -476,7 +492,7 @@ namespace Helper
             DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
                 messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
-                Step2Operation bidOps = SubmitPriceJob.getConfig();
+                Step2Operation bidOps = SubmitPriceStep2Job.getConfig();
                 bidOps.updateTime = DateTime.Now;
                 bidOps.startTime = this.dateTimePicker1.Value;
                 bidOps.expireTime = bidOps.startTime.AddHours(1);
@@ -492,7 +508,7 @@ namespace Helper
                     }
                     this.textBox2.Text = this.comboBox1.Text;
                     bidOps.price = Int32.Parse(this.comboBox1.Text);
-                    SubmitPriceJob.setConfig(bidOps);
+                    SubmitPriceStep2Job.setConfig(bidOps);
                 }
 
                 if (radioPrice.Checked) {
@@ -502,15 +518,15 @@ namespace Helper
                         return;
                     }
                     this.textBox2.Text = this.textPrice2.Text;
-                    SubmitPriceJob.setConfig(Int32.Parse(this.textPrice2.Text), bidOps);
+                    SubmitPriceStep2Job.setConfig(Int32.Parse(this.textPrice2.Text), bidOps);
                 }
 
-                if (null != this.submitPriceThread)
-                    this.submitPriceThread.Abort();
-                System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmit.Start);
-                this.submitPriceThread = new System.Threading.Thread(submitPriceThreadStart);
-                this.submitPriceThread.Name = "submitPriceThread";
-                this.submitPriceThread.Start();
+                if (null != this.submitPriceStep2Thread)
+                    this.submitPriceStep2Thread.Abort();
+                System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmitStep2.Start);
+                this.submitPriceStep2Thread = new System.Threading.Thread(submitPriceThreadStart);
+                this.submitPriceStep2Thread.Name = "submitPriceThread";
+                this.submitPriceStep2Thread.Start();
             }
         }
 
@@ -528,9 +544,10 @@ namespace Helper
         /// <param name="keyData"></param>
         /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+
             Point p1 = MousePosition;
             if (keyData == Keys.Escape) {
-                this.closeDialog(SubmitPriceJob.getPosition());
+                this.closeDialog(SubmitPriceStep2Job.getPosition());
                 this.pictureCaptcha.Image = null;
                 ScreenUtil.SetForegroundWindow(this.Handle);
                 this.textInputPrice.Focus();
@@ -538,24 +555,23 @@ namespace Helper
             }
             if (keyData == Keys.Enter) {
                 if (this.textInputPrice.Focused) {
-                    this.givePrice(SubmitPriceJob.getPosition(), this.textInputPrice.Text);
+                    this.givePrice(SubmitPriceStep2Job.getPosition(), this.textInputPrice.Text);
                     this.textInputCaptcha.Focus();
                 } else if (this.textInputCaptcha.Focused) {
-                    this.submit(SubmitPriceJob.getPosition(), this.textInputCaptcha.Text);
+                    this.submit(SubmitPriceStep2Job.getPosition(), this.textInputCaptcha.Text);
                     this.textInputCaptcha.Text = "";
                     this.textInputPrice.Focus();
                 }
                 ScreenUtil.SetForegroundWindow(this.Handle);
                 ScreenUtil.SetCursorPos(p1.X, p1.Y);
             }
-            //this.TopMost = true;
-            //this.Show(this);
             return base.ProcessCmdKey(ref msg, keyData);
         }
         #endregion
 
         #region 服务器策略|自助策略|手动
         private void radioServPolicy_Click(object sender, EventArgs e) {
+
             if (!this.radioServPolicy.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioServPolicy.Text), "策略选择",
@@ -569,8 +585,8 @@ namespace Helper
 
                     this.groupBoxPolicy.Text = this.radioServPolicy.Text;
 
-                    if (null != this.submitPriceThread)
-                        this.submitPriceThread.Abort();
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
 
                     //加载配置项2
                     KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
@@ -581,15 +597,16 @@ namespace Helper
                     this.keepAliveThread.Name = "keepAliveThread";
                     this.keepAliveThread.Start();
 
-                    System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmit.Start);
-                    this.submitPriceThread = new System.Threading.Thread(submitPriceThreadStart);
-                    this.submitPriceThread.Name = "submitPriceThread";
-                    this.submitPriceThread.Start();
+                    System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmitStep2.Start);
+                    this.submitPriceStep2Thread = new System.Threading.Thread(submitPriceThreadStart);
+                    this.submitPriceStep2Thread.Name = "submitPriceThread";
+                    this.submitPriceStep2Thread.Start();
                 }
             }
         }
 
         private void radioLocalPolicy_Click(object sender, EventArgs e) {
+
             if (!this.radioLocalPolicy.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicy.Text), "策略选择",
@@ -605,13 +622,14 @@ namespace Helper
                     if (null != this.keepAliveThread)
                         this.keepAliveThread.Abort();
 
-                    if (null != this.submitPriceThread)
-                        this.submitPriceThread.Abort();
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
                 }
             }
         }
 
         private void radioManualPolicy_Click(object sender, EventArgs e) {
+
             if (!this.radioManualPolicy.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioManualPolicy.Text), "策略选择",
@@ -628,11 +646,23 @@ namespace Helper
                     if (null != this.keepAliveThread)
                         this.keepAliveThread.Abort();
 
-                    if (null != this.submitPriceThread)
-                        this.submitPriceThread.Abort();
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
                 }
             }
         }
         #endregion        
+
+        private void buttonLogin_Click(object sender, EventArgs e) {
+
+            LoginJob loginJob = new LoginJob(this.m_orcCaptchaLoading);
+            loginJob.Execute();
+
+            //SubmitPriceStep1Job submitPriceJob = new SubmitPriceStep1Job(
+            //    this.m_orcCaptchaLoading,
+            //    this.m_orcCaptchaTipsUtil,
+            //    this.m_orcCaptcha);
+            //submitPriceJob.Execute();
+        }
     }
 }

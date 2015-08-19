@@ -22,8 +22,8 @@ namespace tobid.scheduler.jobs
     /// <summary>
     /// KeepAlive : 向服务器发布主机名，获取配置项
     /// </summary>
-    public class KeepAliveJob : ISchedulerJob
-    {
+    public class KeepAliveJob : ISchedulerJob {
+
         private static log4net.ILog logger = log4net.LogManager.GetLogger("KeepAliveJob");
 
         private ReceiveOperation receiveOperation;
@@ -35,15 +35,15 @@ namespace tobid.scheduler.jobs
         public Boolean isManual { get; set; }
         public String EndPoint { get; set; }
 
-        public KeepAliveJob(String endPoint, ReceiveOperation receiveOperation)
-        {
+        public KeepAliveJob(String endPoint, ReceiveOperation receiveOperation){
+
             this.isManual = false;
             this.EndPoint = endPoint;
             this.receiveOperation = receiveOperation;
         }
 
-        public void Execute()
-        {
+        public void Execute() {
+
             logger.Debug("KeepAliveJob.Execute()");
             string hostName = System.Net.Dns.GetHostName();
             String epKeepAlive = this.EndPoint + "/command/keepAlive.do";
@@ -55,14 +55,17 @@ namespace tobid.scheduler.jobs
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {
-                    if (operation is tobid.rest.Step2Operation)
-                    {
-                        if (SubmitPriceJob.setConfig(operation as Step2Operation))
+                    if (operation is tobid.rest.Step2Operation){
+
+                        if (SubmitPriceStep2Job.setConfig(operation as Step2Operation))
                             this.receiveOperation(operation);
                     }
-                    else if (operation is tobid.rest.LoginOperation)
-                    {
+                    else if (operation is tobid.rest.LoginOperation){
+
                         LoginJob.setConfig(client.config, operation as LoginOperation);
+                    } else if (operation is tobid.rest.Step1Operation) {
+
+                        SubmitPriceStep1Job.setConfig(operation as Step1Operation);
                     }
                 }
             }

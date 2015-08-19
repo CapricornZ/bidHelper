@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+using tobid.rest;
+using tobid.scheduler.jobs;
+
 namespace Cheater {
     public partial class Form1 : Form {
 
@@ -16,8 +19,11 @@ namespace Cheater {
 
         private String[] bitmaps;
         private Random ran = new Random();
-        public Form1() {
+        private String EndPoint { get; set; }
+        public Form1(String endPoint) {
+
             InitializeComponent();
+            this.EndPoint = endPoint;
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -27,6 +33,12 @@ namespace Cheater {
                 "257757.bmp", "522857.bmp", "654714.bmp", "709177.bmp", "882277.bmp",
                 "964932.bmp", "992986.bmp"
             };
+
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
+            keepAliveJob.Execute();
+        }
+
+        private void receiveOperation(Operation operation) {
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -68,7 +80,8 @@ namespace Cheater {
             Graphics g = Graphics.FromHdc(p);
 
             for (int i = 0; i < 20 * second; i++) {
-                g.DrawImage(bitmap, new Point(966, 482));
+                //g.DrawImage(bitmap, new Point(966, 482));
+                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x + 4, SubmitPriceStep2Job.getPosition().submit.captcha[0].y));
                 System.Threading.Thread.Sleep(50);
             }
         }
@@ -81,7 +94,8 @@ namespace Cheater {
             Graphics g = Graphics.FromHdc(p);
 
             for (int i = 0; i < 20 * second; i++) {
-                g.DrawImage(bitmap, new Point(962, 486));
+                //g.DrawImage(bitmap, new Point(962, 486));
+                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x, SubmitPriceStep2Job.getPosition().submit.captcha[0].y + 4));
                 System.Threading.Thread.Sleep(50);
             }
         }

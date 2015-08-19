@@ -53,7 +53,16 @@ namespace tobid.rest.position
     /// <summary>
     /// 竞价坐标
     /// </summary>
-    public class Bid
+    public class BidStep1 {
+
+        public GivePriceStep1 give { get; set; }
+        public SubmitPrice submit { get; set; }
+    }
+
+    /// <summary>
+    /// 竞价坐标
+    /// </summary>
+    public class BidStep2
     {
         public GivePriceStep2 give { get; set; }
         public SubmitPrice submit { get; set; }

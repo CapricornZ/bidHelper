@@ -16,7 +16,7 @@ namespace Admin {
             InitializeComponent();
         }
 
-        public Bid bid { get; set; }
+        public BidStep2 bid { get; set; }
         public Boolean cancel { get; set; }
         public String endPoint { get; set; }
 
@@ -77,7 +77,7 @@ namespace Admin {
                 this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
 
-            this.bid = new Bid();
+            this.bid = new BidStep2();
             this.bid.give = givePrice;
             this.bid.submit = submit;
 
@@ -113,7 +113,7 @@ namespace Admin {
                 this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
 
-            this.bid = new Bid();
+            this.bid = new BidStep2();
             this.bid.give = givePrice;
             this.bid.submit = submit;
 

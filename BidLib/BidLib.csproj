@@ -64,6 +64,7 @@
     <Compile Include="schedule\Scheduler.cs" />
     <Compile Include="schedule\KeepAliveJob.cs" />
     <Compile Include="schedule\SubmitPriceJob.cs" />
+    <Compile Include="schedule\SubmitPriceStep1Job.cs" />
     <Compile Include="util\CaptchaUtil.cs" />
     <Compile Include="util\DomUtil.cs" />
     <Compile Include="util\HttpUtil.cs" />

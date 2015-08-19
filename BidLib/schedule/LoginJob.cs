@@ -18,11 +18,9 @@ namespace tobid.scheduler.jobs
         private static Config config;
         private static int executeCount = 1;
 
-        private String endPoint;
-        private OrcUtil orcCaptcha;
-        public LoginJob(String endPoint, OrcUtil orcCaptcha)
-        {
-            this.endPoint = endPoint;
+        private IOrc orcCaptcha;
+        public LoginJob(IOrc orcCaptcha){
+
             this.orcCaptcha = orcCaptcha;
         }
 
@@ -149,9 +147,7 @@ namespace tobid.scheduler.jobs
                 Monitor.Exit(LoginJob.lockObj);
             }
             else
-            {
                 logger.Error("obtain LoginJob.lockObj timeout on Execute(...)");
-            }
         }
     }
 }
