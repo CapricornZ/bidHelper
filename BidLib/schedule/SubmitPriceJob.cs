@@ -172,6 +172,7 @@ namespace tobid.scheduler.jobs
 
             //INPUT BOX
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
+            logger.DebugFormat("INPUT BOX({0}, {1})", givePrice.inputBox.x, givePrice.inputBox.y);
             ScreenUtil.SetCursorPos(givePrice.inputBox.x, givePrice.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -196,6 +197,7 @@ namespace tobid.scheduler.jobs
 
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
+            logger.DebugFormat("BOX[出价]({0}, {1})", givePrice.button.x, givePrice.button.y);
             System.Threading.Thread.Sleep(50);
             ScreenUtil.SetCursorPos(givePrice.button.x, givePrice.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -214,6 +216,7 @@ namespace tobid.scheduler.jobs
             //INPUT BOX
 
             logger.Info("\tBEGIN make PRICE blank...");
+            logger.DebugFormat("INPUT BOX({0}, {1})", givePrice.inputBox.x, givePrice.inputBox.y);
             ScreenUtil.SetCursorPos(givePrice.inputBox.x, givePrice.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -231,6 +234,7 @@ namespace tobid.scheduler.jobs
             logger.Info("\tEND   make PRICE blank...");
 
             logger.Info("\tBEGIN identify PRICE...");
+            logger.DebugFormat("CAPTURE PRICE({0}, {1})", givePrice.price.x, givePrice.price.y);
             byte[] content = new ScreenUtil().screenCaptureAsByte(givePrice.price.x, givePrice.price.y, 52, 18);
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
             int price = Int32.Parse(txtPrice);
@@ -248,6 +252,7 @@ namespace tobid.scheduler.jobs
 
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
+            logger.DebugFormat("BUTTON[出价]({0}, {1})", givePrice.button.x, givePrice.button.y);
             System.Threading.Thread.Sleep(50);
             ScreenUtil.SetCursorPos(givePrice.button.x, givePrice.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -259,6 +264,7 @@ namespace tobid.scheduler.jobs
         {
             logger.Info("BEGIN giveCAPTCHA");
             logger.Info("\tBEGIN make INPUT blank");
+            logger.DebugFormat("INPUT BOX({0}, {1})", submitPoints.inputBox.x, submitPoints.inputBox.y);
             ScreenUtil.SetCursorPos(submitPoints.inputBox.x, submitPoints.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -280,6 +286,7 @@ namespace tobid.scheduler.jobs
             Boolean isLoading = true;
             int retry = 0;
             Thread.Sleep(1000);//等待1秒钟（等待验证码或者“正在获取验证码”字样出来
+            logger.DebugFormat("CAPTURE CAPTCHA({0}, {1})", submitPoints.captcha[0].x, submitPoints.captcha[0].y);
             while (isLoading)//重试3.5秒钟
             {   
                 binaryCaptcha = new ScreenUtil().screenCaptureAsByte(submitPoints.captcha[0].x, submitPoints.captcha[0].y, 128, 28);
@@ -308,6 +315,7 @@ namespace tobid.scheduler.jobs
 
             File.WriteAllBytes("AUTO-CAPTCHA.BMP", binaryCaptcha);
             String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(binaryCaptcha)));
+            logger.DebugFormat("CAPTURE TIPS({0}, {1})", submitPoints.captcha[1].x, submitPoints.captcha[1].y);
             byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(submitPoints.captcha[1].x, submitPoints.captcha[1].y, 112, 16);
             File.WriteAllBytes("AUTO-TIPS.BMP", binaryCaptcha);
             String strActive = this.m_captchaUtil.getActive(txtCaptcha, new Bitmap(new System.IO.MemoryStream(binaryTips)));
@@ -324,6 +332,7 @@ namespace tobid.scheduler.jobs
             logger.Info("\tEND   input CAPTCHA");
 
             logger.Info("\tBEGIN click BUTTON[确定]");
+            logger.DebugFormat("BUTTON[确定]({0}, {1})", submitPoints.buttons[0].x, submitPoints.buttons[0].y);
             ScreenUtil.SetCursorPos(submitPoints.buttons[0].x, submitPoints.buttons[0].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[确定]");

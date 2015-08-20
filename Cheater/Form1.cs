@@ -34,10 +34,16 @@ namespace Cheater {
                 "964932.bmp", "992986.bmp"
             };
 
-            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, 
+                new ReceiveLogin(this.receiveLogin),
+                new ReceiveOperation[]{
+                    new ReceiveOperation(this.receiveOperation),
+                    new ReceiveOperation(this.receiveOperation)});
             keepAliveJob.Execute();
         }
 
+        private void receiveLogin(Operation operation, Config config) {
+        }
         private void receiveOperation(Operation operation) {
         }
 

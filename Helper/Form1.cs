@@ -99,12 +99,20 @@ namespace Helper
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
 
             //加载配置项2
-            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
+                new ReceiveLogin(this.receiveLogin),
+                new ReceiveOperation[]{
+                    new ReceiveOperation(this.receiveOperation),
+                    new ReceiveOperation(this.receiveOperation)});
             keepAliveJob.Execute();
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
-            config1M.Job = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
+            config1M.Job = new KeepAliveJob(this.EndPoint,
+                new ReceiveLogin(this.receiveLogin), 
+                new ReceiveOperation[]{
+                    new ReceiveOperation(this.receiveOperation),
+                    new ReceiveOperation(this.receiveOperation)});
             this.m_schedulerKeepAlive = new Scheduler(config1M);
 
             //Action任务配置
@@ -192,6 +200,9 @@ namespace Helper
             base.WndProc(ref m);
         }
 
+        private void receiveLogin(Operation operation, Config config) {
+        }
+
         private void receiveOperation(Operation operation) {
             Step2Operation bid = operation as Step2Operation;
             if (null != bid) {
@@ -251,7 +262,7 @@ namespace Helper
                 ScreenUtil screen = new ScreenUtil();
                 for (int i = 0; i < 50; i++)//5秒钟
                 {
-                    logger.Info("LOADING captcha...");
+                    logger.Debug("LOADING captcha...");
                     byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[0].x, bid.submit.captcha[0].y, 128, 28);
                     this.pictureCaptcha.Image = Bitmap.FromStream(new MemoryStream(binaryCaptcha));
                     System.Threading.Thread.Sleep(100);
@@ -313,7 +324,7 @@ namespace Helper
                 ScreenUtil screen = new ScreenUtil();
                 for (int i = 0; i < 50; i++)//5秒钟
                 {
-                    logger.Info("LOADING captcha...");
+                    logger.Debug("LOADING captcha...");
                     byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[0].x, bid.submit.captcha[0].y, 128, 28);
                     this.pictureCaptcha.Image = Bitmap.FromStream(new MemoryStream(binaryCaptcha));
                     System.Threading.Thread.Sleep(100);
@@ -335,6 +346,7 @@ namespace Helper
             logger.InfoFormat("BEGIN submitCAPTCHA({0})", activeCaptcha);
 
             logger.Info("\tBEGIN make INPUT blank");
+            logger.DebugFormat("\tINPUT BOX({0}, {1})", bid.submit.inputBox.x, bid.submit.inputBox.y);
             ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -361,6 +373,7 @@ namespace Helper
             logger.Info("\tEND   input CAPTCHA");
 
             logger.Info("\tBEGIN click BUTTON[确定]");
+            logger.DebugFormat("\tBUTTON[确定]({0}, {1})", bid.submit.buttons[0].x, bid.submit.buttons[0].y);
             ScreenUtil.SetCursorPos(bid.submit.buttons[0].x, bid.submit.buttons[0].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[确定]");
@@ -381,6 +394,7 @@ namespace Helper
 
             logger.InfoFormat("BEGIN submitCAPTCHA({0})", input);
             logger.Info("\tBEGIN make INPUT blank");
+            logger.DebugFormat("\tINPUT BOX({0}, {1})", bid.submit.inputBox.x, bid.submit.inputBox.y);
             ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -398,10 +412,12 @@ namespace Helper
             logger.Info("\tEND   make INPUT blank");
 
             logger.Info("\tBEGIN identify CAPTCHA...");
+            logger.DebugFormat("\tCAPTURE CAPTCHA({0}, {1})", bid.submit.captcha[0].x, bid.submit.captcha[0].y);
             byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[0].x, bid.submit.captcha[0].y, 128, 28);
             File.WriteAllBytes("CAPTCHA.BMP", binaryCaptcha);
             String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(new Bitmap(new MemoryStream(binaryCaptcha)));
 
+            logger.DebugFormat("\tCAPTURE TIPS({0}, {1})", bid.submit.captcha[1].x, bid.submit.captcha[1].y);
             byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(bid.submit.captcha[1].x, bid.submit.captcha[1].y, 112, 16);
             File.WriteAllBytes("TIPS.BMP", binaryTips);
             String txtActive = this.m_orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new MemoryStream(binaryTips)));
@@ -444,6 +460,7 @@ namespace Helper
             DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             if (dr == DialogResult.OK) {
                 logger.InfoFormat("用户选择确定出价");
+                logger.DebugFormat("\tBUTTON[确定]({0}, {1})", bid.submit.buttons[0].x, bid.submit.buttons[0].y);
                 ScreenUtil.SetCursorPos(bid.submit.buttons[0].x, bid.submit.buttons[0].y);//确定按钮
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -455,6 +472,7 @@ namespace Helper
                 return true;
             } else {
                 logger.InfoFormat("用户选择取消出价");
+                logger.DebugFormat("\tBUTTON[取消]({0}, {1})", bid.submit.buttons[0].x+188, bid.submit.buttons[0].y);
                 ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188, bid.submit.buttons[0].y);//取消按钮
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 logger.Info("END   submitCAPTCHA");
@@ -589,7 +607,11 @@ namespace Helper
                         this.submitPriceStep2Thread.Abort();
 
                     //加载配置项2
-                    KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, new ReceiveOperation(this.receiveOperation));
+                    KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, 
+                        new ReceiveLogin(this.receiveLogin),
+                        new ReceiveOperation[]{
+                            new ReceiveOperation(this.receiveOperation),
+                            new ReceiveOperation(this.receiveOperation)});
                     keepAliveJob.Execute();
 
                     System.Threading.ThreadStart keepAliveThread = new System.Threading.ThreadStart(this.m_schedulerKeepAlive.Start);

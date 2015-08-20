@@ -18,6 +18,7 @@ using tobid.util;
 namespace tobid.scheduler.jobs
 {
     public delegate void ReceiveOperation(rest.Operation operation);
+    public delegate void ReceiveLogin(rest.Operation operation, rest.Config config);
     
     /// <summary>
     /// KeepAlive : 向服务器发布主机名，获取配置项
@@ -26,7 +27,8 @@ namespace tobid.scheduler.jobs
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger("KeepAliveJob");
 
-        private ReceiveOperation receiveOperation;
+        private ReceiveLogin receiveLogin;
+        private ReceiveOperation[] receiveOperation;
         /// <summary>
         /// 使用服务器策略或本地策略
         /// true : 本地策略
@@ -35,10 +37,11 @@ namespace tobid.scheduler.jobs
         public Boolean isManual { get; set; }
         public String EndPoint { get; set; }
 
-        public KeepAliveJob(String endPoint, ReceiveOperation receiveOperation){
+        public KeepAliveJob(String endPoint, ReceiveLogin receiveLogin, ReceiveOperation[] receiveOperation){
 
             this.isManual = false;
             this.EndPoint = endPoint;
+            this.receiveLogin = receiveLogin;
             this.receiveOperation = receiveOperation;
         }
 
@@ -55,17 +58,18 @@ namespace tobid.scheduler.jobs
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {
-                    if (operation is tobid.rest.Step2Operation){
+                    if (operation is tobid.rest.LoginOperation){
 
-                        if (SubmitPriceStep2Job.setConfig(operation as Step2Operation))
-                            this.receiveOperation(operation);
-                    }
-                    else if (operation is tobid.rest.LoginOperation){
-
-                        LoginJob.setConfig(client.config, operation as LoginOperation);
+                        if (LoginJob.setConfig(client.config, operation as LoginOperation))
+                            this.receiveLogin(operation, client.config);
                     } else if (operation is tobid.rest.Step1Operation) {
 
-                        SubmitPriceStep1Job.setConfig(operation as Step1Operation);
+                        if(SubmitPriceStep1Job.setConfig(operation as Step1Operation))
+                            this.receiveOperation[0](operation);
+                    } else if (operation is tobid.rest.Step2Operation) {
+
+                        if (SubmitPriceStep2Job.setConfig(operation as Step2Operation))
+                            this.receiveOperation[1](operation);
                     }
                 }
             }

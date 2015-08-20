@@ -49,8 +49,8 @@ namespace Admin {
         private IOrc[] m_orcCaptchaTip;
         private IOrc m_orcPrice;
         private CaptchaUtil m_orcCaptchaTipsUtil;
-        private Step2Form m_bidForm;
-        private Step1Form m_loginForm;
+        private Step2Form m_step2Form;
+        private Step1Form m_step1Form;
 
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceThread;
@@ -86,8 +86,8 @@ namespace Admin {
             System.Console.WriteLine(logger.IsDebugEnabled);
             Form.CheckForIllegalCrossThreadCalls = false;
             this.textURL.Text = this.m_endPoint;
-            this.m_bidForm = new Step2Form();
-            this.m_loginForm = new Step1Form();
+            this.m_step2Form = new Step2Form();
+            this.m_step1Form = new Step1Form();
 
             IGlobalConfig configResource = Resource.getInstance(this.m_endPoint);//加载配置
 
@@ -100,12 +100,20 @@ namespace Admin {
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
 
             //加载配置项2
-            KeepAliveJob keepAliveJob = new KeepAliveJob(this.m_endPoint, new ReceiveOperation(this.receiveOperation));
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.m_endPoint, 
+                new ReceiveLogin(this.receiveLogin),
+                new ReceiveOperation[]{
+                    new ReceiveOperation(this.receiveStep1),
+                    new ReceiveOperation(this.receiveStep2)});
             keepAliveJob.Execute();
 
             //keepAlive任务配置
             SchedulerConfiguration config5M = new SchedulerConfiguration(1000 * 60 * 1);
-            config5M.Job = new KeepAliveJob(this.m_endPoint, new ReceiveOperation(this.receiveOperation));
+            config5M.Job = new KeepAliveJob(this.m_endPoint,
+                new ReceiveLogin(this.receiveLogin), 
+                new ReceiveOperation[]{
+                    new ReceiveOperation(this.receiveStep1),
+                    new ReceiveOperation(this.receiveStep2)});
             m_schedulerKeepAlive = new Scheduler(config5M);
 
             //Action任务配置
@@ -135,47 +143,47 @@ namespace Admin {
                     switch (m.WParam.ToInt32()) {
                         case 103://CTRL+3
                             logger.Info("HOT KEY [CTRL+3]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 300);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 300);
                             break;
                         case 104://CTRL+4
                             logger.Info("HOT KEY [CTRL+4]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 400);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 400);
                             break;
                         case 105://CTRL+5
                             logger.Info("HOT KEY [CTRL+6]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 500);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 500);
                             break;
                         case 106://CTRL+6
                             logger.Info("HOT KEY [CTRL+6]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 600);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 600);
                             break;
                         case 107://CTRL+7
                             logger.Info("HOT KEY [CTRL+7]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 700);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 700);
                             break;
                         case 108://CTRL+8
                             logger.Info("HOT KEY [CTRL+8]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 800);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 800);
                             break;
                         case 109://CTRL+9
                             logger.Info("HOT KEY [CTRL+9]");
-                            this.givePrice(this.m_endPoint, this.m_bidForm.bid.give, 900);
+                            this.givePrice(this.m_endPoint, this.m_step2Form.bid.give, 900);
                             break;
                         case 120://CTRL+UP
                             logger.Info("HOT KEY [CTRL+UP]");
-                            this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.MIDDLE);
+                            this.subimt(this.m_endPoint, this.m_step2Form.bid.submit, CaptchaInput.MIDDLE);
                             break;
                         case 121://CTRL+LEFT
                             logger.Info("HOT KEY [CTRL+LEFT]");
-                            this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.LEFT);
+                            this.subimt(this.m_endPoint, this.m_step2Form.bid.submit, CaptchaInput.LEFT);
                             break;
                         case 122://CTRL+RIGHT
                             logger.Info("HOT KEY [CTRL+RIGHT]");
-                            this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.RIGHT);
+                            this.subimt(this.m_endPoint, this.m_step2Form.bid.submit, CaptchaInput.RIGHT);
                             break;
                         case 123://CTRL+ENTER
                             logger.Info("HOT KEY [CTRL+ENTER]");
-                            this.subimt(this.m_endPoint, this.m_bidForm.bid.submit, CaptchaInput.AUTO);
+                            this.subimt(this.m_endPoint, this.m_step2Form.bid.submit, CaptchaInput.AUTO);
                             break;
                         case 155://CTRL+C
                             logger.Info("HOT KEY [CTRL+SHIFT+ENTER]");
@@ -251,20 +259,34 @@ namespace Admin {
             
         }
 
-        private void receiveOperation(Operation operation) {
-            try {
-                //ShowInfoJob showInfo = new ShowInfoJob("MESSAGE!");
-                //System.Threading.ThreadStart myThreadDelegate = new System.Threading.ThreadStart(showInfo.Execute);
-                //System.Threading.Thread myThread = new System.Threading.Thread(myThreadDelegate);
-                //myThread.Start();
-            } catch {
+        private void receiveLogin(Operation operation, Config config) {
+
+            if (null != config) {
+                this.labelName.Text = config.pname;
+                this.labelNo.Text = config.no;
+
+                this.buttonLogin.Enabled = true;
             }
+        }
+
+        private void receiveStep1(Operation operation) {
+
+            if (null != operation) {
+                Step1Operation bidOps = (Step1Operation)operation;
+                BidStep1 bid = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep1>(operation.content);
+                this.m_step1Form.bid = bid;
+                this.toolStripStatusLabel2.Text = String.Format("步骤1：{1} @{0}", operation.startTime, bidOps.price);
+                this.buttonStep1.Enabled = true;
+            }
+        }
+
+        private void receiveStep2(Operation operation) {
 
             if (null != operation) {
                 Step2Operation bidOps = (Step2Operation)operation;
                 BidStep2 bid = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep2>(operation.content);
-                this.m_bidForm.bid = bid;
-                this.toolStripStatusLabel1.Text = String.Format("配置：+{5} @[{4}], 价格[{0},{1}], 校验码[{2},{3}]", bid.give.price.x, bid.give.price.y, bid.submit.captcha[0].x, bid.submit.captcha[0].y, operation.startTime, bidOps.price);
+                this.m_step2Form.bid = bid;
+                this.toolStripStatusLabel1.Text = String.Format("步骤2：+{1} @{0}", operation.startTime, bidOps.price);
             }
         }
 
@@ -423,17 +445,29 @@ namespace Admin {
 
         private void button_ConfigBid_Click(object sender, EventArgs e) {
 
-            this.m_bidForm.endPoint = this.textURL.Text;
-            this.m_bidForm.ShowDialog(this);
-            this.m_bidForm.BringToFront();
+            this.m_step2Form.endPoint = this.textURL.Text;
+            this.m_step2Form.ShowDialog(this);
+            this.m_step2Form.BringToFront();
         }
 
         private static System.Threading.AutoResetEvent DocComplete = new System.Threading.AutoResetEvent(false);
         private void button7_Click(object sender, EventArgs e) {
 
-            this.m_loginForm.endPoint = this.textURL.Text;
-            this.m_loginForm.ShowDialog(this);
-            this.m_loginForm.BringToFront();
+            this.m_step1Form.endPoint = this.textURL.Text;
+            this.m_step1Form.ShowDialog(this);
+            this.m_step1Form.BringToFront();
+        }
+
+        private void buttonLogin_Click(object sender, EventArgs e) {
+            
+            LoginJob job = new LoginJob(this.m_orcLogin);
+            job.Execute();
+        }
+
+        private void buttonStep1_Click(object sender, EventArgs e) {
+
+            SubmitPriceStep1Job job = new SubmitPriceStep1Job(this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
+            job.Execute();
         }
     }
 }

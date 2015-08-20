@@ -16,7 +16,7 @@ namespace tobid.scheduler.jobs {
 
     public class SubmitPriceStep1Job : ISchedulerJob {
 
-        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SubmitPriceStep2Job));
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SubmitPriceStep1Job));
         private static Object lockObj = new Object();
 
         private static Step1Operation bidOperation = null;

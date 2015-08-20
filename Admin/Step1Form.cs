@@ -16,7 +16,7 @@ namespace Admin {
             InitializeComponent();
         }
 
-        public Login login { get; set; }
+        public BidStep1 bid { get; set; }
         public Boolean cancel { get; set; }
         public String endPoint { get; set; }
 
@@ -38,16 +38,16 @@ namespace Admin {
 
         private void LogForm_Load(object sender, EventArgs e) {
 
-            if (this.login != null) {
+            if (this.bid != null) {
 
-                this.object2InputBox(this.textBox1, login.give.inputBox[0]);
-                this.object2InputBox(this.textBox2, login.give.inputBox[1]);
-                this.object2InputBox(this.textBox3, login.give.button);
+                this.object2InputBox(this.textBox1, bid.give.inputBox[0]);
+                this.object2InputBox(this.textBox2, bid.give.inputBox[1]);
+                this.object2InputBox(this.textBox3, bid.give.button);
 
-                this.object2InputBox(this.textBox4, login.submit.captcha[0]);
-                this.object2InputBox(this.textBox5, login.submit.captcha[1]);
-                this.object2InputBox(this.textBox6, login.submit.inputBox);
-                this.object2InputBox(this.textBox7, login.submit.buttons[0]);
+                this.object2InputBox(this.textBox4, bid.submit.captcha[0]);
+                this.object2InputBox(this.textBox5, bid.submit.captcha[1]);
+                this.object2InputBox(this.textBox6, bid.submit.inputBox);
+                this.object2InputBox(this.textBox7, bid.submit.buttons[0]);
             } else {
 
                 this.object2InputBox(this.textBox1, new Position(0, 0));
@@ -83,9 +83,9 @@ namespace Admin {
                 this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
 
-            this.login = new Login();
-            this.login.give = givePrice;
-            this.login.submit = submit;
+            this.bid = new BidStep1();
+            this.bid.give = givePrice;
+            this.bid.submit = submit;
 
             this.cancel = false;
             this.Close();
@@ -116,16 +116,16 @@ namespace Admin {
                 this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
 
-            this.login = new Login();
-            this.login.give = givePrice;
-            this.login.submit = submit;
+            this.bid = new BidStep1();
+            this.bid.give = givePrice;
+            this.bid.submit = submit;
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             DialogResult dr = MessageBox.Show("确定要提交该配置吗?", "提交LOGIN配置", messButton);
             if (dr == DialogResult.OK) {
                 string hostName = System.Net.Dns.GetHostName();
                 string endpoint = this.endPoint + "/command/operation/screenconfig/BidStep1/accept.do";
-                RestClient rest = new RestClient(endpoint: endpoint, method: HttpVerb.POST, postObj: this.login);
+                RestClient rest = new RestClient(endpoint: endpoint, method: HttpVerb.POST, postObj: this.bid);
                 String response = rest.MakeRequest("?fromHost=" + String.Format("host:{0}, screen:{1}*{2}", hostName, screen.Width, screen.Height));
             }
         }

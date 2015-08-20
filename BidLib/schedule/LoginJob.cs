@@ -49,11 +49,9 @@ namespace tobid.scheduler.jobs
                 }
 
                 Monitor.Exit(LoginJob.lockObj);
-            }
-            else
-            {
+            } else
                 logger.Error("obtain LoginJob.lockObj timeout on setConfig(...)");
-            }
+
             return rtn;
         }
 
@@ -97,7 +95,7 @@ namespace tobid.scheduler.jobs
 
                 SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
                 foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
-                    if (Browser.LocationURL.Contains("baidu.com")) {
+                    if (Browser.LocationURL.Contains("about:blank")) {
 
                         Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                         Browser.Navigate("https://paimai.alltobid.com/bid/2015081501/login.htm");

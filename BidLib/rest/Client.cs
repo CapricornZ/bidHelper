@@ -8,8 +8,8 @@ namespace tobid.rest
     /// <summary>
     /// 客户机信息
     /// </summary>
-    public class Client
-    {
+    public class Client {
+
         public String ip { get; set; }
         public DateTime updateTime { get; set; }
         public Config config { get; set; }
@@ -19,8 +19,8 @@ namespace tobid.rest
     /// <summary>
     /// 配置信息
     /// </summary>
-    public class Config
-    {
+    public class Config {
+
         public String no { get; set; }
         public String passwd { get; set; }
         public String pid { get; set; }
@@ -33,8 +33,8 @@ namespace tobid.rest
     /// <summary>
     /// 操作类
     /// </summary>
-    public abstract class Operation
-    {
+    public abstract class Operation {
+
         public int id { get; set; }
         public String type { get; set; }
         public String content { get; set; }
@@ -46,18 +46,13 @@ namespace tobid.rest
     /// <summary>
     /// 登录
     /// </summary>
-    public class LoginOperation : Operation
-    {
-        public String bidNo { get; set; }
-        public String bidPasswd { get; set; }
-        public String idCard { get; set; }
+    public class LoginOperation : Operation {
     }
 
     /// <summary>
     /// 第一阶段出价
     /// </summary>
-    public class Step1Operation : Operation
-    {
+    public class Step1Operation : Operation {
         /// <summary>
         /// 第一阶段实际价格
         /// </summary>
