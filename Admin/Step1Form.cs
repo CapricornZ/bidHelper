@@ -124,7 +124,7 @@ namespace Admin {
             DialogResult dr = MessageBox.Show("确定要提交该配置吗?", "提交LOGIN配置", messButton);
             if (dr == DialogResult.OK) {
                 string hostName = System.Net.Dns.GetHostName();
-                string endpoint = this.endPoint + "/command/operation/screenconfig/BidStep1/accept.do";
+                string endpoint = this.endPoint + "/rest/service/command/operation/screenconfig/BidStep1";
                 RestClient rest = new RestClient(endpoint: endpoint, method: HttpVerb.POST, postObj: this.bid);
                 String response = rest.MakeRequest("?fromHost=" + String.Format("host:{0}, screen:{1}*{2}", hostName, screen.Width, screen.Height));
             }

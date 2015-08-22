@@ -49,7 +49,8 @@ namespace tobid.scheduler.jobs
 
             logger.Debug("KeepAliveJob.Execute()");
             string hostName = System.Net.Dns.GetHostName();
-            String epKeepAlive = this.EndPoint + "/command/keepAlive.do";
+            //String epKeepAlive = this.EndPoint + "/command/keepAlive.do";
+            String epKeepAlive = this.EndPoint + "/rest/service/command/keepAlive";
             RestClient restKeepAlive = new RestClient(endpoint: epKeepAlive, method: HttpVerb.POST);
             String rtn = restKeepAlive.MakeRequest(String.Format("?ip={0}", hostName));
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());

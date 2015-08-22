@@ -224,10 +224,10 @@ namespace Helper
         /// <param name="price">绝对价</param>
         private void givePrice(tobid.rest.position.BidStep2 bid, String txtPrice) {
 
-            logger.InfoFormat("BEGIN givePRICE({0})", txtPrice);
+            logger.WarnFormat("BEGIN givePRICE({0})", txtPrice);
 
             //INPUT BOX
-            logger.WarnFormat("\tBEGIN input PRICE : {0}", txtPrice);
+            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(bid.give.inputBox.x, bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -279,7 +279,7 @@ namespace Helper
         /// <param name="delta">差价</param>
         private void giveDeltaPrice(tobid.rest.position.BidStep2 bid, int delta) {
 
-            logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
+            logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
             logger.Info("\tBEGIN identify PRICE...");
             byte[] content = new ScreenUtil().screenCaptureAsByte(bid.give.price.x, bid.give.price.y, 52, 18);
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
@@ -289,7 +289,7 @@ namespace Helper
             txtPrice = String.Format("{0:D}", price);
 
             //INPUT BOX
-            logger.WarnFormat("\tBEGIN input PRICE : {0}", txtPrice);
+            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(bid.give.inputBox.x, bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
@@ -343,7 +343,7 @@ namespace Helper
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
 
-            logger.InfoFormat("BEGIN submitCAPTCHA({0})", activeCaptcha);
+            logger.WarnFormat("BEGIN submitCAPTCHA({0})", activeCaptcha);
 
             logger.Info("\tBEGIN make INPUT blank");
             logger.DebugFormat("\tINPUT BOX({0}, {1})", bid.submit.inputBox.x, bid.submit.inputBox.y);
@@ -392,7 +392,7 @@ namespace Helper
         /// <returns></returns>
         private Boolean submit(String URL, tobid.rest.position.BidStep2 bid, CaptchaInput input) {
 
-            logger.InfoFormat("BEGIN submitCAPTCHA({0})", input);
+            logger.WarnFormat("BEGIN submitCAPTCHA({0})", input);
             logger.Info("\tBEGIN make INPUT blank");
             logger.DebugFormat("\tINPUT BOX({0}, {1})", bid.submit.inputBox.x, bid.submit.inputBox.y);
             ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);

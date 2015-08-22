@@ -37,7 +37,8 @@ namespace tobid.util
         {
             Resource rtn = new Resource();
             String hostName = System.Net.Dns.GetHostName();
-            String epKeepAlive = endPoint + "/command/global.do";
+            //String epKeepAlive = endPoint + "/command/global.do";
+            String epKeepAlive = endPoint + "/rest/service/command/global";
             RestClient restGlobalConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
 
             GlobalConfig global = null;
