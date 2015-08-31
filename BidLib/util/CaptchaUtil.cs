@@ -38,6 +38,12 @@ namespace tobid.util.orc{
                     strActive = captcha.Substring(2, 4);
                 this.subImgs = this.orcTips[1].SubImgs;
             }
+
+            for(int i=0; i<this.orcTips[0].SubImgs.Count; i++)
+                this.orcTips[0].SubImgs[i].Save(String.Format("TIP0{0}.bmp", i));
+            for (int i = 0; i < this.orcTips[1].SubImgs.Count; i++)
+                this.orcTips[0].SubImgs[i].Save(String.Format("TIP1{0}.bmp", i));
+
             return strActive;
             /*int index = 0;
             String tips = this.orcTips[index].IdentifyStringFromPic(bitmapTips, 0, 0);

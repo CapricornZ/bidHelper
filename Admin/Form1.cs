@@ -185,7 +185,7 @@ namespace Admin {
                             logger.Info("HOT KEY [CTRL+ENTER]");
                             this.subimt(this.m_endPoint, this.m_step2Form.bid.submit, CaptchaInput.AUTO);
                             break;
-                        case 155://CTRL+C
+                        case 155://CTRL+SHIFT+ENTER
                             logger.Info("HOT KEY [CTRL+SHIFT+ENTER]");
                             this.textPosition.Text = this.textMousePos.Text;
                             break;

@@ -37,7 +37,8 @@ namespace tobid.util
         {
             Resource rtn = new Resource();
             String hostName = System.Net.Dns.GetHostName();
-            String epKeepAlive = endPoint + "/command/global.do";
+            String epKeepAlive = endPoint + "/rest/service/command/global";
+            //String epKeepAlive = endPoint + "/command/global";
             RestClient restGlobalConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
 
             GlobalConfig global = null;
@@ -46,7 +47,7 @@ namespace tobid.util
             try
             {
                 logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?ip={1}", epKeepAlive, hostName));
-                String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?ip={0}", hostName));
+                String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}", hostName));
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
             }
             catch (Exception ex)
