@@ -122,7 +122,7 @@
             this.btnUpdatePolicy.Name = "btnUpdatePolicy";
             this.btnUpdatePolicy.Size = new System.Drawing.Size(75, 23);
             this.btnUpdatePolicy.TabIndex = 4;
-            this.btnUpdatePolicy.Text = "更新策略";
+            this.btnUpdatePolicy.Text = "更新策略(&s)";
             this.btnUpdatePolicy.UseVisualStyleBackColor = true;
             this.btnUpdatePolicy.Click += new System.EventHandler(this.button_updatePolicy_Click);
             // 

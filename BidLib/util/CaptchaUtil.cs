@@ -41,7 +41,7 @@ namespace tobid.util.orc{
 
             for(int i=0; i<this.orcTips[0].SubImgs.Count; i++)
                 this.orcTips[0].SubImgs[i].Save(String.Format("TIP0{0}.bmp", i));
-            for (int i = 0; i < this.orcTips[1].SubImgs.Count; i++)
+            for (int i = 0; this.orcTips[1].SubImgs != null && i < this.orcTips[1].SubImgs.Count; i++)
                 this.orcTips[0].SubImgs[i].Save(String.Format("TIP1{0}.bmp", i));
 
             return strActive;
