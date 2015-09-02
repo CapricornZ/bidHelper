@@ -18,12 +18,14 @@ namespace Admin {
             String debug = ConfigurationManager.AppSettings["DEBUG"];
 
             if ("true".Equals(debug.ToLower())) {
+
                 WindowHelper.AllocConsole();
-                WindowHelper.SetConsoleTitle("千万不要关掉我!");
+                System.Threading.Thread.Sleep(1000);
                 IntPtr windowHandle = WindowHelper.FindWindow(null, System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
                 IntPtr closeMenu = WindowHelper.GetSystemMenu(windowHandle, IntPtr.Zero);
                 uint SC_CLOSE = 0xF060;
                 WindowHelper.RemoveMenu(closeMenu, SC_CLOSE, 0x0);
+                WindowHelper.SetConsoleTitle("千万不要关掉我!");
             }
 
             Application.EnableVisualStyles();

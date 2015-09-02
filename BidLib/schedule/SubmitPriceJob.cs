@@ -143,8 +143,10 @@ namespace tobid.scheduler.jobs
                         if (SubmitPriceStep2Job.price != 0)
                             this.givePrice(SubmitPriceStep2Job.operation.give, price: SubmitPriceStep2Job.price);//出价;
                         else{
-                            int delta = SubmitPriceStep2Job.bidOperation.price > 300 ? 
-                                SubmitPriceStep2Job.bidOperation.price-(submitCount-1)*100 : SubmitPriceStep2Job.bidOperation.price;
+
+                            //int delta = SubmitPriceStep2Job.bidOperation.price > 300 ?
+                            //    SubmitPriceStep2Job.bidOperation.price - (submitCount - 1) * 100 : SubmitPriceStep2Job.bidOperation.price;
+                            int delta = submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300;
                             this.giveDeltaPrice(SubmitPriceStep2Job.operation.give, delta: delta);//出价
                         }
                         success = this.submit(this.EndPoint, SubmitPriceStep2Job.operation.submit);//提交

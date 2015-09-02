@@ -51,13 +51,13 @@
             this.textMousePos = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groubBox4 = new System.Windows.Forms.GroupBox();
-            this.labelNo = new System.Windows.Forms.Label();
-            this.labelName = new System.Windows.Forms.Label();
-            this.buttonLogin = new System.Windows.Forms.Button();
             this.buttonStep1 = new System.Windows.Forms.Button();
+            this.buttonLogin = new System.Windows.Forms.Button();
+            this.labelName = new System.Windows.Forms.Label();
+            this.labelNo = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub5)).BeginInit();
@@ -346,6 +346,12 @@
             this.statusStrip1.TabIndex = 15;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
@@ -353,12 +359,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(396, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
             // groubBox4
             // 
@@ -373,14 +373,25 @@
             this.groubBox4.TabStop = false;
             this.groubBox4.Text = "登录信息";
             // 
-            // labelNo
+            // buttonStep1
             // 
-            this.labelNo.AutoSize = true;
-            this.labelNo.Location = new System.Drawing.Point(6, 22);
-            this.labelNo.Name = "labelNo";
-            this.labelNo.Size = new System.Drawing.Size(55, 13);
-            this.labelNo.TabIndex = 0;
-            this.labelNo.Text = "投标号：";
+            this.buttonStep1.Location = new System.Drawing.Point(115, 42);
+            this.buttonStep1.Name = "buttonStep1";
+            this.buttonStep1.Size = new System.Drawing.Size(57, 23);
+            this.buttonStep1.TabIndex = 3;
+            this.buttonStep1.Text = "出价";
+            this.buttonStep1.UseVisualStyleBackColor = true;
+            this.buttonStep1.Click += new System.EventHandler(this.buttonStep1_Click);
+            // 
+            // buttonLogin
+            // 
+            this.buttonLogin.Location = new System.Drawing.Point(115, 17);
+            this.buttonLogin.Name = "buttonLogin";
+            this.buttonLogin.Size = new System.Drawing.Size(57, 23);
+            this.buttonLogin.TabIndex = 2;
+            this.buttonLogin.Text = "登录";
+            this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             // 
             // labelName
             // 
@@ -391,27 +402,14 @@
             this.labelName.TabIndex = 1;
             this.labelName.Text = "姓名：";
             // 
-            // buttonLogin
+            // labelNo
             // 
-            this.buttonLogin.Enabled = false;
-            this.buttonLogin.Location = new System.Drawing.Point(115, 17);
-            this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(57, 23);
-            this.buttonLogin.TabIndex = 2;
-            this.buttonLogin.Text = "登录";
-            this.buttonLogin.UseVisualStyleBackColor = true;
-            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
-            // 
-            // buttonStep1
-            // 
-            this.buttonStep1.Enabled = false;
-            this.buttonStep1.Location = new System.Drawing.Point(115, 42);
-            this.buttonStep1.Name = "buttonStep1";
-            this.buttonStep1.Size = new System.Drawing.Size(57, 23);
-            this.buttonStep1.TabIndex = 3;
-            this.buttonStep1.Text = "出价";
-            this.buttonStep1.UseVisualStyleBackColor = true;
-            this.buttonStep1.Click += new System.EventHandler(this.buttonStep1_Click);
+            this.labelNo.AutoSize = true;
+            this.labelNo.Location = new System.Drawing.Point(6, 22);
+            this.labelNo.Name = "labelNo";
+            this.labelNo.Size = new System.Drawing.Size(55, 13);
+            this.labelNo.TabIndex = 0;
+            this.labelNo.Text = "投标号：";
             // 
             // Form1
             // 

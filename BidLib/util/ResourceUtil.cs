@@ -46,7 +46,7 @@ namespace tobid.util
             String urlResource = null;
             try
             {
-                logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?ip={1}", epKeepAlive, hostName));
+                logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?fromHost={1}", epKeepAlive, hostName));
                 String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}", hostName));
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
             }
