@@ -16,6 +16,68 @@ namespace tobid.util.orc
         List<Bitmap> SubImgs { get; }
     }
 
+    public class DynamicOrcUtil : IOrc {
+
+        private IOrc orc;
+        public DynamicOrcUtil(IOrc orc) {
+            this.orc = orc;
+        }
+
+        public String IdentifyStringFromPic(Bitmap image, int x = 0, int y = 0) {
+
+            ImageTool it = new ImageTool();
+            it.setImage(image);
+            it = it.changeToGrayImage().changeToBlackWhiteImage();
+            it = it.removeBadBlock(1, 1, 3);
+            Point start = this.findStart(image);
+            return this.orc.IdentifyStringFromPic(image, start.X, start.Y);
+        }
+
+        public List<Bitmap> SubImgs { get { return orc.SubImgs; } }
+
+        private Point findStart(Bitmap image) {
+
+            Boolean bFound = false;
+            int offsetX;
+            for (offsetX = 0; !bFound && offsetX < 20; offsetX++) {
+                
+                List<int> rows = new List<int>();
+                for (int x = 0; x < 15; x++) {
+                    int black = 0;
+                    for (int y = 0; y < image.Height; y++)
+                        black += this.isBlack(image.GetPixel(offsetX + x, y)) ? 1 : 0;
+                    rows.Add(black);
+                }
+
+                if (rows[0] == 0 && rows[1] != 0 && rows[2] != 0 && rows[3] != 0)
+                    bFound = true;
+                if(rows[0] == 0 && rows[1] == 0 && rows[2] == 0)
+                    bFound = (rows[12] == 0 && rows[13] == 0 && rows[14] == 0);
+            }
+
+            bFound = false;
+            int offsetY = 0;
+            for (int y = 0; !bFound && y < image.Height; y++) {
+
+                int black = 0;
+                for (int x = 0; x < 15; x++)
+                    black += this.isBlack(image.GetPixel(offsetX + x, y)) ? 1 : 0;
+                if (black != 0) {
+                    offsetY = y-1;
+                    bFound = true;
+                }
+            }
+            return new Point(offsetX, offsetY);
+        }
+
+        private Boolean isBlack(Color color) {
+            return color.R == 0;
+        }
+    }
+
+    /// <summary>
+    /// 验证码提示识别
+    /// </summary>
     public class OrcUtilEx : IOrc {
 
         class OffsetX : IComparable<OffsetX>{
@@ -245,6 +307,4 @@ namespace tobid.util.orc
             return sb.ToString();
         }
     }
-
-    
 }
