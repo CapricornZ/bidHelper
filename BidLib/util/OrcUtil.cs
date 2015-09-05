@@ -16,65 +16,6 @@ namespace tobid.util.orc
         List<Bitmap> SubImgs { get; }
     }
 
-    public class DynamicOrcUtil : IOrc {
-
-        private IOrc orc;
-        public DynamicOrcUtil(IOrc orc) {
-            this.orc = orc;
-        }
-
-        public String IdentifyStringFromPic(Bitmap image, int x = 0, int y = 0) {
-
-            ImageTool it = new ImageTool();
-            it.setImage(image);
-            it = it.changeToGrayImage().changeToBlackWhiteImage();
-            it = it.removeBadBlock(1, 1, 3);
-            Point start = this.findStart(image);
-            return this.orc.IdentifyStringFromPic(image, start.X, start.Y);
-        }
-
-        public List<Bitmap> SubImgs { get { return orc.SubImgs; } }
-
-        private Point findStart(Bitmap image) {
-
-            Boolean bFound = false;
-            int offsetX;
-            for (offsetX = 0; !bFound && offsetX < 20; offsetX++) {
-                
-                List<int> rows = new List<int>();
-                for (int x = 0; x < 15; x++) {
-                    int black = 0;
-                    for (int y = 0; y < image.Height; y++)
-                        black += this.isBlack(image.GetPixel(offsetX + x, y)) ? 1 : 0;
-                    rows.Add(black);
-                }
-
-                if (rows[0] == 0 && rows[1] != 0 && rows[2] != 0 && rows[3] != 0)
-                    bFound = true;
-                if(rows[0] == 0 && rows[1] == 0 && rows[2] == 0)
-                    bFound = (rows[12] == 0 && rows[13] == 0 && rows[14] == 0);
-            }
-
-            bFound = false;
-            int offsetY = 0;
-            for (int y = 0; !bFound && y < image.Height; y++) {
-
-                int black = 0;
-                for (int x = 0; x < 15; x++)
-                    black += this.isBlack(image.GetPixel(offsetX + x, y)) ? 1 : 0;
-                if (black != 0) {
-                    offsetY = y-1;
-                    bFound = true;
-                }
-            }
-            return new Point(offsetX, offsetY);
-        }
-
-        private Boolean isBlack(Color color) {
-            return color.R == 0;
-        }
-    }
-
     /// <summary>
     /// 验证码提示识别
     /// </summary>
@@ -127,12 +68,12 @@ namespace tobid.util.orc
                 it = it.removeBadBlock(1, 1, config.configTip.minNearSpots);
 
             List<OffsetX> offset = new List<OffsetX>();
-            for (int i = 0; i < config.configTip.offsetX.Length; i++)
-                offset.Add(new OffsetX(config.configTip.offsetX[i], config.configTip.offsetY,
+            for (int i = 0; i < config.configTip.index.Length; i++)
+                offset.Add(new OffsetX(config.configTip.offsetX + config.configTip.index[i], config.configTip.offsetY,
                     config.configTip.width, config.configTip.height, 
                     this.dictTip));
-            for(int i=0; i<config.configNo.offsetX.Length; i++)
-                offset.Add(new OffsetX(config.configNo.offsetX[i], config.configNo.offsetY,
+            for(int i=0; i<config.configNo.index.Length; i++)
+                offset.Add(new OffsetX(config.configNo.offsetX + config.configNo.index[i], config.configNo.offsetY,
                     config.configNo.width, config.configNo.height, this.dictNo));
 
             offset.Sort();
@@ -195,8 +136,8 @@ namespace tobid.util.orc
             return 0;
         }
 
-        private int[] offsetX;
-        private int offsetY;
+        private int[] index;
+        private int offsetX, offsetY;
         private int width, height;
         private int minNearSpots;
         private IDictionary<Bitmap, String> dict;
@@ -205,47 +146,20 @@ namespace tobid.util.orc
 
         static public OrcUtil getInstance(tobid.rest.OrcConfig orcConfig, IDictionary<Bitmap, String> dict)
         {
-            OrcUtil rtn = getInstance(orcConfig.offsetX, orcConfig.offsetY, orcConfig.width, orcConfig.height, dict);
+            OrcUtil rtn = getInstance(orcConfig.index, orcConfig.offsetX, orcConfig.offsetY, orcConfig.width, orcConfig.height, dict);
             rtn.minNearSpots = orcConfig.minNearSpots;
             return rtn;
         }
 
-        static public OrcUtil getInstance(int[] offsetX, int offsetY, int width, int height, IDictionary<Bitmap, String> dict)
+        static public OrcUtil getInstance(int[] index, int offsetX, int offsetY, int width, int height, IDictionary<Bitmap, String> dict)
         {
             OrcUtil rtn = new OrcUtil();
+            rtn.index = index;
             rtn.offsetX = offsetX;
             rtn.offsetY = offsetY;
             rtn.width = width;
             rtn.height = height;
             rtn.dict = dict;
-            return rtn;
-        }
-
-        /// <summary>
-        /// 创建Orc实例(from Stream)
-        /// </summary>
-        /// <param name="offsetX"></param>
-        /// <param name="offsetY"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="resource"></param>
-        /// <returns></returns>
-        static public OrcUtil getInstance(int[] offsetX, int offsetY, int width, int height, Stream resource)
-        {
-            OrcUtil rtn = new OrcUtil();
-            rtn.offsetX = offsetX;
-            rtn.offsetY = offsetY;
-            rtn.width = width;
-            rtn.height = height;
-            rtn.dict = new Dictionary<Bitmap, String>();
-
-            System.Resources.ResXResourceReader resxReader = new System.Resources.ResXResourceReader(resource);
-            IDictionaryEnumerator enumerator = resxReader.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                DictionaryEntry entry = (DictionaryEntry)enumerator.Current;
-                rtn.dict.Add((Bitmap)entry.Value, (String)entry.Key);
-            }
             return rtn;
         }
 
@@ -258,9 +172,10 @@ namespace tobid.util.orc
         /// <param name="height"></param>
         /// <param name="resource"></param>
         /// <returns></returns>
-        static public OrcUtil getInstance(int[] offsetX, int offsetY, int width, int height, String dictPath)
+        static public OrcUtil getInstance(int[] index, int offsetX, int offsetY, int width, int height, String dictPath)
         {
             OrcUtil rtn = new OrcUtil();
+            rtn.index = index;
             rtn.offsetX = offsetX;
             rtn.offsetY = offsetY;
             rtn.width = width;
@@ -295,9 +210,9 @@ namespace tobid.util.orc
             if (minNearSpots != 0)
                 it = it.removeBadBlock(1, 1, this.minNearSpots);
             it.Image.Save(@"p.bmp");
-            for (int i = 0; i < this.offsetX.Length; i++)
+            for (int i = 0; i < this.index.Length; i++)
             {
-                Rectangle cloneRect = new Rectangle(this.offsetX[i] + x, this.offsetY + y, this.width, this.height);
+                Rectangle cloneRect = new Rectangle(this.offsetX + this.index[i] + x, this.offsetY + y, this.width, this.height);
                 Bitmap subImg = it.Image.Clone(cloneRect, it.Image.PixelFormat);
                 this.subImgs.Add(subImg);
                 subImg.Save(String.Format(@"p{0}.bmp", i));

@@ -25,14 +25,20 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.captchaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sToolStripMenuItem3s = new System.Windows.Forms.ToolStripMenuItem();
             this.sToolStripMenuItem5s = new System.Windows.Forms.ToolStripMenuItem();
             this.sToolStripMenuItem7s = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -43,13 +49,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(115, 48);
             // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            // 
             // captchaToolStripMenuItem
             // 
             this.captchaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -57,48 +56,77 @@
             this.sToolStripMenuItem5s,
             this.sToolStripMenuItem7s});
             this.captchaToolStripMenuItem.Name = "captchaToolStripMenuItem";
-            this.captchaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.captchaToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.captchaToolStripMenuItem.Text = "Captcha";
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // sToolStripMenuItem3s
             // 
             this.sToolStripMenuItem3s.Name = "sToolStripMenuItem3s";
-            this.sToolStripMenuItem3s.Size = new System.Drawing.Size(152, 22);
+            this.sToolStripMenuItem3s.Size = new System.Drawing.Size(85, 22);
             this.sToolStripMenuItem3s.Text = "3s";
             this.sToolStripMenuItem3s.Click += new System.EventHandler(this.sToolStripMenuItem3s_Click);
             // 
             // sToolStripMenuItem5s
             // 
             this.sToolStripMenuItem5s.Name = "sToolStripMenuItem5s";
-            this.sToolStripMenuItem5s.Size = new System.Drawing.Size(152, 22);
+            this.sToolStripMenuItem5s.Size = new System.Drawing.Size(85, 22);
             this.sToolStripMenuItem5s.Text = "5s";
             this.sToolStripMenuItem5s.Click += new System.EventHandler(this.sToolStripMenuItem5s_Click);
             // 
             // sToolStripMenuItem7s
             // 
             this.sToolStripMenuItem7s.Name = "sToolStripMenuItem7s";
-            this.sToolStripMenuItem7s.Size = new System.Drawing.Size(152, 22);
+            this.sToolStripMenuItem7s.Size = new System.Drawing.Size(85, 22);
             this.sToolStripMenuItem7s.Text = "7s";
             this.sToolStripMenuItem7s.Click += new System.EventHandler(this.sToolStripMenuItem7s_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
+            // chart1
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(12, 12);
+            this.chart1.Name = "chart1";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
+            this.chart1.Size = new System.Drawing.Size(629, 312);
+            this.chart1.TabIndex = 1;
+            this.chart1.Text = "chart1";
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 112);
+            this.ClientSize = new System.Drawing.Size(653, 337);
+            this.Controls.Add(this.chart1);
             this.Name = "Form1";
-            this.ShowInTaskbar = false;
             this.Text = "Cheater";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -112,6 +140,8 @@
         private System.Windows.Forms.ToolStripMenuItem sToolStripMenuItem7s;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

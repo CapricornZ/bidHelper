@@ -44,25 +44,19 @@ namespace tobid.util
             GlobalConfig global = null;
             Stream stream = null;
             String urlResource = null;
-            try
-            {
+            try {
                 logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?fromHost={1}", epKeepAlive, hostName));
                 String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}", hostName));
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 logger.ErrorFormat("获取全局配置异常:{0}", ex);
             }
 
-            try
-            {
+            try {
                 urlResource = endPoint + global.repository;
                 logger.DebugFormat("获取全局配置资源...【{0}】", urlResource);
                 stream = new HttpUtil().getAsBinary(urlResource);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 logger.ErrorFormat("获取全局配置资源异常:{0}", ex);
             }
 
@@ -76,16 +70,16 @@ namespace tobid.util
             ZipInputStream zip = new ZipInputStream(stream);
             ZipEntry entry = null;
             logger.Debug("解析资源...");
-            while ((entry = zip.GetNextEntry()) != null)
-            {
-                if (entry.IsFile)
-                {
+            while ((entry = zip.GetNextEntry()) != null) {
+
+                if (entry.IsFile) {
+
                     logger.Debug(entry.Name);
                     MemoryStream binaryStream = new MemoryStream();
                     int size = 2048;
                     byte[] data = new byte[2048];
-                    while (true)
-                    {
+                    while (true) {
+
                         size = zip.Read(data, 0, data.Length);
                         if (size > 0)
                             binaryStream.Write(data, 0, size);
@@ -114,7 +108,8 @@ namespace tobid.util
 
             rtn.m_tag = global.tag;
             rtn.m_login = OrcUtil.getInstance(global.login, dictLogin);
-            rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
+            //rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
+            rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_tips = new IOrc[]{
                 OrcUtilEx.getInstance(global.tips0, dictTips, dictTipsNo),

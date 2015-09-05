@@ -67,6 +67,7 @@
     <Compile Include="schedule\SubmitPriceStep1Job.cs" />
     <Compile Include="util\CaptchaUtil.cs" />
     <Compile Include="util\DomUtil.cs" />
+    <Compile Include="util\DynamicOrcUtil.cs" />
     <Compile Include="util\HttpUtil.cs" />
     <Compile Include="util\ImageTool.cs" />
     <Compile Include="util\INIUtil.cs" />

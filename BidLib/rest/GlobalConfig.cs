@@ -11,7 +11,8 @@ namespace tobid.rest
 
     public class OrcConfig : IOrcConfig {
 
-        public int[] offsetX { get; set; }
+        public int[] index { get; set; }
+        public int offsetX { get; set; }
         public int offsetY { get; set; }
         public int width { get; set; }
         public int height { get; set; }

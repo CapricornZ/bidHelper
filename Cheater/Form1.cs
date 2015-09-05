@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+
 using System.Runtime.InteropServices;
 
 using tobid.rest;
@@ -19,11 +21,13 @@ namespace Cheater {
 
         private String[] bitmaps;
         private Random ran = new Random();
+        tobid.util.orc.OrcUtil orc;
         private String EndPoint { get; set; }
         public Form1(String endPoint) {
 
             InitializeComponent();
             this.EndPoint = endPoint;
+            orc = tobid.util.orc.OrcUtil.getInstance(new int[] { 0, 8, 16, 24, 32 }, 0, 0, 7, 10, @"price");
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -40,6 +44,13 @@ namespace Cheater {
                     new ReceiveOperation(this.receiveOperation),
                     new ReceiveOperation(this.receiveOperation)});
             keepAliveJob.Execute();
+
+            this.chart1.Series.Clear();
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Spline;
+            this.chart1.Series.Add(series);
+            this.chart1.ChartAreas[0].AxisY.Maximum = 85000;
+            this.chart1.ChartAreas[0].AxisY.Minimum = 79900;
         }
 
         private void receiveLogin(Operation operation, Config config) {
@@ -104,6 +115,19 @@ namespace Cheater {
                 g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x, SubmitPriceStep2Job.getPosition().submit.captcha[0].y + 4));
                 System.Threading.Thread.Sleep(50);
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) {
+
+            byte[] content = new tobid.util.ScreenUtil().screenCaptureAsByte(380, 507, 43, 14);
+            Bitmap bitmap = new Bitmap(new System.IO.MemoryStream(content));
+            
+            String price = orc.IdentifyStringFromPic(bitmap);
+
+            Series series = this.chart1.Series[0];
+            DataPoint dp = new DataPoint();
+            dp.SetValueXY("01", Int32.Parse(price));
+            series.Points.Add(dp);
         }
         
     }

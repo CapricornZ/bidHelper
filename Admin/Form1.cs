@@ -413,9 +413,7 @@ namespace Admin {
             //}
             
             logger.Info("\tBEGIN identify Captcha");
-            DynamicOrcUtil dynamicOrc = new DynamicOrcUtil(this.m_orcCaptcha);
-            String txtCaptcha = dynamicOrc.IdentifyStringFromPic(bitmap);
-            //String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(bitmap);
+            String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(bitmap);
             logger.InfoFormat("\tEND   identify Captcha : [{0}]", txtCaptcha);
 
             logger.Info("\tBEGIN input ACTIVE CAPTCHA");
