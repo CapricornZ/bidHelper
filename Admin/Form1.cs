@@ -475,7 +475,21 @@ namespace Admin {
             this.m_step1Form.BringToFront();
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags); 
         private void buttonLogin_Click(object sender, EventArgs e) {
+
+            /*System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Threading.Thread.Sleep(1000);
+
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.Contains("about:blank")) {
+
+                    //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 800, 0x40);
+                    Browser.Navigate("http://moni.51hupai.org:8081");
+                }
+            }*/
             
             LoginJob job = new LoginJob(this.m_orcLogin);
             job.Execute();

@@ -41,5 +41,7 @@ namespace tobid.rest
         public OrcConfig loading { get { return this.orcConfigs[3] as OrcConfig; } }
         public OrcConfig captcha { get { return this.orcConfigs[4] as OrcConfig; } }
         public OrcConfig login { get { return this.orcConfigs[5] as OrcConfig; } }
+
+        public Boolean dynamic { get; set; }
     }
 }

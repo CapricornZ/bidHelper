@@ -108,8 +108,10 @@ namespace tobid.util
 
             rtn.m_tag = global.tag;
             rtn.m_login = OrcUtil.getInstance(global.login, dictLogin);
-            //rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
-            rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
+            if(!global.dynamic)
+                rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
+            else
+                rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_tips = new IOrc[]{
                 OrcUtilEx.getInstance(global.tips0, dictTips, dictTipsNo),

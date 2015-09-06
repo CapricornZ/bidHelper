@@ -66,10 +66,12 @@ namespace tobid.scheduler.jobs
         public void Execute()
         {
             DateTime now = DateTime.Now;
-            logger.Debug(String.Format("NOW:{0}, {{Start:{1}, Expire:{2}, Count:{3}}}",
-                now,
-                LoginJob.operation.startTime, LoginJob.operation.expireTime,
-                LoginJob.executeCount));
+            if (LoginJob.operation == null)
+                logger.Debug("LoginJob.OPERATION NOT SET");
+            else
+                logger.Debug(String.Format("{0} {{Start:{1}, Expire:{2}, Count:{3}}}",
+                    LoginJob.config.pname, LoginJob.operation.startTime, LoginJob.operation.expireTime,
+                    LoginJob.executeCount));
 
             if (Monitor.TryEnter(LoginJob.lockObj, 500))
             {
@@ -98,7 +100,7 @@ namespace tobid.scheduler.jobs
                     if (Browser.LocationURL.Contains("about:blank")) {
 
                         Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
-                        Browser.Navigate("https://paimai.alltobid.com/bid/2015081501/login.htm");
+                        Browser.Navigate(LoginJob.operation.url);
                         DocComplete.WaitOne();
                         //"testBtnConfirm";
                         //"protocolBtnConfirm";

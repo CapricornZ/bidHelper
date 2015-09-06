@@ -47,6 +47,7 @@ namespace tobid.rest
     /// 登录
     /// </summary>
     public class LoginOperation : Operation {
+        public String url { get; set; }
     }
 
     /// <summary>
