@@ -152,37 +152,37 @@ namespace Helper
                         case 103://CTRL+3
                             logger.Info("HOT KEY CTRL + 3 (103)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 104://CTRL+4
                             logger.Info("HOT KEY CTRL + 4 (104)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 400);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 105://CTRL+5
                             logger.Info("HOT KEY CTRL + 5 (105)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 500);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 106://CTRL+6
                             logger.Info("HOT KEY CTRL + 6 (106)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 600);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 107://CTRL+7
                             logger.Info("HOT KEY CTRL + 7 (107)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 700);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 108://CTRL+8
                             logger.Info("HOT KEY CTRL + 8 (108)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 800);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 109://CTRL+9
                             logger.Info("HOT KEY CTRL + 9 (109)");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 900);
-                            ScreenUtil.SetForegroundWindow(this.Handle);
+                            //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 201://LEFT
                             logger.Info("HOT KEY CTRL + LEFT (201)");
@@ -272,6 +272,9 @@ namespace Helper
             logger.Info("\tEND   click BUTTON[出价]");
             logger.Info("END   givePRICE");
 
+            ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
             //启动线程截校验码
             System.Threading.Thread loading = new System.Threading.Thread(delegate() {
                 ScreenUtil screen = new ScreenUtil();
@@ -334,6 +337,9 @@ namespace Helper
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");
             logger.Info("END   givePRICE");
+
+            ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
             //启动线程截校验码
             System.Threading.Thread loading = new System.Threading.Thread(delegate() {
