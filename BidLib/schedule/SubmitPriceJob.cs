@@ -26,6 +26,7 @@ namespace tobid.scheduler.jobs
 
         private static int price = 0;
         private static Step2Operation bidOperation;
+        private static Boolean priceOnly;
         private static int executeCount = 1;
         private static BidStep2 operation = null;
 
@@ -62,7 +63,7 @@ namespace tobid.scheduler.jobs
             return SubmitPriceStep2Job.operation;
         }
 
-        public static Boolean setConfig(int Price, Step2Operation operation) {
+        public static Boolean setConfig(int Price, Step2Operation operation, Boolean priceOnly = false) {
 
             logger.Info("setConfig {...}");
             Boolean rtn = false;
@@ -75,6 +76,7 @@ namespace tobid.scheduler.jobs
                     logger.DebugFormat("startTime : {0}", operation.startTime);
                     logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
+                    SubmitPriceStep2Job.priceOnly = priceOnly;
                     SubmitPriceStep2Job.price = Price;
                     SubmitPriceStep2Job.executeCount = 0;
                     SubmitPriceStep2Job.bidOperation = operation;
@@ -88,7 +90,7 @@ namespace tobid.scheduler.jobs
             return rtn;
         }
 
-        public static Boolean setConfig(Step2Operation operation) {
+        public static Boolean setConfig(Step2Operation operation, Boolean priceOnly = false) {
 
             logger.Info("setConfig {...}");
             Boolean rtn = false;
@@ -101,6 +103,7 @@ namespace tobid.scheduler.jobs
                     logger.DebugFormat("startTime : {0}", operation.startTime);
                     logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
+                    SubmitPriceStep2Job.priceOnly = priceOnly;
                     SubmitPriceStep2Job.price = 0;
                     SubmitPriceStep2Job.executeCount = 0;
                     SubmitPriceStep2Job.bidOperation = operation;
@@ -149,7 +152,10 @@ namespace tobid.scheduler.jobs
                             int delta = submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300;
                             this.giveDeltaPrice(SubmitPriceStep2Job.operation.give, delta: delta);//出价
                         }
-                        success = this.submit(this.EndPoint, SubmitPriceStep2Job.operation.submit);//提交
+                        if (SubmitPriceStep2Job.priceOnly)
+                            success = true;
+                        else
+                            success = this.submit(this.EndPoint, SubmitPriceStep2Job.operation.submit);//提交
                         logger.WarnFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
                     }
                 }

@@ -60,6 +60,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.checkPriceOnly = new System.Windows.Forms.CheckBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -71,6 +72,7 @@
             // 
             // groupBoxLocal
             // 
+            this.groupBoxLocal.Controls.Add(this.checkPriceOnly);
             this.groupBoxLocal.Controls.Add(this.panel1);
             this.groupBoxLocal.Controls.Add(this.btnUpdatePolicy);
             this.groupBoxLocal.Controls.Add(this.comboBox1);
@@ -91,7 +93,7 @@
             this.panel1.Controls.Add(this.radioPrice);
             this.panel1.Location = new System.Drawing.Point(6, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(81, 72);
+            this.panel1.Size = new System.Drawing.Size(81, 56);
             this.panel1.TabIndex = 3;
             // 
             // radioDeltaPrice
@@ -380,6 +382,16 @@
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // checkPriceOnly
+            // 
+            this.checkPriceOnly.AutoSize = true;
+            this.checkPriceOnly.Location = new System.Drawing.Point(9, 119);
+            this.checkPriceOnly.Name = "checkPriceOnly";
+            this.checkPriceOnly.Size = new System.Drawing.Size(62, 17);
+            this.checkPriceOnly.TabIndex = 5;
+            this.checkPriceOnly.Text = "仅出价";
+            this.checkPriceOnly.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -448,6 +460,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.CheckBox checkPriceOnly;
     }
 }
 
