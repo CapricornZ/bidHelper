@@ -341,7 +341,7 @@ namespace tobid.scheduler.jobs
                 }
             }
             logger.Info("\tEND   input CAPTCHA");
-
+            
             logger.Info("\tBEGIN click BUTTON[确定]");
             logger.DebugFormat("BUTTON[确定]({0}, {1})", submitPoints.buttons[0].x, submitPoints.buttons[0].y);
             ScreenUtil.SetCursorPos(submitPoints.buttons[0].x, submitPoints.buttons[0].y);

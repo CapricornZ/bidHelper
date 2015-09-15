@@ -21,11 +21,14 @@ namespace tobid.util
         IOrc[] Tips { get; }
         IOrc Captcha { get; }
         IOrc Login { get; }
+        IOrc Title { get; }
     }
 
     public class Resource : IGlobalConfig
     {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Resource));
+
+        private orc.IOrc m_title;
         private orc.IOrc m_login;
         private orc.IOrc m_captcha;
         private orc.IOrc m_price;
@@ -66,6 +69,7 @@ namespace tobid.util
             IDictionary<Bitmap, String> dictTipsNo = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictCaptcha = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictLogin = new Dictionary<Bitmap, String>();
+            IDictionary<Bitmap, String> dictTitle = new Dictionary<Bitmap, String>();
 
             ZipInputStream zip = new ZipInputStream(stream);
             ZipEntry entry = null;
@@ -97,6 +101,8 @@ namespace tobid.util
                         dictLoading.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("login/"))
                         dictLogin.Add(bitmap, array[array.Length - 2]);
+                    else if (entry.Name.ToLower().StartsWith("title/"))
+                        dictTitle.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("captcha.tip/")) {
                         if (entry.Name.ToLower().StartsWith("captcha.tip/no/"))
                             dictTipsNo.Add(bitmap, array[array.Length - 2]);
@@ -108,16 +114,18 @@ namespace tobid.util
 
             rtn.m_tag = global.tag;
             rtn.m_login = OrcUtil.getInstance(global.login, dictLogin);
-            if(!global.dynamic)
+            if (!global.dynamic) {
                 rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
-            else
+                rtn.m_title = OrcUtil.getInstance(global.title, dictTitle);
+            } else {
                 rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
+                rtn.m_title = DynamicOrcUtil.getInstance(global.title, dictTitle);
+            }
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_tips = new IOrc[]{
                 OrcUtilEx.getInstance(global.tips0, dictTips, dictTipsNo),
                 OrcUtilEx.getInstance(global.tips1, dictTips, dictTipsNo)
             };
-
             rtn.m_loading = OrcUtil.getInstance(global.loading, dictLoading);
             return rtn;
         }
@@ -129,6 +137,7 @@ namespace tobid.util
         public IOrc[] Tips { get { return this.m_tips; } }
         public IOrc Captcha { get { return this.m_captcha; } }
         public IOrc Login { get { return this.m_login; } }
+        public IOrc Title { get { return this.m_title; } }
         #endregion
     }
 }

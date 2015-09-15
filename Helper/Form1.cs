@@ -39,6 +39,7 @@ namespace Helper
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
 
+        private IOrc m_orcTitle;
         private IOrc m_orcCaptcha;
         private IOrc m_orcPrice;
         private IOrc m_orcCaptchaLoading;
@@ -95,6 +96,7 @@ namespace Helper
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint);//加载配置
 
             this.Text = configResource.tag;
+            this.m_orcTitle = configResource.Title;
             this.m_orcCaptcha = configResource.Captcha;//
             this.m_orcPrice = configResource.Price;//价格识别
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
@@ -206,7 +208,8 @@ namespace Helper
                             break;
                         case 222://ENTER
                             logger.Info("HOT KEY ENTER");
-                            this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+                            //this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+                            this.processEnter();
                             break;
                     }
                     break;
@@ -507,8 +510,8 @@ namespace Helper
                 ScreenUtil.SetCursorPos(bid.submit.buttons[0].x, bid.submit.buttons[0].y);//确定按钮
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
-                System.Threading.Thread.Sleep(1000);
-                ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188 / 2, bid.submit.buttons[0].y - 10);//确定按钮
+                //System.Threading.Thread.Sleep(1000);
+                //ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188 / 2, bid.submit.buttons[0].y - 10);//确定按钮
                 //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 //ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188 / 2, bid.submit.buttons[0].y - 10);//确定按钮
                 logger.Info("END   submitCAPTCHA");
@@ -728,6 +731,27 @@ namespace Helper
             //    this.m_orcCaptchaTipsUtil,
             //    this.m_orcCaptcha);
             //submitPriceJob.Execute();
+        }
+
+        private void processEnter() {
+
+            //int x=937, y=276;
+            //byte[] title = new ScreenUtil().screenCaptureAsByte(x+35-2, y+84+1, 150, 40);
+            int x = 937, y = 276;
+            //1170,585
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + 30, y + 80, 170, 50);
+            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+            String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+            if ("系统提示".Equals(strTitle)) {
+
+                logger.Info("proces Enter in [系统提示]");
+                ScreenUtil.SetCursorPos(1170, 585);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            } else if ("投标拍卖".Equals(strTitle)) {
+
+                logger.Info("proces Enter in [投标拍卖]");
+                this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+            }
         }
     }
 }
