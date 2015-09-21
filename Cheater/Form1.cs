@@ -27,7 +27,7 @@ namespace Cheater {
 
             InitializeComponent();
             this.EndPoint = endPoint;
-            orc = tobid.util.orc.OrcUtil.getInstance(new int[] { 0, 8, 16, 24, 32 }, 0, 0, 7, 10, @"price");
+            //orc = tobid.util.orc.OrcUtil.getInstance(new int[] { 0, 8, 16, 24, 32 }, 0, 0, 7, 10, @"price");
         }
 
         private void Form1_Load(object sender, EventArgs e) {
@@ -43,13 +43,13 @@ namespace Cheater {
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveOperation),
                     new ReceiveOperation(this.receiveOperation)});
-            keepAliveJob.Execute();
+            //keepAliveJob.Execute();
 
             this.chart1.Series.Clear();
             Series series = new Series();
             series.ChartType = SeriesChartType.Spline;
             this.chart1.Series.Add(series);
-            this.chart1.ChartAreas[0].AxisY.Maximum = 80000;
+            this.chart1.ChartAreas[0].AxisY.Maximum = 85000;
             this.chart1.ChartAreas[0].AxisY.Minimum = 79900;
         }
 
@@ -119,26 +119,24 @@ namespace Cheater {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            byte[] content = new tobid.util.ScreenUtil().screenCaptureAsByte(665, 517, 43, 14);
+            byte[] content = new tobid.util.ScreenUtil().screenCaptureAsByte(380, 507, 43, 14);
             Bitmap bitmap = new Bitmap(new System.IO.MemoryStream(content));
-            bitmap.Save("PRICE.bmp");
             
             String price = orc.IdentifyStringFromPic(bitmap);
-            System.Console.WriteLine(price);
 
             Series series = this.chart1.Series[0];
             DataPoint dp = new DataPoint();
             dp.SetValueXY("01", Int32.Parse(price));
-
-            int max = Int32.Parse(price) + 300;
-
-            this.chart1.ChartAreas[0].AxisY.Maximum = max > this.chart1.ChartAreas[0].AxisY.Minimum ? max : this.chart1.ChartAreas[0].AxisY.Minimum+100;
             series.Points.Add(dp);
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private void button1_Click(object sender, EventArgs e)
+        {
+            WinIOLab.Initialize(); // 注册
+            WinIOLab.KeyDown(Keys.A); // 按下A
+            WinIOLab.KeyUp(Keys.A); // 松开A
+            WinIOLab.Shutdown(); // 用完后注销
 
-            this.chart1.Series[0].Points.Clear();
         }
         
     }

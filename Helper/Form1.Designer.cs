@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBoxLocal = new System.Windows.Forms.GroupBox();
+            this.checkPriceOnly = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioDeltaPrice = new System.Windows.Forms.RadioButton();
             this.radioPrice = new System.Windows.Forms.RadioButton();
@@ -60,7 +61,12 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.checkPriceOnly = new System.Windows.Forms.CheckBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.国拍ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -68,6 +74,7 @@
             this.panel2.SuspendLayout();
             this.groupBoxPolicy.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -80,12 +87,22 @@
             this.groupBoxLocal.Controls.Add(this.label1);
             this.groupBoxLocal.Controls.Add(this.dateTimePicker1);
             this.groupBoxLocal.Enabled = false;
-            this.groupBoxLocal.Location = new System.Drawing.Point(192, 6);
+            this.groupBoxLocal.Location = new System.Drawing.Point(197, 27);
             this.groupBoxLocal.Name = "groupBoxLocal";
             this.groupBoxLocal.Size = new System.Drawing.Size(187, 143);
             this.groupBoxLocal.TabIndex = 5;
             this.groupBoxLocal.TabStop = false;
             this.groupBoxLocal.Text = "自选策略";
+            // 
+            // checkPriceOnly
+            // 
+            this.checkPriceOnly.AutoSize = true;
+            this.checkPriceOnly.Location = new System.Drawing.Point(9, 119);
+            this.checkPriceOnly.Name = "checkPriceOnly";
+            this.checkPriceOnly.Size = new System.Drawing.Size(62, 17);
+            this.checkPriceOnly.TabIndex = 5;
+            this.checkPriceOnly.Text = "仅出价";
+            this.checkPriceOnly.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -232,7 +249,7 @@
             this.groupBoxManual.Controls.Add(this.label5);
             this.groupBoxManual.Controls.Add(this.textInputCaptcha);
             this.groupBoxManual.Controls.Add(this.label4);
-            this.groupBoxManual.Location = new System.Drawing.Point(401, 6);
+            this.groupBoxManual.Location = new System.Drawing.Point(406, 27);
             this.groupBoxManual.Name = "groupBoxManual";
             this.groupBoxManual.Size = new System.Drawing.Size(195, 143);
             this.groupBoxManual.TabIndex = 9;
@@ -304,7 +321,7 @@
             this.panel2.Controls.Add(this.radioManualPolicy);
             this.panel2.Controls.Add(this.radioLocalPolicy);
             this.panel2.Controls.Add(this.radioServPolicy);
-            this.panel2.Location = new System.Drawing.Point(133, 156);
+            this.panel2.Location = new System.Drawing.Point(138, 177);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(246, 29);
             this.panel2.TabIndex = 8;
@@ -349,7 +366,7 @@
             this.groupBoxPolicy.Controls.Add(this.label2);
             this.groupBoxPolicy.Controls.Add(this.textBox2);
             this.groupBoxPolicy.Controls.Add(this.textBox1);
-            this.groupBoxPolicy.Location = new System.Drawing.Point(7, 6);
+            this.groupBoxPolicy.Location = new System.Drawing.Point(12, 27);
             this.groupBoxPolicy.Name = "groupBoxPolicy";
             this.groupBoxPolicy.Size = new System.Drawing.Size(166, 143);
             this.groupBoxPolicy.TabIndex = 7;
@@ -359,7 +376,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(584, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(587, 17);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -376,34 +393,77 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 191);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(603, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(606, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // checkPriceOnly
+            // menuStrip1
             // 
-            this.checkPriceOnly.AutoSize = true;
-            this.checkPriceOnly.Location = new System.Drawing.Point(9, 119);
-            this.checkPriceOnly.Name = "checkPriceOnly";
-            this.checkPriceOnly.Size = new System.Drawing.Size(62, 17);
-            this.checkPriceOnly.TabIndex = 5;
-            this.checkPriceOnly.Text = "仅出价";
-            this.checkPriceOnly.UseVisualStyleBackColor = true;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem,
+            this.配置ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(606, 24);
+            this.menuStrip1.TabIndex = 10;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.国拍ToolStripMenuItem,
+            this.模拟ToolStripMenuItem});
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.xToolStripMenuItem.Text = "环境选择";
+            // 
+            // 国拍ToolStripMenuItem
+            // 
+            this.国拍ToolStripMenuItem.Checked = true;
+            this.国拍ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.国拍ToolStripMenuItem.Name = "国拍ToolStripMenuItem";
+            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.国拍ToolStripMenuItem.Text = "国拍";
+            this.国拍ToolStripMenuItem.Click += new System.EventHandler(this.国拍ToolStripMenuItem_Click);
+            // 
+            // 模拟ToolStripMenuItem
+            // 
+            this.模拟ToolStripMenuItem.Name = "模拟ToolStripMenuItem";
+            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.模拟ToolStripMenuItem.Text = "模拟";
+            this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.模拟ToolStripMenuItem_Click);
+            // 
+            // 配置ToolStripMenuItem
+            // 
+            this.配置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stepToolStripMenuItem});
+            this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.配置ToolStripMenuItem.Text = "配置";
+            // 
+            // stepToolStripMenuItem
+            // 
+            this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
+            this.stepToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stepToolStripMenuItem.Text = "Step2";
+            this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(603, 213);
+            this.ClientSize = new System.Drawing.Size(606, 230);
             this.Controls.Add(this.groupBoxLocal);
             this.Controls.Add(this.groupBoxManual);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.groupBoxPolicy);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.TopMost = true;
@@ -423,6 +483,8 @@
             this.groupBoxPolicy.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -461,6 +523,12 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.CheckBox checkPriceOnly;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 国拍ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 模拟ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 配置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stepToolStripMenuItem;
     }
 }
 

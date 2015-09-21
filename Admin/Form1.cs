@@ -22,7 +22,7 @@ namespace Admin {
         AUTO
     }
 
-    public partial class Form1 : Form {
+    public partial class Form1 : Form, IRepository {
 
         public Form1(String endPoint) {
             InitializeComponent();
@@ -43,6 +43,7 @@ namespace Admin {
 
         private String m_endPoint;
 
+        private IOrc m_orcTitle;
         private IOrc m_orcLogin;
         private IOrc m_orcCaptcha;
         private IOrc m_orcCaptchaLoading;
@@ -51,6 +52,16 @@ namespace Admin {
         private CaptchaUtil m_orcCaptchaTipsUtil;
         private Step2Form m_step2Form;
         private Step1Form m_step1Form;
+
+        #region IRepository
+        public String endPoint { get { return this.m_endPoint; } }
+        public IOrc orcTitle { get { return this.m_orcTitle; } }
+        public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
+        public IOrc orcPrice { get { return this.m_orcPrice; } }
+        public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
+        public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
+        public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }
+        #endregion
 
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceThread;
@@ -74,6 +85,7 @@ namespace Admin {
             Hotkey.UnregisterHotKey(this.Handle, 122);
             Hotkey.UnregisterHotKey(this.Handle, 123);
             Hotkey.UnregisterHotKey(this.Handle, 124);
+            Hotkey.UnregisterHotKey(this.Handle, 125);
 
             Hotkey.UnregisterHotKey(this.Handle, 155);
 
@@ -85,15 +97,15 @@ namespace Admin {
 
         private void Form1_Load(object sender, EventArgs e) {
 
-            System.Console.WriteLine(logger.IsDebugEnabled);
             Form.CheckForIllegalCrossThreadCalls = false;
             this.textURL.Text = this.m_endPoint;
             this.m_step2Form = new Step2Form();
             this.m_step1Form = new Step1Form();
 
-            IGlobalConfig configResource = Resource.getInstance(this.m_endPoint);//加载配置
+            IGlobalConfig configResource = Resource.getInstance(this.m_endPoint, "simulate");//加载配置
 
             this.Text = configResource.tag;
+            this.m_orcTitle = configResource.Title;
             this.m_orcLogin = configResource.Login;
             this.m_orcCaptcha = configResource.Captcha;//验证码
             this.m_orcPrice = configResource.Price;//价格识别
@@ -120,7 +132,7 @@ namespace Admin {
 
             //Action任务配置
             SchedulerConfiguration config1S = new SchedulerConfiguration(1000);
-            config1S.Job = new SubmitPriceStep2Job(this.m_endPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, m_orcCaptcha);
+            config1S.Job = new SubmitPriceStep2Job(this);
             m_schedulerSubmit = new Scheduler(config1S);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
@@ -136,6 +148,7 @@ namespace Admin {
             Hotkey.RegisterHotKey(this.Handle, 122, Hotkey.KeyModifiers.Ctrl, Keys.Right);
             Hotkey.RegisterHotKey(this.Handle, 123, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
             Hotkey.RegisterHotKey(this.Handle, 124, Hotkey.KeyModifiers.None, Keys.Escape);
+            Hotkey.RegisterHotKey(this.Handle, 125, Hotkey.KeyModifiers.None, Keys.Enter);
 
             Hotkey.RegisterHotKey(this.Handle, 155, Hotkey.KeyModifiers.CtrlShift, Keys.Enter);
         }
@@ -191,7 +204,11 @@ namespace Admin {
                             break;
                         case 124://ESC
                             logger.Info("HOT KEY [ESC]");
-                            this.closeDialog(SubmitPriceStep2Job.getPosition());
+                            this.closeDialog(this.m_step2Form.bid);
+                            break;
+                        case 125://ENTER
+                            logger.Info("HOT KEY [ENTER]");
+                            this.processEnter();
                             break;
                         case 155://CTRL+SHIFT+ENTER
                             logger.Info("HOT KEY [CTRL+SHIFT+ENTER]");
@@ -209,13 +226,18 @@ namespace Admin {
             this.textMousePos.Text = screenPoint.X + "," + screenPoint.Y;
         }
 
+        /// <summary>
+        /// 检查价格
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_checkPrice_Click(object sender, EventArgs e) {
 
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
             String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 100, 24);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.give.price.x, Int32.Parse(pos[1]) + this.m_step2Form.bid.give.price.y, 100, 24);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox3.Image));
             for (int i = 0; i < this.m_orcPrice.SubImgs.Count; i++)
@@ -223,13 +245,19 @@ namespace Admin {
             this.label1.Text = txtPrice;
         }
 
+        /// <summary>
+        /// 校验码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_checkCaptcha_Click(object sender, EventArgs e) {
 
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
             String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 120, 38);
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 120, 38);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[0].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[0].y, 120, 38);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
             if (this.checkBoxCaptcha.Checked) {//如果选中“校验码”
@@ -252,13 +280,19 @@ namespace Admin {
             }
         }
 
+        /// <summary>
+        /// 校验码提示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_checkTips_Click(object sender, EventArgs e) {
 
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
             String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 140, 24);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[1].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[1].y, 140, 24);
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 140, 24);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
             this.label2.Text = this.m_orcCaptchaTipsUtil.getActive("一二三四五六", new Bitmap(new MemoryStream(content)));
@@ -327,15 +361,55 @@ namespace Admin {
         #region 拍ACTION
         private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
+            int x = bid.Origin.x;
+            int y = bid.Origin.y;
+
             logger.Info("关闭校验码窗口");
-            ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188, bid.submit.buttons[0].y);//取消按钮
+            ScreenUtil.SetCursorPos(bid.submit.buttons[1].x + x, bid.submit.buttons[1].y + y);//取消按钮
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+        }
+
+        private void submitCaptcha(tobid.rest.position.BidStep2 bid)
+        {
+
+            int x = this.m_step2Form.bid.Origin.x;
+            int y = this.m_step2Form.bid.Origin.y;
+            logger.Info("提交验证码");
+            ScreenUtil.SetCursorPos(x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);//取消按钮
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+        }
+
+        private void processEnter()
+        {
+            int x = this.m_step2Form.bid.Origin.x;
+            int y = this.m_step2Form.bid.Origin.y;
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + 30, y + 85, 170, 50);
+            File.WriteAllBytes("TITLE.bmp", title);
+            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+            String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+            logger.Debug(strTitle);
+            if ("系统提示".Equals(strTitle))
+            {
+
+                logger.Info("proces Enter in [系统提示]");
+                ScreenUtil.SetCursorPos(x + 235, y + 312);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            }
+            else if ("投标拍卖".Equals(strTitle))
+            {
+
+                logger.Info("proces Enter in [投标拍卖]");
+                this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+            }
         }
 
         private void givePrice(String URL, GivePriceStep2 points, int deltaPrice) {
 
+            int x = this.m_step2Form.bid.Origin.x;
+            int y = this.m_step2Form.bid.Origin.y;
+
             logger.WarnFormat("BEGIN 出价格(delta : {0})", deltaPrice);
-            byte[] content = new ScreenUtil().screenCaptureAsByte(points.price.x, points.price.y, 52, 18);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(x+points.price.x, y+points.price.y, 52, 18);
             this.pictureBox2.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             logger.Info("\tBEGIN identify Price");
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox2.Image));
@@ -345,10 +419,10 @@ namespace Admin {
             txtPrice = String.Format("{0:D5}", price);
 
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-            ScreenUtil.SetCursorPos(points.inputBox.x, points.inputBox.y);
+            ScreenUtil.SetCursorPos(x + points.inputBox.x, y + points.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
@@ -362,15 +436,15 @@ namespace Admin {
 
             for (int i = 0; i < txtPrice.Length; i++) {
                 System.Threading.Thread.Sleep(25);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
+                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0);
+                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], ScreenUtil.keycode[txtPrice[i].ToString()], 0x2, 0);
             }
             logger.Info("\tEND   input PRICE");
 
             //点击出价
             System.Threading.Thread.Sleep(100);
             logger.Info("\tBEGIN click button[出价]");
-            ScreenUtil.SetCursorPos(points.button.x, points.button.y);
+            ScreenUtil.SetCursorPos(x + points.button.x, y + points.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click button[出价]");
             logger.Info("END   出价格");
@@ -378,27 +452,30 @@ namespace Admin {
 
         private void subimt(String URL, SubmitPrice points, CaptchaInput inputType) {
 
+            int x = this.m_step2Form.bid.Origin.x;
+            int y = this.m_step2Form.bid.Origin.y;
             logger.WarnFormat("BEGIN 验证码({0})", inputType);
 
-            ScreenUtil.SetCursorPos(points.inputBox.x, points.inputBox.y);
+            ScreenUtil.SetCursorPos(x + points.inputBox.x, y + points.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
             logger.Info("\tBEGIN make INPUTBOX blank");
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+
             logger.Info("\tEND   make INPUTBOX blank");
 
-            byte[] content = new ScreenUtil().screenCaptureAsByte(points.captcha[0].x, points.captcha[0].y, 128, 28);
-            byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(points.captcha[1].x, points.captcha[1].y, 112, 16);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(x + points.captcha[0].x, y + points.captcha[0].y, 128, 28);
+            byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(x + points.captcha[1].x, y + points.captcha[1].y, 112, 16);
             Bitmap bitmap = new Bitmap(new MemoryStream(content));
             this.pictureBox1.Image = bitmap;
             String strLoading = this.m_orcCaptchaLoading.IdentifyStringFromPic(bitmap);
@@ -428,10 +505,10 @@ namespace Admin {
                 strActive = this.m_orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new MemoryStream(binaryTips)));
 
             for (int i = 0; i < strActive.Length; i++) {
+                System.Threading.Thread.Sleep(25);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
-                System.Threading.Thread.Sleep(25);
-            }
+            } System.Threading.Thread.Sleep(25);
             logger.InfoFormat("\tEND   input ACTIVE CAPTCHA [{0}]", strActive);
 
             {
@@ -439,15 +516,15 @@ namespace Admin {
                 DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 if (dr == DialogResult.OK) {
                     logger.Info("用户选择确定出价");
-                    ScreenUtil.SetCursorPos(points.buttons[0].x, points.buttons[0].y);//确定按钮
+                    ScreenUtil.SetCursorPos(x + points.buttons[0].x, y + points.buttons[0].y);//确定按钮
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
-                    System.Threading.Thread.Sleep(1000);
-                    ScreenUtil.SetCursorPos(points.buttons[0].x + 188 / 2, points.buttons[0].y - 10);//确定按钮
+                    //System.Threading.Thread.Sleep(1000);
+                    //ScreenUtil.SetCursorPos(points.buttons[0].x + 188 / 2, points.buttons[0].y - 10);//确定按钮
                     //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 } else {
-                    logger.Warn("用户选择取消出价");
-                    ScreenUtil.SetCursorPos(points.buttons[0].x + 188, points.buttons[0].y);//取消按钮
+                    logger.Info("用户选择取消出价");
+                    ScreenUtil.SetCursorPos(x + points.buttons[1].x, y + points.buttons[1].y);//取消按钮
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 }
             }
@@ -476,23 +553,40 @@ namespace Admin {
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags); 
+        private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         private void buttonLogin_Click(object sender, EventArgs e) {
+            
+            const int GWL_STYLE = (-16);
+            const long WS_THICKFRAME = 0x40000L;
+            const long WS_MINIMIZEBOX = 0x00020000L;
+            const long WS_MAXIMIZEBOX = 0x00010000L;
 
-            /*System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
-            System.Threading.Thread.Sleep(1000);
+
+            System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Threading.Thread.Sleep(2500);
 
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
                 if (Browser.LocationURL.Contains("about:blank")) {
 
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 800, 0x40);
+                    long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+                    Browser.MenuBar = false;
+                    Browser.Top = 0;
+                    Browser.Left = 0;
+                    Browser.Height = 800;
+                    Browser.Width = 1100;
                     Browser.Navigate("http://moni.51hupai.org:8081");
                 }
-            }*/
+            }
             
-            LoginJob job = new LoginJob(this.m_orcLogin);
-            job.Execute();
+            //LoginJob job = new LoginJob(this.m_orcLogin);
+            //job.Execute();
         }
 
         private void buttonStep1_Click(object sender, EventArgs e) {
