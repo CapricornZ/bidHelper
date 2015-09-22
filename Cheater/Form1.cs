@@ -132,10 +132,10 @@ namespace Cheater {
 
         private void button1_Click(object sender, EventArgs e)
         {
-            WinIOLab.Initialize(); // 注册
-            WinIOLab.KeyDown(Keys.A); // 按下A
-            WinIOLab.KeyUp(Keys.A); // 松开A
-            WinIOLab.Shutdown(); // 用完后注销
+            //WinIOLab.Initialize(); // 注册
+            //WinIOLab.KeyDown(Keys.A); // 按下A
+            //WinIOLab.KeyUp(Keys.A); // 松开A
+            //WinIOLab.Shutdown(); // 用完后注销
 
         }
         

@@ -95,14 +95,9 @@ namespace Admin {
                 this.submitPriceThread.Abort();
         }
 
-        private void Form1_Load(object sender, EventArgs e) {
+        private void loadResource(String category) {
 
-            Form.CheckForIllegalCrossThreadCalls = false;
-            this.textURL.Text = this.m_endPoint;
-            this.m_step2Form = new Step2Form();
-            this.m_step1Form = new Step1Form();
-
-            IGlobalConfig configResource = Resource.getInstance(this.m_endPoint, "simulate");//加载配置
+            IGlobalConfig configResource = Resource.getInstance(this.m_endPoint, category);//加载配置
 
             this.Text = configResource.tag;
             this.m_orcTitle = configResource.Title;
@@ -112,6 +107,16 @@ namespace Admin {
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
             this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
+        }
+
+        private void Form1_Load(object sender, EventArgs e) {
+
+            Form.CheckForIllegalCrossThreadCalls = false;
+            this.textURL.Text = this.m_endPoint;
+            this.m_step2Form = new Step2Form();
+            this.m_step1Form = new Step1Form();
+
+            this.loadResource("real");
 
             //加载配置项2
             KeepAliveJob keepAliveJob = new KeepAliveJob(this.m_endPoint, 
@@ -565,10 +570,8 @@ namespace Admin {
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
 
-
             System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
-            System.Threading.Thread.Sleep(2500);
-
+            System.Threading.Thread.Sleep(1500);
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
                 if (Browser.LocationURL.Contains("about:blank")) {
@@ -579,7 +582,7 @@ namespace Admin {
                     Browser.MenuBar = false;
                     Browser.Top = 0;
                     Browser.Left = 0;
-                    Browser.Height = 800;
+                    Browser.Height = 1000;
                     Browser.Width = 1100;
                     Browser.Navigate("http://moni.51hupai.org:8081");
                 }
@@ -593,6 +596,20 @@ namespace Admin {
 
             SubmitPriceStep1Job job = new SubmitPriceStep1Job(this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
             job.Execute();
+        }
+
+        private void RealToolStripMenuItem_Click(object sender, EventArgs e) {
+
+            this.RealToolStripMenuItem.Checked = true;
+            this.SimulateToolStripMenuItem.Checked = false;
+            this.loadResource("real");
+        }
+
+        private void SimulateToolStripMenuItem_Click(object sender, EventArgs e) {
+
+            this.RealToolStripMenuItem.Checked = false;
+            this.SimulateToolStripMenuItem.Checked = true;
+            this.loadResource("simulate");
         }
     }
 }
