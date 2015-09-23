@@ -231,6 +231,20 @@ namespace Admin {
             this.textMousePos.Text = screenPoint.X + "," + screenPoint.Y;
         }
 
+        static private Point findOrigin() {
+
+            Rectangle rectX = new Rectangle();
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+
+                    IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
+                    IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
+                    int rtnX = GetWindowRect(tabWindow, out rectX);
+                }
+            }
+            return new Point(rectX.X, rectX.Y);
+        }
         /// <summary>
         /// 检查价格
         /// </summary>
@@ -238,11 +252,13 @@ namespace Admin {
         /// <param name="e"></param>
         private void button_checkPrice_Click(object sender, EventArgs e) {
 
+            Point origin = findOrigin();
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
-            String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.give.price.x, Int32.Parse(pos[1]) + this.m_step2Form.bid.give.price.y, 100, 24);
+            //String[] pos = this.textPosition.Text.Split(new char[] { ',' });
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.give.price.x, Int32.Parse(pos[1]) + this.m_step2Form.bid.give.price.y, 100, 24);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + this.m_step2Form.bid.give.price.x, origin.Y + this.m_step2Form.bid.give.price.y, 100, 24);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox3.Image));
             for (int i = 0; i < this.m_orcPrice.SubImgs.Count; i++)
@@ -257,12 +273,13 @@ namespace Admin {
         /// <param name="e"></param>
         private void button_checkCaptcha_Click(object sender, EventArgs e) {
 
+            Point origin = findOrigin();
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
             String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 120, 38);
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[0].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[0].y, 120, 38);
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[0].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[0].y, 120, 38);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + this.m_step2Form.bid.submit.captcha[0].x, origin.Y + this.m_step2Form.bid.submit.captcha[0].y, 120, 38);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
             if (this.checkBoxCaptcha.Checked) {//如果选中“校验码”
@@ -292,11 +309,13 @@ namespace Admin {
         /// <param name="e"></param>
         private void button_checkTips_Click(object sender, EventArgs e) {
 
+            Point origin = findOrigin();
             foreach (PictureBox picBox in this.pictureSubs)
                 picBox.Image = null;
 
             String[] pos = this.textPosition.Text.Split(new char[] { ',' });
-            byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[1].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[1].y, 140, 24);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + this.m_step2Form.bid.submit.captcha[1].x, origin.Y + this.m_step2Form.bid.submit.captcha[1].y, 140, 24);
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]) + this.m_step2Form.bid.submit.captcha[1].x, Int32.Parse(pos[1]) + this.m_step2Form.bid.submit.captcha[1].y, 140, 24);
             //byte[] content = new ScreenUtil().screenCaptureAsByte(Int32.Parse(pos[0]), Int32.Parse(pos[1]), 140, 24);
             this.pictureBox3.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
@@ -366,8 +385,11 @@ namespace Admin {
         #region 拍ACTION
         private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
-            int x = bid.Origin.x;
-            int y = bid.Origin.y;
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            //int x = bid.Origin.x;
+            //int y = bid.Origin.y;
 
             logger.Info("关闭校验码窗口");
             ScreenUtil.SetCursorPos(bid.submit.buttons[1].x + x, bid.submit.buttons[1].y + y);//取消按钮
@@ -376,9 +398,11 @@ namespace Admin {
 
         private void submitCaptcha(tobid.rest.position.BidStep2 bid)
         {
-
-            int x = this.m_step2Form.bid.Origin.x;
-            int y = this.m_step2Form.bid.Origin.y;
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            //int x = this.m_step2Form.bid.Origin.x;
+            //int y = this.m_step2Form.bid.Origin.y;
             logger.Info("提交验证码");
             ScreenUtil.SetCursorPos(x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);//取消按钮
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -386,9 +410,13 @@ namespace Admin {
 
         private void processEnter()
         {
-            int x = this.m_step2Form.bid.Origin.x;
-            int y = this.m_step2Form.bid.Origin.y;
-            byte[] title = new ScreenUtil().screenCaptureAsByte(x + 30, y + 85, 170, 50);
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            //int x = this.m_step2Form.bid.Origin.x;
+            //int y = this.m_step2Form.bid.Origin.y;
+            //byte[] title = new ScreenUtil().screenCaptureAsByte(x + 30, y + 85, 170, 50);
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + 555, y + 241, 170, 50);
             File.WriteAllBytes("TITLE.bmp", title);
             Bitmap bitTitle = new Bitmap(new MemoryStream(title));
             String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
@@ -397,21 +425,25 @@ namespace Admin {
             {
 
                 logger.Info("proces Enter in [系统提示]");
-                ScreenUtil.SetCursorPos(x + 235, y + 312);
+                //ScreenUtil.SetCursorPos(x + 235, y + 312);
+                ScreenUtil.SetCursorPos(x + 733, y + 465);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             }
             else if ("投标拍卖".Equals(strTitle))
             {
 
                 logger.Info("proces Enter in [投标拍卖]");
-                this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+                this.submitCaptcha(this.m_step2Form.bid);
             }
         }
 
         private void givePrice(String URL, GivePriceStep2 points, int deltaPrice) {
 
-            int x = this.m_step2Form.bid.Origin.x;
-            int y = this.m_step2Form.bid.Origin.y;
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            //int x = this.m_step2Form.bid.Origin.x;
+            //int y = this.m_step2Form.bid.Origin.y;
 
             logger.WarnFormat("BEGIN 出价格(delta : {0})", deltaPrice);
             byte[] content = new ScreenUtil().screenCaptureAsByte(x+points.price.x, y+points.price.y, 52, 18);
@@ -457,8 +489,11 @@ namespace Admin {
 
         private void subimt(String URL, SubmitPrice points, CaptchaInput inputType) {
 
-            int x = this.m_step2Form.bid.Origin.x;
-            int y = this.m_step2Form.bid.Origin.y;
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            //int x = this.m_step2Form.bid.Origin.x;
+            //int y = this.m_step2Form.bid.Origin.y;
             logger.WarnFormat("BEGIN 验证码({0})", inputType);
 
             ScreenUtil.SetCursorPos(x + points.inputBox.x, y + points.inputBox.y);
@@ -563,6 +598,15 @@ namespace Admin {
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern int GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern int ClientToScreen(IntPtr hwnd, ref Point lpPoint);
+
         private void buttonLogin_Click(object sender, EventArgs e) {
             
             const int GWL_STYLE = (-16);
@@ -570,13 +614,36 @@ namespace Admin {
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
 
-            System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Diagnostics.Process[] myProcesses;
+            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
+            foreach (System.Diagnostics.Process instance in myProcesses) {
+                instance.Kill();
+            }
+
+            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
             System.Threading.Thread.Sleep(1500);
+            //IntPtr ie = FindWindow("IEFrame", null);
+            //IntPtr frame = FindWindowEx(ie, IntPtr.Zero, "Frame Tab", null);
+            //IntPtr tab = FindWindowEx(frame, IntPtr.Zero, "TabWindowClass", null);
+            //Rectangle rect = new Rectangle();
+            //int rtn = GetWindowRect(tab, out rect);
+
+            //System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            //System.Threading.Thread.Sleep(1500);
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
                 if (Browser.LocationURL.Contains("about:blank")) {
 
-                    //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 800, 0x40);
+                    IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
+                    IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
+                    Rectangle rectX = new Rectangle();
+                    int rtnX = GetWindowRect(tabWindow, out rectX);
+                    //Point point = new Point(rect.X, rect.Y);
+                    //rtn = ClientToScreen(IntPtr.Zero, ref point);
+
+                    //int x=0, y=0;
+                    //Browser.ClientToWindow(ref x, ref y);
+                    SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
                     SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
                     Browser.MenuBar = false;
@@ -595,7 +662,7 @@ namespace Admin {
         private void buttonStep1_Click(object sender, EventArgs e) {
 
             SubmitPriceStep1Job job = new SubmitPriceStep1Job(this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
-            job.Execute();
+            job.Execute();SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
         }
 
         private void RealToolStripMenuItem_Click(object sender, EventArgs e) {

@@ -67,6 +67,7 @@
             this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonIE = new System.Windows.Forms.Button();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -450,11 +451,22 @@
             this.stepToolStripMenuItem.Text = "Step2";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
+            // buttonIE
+            // 
+            this.buttonIE.Location = new System.Drawing.Point(526, 182);
+            this.buttonIE.Name = "buttonIE";
+            this.buttonIE.Size = new System.Drawing.Size(75, 23);
+            this.buttonIE.TabIndex = 11;
+            this.buttonIE.Text = "打开&IE";
+            this.buttonIE.UseVisualStyleBackColor = true;
+            this.buttonIE.Click += new System.EventHandler(this.buttonIE_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 230);
+            this.Controls.Add(this.buttonIE);
             this.Controls.Add(this.groupBoxLocal);
             this.Controls.Add(this.groupBoxManual);
             this.Controls.Add(this.panel2);
@@ -529,6 +541,7 @@
         private System.Windows.Forms.ToolStripMenuItem 模拟ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 配置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stepToolStripMenuItem;
+        private System.Windows.Forms.Button buttonIE;
     }
 }
 

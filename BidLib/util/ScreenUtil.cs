@@ -25,6 +25,74 @@ namespace tobid.util
         Absolute = 0x8000
     }
 
+    public class IEUtil{
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern int GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        static public Point findOrigin() {
+
+            Rectangle rectX = new Rectangle();
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+
+                    IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
+                    IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
+                    int rtnX = GetWindowRect(tabWindow, out rectX);
+                }
+            }
+            return new Point(rectX.X, rectX.Y);
+        }
+
+        static public void openIE(String category) {
+
+            const int GWL_STYLE = -16;
+            const long WS_THICKFRAME = 0x40000L;
+            const long WS_MINIMIZEBOX = 0x00020000L;
+            const long WS_MAXIMIZEBOX = 0x00010000L;
+
+            System.Diagnostics.Process[] myProcesses;
+            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
+            foreach (System.Diagnostics.Process instance in myProcesses) {
+                instance.Kill();
+            }
+
+            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Threading.Thread.Sleep(1500);
+
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.Contains("about:blank")) {
+
+                    SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
+                    long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+                    Browser.MenuBar = false;
+                    Browser.Top = 0;
+                    Browser.Left = 0;
+                    Browser.Height = 1000;
+                    Browser.Width = 1100;
+                    if ("real".Equals(category))
+                        Browser.Navigate("https://paimai.alltobid.com/");
+                    else
+                        Browser.Navigate("http://moni.51hupai.org:8081");
+                }
+            }
+        }
+    }
+
     public class ScreenUtil
     {
         [DllImport("User32.dll")]
