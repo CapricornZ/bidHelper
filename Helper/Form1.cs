@@ -249,7 +249,7 @@ namespace Helper
                         case 222://ENTER
                             logger.Info("HOT KEY ENTER");
                             //this.submitCaptcha(SubmitPriceStep2Job.getPosition());
-                            this.processEnter();
+                            this.processEnter(SubmitPriceStep2Job.getPosition());
                             break;
                     }
                     break;
@@ -425,13 +425,14 @@ namespace Helper
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
         }
 
-        private void processEnter(){
+        private void processEnter(tobid.rest.position.BidStep2 bid) {
 
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
 
-            byte[] title = new ScreenUtil().screenCaptureAsByte(x + 555, y + 241, 170, 50);
+            //byte[] title = new ScreenUtil().screenCaptureAsByte(x + 555, y + 241, 170, 50);
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
             File.WriteAllBytes("TITLE.bmp", title);
             Bitmap bitTitle = new Bitmap(new MemoryStream(title));
             String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
@@ -439,7 +440,8 @@ namespace Helper
             if ("系统提示".Equals(strTitle)){
 
                 logger.Info("proces Enter in [系统提示]");
-                ScreenUtil.SetCursorPos(x + 733, y + 465);
+                //ScreenUtil.SetCursorPos(x + 733, y + 465);
+                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             } else if ("投标拍卖".Equals(strTitle)) {
 
@@ -579,18 +581,15 @@ namespace Helper
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             if (dr == DialogResult.OK) {
+
                 logger.InfoFormat("用户选择确定出价");
                 logger.DebugFormat("\tBUTTON[确定]({0}, {1})", x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);
                 ScreenUtil.SetCursorPos(x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);//确定按钮
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-
-                //System.Threading.Thread.Sleep(1000);
-                //ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188 / 2, bid.submit.buttons[0].y - 10);//确定按钮
-                //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                //ScreenUtil.SetCursorPos(bid.submit.buttons[0].x + 188 / 2, bid.submit.buttons[0].y - 10);//确定按钮
                 logger.Info("END   submitCAPTCHA");
                 return true;
             } else {
+
                 logger.InfoFormat("用户选择取消出价");
                 logger.DebugFormat("\tBUTTON[取消]({0}, {1})", x+bid.submit.buttons[0].x+188, y+bid.submit.buttons[0].y);
                 ScreenUtil.SetCursorPos(x+bid.submit.buttons[1].x, y+bid.submit.buttons[1].y);//取消按钮
@@ -598,11 +597,6 @@ namespace Helper
                 logger.Info("END   submitCAPTCHA");
                 return false;
             }
-
-            //logger.Info("\tBEGIN click BUTTON[确定]");
-            //ScreenUtil.SetCursorPos(bid.submit.buttons[0].x, bid.submit.buttons[0].y);
-            //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            //logger.Info("\tEND   click BUTTON[确定]");
         }
         #endregion
 
@@ -646,7 +640,7 @@ namespace Helper
                     }
                     this.textBox2.Text = this.comboBox1.Text;
                     bidOps.price = Int32.Parse(this.comboBox1.Text);
-                    SubmitPriceStep2Job.setConfig(bidOps, this.checkPriceOnly.Checked);
+                    SubmitPriceStep2Job.setConfig(bidOps, this.checkPriceOnly.Checked, updatePos:false);
                 }
 
                 if (radioPrice.Checked) {

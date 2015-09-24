@@ -49,7 +49,7 @@ namespace Admin {
                 this.object2InputBox(this.textBox6, bid.submit.inputBox);
                 this.object2InputBox(this.textBox7, bid.submit.buttons[0]);
 
-                this.object2InputBox(this.textBoxOrigin, bid.Origin);
+                //this.object2InputBox(this.textBoxOrigin, bid.Origin);
             } else {
                 this.object2InputBox(this.textBox1, new Position(0, 0));
                 this.object2InputBox(this.textBox2, new Position(0, 0));
@@ -60,7 +60,7 @@ namespace Admin {
                 this.object2InputBox(this.textBox6, new Position(0, 0));
                 this.object2InputBox(this.textBox7, new Position(0, 0));
 
-                this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
+                //this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
             }
         }
 
@@ -87,7 +87,7 @@ namespace Admin {
             this.bid = new BidStep2();
             this.bid.give = givePrice;
             this.bid.submit = submit;
-            this.bid.Origin = this.inputBox2Object(this.textBoxOrigin);
+            //this.bid.Origin = this.inputBox2Object(this.textBoxOrigin);
 
             this.cancel = false;
             this.Close();

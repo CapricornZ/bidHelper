@@ -46,9 +46,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.groupBoxOrigin = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBoxOrigin = new System.Windows.Forms.TextBox();
+            this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.textBoxTitleOk = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -62,7 +64,7 @@
             this.groupBoxPrice.Controls.Add(this.textBox1);
             this.groupBoxPrice.Controls.Add(this.textBox2);
             this.groupBoxPrice.Controls.Add(this.textBox3);
-            this.groupBoxPrice.Location = new System.Drawing.Point(12, 82);
+            this.groupBoxPrice.Location = new System.Drawing.Point(12, 12);
             this.groupBoxPrice.Name = "groupBoxPrice";
             this.groupBoxPrice.Size = new System.Drawing.Size(230, 110);
             this.groupBoxPrice.TabIndex = 0;
@@ -127,7 +129,7 @@
             this.groupBoxCaptcha.Controls.Add(this.label6);
             this.groupBoxCaptcha.Controls.Add(this.label5);
             this.groupBoxCaptcha.Controls.Add(this.label4);
-            this.groupBoxCaptcha.Location = new System.Drawing.Point(12, 198);
+            this.groupBoxCaptcha.Location = new System.Drawing.Point(12, 128);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
             this.groupBoxCaptcha.Size = new System.Drawing.Size(230, 141);
             this.groupBoxCaptcha.TabIndex = 1;
@@ -200,14 +202,16 @@
             // 
             // groupBoxOrigin
             // 
+            this.groupBoxOrigin.Controls.Add(this.label9);
+            this.groupBoxOrigin.Controls.Add(this.textBoxTitleOk);
             this.groupBoxOrigin.Controls.Add(this.label8);
-            this.groupBoxOrigin.Controls.Add(this.textBoxOrigin);
-            this.groupBoxOrigin.Location = new System.Drawing.Point(12, 13);
+            this.groupBoxOrigin.Controls.Add(this.textBoxTitle);
+            this.groupBoxOrigin.Location = new System.Drawing.Point(12, 275);
             this.groupBoxOrigin.Name = "groupBoxOrigin";
-            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 63);
+            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 97);
             this.groupBoxOrigin.TabIndex = 2;
             this.groupBoxOrigin.TabStop = false;
-            this.groupBoxOrigin.Text = "起点";
+            this.groupBoxOrigin.Text = "标题";
             // 
             // label8
             // 
@@ -218,16 +222,16 @@
             this.label8.TabIndex = 13;
             this.label8.Text = "坐标：";
             // 
-            // textBoxOrigin
+            // textBoxTitle
             // 
-            this.textBoxOrigin.Location = new System.Drawing.Point(96, 24);
-            this.textBoxOrigin.Name = "textBoxOrigin";
-            this.textBoxOrigin.Size = new System.Drawing.Size(100, 20);
-            this.textBoxOrigin.TabIndex = 1;
+            this.textBoxTitle.Location = new System.Drawing.Point(96, 24);
+            this.textBoxTitle.Name = "textBoxTitle";
+            this.textBoxTitle.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTitle.TabIndex = 1;
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(12, 354);
+            this.buttonOK.Location = new System.Drawing.Point(12, 378);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -237,13 +241,29 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(133, 354);
+            this.buttonCancel.Location = new System.Drawing.Point(133, 378);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "取消(&C)";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // textBoxTitleOk
+            // 
+            this.textBoxTitleOk.Location = new System.Drawing.Point(96, 60);
+            this.textBoxTitleOk.Name = "textBoxTitleOk";
+            this.textBoxTitleOk.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTitleOk.TabIndex = 14;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(14, 63);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(77, 13);
+            this.label9.TabIndex = 15;
+            this.label9.Text = "\"确定\"按钮：";
             // 
             // Step2ConfigDialog
             // 
@@ -288,8 +308,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBoxOrigin;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBoxOrigin;
+        private System.Windows.Forms.TextBox textBoxTitle;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox textBoxTitleOk;
     }
 }

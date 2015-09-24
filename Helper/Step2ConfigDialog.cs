@@ -57,7 +57,9 @@ namespace Helper
                 this.object2InputBox(this.textBox6, bid.submit.inputBox);
                 this.object2InputBox(this.textBox7, bid.submit.buttons[0]);
 
-                this.object2InputBox(this.textBoxOrigin, bid.Origin);
+                //this.object2InputBox(this.textBoxOrigin, bid.Origin);
+                this.object2InputBox(this.textBoxTitle, bid.title);
+                this.object2InputBox(this.textBoxTitleOk, bid.okButton);
             } else {
                 this.object2InputBox(this.textBox1, new Position(0, 0));
                 this.object2InputBox(this.textBox2, new Position(0, 0));
@@ -68,7 +70,9 @@ namespace Helper
                 this.object2InputBox(this.textBox6, new Position(0, 0));
                 this.object2InputBox(this.textBox7, new Position(0, 0));
 
-                this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
+                //this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
+                this.object2InputBox(this.textBoxTitle, new Position(0, 0));
+                this.object2InputBox(this.textBoxTitleOk, new Position(0, 0));
             }
         }
 
@@ -95,7 +99,9 @@ namespace Helper
             BidStep2 bid = new BidStep2();
             bid.give = givePrice;
             bid.submit = submit;
-            bid.Origin = this.inputBox2Object(this.textBoxOrigin);
+            //bid.Origin = this.inputBox2Object(this.textBoxOrigin);
+            bid.title = this.inputBox2Object(this.textBoxTitle);
+            bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
             SubmitPriceStep2Job.setPosition(bid);
 
             this.cancel = false;

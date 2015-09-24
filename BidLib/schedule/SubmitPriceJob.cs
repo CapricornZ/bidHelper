@@ -97,7 +97,7 @@ namespace tobid.scheduler.jobs
             return rtn;
         }
 
-        public static Boolean setConfig(Step2Operation operation, Boolean priceOnly = false) {
+        public static Boolean setConfig(Step2Operation operation, Boolean priceOnly = false, Boolean updatePos = true) {
 
             logger.Info("setConfig {...}");
             Boolean rtn = false;
@@ -114,7 +114,8 @@ namespace tobid.scheduler.jobs
                     SubmitPriceStep2Job.price = 0;
                     SubmitPriceStep2Job.executeCount = 0;
                     SubmitPriceStep2Job.bidOperation = operation;
-                    SubmitPriceStep2Job.operation = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep2>(operation.content);
+                    if(updatePos)
+                        SubmitPriceStep2Job.operation = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep2>(operation.content);
                     rtn = true;
                 }
                 Monitor.Exit(SubmitPriceStep2Job.lockObj);
@@ -211,7 +212,7 @@ namespace tobid.scheduler.jobs
 
             for (int i = 0; i < txtPrice.Length; i++)
             {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(50);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
             }
@@ -268,7 +269,7 @@ namespace tobid.scheduler.jobs
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             for (int i = 0; i < txtPrice.Length; i++)
             {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(50);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
             }
@@ -364,7 +365,6 @@ namespace tobid.scheduler.jobs
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[确定]");
 
-            ScreenUtil.SetCursorPos(x + submitPoints.buttons[0].x + 188 / 2, y + submitPoints.buttons[0].y - 10);//确定按钮
             logger.Info("END   giveCAPTCHA");
             return true;
         }
