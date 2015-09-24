@@ -126,6 +126,41 @@ namespace tobid.scheduler.jobs
             return rtn;
         }
 
+        public void Fire(int delta) {
+
+            //TODO:这里可以加入逻辑，如果this.submit成功，SubmitPriceJob.executeCount++。
+            //这样在下一秒可以自动执行一次未成功的出价。但是DeltaPrice应该-=100，同时需要保证DeltaPrice>=+300
+            SubmitPriceStep2Job.executeCount++;
+            logger.Warn("trigger Fired");
+                    
+            Point origin = IEUtil.findOrigin();
+            Position pos = new Position(origin.X, origin.Y);
+
+            Boolean success = false;
+            int submitCount = 0;
+            while (!success && submitCount < 2) {//1次出价，1次重试
+
+                submitCount++;
+                if (SubmitPriceStep2Job.price != 0)
+                    this.givePrice(pos, SubmitPriceStep2Job.operation.give, price: SubmitPriceStep2Job.price);//出价;
+                else{
+
+                    //int delta = SubmitPriceStep2Job.bidOperation.price > 300 ?
+                    //    SubmitPriceStep2Job.bidOperation.price - (submitCount - 1) * 100 : SubmitPriceStep2Job.bidOperation.price;
+                    if (delta == 0) {
+                        this.giveDeltaPrice(pos, SubmitPriceStep2Job.operation.give, delta: submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300);//出价
+                    } else {
+                        this.giveDeltaPrice(pos, SubmitPriceStep2Job.operation.give, delta: delta);//出价
+                    }
+                }
+                if (SubmitPriceStep2Job.priceOnly)
+                    success = true;
+                else
+                    success = this.submit(pos, SubmitPriceStep2Job.operation.submit);//提交
+                logger.WarnFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
+            }
+        }
+
         public void Execute()
         {
             DateTime now = DateTime.Now;
@@ -141,34 +176,7 @@ namespace tobid.scheduler.jobs
                 if (null != SubmitPriceStep2Job.bidOperation && 
                     now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceStep2Job.executeCount == 0)
                 {
-                    //TODO:这里可以加入逻辑，如果this.submit成功，SubmitPriceJob.executeCount++。
-                    //这样在下一秒可以自动执行一次未成功的出价。但是DeltaPrice应该-=100，同时需要保证DeltaPrice>=+300
-                    SubmitPriceStep2Job.executeCount++;
-                    logger.Warn("trigger Fired");
-                    
-                    Point origin = IEUtil.findOrigin();
-                    Position pos = new Position(origin.X, origin.Y);
-
-                    Boolean success = false;
-                    int submitCount = 0;
-                    while (!success && submitCount < 2) {//1次出价，1次重试
-
-                        submitCount++;
-                        if (SubmitPriceStep2Job.price != 0)
-                            this.givePrice(pos, SubmitPriceStep2Job.operation.give, price: SubmitPriceStep2Job.price);//出价;
-                        else{
-
-                            //int delta = SubmitPriceStep2Job.bidOperation.price > 300 ?
-                            //    SubmitPriceStep2Job.bidOperation.price - (submitCount - 1) * 100 : SubmitPriceStep2Job.bidOperation.price;
-                            int delta = submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300;
-                            this.giveDeltaPrice(pos, SubmitPriceStep2Job.operation.give, delta: delta);//出价
-                        }
-                        if (SubmitPriceStep2Job.priceOnly)
-                            success = true;
-                        else
-                            success = this.submit(pos, SubmitPriceStep2Job.operation.submit);//提交
-                        logger.WarnFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
-                    }
+                    this.Fire(0);
                 }
 
                 Monitor.Exit(SubmitPriceStep2Job.lockObj);
@@ -240,27 +248,28 @@ namespace tobid.scheduler.jobs
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
             //INPUT BOX
 
+            logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
+
             logger.Info("\tBEGIN make PRICE blank...");
             logger.DebugFormat("INPUT BOX({0}, {1})", x + givePrice.inputBox.x, y + givePrice.inputBox.y);
             ScreenUtil.SetCursorPos(x + givePrice.inputBox.x, y + givePrice.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
 
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(15); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
             logger.Info("\tEND   make PRICE blank...");
 
             logger.Info("\tBEGIN identify PRICE...");
-            logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
-            byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
             String txtPrice = this.orcRepository.orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
             int price = Int32.Parse(txtPrice) + delta;
             logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
@@ -269,9 +278,8 @@ namespace tobid.scheduler.jobs
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             for (int i = 0; i < txtPrice.Length; i++)
             {
-                System.Threading.Thread.Sleep(50);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
+                System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
+                System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
             }
             logger.Info("\tEND   input PRICE");
 
@@ -351,9 +359,8 @@ namespace tobid.scheduler.jobs
             {
                 for (int i = 0; i < strActive.Length; i++)
                 {
-                    System.Threading.Thread.Sleep(50);
-                    ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
-                    ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
+                    System.Threading.Thread.Sleep(25);ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
+                    System.Threading.Thread.Sleep(25);ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
                     
                 }
             } System.Threading.Thread.Sleep(50);

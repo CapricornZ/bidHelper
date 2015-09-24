@@ -93,6 +93,7 @@ namespace Helper
 
             Hotkey.UnregisterHotKey(this.Handle, 221);
             Hotkey.UnregisterHotKey(this.Handle, 222);
+            Hotkey.UnregisterHotKey(this.Handle, 223);
 
             logger.Info("Application Form Closed");
         }
@@ -180,6 +181,8 @@ namespace Helper
 
             Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
             Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+
+            Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
         }
 
         /// <summary>
@@ -250,6 +253,10 @@ namespace Helper
                             logger.Info("HOT KEY ENTER");
                             //this.submitCaptcha(SubmitPriceStep2Job.getPosition());
                             this.processEnter(SubmitPriceStep2Job.getPosition());
+                            break;
+                        case 223://F9
+                            logger.Info("HOT KEY F9");
+                            this.fire(300);
                             break;
                     }
                     break;
@@ -448,6 +455,12 @@ namespace Helper
                 logger.Info("proces Enter in [投标拍卖]");
                 this.submitCaptcha(SubmitPriceStep2Job.getPosition());
             }
+        }
+
+        private void fire(int delta) {
+
+            SubmitPriceStep2Job job = new SubmitPriceStep2Job(this);
+            job.Fire(delta);
         }
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
