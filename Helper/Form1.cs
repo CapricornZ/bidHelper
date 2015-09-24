@@ -62,7 +62,7 @@ namespace Helper
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceStep2Thread;
 
-        private Step2ConfigDialog step2Dialog = new Step2ConfigDialog();
+        private Step2ConfigDialog step2Dialog;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -140,6 +140,7 @@ namespace Helper
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
+            this.step2Dialog = new Step2ConfigDialog(this);
 
             this.loadResource("real");
 

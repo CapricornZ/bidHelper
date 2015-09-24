@@ -130,7 +130,6 @@ namespace tobid.scheduler.jobs
 
             //TODO:这里可以加入逻辑，如果this.submit成功，SubmitPriceJob.executeCount++。
             //这样在下一秒可以自动执行一次未成功的出价。但是DeltaPrice应该-=100，同时需要保证DeltaPrice>=+300
-            SubmitPriceStep2Job.executeCount++;
             logger.Warn("trigger Fired");
                     
             Point origin = IEUtil.findOrigin();
@@ -176,6 +175,7 @@ namespace tobid.scheduler.jobs
                 if (null != SubmitPriceStep2Job.bidOperation && 
                     now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceStep2Job.executeCount == 0)
                 {
+                    SubmitPriceStep2Job.executeCount++;
                     this.Fire(0);
                 }
 

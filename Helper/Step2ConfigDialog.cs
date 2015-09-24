@@ -10,16 +10,30 @@ using System.Windows.Forms;
 using tobid.rest.position;
 using tobid.scheduler.jobs;
 using tobid.rest;
+using tobid.util;
+using System.IO;
 
 namespace Helper
 {
     public partial class Step2ConfigDialog : Form
     {
         public Boolean cancel { get; set; }
+        private PictureBox[] m_pictureSubs;
+        private IRepository m_repository;
 
-        public Step2ConfigDialog()
+        public Step2ConfigDialog(IRepository repo)
         {
             InitializeComponent();
+
+            this.m_repository = repo;
+            this.m_pictureSubs = new PictureBox[]{
+                this.pictureSub1,
+                this.pictureSub2,
+                this.pictureSub3,
+                this.pictureSub4,
+                this.pictureSub5,
+                this.pictureSub6
+            };
         }
 
         private void object2InputBox(System.Windows.Forms.TextBox textBox, Position pos)
@@ -112,6 +126,57 @@ namespace Helper
 
             this.cancel = true;
             this.Close();
+        }
+
+        private void btnPrice_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBox1);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+            
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 100, 24);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+            String txtPrice = this.m_repository.orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox1.Image));
+            for (int i = 0; i < this.m_repository.orcPrice.SubImgs.Count; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcPrice.SubImgs[i];
+            this.labelResult.Text = txtPrice;
+        }
+
+        private void btnCaptcha_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBox4);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 128, 28);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+            File.WriteAllBytes("CAPTCHA.BMP", content);
+            String strCaptcha = this.m_repository.orcCaptcha.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+            //String[] array = Newtonsoft.Json.JsonConvert.DeserializeObject<String[]>(strCaptcha);
+
+            for (int i = 0; i < 6; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcCaptcha.SubImgs[i];
+            this.labelResult.Text = strCaptcha;
+        }
+
+        private void btnTips_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBox5);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+
+            this.labelTips.Text = this.m_repository.orcCaptchaTipsUtil.getActive("一二三四五六", new Bitmap(new System.IO.MemoryStream(content)));
+            for (int i = 0; i < this.m_repository.orcCaptchaTipsUtil.SubImgs.Count; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcCaptchaTipsUtil.SubImgs[i];
         }
     }
 }
