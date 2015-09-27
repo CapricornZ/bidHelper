@@ -22,7 +22,7 @@ namespace Admin {
         AUTO
     }
 
-    public partial class Form1 : Form, IRepository {
+    public partial class Form1 : Form, IRepository, INotify {
 
         public Form1(String endPoint) {
             InitializeComponent();
@@ -137,7 +137,7 @@ namespace Admin {
 
             //Action任务配置
             SchedulerConfiguration config1S = new SchedulerConfiguration(1000);
-            config1S.Job = new SubmitPriceStep2Job(this);
+            config1S.Job = new SubmitPriceStep2Job(repository: this, notify: this);
             m_schedulerSubmit = new Scheduler(config1S);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
@@ -677,6 +677,10 @@ namespace Admin {
             this.RealToolStripMenuItem.Checked = false;
             this.SimulateToolStripMenuItem.Checked = true;
             this.loadResource("simulate");
+        }
+
+        public void acceptMessage(string msg) {
+            throw new NotImplementedException();
         }
     }
 }

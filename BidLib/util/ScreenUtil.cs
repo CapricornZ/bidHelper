@@ -79,10 +79,11 @@ namespace tobid.util
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
                     Browser.MenuBar = false;
+                    Browser.AddressBar = true;
                     Browser.Top = 0;
                     Browser.Left = 0;
                     Browser.Height = 780;
-                    Browser.Width = 1100;
+                    Browser.Width = 1095;
                     if ("real".Equals(category))
                         Browser.Navigate("https://paimai.alltobid.com/");
                     else

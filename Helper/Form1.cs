@@ -23,7 +23,7 @@ namespace Helper
         AUTO
     }
 
-    public partial class Form1 : Form, IRepository
+    public partial class Form1 : Form, IRepository, INotify
     {
         public Form1(){
 
@@ -164,7 +164,7 @@ namespace Helper
             //Action任务配置
             SchedulerConfiguration configStep2 = new SchedulerConfiguration(1000);
             //configStep2.Job = new SubmitPriceStep2Job(this.EndPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
-            configStep2.Job = new SubmitPriceStep2Job(this);
+            configStep2.Job = new SubmitPriceStep2Job(repository: this, notify: this);
             m_schedulerSubmitStep2 = new Scheduler(configStep2);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
@@ -279,6 +279,11 @@ namespace Helper
         private void timer1_Tick(object sender, EventArgs e) {
 
             this.toolStripStatusLabel2.Text = String.Format("当前时间 {0}", DateTime.Now.ToString("HH:mm:ss"));
+        }
+
+        public void acceptMessage(String msg){
+
+            this.toolStripStatusLabel1.Text = msg;
         }
 
         #region 拍牌ACTION
@@ -460,7 +465,7 @@ namespace Helper
 
         private void fire(int delta) {
 
-            SubmitPriceStep2Job job = new SubmitPriceStep2Job(this);
+            SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
             job.Fire(delta);
         }
 

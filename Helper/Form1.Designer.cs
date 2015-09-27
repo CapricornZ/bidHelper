@@ -111,7 +111,7 @@
             this.panel1.Controls.Add(this.radioPrice);
             this.panel1.Location = new System.Drawing.Point(6, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(81, 56);
+            this.panel1.Size = new System.Drawing.Size(75, 56);
             this.panel1.TabIndex = 3;
             // 
             // radioDeltaPrice
@@ -377,7 +377,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(587, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(536, 17);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -387,7 +387,8 @@
             this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(4, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(55, 17);
+            this.toolStripStatusLabel1.Text = "XX:XX:XX";
             // 
             // statusStrip1
             // 
@@ -425,14 +426,14 @@
             this.国拍ToolStripMenuItem.Checked = true;
             this.国拍ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.国拍ToolStripMenuItem.Name = "国拍ToolStripMenuItem";
-            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.国拍ToolStripMenuItem.Text = "国拍";
             this.国拍ToolStripMenuItem.Click += new System.EventHandler(this.国拍ToolStripMenuItem_Click);
             // 
             // 模拟ToolStripMenuItem
             // 
             this.模拟ToolStripMenuItem.Name = "模拟ToolStripMenuItem";
-            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.模拟ToolStripMenuItem.Text = "模拟";
             this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.模拟ToolStripMenuItem_Click);
             // 
@@ -447,15 +448,15 @@
             // stepToolStripMenuItem
             // 
             this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
-            this.stepToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stepToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.stepToolStripMenuItem.Text = "Step2";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
             // buttonIE
             // 
-            this.buttonIE.Location = new System.Drawing.Point(526, 182);
+            this.buttonIE.Location = new System.Drawing.Point(547, 182);
             this.buttonIE.Name = "buttonIE";
-            this.buttonIE.Size = new System.Drawing.Size(75, 23);
+            this.buttonIE.Size = new System.Drawing.Size(54, 23);
             this.buttonIE.TabIndex = 11;
             this.buttonIE.Text = "打开&IE";
             this.buttonIE.UseVisualStyleBackColor = true;

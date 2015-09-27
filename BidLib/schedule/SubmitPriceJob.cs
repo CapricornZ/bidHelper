@@ -27,6 +27,10 @@ namespace tobid.scheduler.jobs
         CaptchaUtil orcCaptchaTipsUtil { get; }
     }
 
+    public interface INotify {
+        void acceptMessage(String msg);
+    }
+
     /// <summary>
     /// SubmitPrice : 每秒检查，符合条件执行出价Action
     /// </summary>
@@ -42,10 +46,12 @@ namespace tobid.scheduler.jobs
         private static BidStep2 operation = null;
 
         private IRepository orcRepository;
+        private INotify notify;
 
-        public SubmitPriceStep2Job(IRepository repository)
+        public SubmitPriceStep2Job(IRepository repository, INotify notify)
         {
             this.orcRepository = repository;
+            this.notify = notify;
         }
 
         public static Step2Operation getConfig() {
@@ -164,11 +170,15 @@ namespace tobid.scheduler.jobs
         {
             DateTime now = DateTime.Now;
             if (null == SubmitPriceStep2Job.bidOperation)
-                logger.Debug(String.Format("{{Count:{0}}}", SubmitPriceStep2Job.executeCount));
-            else
-                logger.Debug(String.Format("{{Start:{0}, Expire:{1}, Count:{2}}}", 
-                    SubmitPriceStep2Job.bidOperation.startTime, SubmitPriceStep2Job.bidOperation.expireTime,
-                    SubmitPriceStep2Job.executeCount));
+                logger.Error(String.Format("{{Count:{0}}}", SubmitPriceStep2Job.executeCount));
+            else {
+                //logger.Debug(String.Format("{{Start:{0}, Expire:{1}, Count:{2}}}",
+                //    SubmitPriceStep2Job.bidOperation.startTime, SubmitPriceStep2Job.bidOperation.expireTime,
+                //    SubmitPriceStep2Job.executeCount));
+                TimeSpan diff = SubmitPriceStep2Job.bidOperation.startTime - now;
+                if(SubmitPriceStep2Job.executeCount == 0)
+                    this.notify.acceptMessage(String.Format("SECS:{0}", (int)diff.TotalSeconds));
+            }
 
             if (Monitor.TryEnter(SubmitPriceStep2Job.lockObj, 500))
             {
@@ -319,7 +329,7 @@ namespace tobid.scheduler.jobs
             byte[] binaryCaptcha = null;
             Boolean isLoading = true;
             int retry = 0;
-            Thread.Sleep(1000);//等待1秒钟（等待验证码或者“正在获取验证码”字样出来
+            Thread.Sleep(500);//等待0.5秒钟（等待验证码或者“正在获取验证码”字样出来
             logger.DebugFormat("CAPTURE CAPTCHA({0}, {1})", x+submitPoints.captcha[0].x, y+submitPoints.captcha[0].y);
             while (isLoading)//重试3.5秒钟
             {   
