@@ -355,7 +355,7 @@
             this.btnPrice.Name = "btnPrice";
             this.btnPrice.Size = new System.Drawing.Size(75, 23);
             this.btnPrice.TabIndex = 12;
-            this.btnPrice.Text = "价格";
+            this.btnPrice.Text = "价格(&P)";
             this.btnPrice.UseVisualStyleBackColor = true;
             this.btnPrice.Click += new System.EventHandler(this.btnPrice_Click);
             // 
@@ -365,7 +365,7 @@
             this.btnCaptcha.Name = "btnCaptcha";
             this.btnCaptcha.Size = new System.Drawing.Size(75, 23);
             this.btnCaptcha.TabIndex = 13;
-            this.btnCaptcha.Text = "验证码";
+            this.btnCaptcha.Text = "验证码(&C)";
             this.btnCaptcha.UseVisualStyleBackColor = true;
             this.btnCaptcha.Click += new System.EventHandler(this.btnCaptcha_Click);
             // 
@@ -375,7 +375,7 @@
             this.btnTips.Name = "btnTips";
             this.btnTips.Size = new System.Drawing.Size(75, 23);
             this.btnTips.TabIndex = 14;
-            this.btnTips.Text = "提示";
+            this.btnTips.Text = "提示(&T)";
             this.btnTips.UseVisualStyleBackColor = true;
             this.btnTips.Click += new System.EventHandler(this.btnTips_Click);
             // 

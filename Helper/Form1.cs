@@ -47,6 +47,7 @@ namespace Helper
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
+        public int interval { get { return Int16.Parse(this.toolStripTextBoxInterval.Text); } }
         #endregion
 
         private IOrc m_orcTitle;
@@ -71,7 +72,7 @@ namespace Helper
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
-
+            
             if (null != this.keepAliveThread && (this.keepAliveThread.ThreadState == System.Threading.ThreadState.Running || this.keepAliveThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
                 this.keepAliveThread.Abort();
 
@@ -135,7 +136,7 @@ namespace Helper
         }
 
         private void Form1_Load(object sender, EventArgs e){
-
+            
             logger.Info("Application Form Load");
 
             Form.CheckForIllegalCrossThreadCalls = false;
@@ -143,6 +144,9 @@ namespace Helper
             this.step2Dialog = new Step2ConfigDialog(this);
 
             this.loadResource("real");
+
+            String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
+            this.toolStripTextBoxInterval.Text = keyInterval;
 
             //加载配置项2
             KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
@@ -294,6 +298,7 @@ namespace Helper
         /// <param name="price">绝对价</param>
         private void givePrice(tobid.rest.position.BidStep2 bid, String txtPrice) {
 
+            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
@@ -304,22 +309,26 @@ namespace Helper
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            System.Threading.Thread.Sleep(50);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            SendKeys.SendWait("{BACKSPACE 5}");
+            SendKeys.SendWait("{DEL 5}");
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
 
             for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(interval);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
+                System.Threading.Thread.Sleep(interval);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
             } System.Threading.Thread.Sleep(50);
             logger.Info("\tEND   input PRICE");
@@ -356,6 +365,8 @@ namespace Helper
         /// <param name="delta">差价</param>
         private void giveDeltaPrice(tobid.rest.position.BidStep2 bid, int delta) {
 
+            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
+
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
@@ -373,24 +384,33 @@ namespace Helper
             logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
             ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            System.Threading.Thread.Sleep(50);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            SendKeys.SendWait("{BACKSPACE 5}");
+            SendKeys.SendWait("{DEL 5}");
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPAC"E], 0, 0x2, 0);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //BidLib.util.WinIO io = new BidLib.util.WinIO();
             for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(25);
+                System.Threading.Thread.Sleep(interval);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
+                System.Threading.Thread.Sleep(interval);
                 ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
+
+                //BidLib.util.WinIo.MykeyDown(BidLib.util.VKKey.VK_NUM0); System.Threading.Thread.Sleep(100); BidLib.util.WinIo.MykeyUp(BidLib.util.VKKey.VK_NUM0);
+                //io.KeyDownUp(Keys.D);
+
             } System.Threading.Thread.Sleep(50);
+            //BidLib.util.WinIo.Shutdown();
             logger.Info("\tEND   input PRICE");
 
             //点击出价
@@ -471,6 +491,7 @@ namespace Helper
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
 
+            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
@@ -481,24 +502,28 @@ namespace Helper
             logger.DebugFormat("\tINPUT BOX({0}, {1})", x+bid.submit.inputBox.x, y+bid.submit.inputBox.y);
             ScreenUtil.SetCursorPos(x+bid.submit.inputBox.x, y+bid.submit.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            System.Threading.Thread.Sleep(50);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            SendKeys.SendWait("{BACKSPACE 4}");
+            SendKeys.SendWait("{DEL 4}");
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
             logger.Info("\tEND   make INPUT blank");
 
             logger.Info("\tBEGIN input CAPTCHA");
             {
                 for (int i = 0; i < activeCaptcha.Length; i++) {
 
-                    System.Threading.Thread.Sleep(25);
+                    System.Threading.Thread.Sleep(interval);
                     ScreenUtil.keybd_event(ScreenUtil.keycode[activeCaptcha[i].ToString()], 0, 0, 0);
+                    System.Threading.Thread.Sleep(interval);
                     ScreenUtil.keybd_event(ScreenUtil.keycode[activeCaptcha[i].ToString()], 0, 0x2, 0);
                 }
             } System.Threading.Thread.Sleep(50);
@@ -522,6 +547,7 @@ namespace Helper
         /// <returns></returns>
         private Boolean submit(String URL, tobid.rest.position.BidStep2 bid, CaptchaInput input) {
 
+            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
@@ -531,16 +557,19 @@ namespace Helper
             logger.DebugFormat("\tINPUT BOX({0}, {1})", x + bid.submit.inputBox.x, y + bid.submit.inputBox.y);
             ScreenUtil.SetCursorPos(x + bid.submit.inputBox.x, y + bid.submit.inputBox.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            System.Threading.Thread.Sleep(50);
 
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            SendKeys.SendWait("{BACKSPACE 4}");
+            SendKeys.SendWait("{DEL 4}");
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
+            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
             
             logger.Info("\tEND   make INPUT blank");
 
@@ -561,8 +590,9 @@ namespace Helper
                 if (CaptchaInput.LEFT == input) {
 
                     for (int i = 0; i <= 3; i++) {
-                        System.Threading.Thread.Sleep(25);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
                     }
                 }
@@ -570,8 +600,9 @@ namespace Helper
 
                     for (int i = 1; i <= 4; i++) {
 
-                        System.Threading.Thread.Sleep(25);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
                     }
                 }
@@ -579,8 +610,9 @@ namespace Helper
 
                     for (int i = 2; i <= 5; i++) {
 
-                        System.Threading.Thread.Sleep(25);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
                     }
                 }
@@ -588,8 +620,9 @@ namespace Helper
 
                     for (int i = 0; i < txtActive.Length; i++) {
 
-                        System.Threading.Thread.Sleep(25);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0, 0);
+                        System.Threading.Thread.Sleep(interval);
                         ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0x2, 0);
                     }
                 }
@@ -893,6 +926,14 @@ namespace Helper
                 IEUtil.openIE("real");
             else
                 IEUtil.openIE("simulate");
+        }
+
+        private void buttonURL_Click(object sender, EventArgs e) {
+
+            if (this.国拍ToolStripMenuItem.Checked)
+                IEUtil.openURL("real");
+            else
+                IEUtil.openURL("simulate");
         }
     }
 }

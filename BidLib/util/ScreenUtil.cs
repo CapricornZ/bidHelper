@@ -56,21 +56,12 @@ namespace tobid.util
             return new Point(rectX.X, rectX.Y);
         }
 
-        static public void openIE(String category) {
+        static public void openURL(String category) {
 
             const int GWL_STYLE = -16;
             const long WS_THICKFRAME = 0x40000L;
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
-
-            System.Diagnostics.Process[] myProcesses;
-            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
-            foreach (System.Diagnostics.Process instance in myProcesses) {
-                instance.Kill();
-            }
-
-            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
-            System.Threading.Thread.Sleep(1500);
 
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
@@ -83,7 +74,7 @@ namespace tobid.util
                     Browser.Top = 0;
                     Browser.Left = 0;
                     Browser.Height = 780;
-                    Browser.Width = 1095;
+                    Browser.Width = 1100;
                     if ("real".Equals(category))
                         Browser.Navigate("https://paimai.alltobid.com/");
                     else
@@ -91,6 +82,17 @@ namespace tobid.util
                     SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
                 }
             }
+        }
+
+        static public void openIE(String category) {
+
+            System.Diagnostics.Process[] myProcesses;
+            myProcesses = System.Diagnostics.Process.GetProcessesByName("IEXPLORE");
+            foreach (System.Diagnostics.Process instance in myProcesses) {
+                instance.Kill();
+            }
+
+            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
         }
     }
 

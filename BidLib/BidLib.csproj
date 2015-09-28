@@ -75,6 +75,7 @@
     <Compile Include="util\ResourceUtil.cs" />
     <Compile Include="util\RestClient.cs" />
     <Compile Include="util\ScreenUtil.cs" />
+    <Compile Include="util\WinIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SHDocVw">

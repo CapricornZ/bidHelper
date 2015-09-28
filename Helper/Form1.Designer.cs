@@ -68,6 +68,8 @@
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonIE = new System.Windows.Forms.Button();
+            this.buttonURL = new System.Windows.Forms.Button();
+            this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -377,7 +379,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(536, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(532, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -387,7 +389,7 @@
             this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(55, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(59, 19);
             this.toolStripStatusLabel1.Text = "XX:XX:XX";
             // 
             // statusStrip1
@@ -395,9 +397,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 208);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 206);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(606, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(606, 24);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -440,7 +442,8 @@
             // 配置ToolStripMenuItem
             // 
             this.配置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stepToolStripMenuItem});
+            this.stepToolStripMenuItem,
+            this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
             this.配置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.配置ToolStripMenuItem.Text = "配置";
@@ -448,13 +451,13 @@
             // stepToolStripMenuItem
             // 
             this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
-            this.stepToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.stepToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.stepToolStripMenuItem.Text = "Step2";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
             // buttonIE
             // 
-            this.buttonIE.Location = new System.Drawing.Point(547, 182);
+            this.buttonIE.Location = new System.Drawing.Point(487, 183);
             this.buttonIE.Name = "buttonIE";
             this.buttonIE.Size = new System.Drawing.Size(54, 23);
             this.buttonIE.TabIndex = 11;
@@ -462,11 +465,27 @@
             this.buttonIE.UseVisualStyleBackColor = true;
             this.buttonIE.Click += new System.EventHandler(this.buttonIE_Click);
             // 
+            // buttonURL
+            // 
+            this.buttonURL.Location = new System.Drawing.Point(547, 183);
+            this.buttonURL.Name = "buttonURL";
+            this.buttonURL.Size = new System.Drawing.Size(54, 23);
+            this.buttonURL.TabIndex = 12;
+            this.buttonURL.Text = "打开网站(&U)";
+            this.buttonURL.UseVisualStyleBackColor = true;
+            this.buttonURL.Click += new System.EventHandler(this.buttonURL_Click);
+            // 
+            // toolStripTextBoxInterval
+            // 
+            this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 230);
+            this.Controls.Add(this.buttonURL);
             this.Controls.Add(this.buttonIE);
             this.Controls.Add(this.groupBoxLocal);
             this.Controls.Add(this.groupBoxManual);
@@ -543,6 +562,8 @@
         private System.Windows.Forms.ToolStripMenuItem 配置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stepToolStripMenuItem;
         private System.Windows.Forms.Button buttonIE;
+        private System.Windows.Forms.Button buttonURL;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxInterval;
     }
 }
 

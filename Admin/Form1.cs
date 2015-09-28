@@ -61,6 +61,7 @@ namespace Admin {
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }
+        public int interval { get { return 25; } }
         #endregion
 
         private System.Threading.Thread keepAliveThread;
