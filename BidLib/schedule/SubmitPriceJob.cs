@@ -161,9 +161,13 @@ namespace tobid.scheduler.jobs
                     }
                 }
                 if (SubmitPriceStep2Job.priceOnly)
-                    success = true;
+                    if(delta == 0)
+                        success = true;
+                    else
+                        success = this.submit(pos, SubmitPriceStep2Job.operation.submit);//提交
                 else
                     success = this.submit(pos, SubmitPriceStep2Job.operation.submit);//提交
+                    
                 logger.WarnFormat("ROUND[{0}] {1}", submitCount, success?"SUCCESS":"FAILED");
             }
         }
