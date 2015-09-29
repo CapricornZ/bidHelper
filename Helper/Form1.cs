@@ -268,7 +268,7 @@ namespace Helper
                             break;
                         case 223://F9
                             logger.Info("HOT KEY F9");
-                            this.fire(300);
+                            this.fire(SubmitPriceStep2Job.getPosition(), 300);
                             break;
                     }
                     break;
@@ -490,8 +490,16 @@ namespace Helper
             }
         }
 
-        private void fire(int delta) {
+        private void fire(tobid.rest.position.BidStep2 bid, int delta) {
 
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+
+            ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
+            System.Threading.Thread.Sleep(250);
             SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
             job.Fire(delta);
         }
