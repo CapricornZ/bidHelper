@@ -48,6 +48,16 @@ namespace Helper
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
         public int interval { get { return Int16.Parse(this.toolStripTextBoxInterval.Text); } }
+        public String category
+        {
+            get
+            {
+                if (this.国拍ToolStripMenuItem.Checked)
+                    return "real";
+                else
+                    return "simulate";
+            }
+        }
         #endregion
 
         private IOrc m_orcTitle;
@@ -112,6 +122,15 @@ namespace Helper
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
             this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
+
+            //加载配置项2
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
+                new ReceiveLogin(this.receiveLogin),
+                new ReceiveOperation[]{
+                            new ReceiveOperation(this.receiveOperation),
+                            new ReceiveOperation(this.receiveOperation)},
+                this);
+            keepAliveJob.Execute();
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -149,12 +168,13 @@ namespace Helper
             this.toolStripTextBoxInterval.Text = keyInterval;
 
             //加载配置项2
-            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
-                new ReceiveLogin(this.receiveLogin),
-                new ReceiveOperation[]{
-                    new ReceiveOperation(this.receiveOperation),
-                    new ReceiveOperation(this.receiveOperation)});
-            keepAliveJob.Execute();
+            //KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
+            //    new ReceiveLogin(this.receiveLogin),
+            //    new ReceiveOperation[]{
+            //        new ReceiveOperation(this.receiveOperation),
+            //        new ReceiveOperation(this.receiveOperation)},
+            //    this);
+            //keepAliveJob.Execute();
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -162,7 +182,8 @@ namespace Helper
                 new ReceiveLogin(this.receiveLogin), 
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveOperation),
-                    new ReceiveOperation(this.receiveOperation)});
+                    new ReceiveOperation(this.receiveOperation)},
+                this);
             this.m_schedulerKeepAlive = new Scheduler(config1M);
 
             //Action任务配置
@@ -792,7 +813,8 @@ namespace Helper
                         new ReceiveLogin(this.receiveLogin),
                         new ReceiveOperation[]{
                             new ReceiveOperation(this.receiveOperation),
-                            new ReceiveOperation(this.receiveOperation)});
+                            new ReceiveOperation(this.receiveOperation)},
+                        this);
                     keepAliveJob.Execute();
 
                     System.Threading.ThreadStart keepAliveThread = new System.Threading.ThreadStart(this.m_schedulerKeepAlive.Start);
@@ -885,7 +907,7 @@ namespace Helper
         private void stepToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.step2Dialog.ShowDialog(this);
-            this.step2Dialog.BringToFront();
+            //this.step2Dialog.BringToFront();
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -937,18 +959,20 @@ namespace Helper
                     //    Browser.Navigate("http://moni.51hupai.org:8081");
                 //}
             //}
-            if (this.国拍ToolStripMenuItem.Checked)
-                IEUtil.openIE("real");
-            else
-                IEUtil.openIE("simulate");
+            IEUtil.openIE(this.category);
+            //if (this.国拍ToolStripMenuItem.Checked)
+            //    IEUtil.openIE("real");
+            //else
+            //    IEUtil.openIE("simulate");
         }
 
         private void buttonURL_Click(object sender, EventArgs e) {
 
-            if (this.国拍ToolStripMenuItem.Checked)
-                IEUtil.openURL("real");
-            else
-                IEUtil.openURL("simulate");
+            IEUtil.openURL(this.category);
+            //if (this.国拍ToolStripMenuItem.Checked)
+            //    IEUtil.openURL("real");
+            //else
+            //    IEUtil.openURL("simulate");
         }
     }
 }

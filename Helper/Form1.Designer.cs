@@ -67,9 +67,9 @@
             this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
-            this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -113,7 +113,7 @@
             this.panel1.Controls.Add(this.radioPrice);
             this.panel1.Location = new System.Drawing.Point(6, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(75, 56);
+            this.panel1.Size = new System.Drawing.Size(77, 56);
             this.panel1.TabIndex = 3;
             // 
             // radioDeltaPrice
@@ -455,6 +455,11 @@
             this.stepToolStripMenuItem.Text = "Step2";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
+            // toolStripTextBoxInterval
+            // 
+            this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
+            // 
             // buttonIE
             // 
             this.buttonIE.Location = new System.Drawing.Point(487, 183);
@@ -474,11 +479,6 @@
             this.buttonURL.Text = "打开网站(&U)";
             this.buttonURL.UseVisualStyleBackColor = true;
             this.buttonURL.Click += new System.EventHandler(this.buttonURL_Click);
-            // 
-            // toolStripTextBoxInterval
-            // 
-            this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
-            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
             // 
             // Form1
             // 

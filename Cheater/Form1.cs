@@ -42,9 +42,10 @@ namespace Cheater {
                 new ReceiveLogin(this.receiveLogin),
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveOperation),
-                    new ReceiveOperation(this.receiveOperation)});
+                    new ReceiveOperation(this.receiveOperation)},
+                null);
             //keepAliveJob.Execute();
-
+            
             this.chart1.Series.Clear();
             Series series = new Series();
             series.ChartType = SeriesChartType.Spline;

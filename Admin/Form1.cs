@@ -62,6 +62,16 @@ namespace Admin {
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }
         public int interval { get { return 25; } }
+        public String category
+        {
+            get
+            {
+                if (this.RealToolStripMenuItem.Checked)
+                    return "real";
+                else
+                    return "simulate";
+            }
+        }
         #endregion
 
         private System.Threading.Thread keepAliveThread;
@@ -124,7 +134,8 @@ namespace Admin {
                 new ReceiveLogin(this.receiveLogin),
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveStep1),
-                    new ReceiveOperation(this.receiveStep2)});
+                    new ReceiveOperation(this.receiveStep2)},
+                this);
             keepAliveJob.Execute();
 
             //keepAlive任务配置
@@ -133,7 +144,8 @@ namespace Admin {
                 new ReceiveLogin(this.receiveLogin), 
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveStep1),
-                    new ReceiveOperation(this.receiveStep2)});
+                    new ReceiveOperation(this.receiveStep2)},
+                this);
             m_schedulerKeepAlive = new Scheduler(config5M);
 
             //Action任务配置

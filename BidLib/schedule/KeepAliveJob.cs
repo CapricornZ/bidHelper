@@ -29,6 +29,8 @@ namespace tobid.scheduler.jobs
 
         private ReceiveLogin receiveLogin;
         private ReceiveOperation[] receiveOperation;
+        private IRepository repository;
+
         /// <summary>
         /// 使用服务器策略或本地策略
         /// true : 本地策略
@@ -37,12 +39,26 @@ namespace tobid.scheduler.jobs
         public Boolean isManual { get; set; }
         public String EndPoint { get; set; }
 
-        public KeepAliveJob(String endPoint, ReceiveLogin receiveLogin, ReceiveOperation[] receiveOperation){
+        public KeepAliveJob(String endPoint, ReceiveLogin receiveLogin, ReceiveOperation[] receiveOperation, IRepository repo){
 
             this.isManual = false;
             this.EndPoint = endPoint;
             this.receiveLogin = receiveLogin;
             this.receiveOperation = receiveOperation;
+            this.repository = repo;
+        }
+
+        class Filter
+        {
+            public static Client remain(String tag, Client client)
+            {
+                for (int i = client.operation.Count - 1; i >= 0; i--)
+                {
+                    if (!client.operation[i].tag.Equals(tag))
+                        client.operation.RemoveAt(i);
+                }
+                return client;
+            }
         }
 
         public void Execute() {
@@ -54,8 +70,9 @@ namespace tobid.scheduler.jobs
             RestClient restKeepAlive = new RestClient(endpoint: epKeepAlive, method: HttpVerb.POST);
             String rtn = restKeepAlive.MakeRequest(String.Format("?ip={0}", hostName));
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
-            
-            if (!this.isManual && client.operation != null && client.operation.Length > 0)
+            client = Filter.remain(this.repository.category, client);
+
+            if (!this.isManual && client.operation != null && client.operation.Count > 0)
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {

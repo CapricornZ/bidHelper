@@ -13,7 +13,8 @@ namespace tobid.rest
         public String ip { get; set; }
         public DateTime updateTime { get; set; }
         public Config config { get; set; }
-        public Operation[] operation { get; set; }
+        //public Operation[] operation { get; set; }
+        public List<Operation> operation { get; set; }
     }
 
     /// <summary>
@@ -37,6 +38,7 @@ namespace tobid.rest
 
         public int id { get; set; }
         public String type { get; set; }
+        public String tag { get; set; }
         public String content { get; set; }
         public DateTime startTime { get; set; }
         public DateTime expireTime { get; set; }
