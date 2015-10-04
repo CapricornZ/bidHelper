@@ -141,7 +141,7 @@ namespace tobid.util.orc{
             return counter == total && total != 0;
         }
 
-        private int getWhitePercent() {
+        public int getWhitePercent() {
             int white = 0;
             for (int i = 0; i < this.height; i++)
                 for (int j = 0; j < this.width; j++) {

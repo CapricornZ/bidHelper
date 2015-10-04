@@ -70,6 +70,7 @@
             this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
+            this.buttonLogin = new System.Windows.Forms.Button();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxManual.SuspendLayout();
@@ -462,7 +463,7 @@
             // 
             // buttonIE
             // 
-            this.buttonIE.Location = new System.Drawing.Point(487, 183);
+            this.buttonIE.Location = new System.Drawing.Point(421, 183);
             this.buttonIE.Name = "buttonIE";
             this.buttonIE.Size = new System.Drawing.Size(54, 23);
             this.buttonIE.TabIndex = 11;
@@ -472,19 +473,30 @@
             // 
             // buttonURL
             // 
-            this.buttonURL.Location = new System.Drawing.Point(547, 183);
+            this.buttonURL.Location = new System.Drawing.Point(481, 183);
             this.buttonURL.Name = "buttonURL";
             this.buttonURL.Size = new System.Drawing.Size(54, 23);
             this.buttonURL.TabIndex = 12;
-            this.buttonURL.Text = "打开网站(&U)";
+            this.buttonURL.Text = "打开页(&U)";
             this.buttonURL.UseVisualStyleBackColor = true;
             this.buttonURL.Click += new System.EventHandler(this.buttonURL_Click);
+            // 
+            // buttonLogin
+            // 
+            this.buttonLogin.Location = new System.Drawing.Point(542, 182);
+            this.buttonLogin.Name = "buttonLogin";
+            this.buttonLogin.Size = new System.Drawing.Size(51, 23);
+            this.buttonLogin.TabIndex = 13;
+            this.buttonLogin.Text = "登录(&L)";
+            this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 230);
+            this.Controls.Add(this.buttonLogin);
             this.Controls.Add(this.buttonURL);
             this.Controls.Add(this.buttonIE);
             this.Controls.Add(this.groupBoxLocal);
@@ -564,6 +576,7 @@
         private System.Windows.Forms.Button buttonIE;
         private System.Windows.Forms.Button buttonURL;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxInterval;
+        private System.Windows.Forms.Button buttonLogin;
     }
 }
 

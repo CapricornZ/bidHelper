@@ -22,6 +22,7 @@ namespace tobid.util.http
         public HttpVerb Method { get; set; }
         public string ContentType { get; set; }
         public string PostData { get; set; }
+        private string basicAuth;
 
         public RestClient(string endpoint, HttpVerb method)
         {
@@ -29,15 +30,19 @@ namespace tobid.util.http
             this.Method = method;
             this.ContentType = "text/xml";
             this.PostData = "";
+
+            String user = System.Configuration.ConfigurationManager.AppSettings["principal"];
+            String pass = System.Configuration.ConfigurationManager.AppSettings["credential"];
+            this.basicAuth = user + ":" + pass;
         }
 
-        public RestClient(string endpoint, HttpVerb method, string postData)
+        /*public RestClient(string endpoint, HttpVerb method, string postData)
         {
             this.EndPoint = endpoint;
             this.Method = method;
             this.ContentType = "text/xml";
             this.PostData = postData;
-        }
+        }*/
 
         public RestClient(string endpoint, HttpVerb method, Object postObj)
         {
@@ -54,9 +59,10 @@ namespace tobid.util.http
 
         public string MakeRequest(string parameters)
         {
-            var request = (HttpWebRequest)WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
+            WebRequest request = WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
 
             request.Method = Method.ToString();
+            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             request.ContentLength = 0;
             request.ContentType = ContentType;
 

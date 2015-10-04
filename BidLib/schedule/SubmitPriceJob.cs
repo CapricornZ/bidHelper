@@ -350,7 +350,13 @@ namespace tobid.scheduler.jobs
             {   
                 binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + submitPoints.captcha[0].x, y + submitPoints.captcha[0].y, 128, 28);
                 File.WriteAllBytes(String.Format("AUTO-LOADING-{0}.BMP", retry), binaryCaptcha);
-                String strLoading = this.orcRepository.orcCaptchaLoading.IdentifyStringFromPic(new Bitmap(new MemoryStream(binaryCaptcha)));
+                Bitmap bitMap = new Bitmap(new MemoryStream(binaryCaptcha));
+                //if (this.orcRepository.orcCaptchaLoading.IsBlank(bitMap))
+                //{
+                //    logger.Debug("BLANK");
+                //    continue;
+                //}
+                String strLoading = this.orcRepository.orcCaptchaLoading.IdentifyStringFromPic(bitMap);
                 logger.InfoFormat("\t LOADING({0}) = {1}", retry++, strLoading);
                 if ("正在获取校验码".Equals(strLoading))
                 {

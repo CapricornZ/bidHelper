@@ -13,6 +13,7 @@ namespace tobid.util.orc
     public interface IOrc {
 
         String IdentifyStringFromPic(Bitmap image, int x = 0, int y = 0);
+        Boolean IsBlank(Bitmap image, int x = 0, int y = 0);
         List<Bitmap> SubImgs { get; }
     }
 
@@ -87,6 +88,11 @@ namespace tobid.util.orc
                 sb.Append(s);
             }
             return sb.ToString();
+        }
+
+        public Boolean IsBlank(Bitmap image, int x = 0, int y = 0)
+        {
+            return false;
         }
     }
 
@@ -220,6 +226,17 @@ namespace tobid.util.orc
                 sb.Append(s);
             }
             return sb.ToString();
+        }
+
+        public Boolean IsBlank(Bitmap image, int x = 0, int y = 0)
+        {
+            ImageTool it = new ImageTool();
+            it.setImage(image);
+            it = it.changeToGrayImage().changeToBlackWhiteImage();
+            if (minNearSpots != 0)
+                it = it.removeBadBlock(1, 1, this.minNearSpots);
+            int whitePercent = it.getWhitePercent();
+            return whitePercent > 80;
         }
     }
 }

@@ -97,7 +97,7 @@ namespace tobid.util.orc {
             Point start = DynamicOrcUtil.scanStart(it.Image);
             for (int i = 0; i < this.index.Length; i++) {
 
-                Rectangle cloneRect = new Rectangle(this.index[i] + start.X, start.Y, this.width, this.height);
+                Rectangle cloneRect = new Rectangle(this.index[i] + start.X, start.Y, this.width - start.X, this.height-start.Y);
                 Bitmap subImg = it.Image.Clone(cloneRect, it.Image.PixelFormat);
                 this.subImgs.Add(subImg);
                 subImg.Save(String.Format(@"p{0}.bmp", i));
@@ -105,6 +105,17 @@ namespace tobid.util.orc {
                 sb.Append(s);
             }
             return sb.ToString();
+        }
+
+        public Boolean IsBlank(Bitmap image, int x = 0, int y = 0)
+        {
+            ImageTool it = new ImageTool();
+            it.setImage(image);
+            it = it.changeToGrayImage().changeToBlackWhiteImage();
+            if (minNearSpots != 0)
+                it = it.removeBadBlock(1, 1, this.minNearSpots);
+            int whitePercent = it.getWhitePercent();
+            return whitePercent > 80;
         }
     }
 }

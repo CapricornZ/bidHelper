@@ -41,6 +41,18 @@ namespace tobid.util
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+        static public SHDocVw.InternetExplorer findBrowser(){
+
+            SHDocVw.InternetExplorer rtn = null;
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows)
+            {
+                if (rtn == null && (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")))
+                    rtn = Browser;
+            }
+            return rtn;
+        }
+
         static public Point findOrigin() {
 
             Rectangle rectX = new Rectangle();

@@ -60,6 +60,7 @@ namespace Helper
         }
         #endregion
 
+        private IOrc m_orcLogin;
         private IOrc m_orcTitle;
         private IOrc m_orcCaptcha;
         private IOrc m_orcPrice;
@@ -114,8 +115,9 @@ namespace Helper
 
             //加载配置项1
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
-
+            
             this.Text = configResource.tag;
+            this.m_orcLogin = configResource.Login;
             this.m_orcTitle = configResource.Title;
             this.m_orcCaptcha = configResource.Captcha;//
             this.m_orcPrice = configResource.Price;//价格识别
@@ -973,6 +975,12 @@ namespace Helper
             //    IEUtil.openURL("real");
             //else
             //    IEUtil.openURL("simulate");
+        }
+
+        private void buttonLogin_Click_1(object sender, EventArgs e)
+        {
+            LoginJob job = new LoginJob(m_orcLogin);
+            job.Execute();
         }
     }
 }
