@@ -52,6 +52,9 @@ namespace tobid.scheduler.jobs
         {
             public static Client remain(String tag, Client client)
             {
+                if (client.operation == null)
+                    return client;
+
                 for (int i = client.operation.Count - 1; i >= 0; i--)
                 {
                     if (!client.operation[i].tag.Equals(tag))

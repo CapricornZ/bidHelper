@@ -40,6 +40,10 @@ namespace tobid.util
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        static private int processID;
 
         static public SHDocVw.InternetExplorer findBrowser(){
 
@@ -47,7 +51,14 @@ namespace tobid.util
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows)
             {
-                if (rtn == null && (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")))
+                uint process = 0;
+                GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
+
+                System.Console.WriteLine("HWND:" + Browser.HWND);
+                System.Console.WriteLine("PROCESS:" + process);
+
+                if(process == IEUtil.processID)
+                //if (rtn == null && (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")))
                     rtn = Browser;
             }
             return rtn;
@@ -58,7 +69,15 @@ namespace tobid.util
             Rectangle rectX = new Rectangle();
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
-                if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+
+                uint process = 0;
+                GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
+
+                System.Console.WriteLine("HWND:" + Browser.HWND);
+                System.Console.WriteLine("PROCESS:" + process);
+
+                //if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+                if(process == IEUtil.processID){
 
                     IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
                     IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
@@ -77,7 +96,14 @@ namespace tobid.util
 
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
-                if (Browser.LocationURL.Contains("about:blank")) {
+
+                uint process = 0;
+                GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
+
+                System.Console.WriteLine("HWND:" + Browser.HWND);
+                System.Console.WriteLine("PROCESS:" + process);
+                //if (Browser.LocationURL.Contains("about:blank")) {
+                if(process == IEUtil.processID){
 
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
@@ -104,7 +130,10 @@ namespace tobid.util
                 instance.Kill();
             }
 
-            System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Diagnostics.Process process = System.Diagnostics.Process.Start("iexplore.exe", "about:blank");
+            System.Console.WriteLine("Process:" + process.Id);
+            System.Console.WriteLine("MainWindowHandle:" + process.MainWindowHandle);
+            IEUtil.processID = process.Id;
         }
     }
 

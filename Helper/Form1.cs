@@ -75,6 +75,7 @@ namespace Helper
         private System.Threading.Thread submitPriceStep2Thread;
 
         private Step2ConfigDialog step2Dialog;
+        private static Object lockObj = new Object();
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -224,43 +225,36 @@ namespace Helper
                     switch (m.WParam.ToInt32()) {
                         case 103://CTRL+3
                             logger.Info("HOT KEY CTRL + 3 (103)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 104://CTRL+4
                             logger.Info("HOT KEY CTRL + 4 (104)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 400);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 105://CTRL+5
                             logger.Info("HOT KEY CTRL + 5 (105)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 500);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 106://CTRL+6
                             logger.Info("HOT KEY CTRL + 6 (106)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 600);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 107://CTRL+7
                             logger.Info("HOT KEY CTRL + 7 (107)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 700);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 108://CTRL+8
                             logger.Info("HOT KEY CTRL + 8 (108)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 800);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 109://CTRL+9
                             logger.Info("HOT KEY CTRL + 9 (109)");
-                            System.Threading.Thread.Sleep(50);
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 900);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
