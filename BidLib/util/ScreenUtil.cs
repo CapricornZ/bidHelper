@@ -166,7 +166,9 @@ namespace tobid.util
             keycode.Add("9", 57);
             keycode.Add("BACKSPACE", 0x8);
             keycode.Add("DELETE", 0x2e);
+            keycode.Add("CTRL", 17);
             keycode.Add("+", 48);
+            
         }
 
         public void drawSomething(int x, int y, String something)
