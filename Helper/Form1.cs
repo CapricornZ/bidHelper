@@ -580,12 +580,12 @@ namespace Helper
 
                     logger.Info("\tBEGIN identify CAPTCHA...");
                     logger.DebugFormat("\tCAPTURE CAPTCHA({0}, {1})", x + bid.submit.captcha[0].x, y + bid.submit.captcha[0].y);
-                    byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + bid.submit.captcha[0].x, y + bid.submit.captcha[0].y, 128, 28);
+                    byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + bid.submit.captcha[0].x, y + bid.submit.captcha[0].y, 148, 28);
                     File.WriteAllBytes("CAPTCHA.BMP", binaryCaptcha);
                     String txtCaptcha = this.m_orcCaptcha.IdentifyStringFromPic(new Bitmap(new MemoryStream(binaryCaptcha)));
 
                     logger.DebugFormat("\tCAPTURE TIPS({0}, {1})", x + bid.submit.captcha[1].x, y + bid.submit.captcha[1].y);
-                    byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(x + bid.submit.captcha[1].x, y + bid.submit.captcha[1].y, 112, 16);
+                    byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(x + bid.submit.captcha[1].x, y + bid.submit.captcha[1].y, 132, 16);
                     File.WriteAllBytes("TIPS.BMP", binaryTips);
                     String txtActive = this.m_orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new MemoryStream(binaryTips)));
                     logger.InfoFormat("\tEND   identify CAPTCHA = {0}, ACTIVE = {1}", txtCaptcha, txtActive);

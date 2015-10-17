@@ -97,7 +97,7 @@ namespace tobid.util.orc {
             Point start = DynamicOrcUtil.scanStart(it.Image);
             for (int i = 0; i < this.index.Length; i++) {
 
-                Rectangle cloneRect = new Rectangle(this.index[i] + start.X, start.Y, this.width - start.X, this.height-start.Y);
+                Rectangle cloneRect = new Rectangle(this.index[i] + start.X, start.Y, this.width, this.height);
                 Bitmap subImg = it.Image.Clone(cloneRect, it.Image.PixelFormat);
                 this.subImgs.Add(subImg);
                 subImg.Save(String.Format(@"p{0}.bmp", i));

@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace tobid.util
 {
@@ -93,6 +94,7 @@ namespace tobid.util
             const long WS_THICKFRAME = 0x40000L;
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
+            const long WS_VSCROLL = 0x00200000L;
 
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
@@ -107,19 +109,33 @@ namespace tobid.util
 
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME & ~WS_VSCROLL));
+
                     Browser.MenuBar = false;
                     Browser.AddressBar = true;
                     Browser.Top = 0;
                     Browser.Left = 0;
                     Browser.Height = 780;
                     Browser.Width = 1100;
+                    Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     if ("real".Equals(category))
                         Browser.Navigate("https://paimai.alltobid.com/");
                     else
                         Browser.Navigate("http://moni.51hupai.org:8081");
-                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+                    DocComplete.WaitOne();
+
+                    mshtml.IHTMLDocument2 doc = (mshtml.IHTMLDocument2)Browser.Document;
+                    mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)doc.parentWindow;
+                    win.execScript("document.body.style.overflow='hidden';", "javascript");
                 }
             }
+        }
+
+        private static AutoResetEvent DocComplete = new AutoResetEvent(false);
+        static void ie_DocumentComplete(object pDisp, ref object URL)
+        {
+            DocComplete.Set();
+            Console.WriteLine("Complete");
         }
 
         static public void openIE(String category) {
