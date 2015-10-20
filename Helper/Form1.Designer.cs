@@ -41,17 +41,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.radioManualPolicy = new System.Windows.Forms.RadioButton();
-            this.radioLocalPolicy = new System.Windows.Forms.RadioButton();
+            this.radioLocalPolicyV2 = new System.Windows.Forms.RadioButton();
+            this.radioLocalPolicyV1 = new System.Windows.Forms.RadioButton();
             this.radioServPolicy = new System.Windows.Forms.RadioButton();
-            this.groupBoxManual = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.groupBoxLocalV2 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textInputPrice = new System.Windows.Forms.TextBox();
-            this.pictureCaptcha = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textInputCaptcha = new System.Windows.Forms.TextBox();
+            this.btnUpdateV2 = new System.Windows.Forms.Button();
+            this.textBoxDelay = new System.Windows.Forms.TextBox();
+            this.comboBoxDelta = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -71,10 +71,10 @@
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
+            this.radioManual = new System.Windows.Forms.RadioButton();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.groupBoxManual.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureCaptcha)).BeginInit();
+            this.groupBoxLocalV2.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBoxPolicy.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -96,7 +96,7 @@
             this.groupBoxLocal.Size = new System.Drawing.Size(187, 143);
             this.groupBoxLocal.TabIndex = 5;
             this.groupBoxLocal.TabStop = false;
-            this.groupBoxLocal.Text = "自选策略";
+            this.groupBoxLocal.Text = "策略V1";
             // 
             // checkPriceOnly
             // 
@@ -205,129 +205,146 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // radioManualPolicy
+            // radioLocalPolicyV2
             // 
-            this.radioManualPolicy.AutoCheck = false;
-            this.radioManualPolicy.AutoSize = true;
-            this.radioManualPolicy.Checked = true;
-            this.radioManualPolicy.Location = new System.Drawing.Point(192, 5);
-            this.radioManualPolicy.Name = "radioManualPolicy";
-            this.radioManualPolicy.Size = new System.Drawing.Size(49, 17);
-            this.radioManualPolicy.TabIndex = 0;
-            this.radioManualPolicy.TabStop = true;
-            this.radioManualPolicy.Text = "手动";
-            this.radioManualPolicy.UseVisualStyleBackColor = true;
-            this.radioManualPolicy.Click += new System.EventHandler(this.radioManualPolicy_Click);
+            this.radioLocalPolicyV2.AutoCheck = false;
+            this.radioLocalPolicyV2.AutoSize = true;
+            this.radioLocalPolicyV2.Location = new System.Drawing.Point(205, 5);
+            this.radioLocalPolicyV2.Name = "radioLocalPolicyV2";
+            this.radioLocalPolicyV2.Size = new System.Drawing.Size(86, 17);
+            this.radioLocalPolicyV2.TabIndex = 1;
+            this.radioLocalPolicyV2.TabStop = true;
+            this.radioLocalPolicyV2.Text = "自选策略V2";
+            this.radioLocalPolicyV2.UseVisualStyleBackColor = true;
+            this.radioLocalPolicyV2.Click += new System.EventHandler(this.radioLocalPolicyV2_Click);
             // 
-            // radioLocalPolicy
+            // radioLocalPolicyV1
             // 
-            this.radioLocalPolicy.AutoCheck = false;
-            this.radioLocalPolicy.AutoSize = true;
-            this.radioLocalPolicy.Location = new System.Drawing.Point(113, 5);
-            this.radioLocalPolicy.Name = "radioLocalPolicy";
-            this.radioLocalPolicy.Size = new System.Drawing.Size(73, 17);
-            this.radioLocalPolicy.TabIndex = 1;
-            this.radioLocalPolicy.Text = "自选策略";
-            this.radioLocalPolicy.UseVisualStyleBackColor = true;
-            this.radioLocalPolicy.Click += new System.EventHandler(this.radioLocalPolicy_Click);
+            this.radioLocalPolicyV1.AutoCheck = false;
+            this.radioLocalPolicyV1.AutoSize = true;
+            this.radioLocalPolicyV1.Location = new System.Drawing.Point(113, 5);
+            this.radioLocalPolicyV1.Name = "radioLocalPolicyV1";
+            this.radioLocalPolicyV1.Size = new System.Drawing.Size(86, 17);
+            this.radioLocalPolicyV1.TabIndex = 2;
+            this.radioLocalPolicyV1.Text = "自选策略V1";
+            this.radioLocalPolicyV1.UseVisualStyleBackColor = true;
+            this.radioLocalPolicyV1.Click += new System.EventHandler(this.radioLocalPolicy_Click);
             // 
             // radioServPolicy
             // 
             this.radioServPolicy.AutoCheck = false;
             this.radioServPolicy.AutoSize = true;
+            this.radioServPolicy.Enabled = false;
             this.radioServPolicy.Location = new System.Drawing.Point(16, 5);
             this.radioServPolicy.Name = "radioServPolicy";
             this.radioServPolicy.Size = new System.Drawing.Size(85, 17);
-            this.radioServPolicy.TabIndex = 2;
+            this.radioServPolicy.TabIndex = 3;
             this.radioServPolicy.TabStop = true;
             this.radioServPolicy.Text = "服务器策略";
             this.radioServPolicy.UseVisualStyleBackColor = true;
             this.radioServPolicy.Click += new System.EventHandler(this.radioServPolicy_Click);
             // 
-            // groupBoxManual
+            // groupBoxLocalV2
             // 
-            this.groupBoxManual.Controls.Add(this.label7);
-            this.groupBoxManual.Controls.Add(this.label6);
-            this.groupBoxManual.Controls.Add(this.textInputPrice);
-            this.groupBoxManual.Controls.Add(this.pictureCaptcha);
-            this.groupBoxManual.Controls.Add(this.label5);
-            this.groupBoxManual.Controls.Add(this.textInputCaptcha);
-            this.groupBoxManual.Controls.Add(this.label4);
-            this.groupBoxManual.Location = new System.Drawing.Point(406, 27);
-            this.groupBoxManual.Name = "groupBoxManual";
-            this.groupBoxManual.Size = new System.Drawing.Size(195, 143);
-            this.groupBoxManual.TabIndex = 9;
-            this.groupBoxManual.TabStop = false;
-            this.groupBoxManual.Text = "手动";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 125);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(157, 13);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "输入验证码+回车，立即提交";
+            this.groupBoxLocalV2.Controls.Add(this.label6);
+            this.groupBoxLocalV2.Controls.Add(this.label5);
+            this.groupBoxLocalV2.Controls.Add(this.btnUpdateV2);
+            this.groupBoxLocalV2.Controls.Add(this.textBoxDelay);
+            this.groupBoxLocalV2.Controls.Add(this.comboBoxDelta);
+            this.groupBoxLocalV2.Controls.Add(this.label4);
+            this.groupBoxLocalV2.Controls.Add(this.dateTimePicker2);
+            this.groupBoxLocalV2.Enabled = false;
+            this.groupBoxLocalV2.Location = new System.Drawing.Point(406, 27);
+            this.groupBoxLocalV2.Name = "groupBoxLocalV2";
+            this.groupBoxLocalV2.Size = new System.Drawing.Size(188, 143);
+            this.groupBoxLocalV2.TabIndex = 9;
+            this.groupBoxLocalV2.TabStop = false;
+            this.groupBoxLocalV2.Text = "策略V2";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 41);
+            this.label6.Location = new System.Drawing.Point(10, 88);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(181, 13);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "输入价格+回车，自动显示验证码";
-            // 
-            // textInputPrice
-            // 
-            this.textInputPrice.Location = new System.Drawing.Point(75, 16);
-            this.textInputPrice.Name = "textInputPrice";
-            this.textInputPrice.Size = new System.Drawing.Size(100, 20);
-            this.textInputPrice.TabIndex = 5;
-            this.textInputPrice.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textInputPrice_KeyPress);
-            // 
-            // pictureCaptcha
-            // 
-            this.pictureCaptcha.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureCaptcha.Location = new System.Drawing.Point(75, 57);
-            this.pictureCaptcha.Name = "pictureCaptcha";
-            this.pictureCaptcha.Size = new System.Drawing.Size(100, 37);
-            this.pictureCaptcha.TabIndex = 4;
-            this.pictureCaptcha.TabStop = false;
+            this.label6.Size = new System.Drawing.Size(43, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "加价格";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(17, 63);
+            this.label5.Location = new System.Drawing.Point(7, 55);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(43, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "校验码";
+            this.label5.Size = new System.Drawing.Size(85, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "验证码延时(秒)";
             // 
-            // textInputCaptcha
+            // btnUpdateV2
             // 
-            this.textInputCaptcha.Location = new System.Drawing.Point(75, 102);
-            this.textInputCaptcha.Name = "textInputCaptcha";
-            this.textInputCaptcha.Size = new System.Drawing.Size(100, 20);
-            this.textInputCaptcha.TabIndex = 2;
+            this.btnUpdateV2.Location = new System.Drawing.Point(90, 115);
+            this.btnUpdateV2.Name = "btnUpdateV2";
+            this.btnUpdateV2.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateV2.TabIndex = 9;
+            this.btnUpdateV2.Text = "更新策略(&s)";
+            this.btnUpdateV2.UseVisualStyleBackColor = true;
+            this.btnUpdateV2.Click += new System.EventHandler(this.btnUpdateV2_Click);
+            // 
+            // textBoxDelay
+            // 
+            this.textBoxDelay.Location = new System.Drawing.Point(93, 53);
+            this.textBoxDelay.Name = "textBoxDelay";
+            this.textBoxDelay.Size = new System.Drawing.Size(82, 20);
+            this.textBoxDelay.TabIndex = 8;
+            this.textBoxDelay.Text = "0";
+            // 
+            // comboBoxDelta
+            // 
+            this.comboBoxDelta.FormattingEnabled = true;
+            this.comboBoxDelta.Items.AddRange(new object[] {
+            "+100",
+            "+200",
+            "+300",
+            "+400",
+            "+500",
+            "+600",
+            "+700",
+            "+800",
+            "+900",
+            "+1000"});
+            this.comboBoxDelta.Location = new System.Drawing.Point(93, 84);
+            this.comboBoxDelta.Name = "comboBoxDelta";
+            this.comboBoxDelta.Size = new System.Drawing.Size(82, 21);
+            this.comboBoxDelta.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 19);
+            this.label4.Location = new System.Drawing.Point(7, 22);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "手动价格";
+            this.label4.TabIndex = 7;
+            this.label4.Text = "出价时间";
+            // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.CustomFormat = "";
+            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePicker2.Location = new System.Drawing.Point(93, 19);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.ShowUpDown = true;
+            this.dateTimePicker2.Size = new System.Drawing.Size(82, 20);
+            this.dateTimePicker2.TabIndex = 6;
+            this.dateTimePicker2.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.radioManualPolicy);
-            this.panel2.Controls.Add(this.radioLocalPolicy);
+            this.panel2.Controls.Add(this.radioManual);
+            this.panel2.Controls.Add(this.radioLocalPolicyV2);
+            this.panel2.Controls.Add(this.radioLocalPolicyV1);
             this.panel2.Controls.Add(this.radioServPolicy);
-            this.panel2.Location = new System.Drawing.Point(138, 177);
+            this.panel2.Location = new System.Drawing.Point(48, 177);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(246, 29);
+            this.panel2.Size = new System.Drawing.Size(358, 29);
             this.panel2.TabIndex = 8;
             // 
             // label3
@@ -491,6 +508,20 @@
             this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click_1);
             // 
+            // radioManual
+            // 
+            this.radioManual.AutoCheck = false;
+            this.radioManual.AutoSize = true;
+            this.radioManual.Checked = true;
+            this.radioManual.Location = new System.Drawing.Point(298, 6);
+            this.radioManual.Name = "radioManual";
+            this.radioManual.Size = new System.Drawing.Size(49, 17);
+            this.radioManual.TabIndex = 0;
+            this.radioManual.TabStop = true;
+            this.radioManual.Text = "手动";
+            this.radioManual.UseVisualStyleBackColor = true;
+            this.radioManual.Click += new System.EventHandler(this.radioManual_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -500,7 +531,7 @@
             this.Controls.Add(this.buttonURL);
             this.Controls.Add(this.buttonIE);
             this.Controls.Add(this.groupBoxLocal);
-            this.Controls.Add(this.groupBoxManual);
+            this.Controls.Add(this.groupBoxLocalV2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.groupBoxPolicy);
             this.Controls.Add(this.statusStrip1);
@@ -518,9 +549,8 @@
             this.groupBoxLocal.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.groupBoxManual.ResumeLayout(false);
-            this.groupBoxManual.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureCaptcha)).EndInit();
+            this.groupBoxLocalV2.ResumeLayout(false);
+            this.groupBoxLocalV2.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.groupBoxPolicy.ResumeLayout(false);
@@ -546,17 +576,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.RadioButton radioManualPolicy;
-        private System.Windows.Forms.RadioButton radioLocalPolicy;
+        private System.Windows.Forms.RadioButton radioLocalPolicyV2;
+        private System.Windows.Forms.RadioButton radioLocalPolicyV1;
         private System.Windows.Forms.RadioButton radioServPolicy;
-        private System.Windows.Forms.GroupBox groupBoxManual;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textInputPrice;
-        private System.Windows.Forms.PictureBox pictureCaptcha;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textInputCaptcha;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBoxLocalV2;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -577,6 +600,14 @@
         private System.Windows.Forms.Button buttonURL;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxInterval;
         private System.Windows.Forms.Button buttonLogin;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.Button btnUpdateV2;
+        private System.Windows.Forms.TextBox textBoxDelay;
+        private System.Windows.Forms.ComboBox comboBoxDelta;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton radioManual;
     }
 }
 

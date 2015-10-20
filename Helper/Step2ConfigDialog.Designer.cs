@@ -64,6 +64,8 @@
             this.labelResult = new System.Windows.Forms.Label();
             this.labelTips = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.btnGoto = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -405,6 +407,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnGoto);
+            this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.pictureBox1);
             this.groupBox1.Controls.Add(this.labelTips);
             this.groupBox1.Controls.Add(this.pictureSub1);
@@ -419,10 +423,27 @@
             this.groupBox1.Controls.Add(this.pictureSub6);
             this.groupBox1.Location = new System.Drawing.Point(273, 159);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(278, 145);
+            this.groupBox1.Size = new System.Drawing.Size(278, 161);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "验证";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(30, 130);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(100, 20);
+            this.textBox8.TabIndex = 17;
+            // 
+            // btnGoto
+            // 
+            this.btnGoto.Location = new System.Drawing.Point(150, 127);
+            this.btnGoto.Name = "btnGoto";
+            this.btnGoto.Size = new System.Drawing.Size(75, 23);
+            this.btnGoto.TabIndex = 18;
+            this.btnGoto.Text = "&goto";
+            this.btnGoto.UseVisualStyleBackColor = true;
+            this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
             // 
             // Step2ConfigDialog
             // 
@@ -495,5 +516,7 @@
         private System.Windows.Forms.Label labelResult;
         private System.Windows.Forms.Label labelTips;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnGoto;
+        private System.Windows.Forms.TextBox textBox8;
     }
 }

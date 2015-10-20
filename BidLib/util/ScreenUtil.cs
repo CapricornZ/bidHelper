@@ -109,14 +109,15 @@ namespace tobid.util
 
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
-                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME & ~WS_VSCROLL));
 
                     Browser.MenuBar = false;
                     Browser.AddressBar = true;
                     Browser.Top = 0;
                     Browser.Left = 0;
-                    Browser.Height = 780;
+                    Browser.Height = 800;
                     Browser.Width = 1100;
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     if ("real".Equals(category))
                         Browser.Navigate("https://paimai.alltobid.com/");
@@ -127,6 +128,7 @@ namespace tobid.util
                     mshtml.IHTMLDocument2 doc = (mshtml.IHTMLDocument2)Browser.Document;
                     mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)doc.parentWindow;
                     win.execScript("document.body.style.overflow='hidden';", "javascript");
+                    
                 }
             }
         }
@@ -184,7 +186,6 @@ namespace tobid.util
             keycode.Add("DELETE", 0x2e);
             keycode.Add("CTRL", 17);
             keycode.Add("+", 48);
-            
         }
 
         public void drawSomething(int x, int y, String something)

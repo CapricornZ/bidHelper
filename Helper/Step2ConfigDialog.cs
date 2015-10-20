@@ -58,6 +58,12 @@ namespace Helper
             return pos;
         }
 
+        public BidStep2 BidStep2
+        {
+            get;
+            set;
+        }
+
         private void Step2ConfigDialog_Load(object sender, EventArgs e)
         {
             BidStep2 bid = SubmitPriceStep2Job.getPosition();
@@ -118,6 +124,8 @@ namespace Helper
             bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
             SubmitPriceStep2Job.setPosition(bid);
 
+            this.BidStep2 = bid;
+            
             this.cancel = false;
             this.Close();
         }
@@ -177,6 +185,14 @@ namespace Helper
             this.labelTips.Text = this.m_repository.orcCaptchaTipsUtil.getActive("一二三四五六", new Bitmap(new System.IO.MemoryStream(content)));
             for (int i = 0; i < this.m_repository.orcCaptchaTipsUtil.SubImgs.Count; i++)
                 this.m_pictureSubs[i].Image = this.m_repository.orcCaptchaTipsUtil.SubImgs[i];
+        }
+
+        private void btnGoto_Click(object sender, EventArgs e)
+        {
+            Position pos = this.inputBox2Object(this.textBox8);
+            Point origin = tobid.util.IEUtil.findOrigin();
+
+            ScreenUtil.SetCursorPos(origin.X + pos.x, origin.Y + pos.y);
         }
     }
 }

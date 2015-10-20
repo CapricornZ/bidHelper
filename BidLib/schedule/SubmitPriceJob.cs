@@ -43,7 +43,7 @@ namespace tobid.scheduler.jobs
         private static Object lockObj = new Object();
 
         private static int price = 0;
-        private static Step2Operation bidOperation;
+        public static Step2Operation bidOperation;
         private static Boolean priceOnly;
         private static int executeCount = 1;
         private static BidStep2 operation = null;
@@ -74,6 +74,7 @@ namespace tobid.scheduler.jobs
 
             return SubmitPriceStep2Job.operation;
         }
+
         public static void setPosition(BidStep2 value) {
 
             SubmitPriceStep2Job.operation = value;
@@ -308,7 +309,7 @@ namespace tobid.scheduler.jobs
             logger.Info("END   givePRICE");
         }
 
-        private Boolean submit(Position origin, SubmitPrice submitPoints)
+        public Boolean submit(Position origin, SubmitPrice submitPoints)
         {
             int x = origin.x;
             int y = origin.y;
@@ -385,7 +386,7 @@ namespace tobid.scheduler.jobs
                 {
                     System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
                     KeyBoardUtil.sendKeyDown(strActive[i].ToString());
-                    System.Threading.Thread.Sleep(this.orcRepository.interval); ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
+                    System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
                     KeyBoardUtil.sendKeyUp(strActive[i].ToString());
                     
                 }

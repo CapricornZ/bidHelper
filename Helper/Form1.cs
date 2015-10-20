@@ -70,9 +70,11 @@ namespace Helper
 
         private Scheduler m_schedulerKeepAlive;
         private Scheduler m_schedulerSubmitStep2;
+        private Scheduler m_schedulerSubmitStepV2;
 
         private System.Threading.Thread keepAliveThread;
         private System.Threading.Thread submitPriceStep2Thread;
+        private System.Threading.Thread submitPriceV2Thread;
 
         private Step2ConfigDialog step2Dialog;
         private Object lockSubmit = new Object();
@@ -80,7 +82,6 @@ namespace Helper
 
         private void Form1_Activated(object sender, EventArgs e) {
 
-            this.textInputPrice.Focus();
             logger.Info("Application Form Activated");
         }
 
@@ -91,6 +92,9 @@ namespace Helper
 
             if (null != this.submitPriceStep2Thread && (this.submitPriceStep2Thread.ThreadState == System.Threading.ThreadState.Running || this.submitPriceStep2Thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
                 this.submitPriceStep2Thread.Abort();
+
+            if (null != this.submitPriceV2Thread && (this.submitPriceV2Thread.ThreadState == System.Threading.ThreadState.Running || this.submitPriceV2Thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
+                this.submitPriceV2Thread.Abort();
 
             Hotkey.UnregisterHotKey(this.Handle, 103);
             Hotkey.UnregisterHotKey(this.Handle, 104);
@@ -164,6 +168,7 @@ namespace Helper
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
+            this.dateTimePicker2.Value = DateTime.Now;
             this.step2Dialog = new Step2ConfigDialog(this);
 
             this.loadResource("real");
@@ -195,6 +200,10 @@ namespace Helper
             //configStep2.Job = new SubmitPriceStep2Job(this.EndPoint, this.m_orcPrice, this.m_orcCaptchaLoading, this.m_orcCaptchaTipsUtil, this.m_orcCaptcha);
             configStep2.Job = new SubmitPriceStep2Job(repository: this, notify: this);
             m_schedulerSubmitStep2 = new Scheduler(configStep2);
+
+            SchedulerConfiguration configStepV2 = new SchedulerConfiguration(1000);
+            configStepV2.Job = new SubmitPriceV2Job(repository: this, notify: this);
+            m_schedulerSubmitStepV2 = new Scheduler(configStepV2);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
             Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
@@ -317,72 +326,6 @@ namespace Helper
         }
 
         #region 拍牌ACTION
-        /// <summary>
-        /// 绝对价格，出价
-        /// </summary>
-        /// <param name="givePrice">坐标</param>
-        /// <param name="price">绝对价</param>
-        private void givePrice(tobid.rest.position.BidStep2 bid, String txtPrice) {
-
-            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
-
-            logger.WarnFormat("BEGIN givePRICE({0})", txtPrice);
-
-            //INPUT BOX
-            logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-            ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            System.Threading.Thread.Sleep(50);
-
-            SendKeys.SendWait("{BACKSPACE 5}");
-            SendKeys.SendWait("{DEL 5}");
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
-
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-            //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0x2, 0);
-
-            for (int i = 0; i < txtPrice.Length; i++) {
-                System.Threading.Thread.Sleep(interval);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
-                System.Threading.Thread.Sleep(interval);
-                ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
-            } System.Threading.Thread.Sleep(50);
-            logger.Info("\tEND   input PRICE");
-
-            //点击出价
-            logger.Info("\tBEGIN click BUTTON[出价]");
-            ScreenUtil.SetCursorPos(x + bid.give.button.x, y + bid.give.button.y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            logger.Info("\tEND   click BUTTON[出价]");
-            logger.Info("END   givePRICE");
-
-            ScreenUtil.SetCursorPos(bid.submit.inputBox.x, bid.submit.inputBox.y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-
-            //启动线程截校验码
-            System.Threading.Thread loading = new System.Threading.Thread(delegate() {
-                ScreenUtil screen = new ScreenUtil();
-                for (int i = 0; i < 50; i++)//5秒钟
-                {
-                    //logger.Debug("LOADING captcha...");
-                    byte[] binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + bid.submit.captcha[0].x, y + bid.submit.captcha[0].y, 128, 28);
-                    this.pictureCaptcha.Image = Bitmap.FromStream(new MemoryStream(binaryCaptcha));
-                    System.Threading.Thread.Sleep(100);
-                }
-            });
-            loading.Start();
-            this.textInputCaptcha.Focus();
-        }
 
         /// <summary>
         /// 获取当前价格，+delta，出价.【for CTRL+3、4、5、6、7、8、9】
@@ -444,7 +387,6 @@ namespace Helper
 
             });
             startPrice.Start();
-            this.textInputCaptcha.Focus();
         }
 
         private void closeDialog(tobid.rest.position.BidStep2 bid) {
@@ -682,6 +624,44 @@ namespace Helper
                 e.Handled = true;
         }
 
+        private void btnUpdateV2_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
+                messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            if (dr == DialogResult.OK)
+            {
+                Step2Operation bidOps = SubmitPriceStep2Job.bidOperation;
+                bidOps.updateTime = DateTime.Now;
+                bidOps.startTime = this.dateTimePicker2.Value;
+                bidOps.expireTime = bidOps.startTime.AddHours(1);
+
+                this.textBox1.Text = this.dateTimePicker2.Value.ToString("MM/dd HH:mm:ss");
+                int delay = Int32.Parse(this.textBoxDelay.Text);
+
+                {
+                    object obj = this.comboBoxDelta.SelectedItem;
+                    if (obj == null)
+                    {
+                        MessageBox.Show("请选择价格");
+                        this.comboBoxDelta.Focus();
+                        return;
+                    }
+                    this.textBox2.Text = this.comboBoxDelta.Text;
+                    bidOps.price = Int32.Parse(this.comboBoxDelta.Text);
+                    SubmitPriceV2Job.setConfig(bidOps, delay * 1000);
+                }
+
+                if (null != this.submitPriceV2Thread)
+                    this.submitPriceV2Thread.Abort();
+                System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmitStepV2.Start);
+                this.submitPriceV2Thread = new System.Threading.Thread(submitPriceThreadStart);
+                this.submitPriceV2Thread.Name = "submitPriceV2Thread";
+                this.submitPriceV2Thread.Start();
+            }
+
+        }
+
         private void button_updatePolicy_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
@@ -741,7 +721,7 @@ namespace Helper
         /// <param name="msg"></param>
         /// <param name="keyData"></param>
         /// <returns></returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+        /*protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
 
             Point p1 = MousePosition;
             if (keyData == Keys.Escape) {
@@ -764,7 +744,7 @@ namespace Helper
                 ScreenUtil.SetCursorPos(p1.X, p1.Y);
             }
             return base.ProcessCmdKey(ref msg, keyData);
-        }
+        }*/
         #endregion
 
         #region 服务器策略|自助策略|手动
@@ -776,10 +756,10 @@ namespace Helper
                     messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK) {
                     this.radioServPolicy.Checked = true;
-                    this.radioLocalPolicy.Checked = false;
+                    this.radioLocalPolicyV1.Checked = false;
                     this.groupBoxLocal.Enabled = false;
-                    this.radioManualPolicy.Checked = false;
-                    this.groupBoxManual.Enabled = false;
+                    this.radioLocalPolicyV2.Checked = false;
+                    this.groupBoxLocalV2.Enabled = false;
 
                     this.groupBoxPolicy.Text = this.radioServPolicy.Text;
 
@@ -810,49 +790,93 @@ namespace Helper
 
         private void radioLocalPolicy_Click(object sender, EventArgs e) {
 
-            if (!this.radioLocalPolicy.Checked) {
+            if (!this.radioLocalPolicyV1.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-                DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicy.Text), "策略选择",
+                DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicyV1.Text), "策略选择",
                     messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK) {
                     this.radioServPolicy.Checked = false;
-                    this.radioLocalPolicy.Checked = true;
-                    this.radioManualPolicy.Checked = false;
-                    this.groupBoxManual.Enabled = false;
-
+                    this.radioLocalPolicyV1.Checked = true;
+                    this.radioLocalPolicyV2.Checked = false;
+                    this.radioManual.Checked = false;
+                    
+                    this.groupBoxLocalV2.Enabled = false;
                     this.groupBoxLocal.Enabled = true;
-                    this.groupBoxPolicy.Text = this.radioLocalPolicy.Text;
+                    this.groupBoxPolicy.Text = this.radioLocalPolicyV1.Text;
                     if (null != this.keepAliveThread)
                         this.keepAliveThread.Abort();
 
                     if (null != this.submitPriceStep2Thread)
                         this.submitPriceStep2Thread.Abort();
+
+                    if (null != this.submitPriceV2Thread)
+                        this.submitPriceV2Thread.Abort();
+                }
+            }
+        }
+
+        private void radioLocalPolicyV2_Click(object sender, EventArgs e)
+        {
+            if (!this.radioLocalPolicyV2.Checked)
+            {
+                MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+                DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicyV2.Text), "策略选择",
+                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                if (dr == DialogResult.OK)
+                {
+                    this.radioServPolicy.Checked = false;
+                    this.radioLocalPolicyV1.Checked = false;
+                    this.radioLocalPolicyV2.Checked = true;
+                    this.radioManual.Checked = false;
+
+                    this.groupBoxLocalV2.Enabled = true;
+                    this.groupBoxLocal.Enabled = false;
+                    this.groupBoxPolicy.Text = this.radioLocalPolicyV1.Text;
+                    
+                    if (null != this.keepAliveThread)
+                        this.keepAliveThread.Abort();
+
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
+
+                    if (null != this.submitPriceV2Thread)
+                        this.submitPriceV2Thread.Abort();
+                }
+            }
+        }
+
+        private void radioManual_Click(object sender, EventArgs e)
+        {
+            if (!this.radioManual.Checked)
+            {
+                MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+                DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioManual.Text), "策略选择",
+                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                if (dr == DialogResult.OK)
+                {
+                    this.radioServPolicy.Checked = false;
+                    this.radioLocalPolicyV1.Checked = false;
+                    this.radioLocalPolicyV2.Checked = false;
+                    this.radioManual.Checked = true;
+
+                    this.groupBoxLocalV2.Enabled = false;
+                    this.groupBoxLocal.Enabled = false;
+                    this.groupBoxPolicy.Text = this.radioManual.Text;
+                    if (null != this.keepAliveThread)
+                        this.keepAliveThread.Abort();
+
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
+
+                    if (null != this.submitPriceV2Thread)
+                        this.submitPriceV2Thread.Abort();
                 }
             }
         }
 
         private void radioManualPolicy_Click(object sender, EventArgs e) {
 
-            if (!this.radioManualPolicy.Checked) {
-                MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-                DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioManualPolicy.Text), "策略选择",
-                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                if (dr == DialogResult.OK) {
-                    this.radioServPolicy.Checked = false;
-                    this.radioLocalPolicy.Checked = false;
-                    this.groupBoxLocal.Enabled = false;
-                    this.radioManualPolicy.Checked = true;
-
-                    this.groupBoxManual.Enabled = true;
-                    this.textInputPrice.Focus();
-                    this.groupBoxPolicy.Text = this.radioLocalPolicy.Text;
-                    if (null != this.keepAliveThread)
-                        this.keepAliveThread.Abort();
-
-                    if (null != this.submitPriceStep2Thread)
-                        this.submitPriceStep2Thread.Abort();
-                }
-            }
+            
         }
         #endregion        
 
@@ -912,6 +936,6 @@ namespace Helper
             //this.submit("", SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
-        }
+        }        
     }
 }
