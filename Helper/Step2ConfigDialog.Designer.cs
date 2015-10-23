@@ -64,8 +64,12 @@
             this.labelResult = new System.Windows.Forms.Label();
             this.labelTips = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             this.btnGoto = new System.Windows.Forms.Button();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBoxPriceSM = new System.Windows.Forms.TextBox();
+            this.btnPriceSM = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -154,9 +158,9 @@
             this.groupBoxCaptcha.Controls.Add(this.label6);
             this.groupBoxCaptcha.Controls.Add(this.label5);
             this.groupBoxCaptcha.Controls.Add(this.label4);
-            this.groupBoxCaptcha.Location = new System.Drawing.Point(273, 12);
+            this.groupBoxCaptcha.Location = new System.Drawing.Point(260, 12);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
-            this.groupBoxCaptcha.Size = new System.Drawing.Size(230, 141);
+            this.groupBoxCaptcha.Size = new System.Drawing.Size(243, 141);
             this.groupBoxCaptcha.TabIndex = 1;
             this.groupBoxCaptcha.TabStop = false;
             this.groupBoxCaptcha.Text = "校验码";
@@ -231,13 +235,15 @@
             // 
             // groupBoxOrigin
             // 
+            this.groupBoxOrigin.Controls.Add(this.textBoxPriceSM);
+            this.groupBoxOrigin.Controls.Add(this.label11);
             this.groupBoxOrigin.Controls.Add(this.label9);
             this.groupBoxOrigin.Controls.Add(this.textBoxTitleOk);
             this.groupBoxOrigin.Controls.Add(this.label8);
             this.groupBoxOrigin.Controls.Add(this.textBoxTitle);
             this.groupBoxOrigin.Location = new System.Drawing.Point(12, 159);
             this.groupBoxOrigin.Name = "groupBoxOrigin";
-            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 97);
+            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 122);
             this.groupBoxOrigin.TabIndex = 2;
             this.groupBoxOrigin.TabStop = false;
             this.groupBoxOrigin.Text = "标题";
@@ -276,7 +282,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(43, 272);
+            this.buttonOK.Location = new System.Drawing.Point(43, 287);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -286,7 +292,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(124, 272);
+            this.buttonCancel.Location = new System.Drawing.Point(124, 287);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -359,9 +365,9 @@
             // 
             // btnPrice
             // 
-            this.btnPrice.Location = new System.Drawing.Point(30, 99);
+            this.btnPrice.Location = new System.Drawing.Point(14, 99);
             this.btnPrice.Name = "btnPrice";
-            this.btnPrice.Size = new System.Drawing.Size(75, 23);
+            this.btnPrice.Size = new System.Drawing.Size(59, 23);
             this.btnPrice.TabIndex = 12;
             this.btnPrice.Text = "价格(&P)";
             this.btnPrice.UseVisualStyleBackColor = true;
@@ -369,7 +375,7 @@
             // 
             // btnCaptcha
             // 
-            this.btnCaptcha.Location = new System.Drawing.Point(111, 99);
+            this.btnCaptcha.Location = new System.Drawing.Point(146, 99);
             this.btnCaptcha.Name = "btnCaptcha";
             this.btnCaptcha.Size = new System.Drawing.Size(75, 23);
             this.btnCaptcha.TabIndex = 13;
@@ -379,9 +385,9 @@
             // 
             // btnTips
             // 
-            this.btnTips.Location = new System.Drawing.Point(192, 99);
+            this.btnTips.Location = new System.Drawing.Point(225, 99);
             this.btnTips.Name = "btnTips";
-            this.btnTips.Size = new System.Drawing.Size(75, 23);
+            this.btnTips.Size = new System.Drawing.Size(56, 23);
             this.btnTips.TabIndex = 14;
             this.btnTips.Text = "提示(&T)";
             this.btnTips.UseVisualStyleBackColor = true;
@@ -407,6 +413,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnPriceSM);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.btnGoto);
             this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.pictureBox1);
@@ -421,29 +429,66 @@
             this.groupBox1.Controls.Add(this.btnPrice);
             this.groupBox1.Controls.Add(this.pictureSub5);
             this.groupBox1.Controls.Add(this.pictureSub6);
-            this.groupBox1.Location = new System.Drawing.Point(273, 159);
+            this.groupBox1.Location = new System.Drawing.Point(260, 159);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(278, 161);
+            this.groupBox1.Size = new System.Drawing.Size(291, 161);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "验证";
             // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(30, 130);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
-            this.textBox8.TabIndex = 17;
-            // 
             // btnGoto
             // 
-            this.btnGoto.Location = new System.Drawing.Point(150, 127);
+            this.btnGoto.Location = new System.Drawing.Point(111, 127);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
             this.btnGoto.TabIndex = 18;
             this.btnGoto.Text = "&goto";
             this.btnGoto.UseVisualStyleBackColor = true;
             this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(30, 130);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(75, 20);
+            this.textBox8.TabIndex = 17;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(199, 132);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 13);
+            this.label10.TabIndex = 19;
+            this.label10.Text = "label10";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.Red;
+            this.label11.Location = new System.Drawing.Point(15, 95);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 16;
+            this.label11.Text = "价格(小)：";
+            // 
+            // textBoxPriceSM
+            // 
+            this.textBoxPriceSM.Location = new System.Drawing.Point(96, 92);
+            this.textBoxPriceSM.Name = "textBoxPriceSM";
+            this.textBoxPriceSM.Size = new System.Drawing.Size(100, 20);
+            this.textBoxPriceSM.TabIndex = 17;
+            // 
+            // btnPriceSM
+            // 
+            this.btnPriceSM.Location = new System.Drawing.Point(79, 99);
+            this.btnPriceSM.Name = "btnPriceSM";
+            this.btnPriceSM.Size = new System.Drawing.Size(59, 23);
+            this.btnPriceSM.TabIndex = 20;
+            this.btnPriceSM.Text = "价格(&S)";
+            this.btnPriceSM.UseVisualStyleBackColor = true;
+            this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
             // 
             // Step2ConfigDialog
             // 
@@ -518,5 +563,9 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnGoto;
         private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBoxPriceSM;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnPriceSM;
     }
 }

@@ -44,6 +44,7 @@ namespace Helper
         public IOrc orcTitle { get { return this.m_orcTitle; } }
         public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
         public IOrc orcPrice { get { return this.m_orcPrice; } }
+        public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
@@ -64,6 +65,7 @@ namespace Helper
         private IOrc m_orcTitle;
         private IOrc m_orcCaptcha;
         private IOrc m_orcPrice;
+        private IOrc m_orcPriceSM;
         private IOrc m_orcCaptchaLoading;
         private IOrc[] m_orcCaptchaTip;
         private CaptchaUtil m_orcCaptchaTipsUtil;
@@ -127,6 +129,7 @@ namespace Helper
             this.m_orcTitle = configResource.Title;
             this.m_orcCaptcha = configResource.Captcha;//
             this.m_orcPrice = configResource.Price;//价格识别
+            this.m_orcPriceSM = configResource.PriceSM;//价格（小）
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
             this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
@@ -831,7 +834,7 @@ namespace Helper
 
                     this.groupBoxLocalV2.Enabled = true;
                     this.groupBoxLocal.Enabled = false;
-                    this.groupBoxPolicy.Text = this.radioLocalPolicyV1.Text;
+                    this.groupBoxPolicy.Text = this.radioLocalPolicyV2.Text;
                     
                     if (null != this.keepAliveThread)
                         this.keepAliveThread.Abort();

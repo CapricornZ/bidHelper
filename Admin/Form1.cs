@@ -49,6 +49,7 @@ namespace Admin {
         private IOrc m_orcCaptchaLoading;
         private IOrc[] m_orcCaptchaTip;
         private IOrc m_orcPrice;
+        private IOrc m_orcPriceSM;
         private CaptchaUtil m_orcCaptchaTipsUtil;
         private Step2Form m_step2Form;
         private Step1Form m_step1Form;
@@ -58,6 +59,7 @@ namespace Admin {
         public IOrc orcTitle { get { return this.m_orcTitle; } }
         public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
         public IOrc orcPrice { get { return this.m_orcPrice; } }
+        public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }

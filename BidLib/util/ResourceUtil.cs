@@ -17,6 +17,7 @@ namespace tobid.util
     {
         String tag { get; }
         IOrc Price { get; }
+        IOrc PriceSM { get; }
         IOrc Loading { get; }
         IOrc[] Tips { get; }
         IOrc Captcha { get; }
@@ -31,6 +32,7 @@ namespace tobid.util
         private orc.IOrc m_login;
         private orc.IOrc m_captcha;
         private orc.IOrc m_price;
+        private orc.IOrc m_priceSM;
         private orc.IOrc m_loading;
         private orc.IOrc[] m_tips;
         private String m_tag;
@@ -63,6 +65,7 @@ namespace tobid.util
             }
 
             IDictionary<Bitmap, String> dictPrice = new Dictionary<Bitmap, String>();
+            IDictionary<Bitmap, String> dictPriceSM = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictLoading = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictTips = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictTipsNo = new Dictionary<Bitmap, String>();
@@ -96,13 +99,16 @@ namespace tobid.util
                         dictCaptcha.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("price/"))
                         dictPrice.Add(bitmap, array[array.Length - 2]);
+                    else if (entry.Name.ToLower().StartsWith("price(sm)"))
+                        dictPriceSM.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("loading/"))
                         dictLoading.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("login/"))
                         dictLogin.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("title/"))
                         dictTitle.Add(bitmap, array[array.Length - 2]);
-                    else if (entry.Name.ToLower().StartsWith("captcha.tip/")) {
+                    else if (entry.Name.ToLower().StartsWith("captcha.tip/"))
+                    {
                         if (entry.Name.ToLower().StartsWith("captcha.tip/no/"))
                             dictTipsNo.Add(bitmap, array[array.Length - 2]);
                         else
@@ -119,6 +125,7 @@ namespace tobid.util
                 rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
             rtn.m_title = DynamicOrcUtil.getInstance(global.title, dictTitle);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
+            rtn.m_priceSM = OrcUtil.getInstance(global.priceSM, dictPriceSM);
             rtn.m_tips = new IOrc[]{
                 OrcUtilEx.getInstance(global.tips0, dictTips, dictTipsNo),
                 OrcUtilEx.getInstance(global.tips1, dictTips, dictTipsNo)
@@ -131,6 +138,7 @@ namespace tobid.util
         #region IGlobalConfig接口
         public String tag { get { return this.m_tag; } }
         public IOrc Price { get { return this.m_price; } }
+        public IOrc PriceSM { get{return this.m_priceSM; } }
         public IOrc Loading { get { return this.m_loading; } }
         public IOrc[] Tips { get { return this.m_tips; } }
         public IOrc Captcha { get { return this.m_captcha; } }

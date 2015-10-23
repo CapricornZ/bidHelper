@@ -37,6 +37,7 @@ namespace tobid.scheduler.jobs
             {
                 {
                     logger.DebugFormat("PRICE     : {0}", operation.price);
+                    logger.DebugFormat("DELAY     : {0}", delay);
                     logger.DebugFormat("startTime : {0}", operation.startTime);
                     logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
@@ -66,18 +67,79 @@ namespace tobid.scheduler.jobs
 
             Boolean success = false;
             int submitCount = 0;
-            while (!success && submitCount < 2)
+            //while (!success && submitCount < 2)
             {//1次出价，1次重试
 
                 //BidStep2 operation = Newtonsoft.Json.JsonConvert.DeserializeObject<BidStep2>(SubmitPriceStep2Job.bidOperation.content);
                 BidStep2 operation = SubmitPriceStep2Job.getPosition();
                 submitCount++;
+                string givePrice = "";
                 if (delta == 0)
-                    this.giveDeltaPrice(pos, operation.give, delta: submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300);//出价
+                    givePrice = this.giveDeltaPrice(pos, operation.give, delta: submitCount == 1 ? SubmitPriceStep2Job.bidOperation.price : 300);//出价
                 else
-                    this.giveDeltaPrice(pos, operation.give, delta: delta);//出价
-                Thread.Sleep(SubmitPriceV2Job.delay);
-                success = this.submit(pos, operation.submit);//提交
+                    givePrice = this.giveDeltaPrice(pos, operation.give, delta: delta);//出价
+
+                byte[] binaryCaptcha = null;
+                Boolean isLoading = true;
+                Boolean typeCaptcha = false;
+                Boolean stop = false;
+                int retry = 0;
+                for (int idle = 0; !stop && idle < SubmitPriceV2Job.delay; idle += 100)
+                {
+                    Thread.Sleep(100);
+                    byte[] binaryPrice = new ScreenUtil().screenCaptureAsByte(pos.x + operation.price.x, pos.y + operation.price.y, 48, 12);
+                    string price = this.orcRepository.orcPriceSM.IdentifyStringFromPic(new Bitmap(new MemoryStream(binaryPrice)));
+                    logger.Info("PRICE:" + price);
+
+                    int delta1 = Int32.Parse(givePrice) - Int32.Parse(price);
+
+                    if (idle > 500 && isLoading)
+                    {
+                        logger.Info("\tBEGIN identify CAPTCHA...");
+                        {
+                            logger.DebugFormat("CAPTURE CAPTCHA({0}, {1})", pos.x + operation.submit.captcha[0].x, pos.y + operation.submit.captcha[0].y);
+                            binaryCaptcha = new ScreenUtil().screenCaptureAsByte(pos.x + operation.submit.captcha[0].x, pos.y + operation.submit.captcha[0].y, 128, 28);
+                            File.WriteAllBytes(String.Format("AUTO-LOADING-{0}.BMP", retry), binaryCaptcha);
+                            Bitmap bitMap = new Bitmap(new MemoryStream(binaryCaptcha));
+                            String strLoading = this.orcRepository.orcCaptchaLoading.IdentifyStringFromPic(bitMap);
+                            logger.InfoFormat("\t LOADING({0}) = {1}", retry++, strLoading);
+                            if (!"正在获取校验码".Equals(strLoading))
+                            {
+                                isLoading = false;
+
+                                File.WriteAllBytes("AUTO-CAPTCHA.BMP", binaryCaptcha);
+                                String txtCaptcha = this.orcRepository.orcCaptcha.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(binaryCaptcha)));
+                                logger.DebugFormat("CAPTURE TIPS({0}, {1})", pos.x + operation.submit.captcha[1].x, pos.y + operation.submit.captcha[1].y);
+                                byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(pos.x + operation.submit.captcha[1].x, pos.y + operation.submit.captcha[1].y, 112, 16);
+                                File.WriteAllBytes("AUTO-TIPS.BMP", binaryCaptcha);
+                                String strActive = this.orcRepository.orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new System.IO.MemoryStream(binaryTips)));
+                                logger.InfoFormat("\tEND   identify CAPTCHA = {0}, ACTIVE = {1}", txtCaptcha, strActive);
+
+                                logger.Info("\tBEGIN input CAPTCHA");
+                                {
+                                    typeCaptcha = true;
+                                    for (int i = 0; i < strActive.Length; i++)
+                                    {
+                                        System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0, 0);
+                                        KeyBoardUtil.sendKeyDown(strActive[i].ToString());
+                                        System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
+                                        KeyBoardUtil.sendKeyUp(strActive[i].ToString());
+                                    }
+                                } System.Threading.Thread.Sleep(50);
+                                logger.Info("\tEND   input CAPTCHA");
+                            }
+                        }
+                        logger.Info("\tEND identify CAPTCHA...");
+                    }
+
+                    stop = typeCaptcha && delta1 <= 400;
+                }
+                //success = this.submit(pos, operation.submit);//提交
+                logger.Info("\tBEGIN click BUTTON[确定]");
+                logger.DebugFormat("BUTTON[确定]({0}, {1})", pos.x + operation.submit.buttons[0].x, pos.y + operation.submit.buttons[0].y);
+                ScreenUtil.SetCursorPos(pos.x + operation.submit.buttons[0].x, pos.y + operation.submit.buttons[0].y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                logger.Info("\tEND   click BUTTON[确定]");
 
                 logger.WarnFormat("ROUND[{0}] {1}", submitCount, success ? "SUCCESS" : "FAILED");
             }
@@ -114,7 +176,7 @@ namespace tobid.scheduler.jobs
         /// </summary>
         /// <param name="givePrice">坐标</param>
         /// <param name="delta">差价</param>
-        private void giveDeltaPrice(Position origin, GivePriceStep2 givePrice, int delta)
+        private string giveDeltaPrice(Position origin, GivePriceStep2 givePrice,  int delta)
         {
             int x = origin.x;
             int y = origin.y;
@@ -167,6 +229,8 @@ namespace tobid.scheduler.jobs
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");
             logger.Info("END   givePRICE");
+
+            return txtPrice;
         }
 
         public Boolean submit(Position origin, SubmitPrice submitPoints)
@@ -196,7 +260,7 @@ namespace tobid.scheduler.jobs
             byte[] binaryCaptcha = null;
             Boolean isLoading = true;
             int retry = 0;
-            //Thread.Sleep(500);//等待0.5秒钟（等待验证码或者“正在获取验证码”字样出来
+            Thread.Sleep(500);//等待0.5秒钟（等待验证码或者“正在获取验证码”字样出来
             logger.DebugFormat("CAPTURE CAPTCHA({0}, {1})", x + submitPoints.captcha[0].x, y + submitPoints.captcha[0].y);
             while (isLoading)//重试3.5秒钟
             {
@@ -245,11 +309,11 @@ namespace tobid.scheduler.jobs
             } System.Threading.Thread.Sleep(50);
             logger.Info("\tEND   input CAPTCHA");
 
-            logger.Info("\tBEGIN click BUTTON[确定]");
-            logger.DebugFormat("BUTTON[确定]({0}, {1})", x + submitPoints.buttons[0].x, y + submitPoints.buttons[0].y);
-            ScreenUtil.SetCursorPos(x + submitPoints.buttons[0].x, y + submitPoints.buttons[0].y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            logger.Info("\tEND   click BUTTON[确定]");
+            //logger.Info("\tBEGIN click BUTTON[确定]");
+            //logger.DebugFormat("BUTTON[确定]({0}, {1})", x + submitPoints.buttons[0].x, y + submitPoints.buttons[0].y);
+            //ScreenUtil.SetCursorPos(x + submitPoints.buttons[0].x, y + submitPoints.buttons[0].y);
+            //ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            //logger.Info("\tEND   click BUTTON[确定]");
 
             logger.Info("END   giveCAPTCHA");
             return true;

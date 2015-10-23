@@ -80,6 +80,7 @@ namespace Helper
                 //this.object2InputBox(this.textBoxOrigin, bid.Origin);
                 this.object2InputBox(this.textBoxTitle, bid.title);
                 this.object2InputBox(this.textBoxTitleOk, bid.okButton);
+                this.object2InputBox(this.textBoxPriceSM, bid.price);
             } else {
                 this.object2InputBox(this.textBox1, new Position(0, 0));
                 this.object2InputBox(this.textBox2, new Position(0, 0));
@@ -93,6 +94,7 @@ namespace Helper
                 //this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
                 this.object2InputBox(this.textBoxTitle, new Position(0, 0));
                 this.object2InputBox(this.textBoxTitleOk, new Position(0, 0));
+                this.object2InputBox(this.textBoxPriceSM, new Position(0, 0));
             }
         }
 
@@ -122,6 +124,7 @@ namespace Helper
             //bid.Origin = this.inputBox2Object(this.textBoxOrigin);
             bid.title = this.inputBox2Object(this.textBoxTitle);
             bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
+            bid.price = this.inputBox2Object(this.textBoxPriceSM);
             SubmitPriceStep2Job.setPosition(bid);
 
             this.BidStep2 = bid;
@@ -149,6 +152,22 @@ namespace Helper
             String txtPrice = this.m_repository.orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox1.Image));
             for (int i = 0; i < this.m_repository.orcPrice.SubImgs.Count; i++)
                 this.m_pictureSubs[i].Image = this.m_repository.orcPrice.SubImgs[i];
+            this.labelResult.Text = txtPrice;
+        }
+
+        private void btnPriceSM_Click(object sender, EventArgs e)
+        {
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBoxPriceSM);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 100, 24);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+            String txtPrice = this.m_repository.orcPriceSM.IdentifyStringFromPic(new Bitmap(this.pictureBox1.Image));
+            for (int i = 0; i < this.m_repository.orcPriceSM.SubImgs.Count; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcPriceSM.SubImgs[i];
             this.labelResult.Text = txtPrice;
         }
 
@@ -191,8 +210,13 @@ namespace Helper
         {
             Position pos = this.inputBox2Object(this.textBox8);
             Point origin = tobid.util.IEUtil.findOrigin();
+            System.Console.WriteLine(String.Format("origin : {{ x:{0}, y:{1} }}", origin.X, origin.Y));
 
             ScreenUtil.SetCursorPos(origin.X + pos.x, origin.Y + pos.y);
+            //KeyBoardUtil.moveMouse(origin.X + pos.x, origin.Y + pos.y);
+            System.Console.WriteLine(String.Format("goto : {{ x:{0}, y:{1} }}", pos.x, pos.y));
         }
+
+        
     }
 }

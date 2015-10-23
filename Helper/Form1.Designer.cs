@@ -53,6 +53,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.radioManual = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -71,7 +72,6 @@
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
-            this.radioManual = new System.Windows.Forms.RadioButton();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -281,7 +281,7 @@
             // 
             // btnUpdateV2
             // 
-            this.btnUpdateV2.Location = new System.Drawing.Point(90, 115);
+            this.btnUpdateV2.Location = new System.Drawing.Point(93, 111);
             this.btnUpdateV2.Name = "btnUpdateV2";
             this.btnUpdateV2.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateV2.TabIndex = 9;
@@ -346,6 +346,20 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(358, 29);
             this.panel2.TabIndex = 8;
+            // 
+            // radioManual
+            // 
+            this.radioManual.AutoCheck = false;
+            this.radioManual.AutoSize = true;
+            this.radioManual.Checked = true;
+            this.radioManual.Location = new System.Drawing.Point(298, 6);
+            this.radioManual.Name = "radioManual";
+            this.radioManual.Size = new System.Drawing.Size(49, 17);
+            this.radioManual.TabIndex = 0;
+            this.radioManual.TabStop = true;
+            this.radioManual.Text = "手动";
+            this.radioManual.UseVisualStyleBackColor = true;
+            this.radioManual.Click += new System.EventHandler(this.radioManual_Click);
             // 
             // label3
             // 
@@ -507,20 +521,6 @@
             this.buttonLogin.Text = "登录(&L)";
             this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click_1);
-            // 
-            // radioManual
-            // 
-            this.radioManual.AutoCheck = false;
-            this.radioManual.AutoSize = true;
-            this.radioManual.Checked = true;
-            this.radioManual.Location = new System.Drawing.Point(298, 6);
-            this.radioManual.Name = "radioManual";
-            this.radioManual.Size = new System.Drawing.Size(49, 17);
-            this.radioManual.TabIndex = 0;
-            this.radioManual.TabStop = true;
-            this.radioManual.Text = "手动";
-            this.radioManual.UseVisualStyleBackColor = true;
-            this.radioManual.Click += new System.EventHandler(this.radioManual_Click);
             // 
             // Form1
             // 
