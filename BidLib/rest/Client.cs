@@ -71,4 +71,17 @@ namespace tobid.rest
         /// </summary>
         public int price { get; set; }
     }
+
+    /// <summary>
+    /// 授权码
+    /// </summary>
+    public class Warrant
+    {
+        public Warrant(String code)
+        {
+            this.code = code;
+        }
+
+        public String code { get; set; }
+    }
 }

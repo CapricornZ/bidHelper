@@ -10,6 +10,14 @@ namespace tobid.util.http
 {
     public class HttpUtil
     {
+        private String basicAuth;
+        public HttpUtil()
+        {
+            String user = System.Configuration.ConfigurationManager.AppSettings["principal"];
+            String pass = System.Configuration.ConfigurationManager.AppSettings["credential"];
+            this.basicAuth = user + ":" + pass;
+        }
+
         /// <summary>
         /// 从Address地址获取数据
         /// </summary>
@@ -18,9 +26,10 @@ namespace tobid.util.http
         public Stream getAsBinary(String address)
         {
             HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
+            httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             httpReq.Method = "GET";
             httpReq.Timeout = 1000 * 60;
-
+            
             WebResponse webRespon = httpReq.GetResponse();
             Stream s = webRespon.GetResponseStream();
             return s;

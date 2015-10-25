@@ -57,19 +57,19 @@ namespace tobid.util.http
             return MakeRequest(null);
         }
 
-        public string MakeRequest(string parameters)
+        public string MakeRequest(string parameters, Boolean isBasicAuth=true)
         {
             WebRequest request = WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
 
             request.Method = Method.ToString();
-            request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
+            if(isBasicAuth)
+                request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             request.ContentLength = 0;
             request.ContentType = ContentType;
 
             if (!string.IsNullOrEmpty(PostData) && Method == HttpVerb.POST)
             {
                 var encoding = new UTF8Encoding();
-                //var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(PostData);
                 var bytes = Encoding.GetEncoding("utf-8").GetBytes(PostData);
                 request.ContentLength = bytes.Length;
 

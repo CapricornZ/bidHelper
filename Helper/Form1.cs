@@ -15,6 +15,7 @@ using tobid.util.http;
 using tobid.util.orc;
 using tobid.scheduler;
 using tobid.scheduler.jobs;
+using System.Configuration;
 
 namespace Helper
 {
@@ -84,7 +85,7 @@ namespace Helper
 
         private void Form1_Activated(object sender, EventArgs e) {
 
-            logger.Info("Application Form Activated");
+            //logger.Info("Application Form Activated");
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
@@ -166,7 +167,7 @@ namespace Helper
         }
 
         private void Form1_Load(object sender, EventArgs e){
-            
+
             logger.Info("Application Form Load");
 
             Form.CheckForIllegalCrossThreadCalls = false;
@@ -174,10 +175,10 @@ namespace Helper
             this.dateTimePicker2.Value = DateTime.Now;
             this.step2Dialog = new Step2ConfigDialog(this);
 
-            this.loadResource("real");
-
             String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
             this.toolStripTextBoxInterval.Text = keyInterval;
+
+            this.loadResource("real");
 
             //加载配置项2
             //KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
@@ -912,8 +913,34 @@ namespace Helper
         private void stepToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.step2Dialog.ShowDialog(this);
-            //this.step2Dialog.BringToFront();
         }
+
+        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e)
+        {
+            String credential = ConfigurationManager.AppSettings["credential"];
+            String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入授权码", "", credential);
+            if (!String.IsNullOrEmpty(authCode))
+            {
+                Warrant warrant = new Warrant(authCode);
+                String hostName = System.Net.Dns.GetHostName();
+                String epKeepAlive = this.EndPoint + "/rest/service/command/register/" + hostName;
+                RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, warrant);
+                try
+                {
+                    String rtn = rest.MakeRequest(null, false);
+
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    config.AppSettings.Settings["principal"].Value = hostName;
+                    config.AppSettings.Settings["credential"].Value = authCode;
+                    config.Save();
+                    ConfigurationManager.RefreshSection("appSettings");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                }
+            }
+        }   
 
         //[System.Runtime.InteropServices.DllImport("user32.dll")]
         //private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags);
@@ -939,6 +966,6 @@ namespace Helper
             //this.submit("", SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
-        }        
+        }     
     }
 }

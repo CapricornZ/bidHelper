@@ -72,6 +72,7 @@
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
+            this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -475,6 +476,7 @@
             // 
             this.配置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stepToolStripMenuItem,
+            this.ToolStripMenuItemAuthCode,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
             this.配置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
@@ -484,7 +486,7 @@
             // 
             this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
             this.stepToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.stepToolStripMenuItem.Text = "Step2";
+            this.stepToolStripMenuItem.Text = "阶段2坐标";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
             // toolStripTextBoxInterval
@@ -521,6 +523,13 @@
             this.buttonLogin.Text = "登录(&L)";
             this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click_1);
+            // 
+            // ToolStripMenuItemAuthCode
+            // 
+            this.ToolStripMenuItemAuthCode.Name = "ToolStripMenuItemAuthCode";
+            this.ToolStripMenuItemAuthCode.Size = new System.Drawing.Size(160, 22);
+            this.ToolStripMenuItemAuthCode.Text = "授权码";
+            this.ToolStripMenuItemAuthCode.Click += new System.EventHandler(this.ToolStripMenuItemAuthCode_Click);
             // 
             // Form1
             // 
@@ -608,6 +617,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton radioManual;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAuthCode;
     }
 }
 

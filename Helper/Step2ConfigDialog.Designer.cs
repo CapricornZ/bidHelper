@@ -45,6 +45,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBoxOrigin = new System.Windows.Forms.GroupBox();
+            this.textBoxPriceSM = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxTitleOk = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -64,12 +66,10 @@
             this.labelResult = new System.Windows.Forms.Label();
             this.labelTips = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPriceSM = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBoxPriceSM = new System.Windows.Forms.TextBox();
-            this.btnPriceSM = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -216,7 +216,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(15, 59);
+            this.label5.Location = new System.Drawing.Point(14, 55);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 13);
             this.label5.TabIndex = 15;
@@ -227,7 +227,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(15, 30);
+            this.label4.Location = new System.Drawing.Point(15, 26);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 13);
             this.label4.TabIndex = 14;
@@ -247,6 +247,24 @@
             this.groupBoxOrigin.TabIndex = 2;
             this.groupBoxOrigin.TabStop = false;
             this.groupBoxOrigin.Text = "标题";
+            // 
+            // textBoxPriceSM
+            // 
+            this.textBoxPriceSM.Location = new System.Drawing.Point(96, 92);
+            this.textBoxPriceSM.Name = "textBoxPriceSM";
+            this.textBoxPriceSM.Size = new System.Drawing.Size(100, 20);
+            this.textBoxPriceSM.TabIndex = 17;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.Red;
+            this.label11.Location = new System.Drawing.Point(15, 95);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 16;
+            this.label11.Text = "价格(小)：";
             // 
             // label9
             // 
@@ -436,9 +454,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "验证";
             // 
+            // btnPriceSM
+            // 
+            this.btnPriceSM.Location = new System.Drawing.Point(79, 99);
+            this.btnPriceSM.Name = "btnPriceSM";
+            this.btnPriceSM.Size = new System.Drawing.Size(59, 23);
+            this.btnPriceSM.TabIndex = 20;
+            this.btnPriceSM.Text = "价格(&S)";
+            this.btnPriceSM.UseVisualStyleBackColor = true;
+            this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(199, 132);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 13);
+            this.label10.TabIndex = 19;
+            this.label10.Text = "label10";
+            // 
             // btnGoto
             // 
-            this.btnGoto.Location = new System.Drawing.Point(111, 127);
+            this.btnGoto.Location = new System.Drawing.Point(111, 128);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
             this.btnGoto.TabIndex = 18;
@@ -452,43 +489,6 @@
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(75, 20);
             this.textBox8.TabIndex = 17;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(199, 132);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
-            this.label10.TabIndex = 19;
-            this.label10.Text = "label10";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.Red;
-            this.label11.Location = new System.Drawing.Point(15, 95);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 13);
-            this.label11.TabIndex = 16;
-            this.label11.Text = "价格(小)：";
-            // 
-            // textBoxPriceSM
-            // 
-            this.textBoxPriceSM.Location = new System.Drawing.Point(96, 92);
-            this.textBoxPriceSM.Name = "textBoxPriceSM";
-            this.textBoxPriceSM.Size = new System.Drawing.Size(100, 20);
-            this.textBoxPriceSM.TabIndex = 17;
-            // 
-            // btnPriceSM
-            // 
-            this.btnPriceSM.Location = new System.Drawing.Point(79, 99);
-            this.btnPriceSM.Name = "btnPriceSM";
-            this.btnPriceSM.Size = new System.Drawing.Size(59, 23);
-            this.btnPriceSM.TabIndex = 20;
-            this.btnPriceSM.Text = "价格(&S)";
-            this.btnPriceSM.UseVisualStyleBackColor = true;
-            this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
             // 
             // Step2ConfigDialog
             // 
