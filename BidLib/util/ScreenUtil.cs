@@ -123,12 +123,17 @@ namespace tobid.util
                         Browser.Navigate("https://paimai.alltobid.com/");
                     else
                         Browser.Navigate("http://moni.51hupai.org:8081");
-                    DocComplete.WaitOne();
-
-                    mshtml.IHTMLDocument2 doc = (mshtml.IHTMLDocument2)Browser.Document;
-                    mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)doc.parentWindow;
-                    win.execScript("document.body.style.overflow='hidden';", "javascript");
-                    
+                    try
+                    {
+                        DocComplete.WaitOne();
+                        mshtml.IHTMLDocument2 doc = (mshtml.IHTMLDocument2)Browser.Document;
+                        mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)doc.parentWindow;
+                        win.execScript("document.body.style.overflow='hidden';", "javascript");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Console.WriteLine(ex);
+                    }
                 }
             }
         }

@@ -201,6 +201,8 @@ namespace Helper
             byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
+            //File.WriteAllBytes(@"e:/xxx.bmp", content);
+
             this.labelTips.Text = this.m_repository.orcCaptchaTipsUtil.getActive("一二三四五六", new Bitmap(new System.IO.MemoryStream(content)));
             for (int i = 0; i < this.m_repository.orcCaptchaTipsUtil.SubImgs.Count; i++)
                 this.m_pictureSubs[i].Image = this.m_repository.orcCaptchaTipsUtil.SubImgs[i];
