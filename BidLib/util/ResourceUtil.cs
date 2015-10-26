@@ -22,7 +22,8 @@ namespace tobid.util
         IOrc[] Tips { get; }
         IOrc Captcha { get; }
         IOrc Login { get; }
-        IOrc Title { get;  }
+        IOrc Title { get; }
+        Entry[] Entries { get; }
     }
 
     public class Resource : IGlobalConfig
@@ -35,6 +36,7 @@ namespace tobid.util
         private orc.IOrc m_priceSM;
         private orc.IOrc m_loading;
         private orc.IOrc[] m_tips;
+        private Entry[] m_entries;
         private String m_tag;
 
         public static Resource getInstance(String endPoint, String category)
@@ -42,7 +44,6 @@ namespace tobid.util
             Resource rtn = new Resource();
             String hostName = System.Net.Dns.GetHostName();
             String epKeepAlive = endPoint + "/rest/service/command/global/" + category;
-            //String epKeepAlive = endPoint + "/command/global";
             RestClient restGlobalConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
 
             GlobalConfig global = null;
@@ -132,6 +133,7 @@ namespace tobid.util
             };
 
             rtn.m_loading = OrcUtil.getInstance(global.loading, dictLoading);
+            rtn.m_entries = global.entries.ToArray();
             return rtn;
         }
 
@@ -144,6 +146,7 @@ namespace tobid.util
         public IOrc Captcha { get { return this.m_captcha; } }
         public IOrc Login { get { return this.m_login; } }
         public IOrc Title { get { return this.m_title; } }
+        public Entry[] Entries { get { return this.m_entries; } }
         #endregion
     }
 }

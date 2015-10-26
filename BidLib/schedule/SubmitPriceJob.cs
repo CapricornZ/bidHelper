@@ -29,6 +29,7 @@ namespace tobid.scheduler.jobs
 
         int interval { get; }
         String category { get; }
+        Entry[] entries { get; }
     }
 
     public interface INotify {

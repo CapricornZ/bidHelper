@@ -29,9 +29,16 @@ namespace tobid.rest
         public String category { get; set; }
     }
 
+    public class Entry {
+
+        public String description { get; set; }
+        public String url { get; set; }
+    }
+
     public class GlobalConfig
     {
         public IList<IOrcConfig> orcConfigs { get; set; }
+        public List<Entry> entries { get; set; }
         public String repository { get; set; }
         public String tag { get; set; }
 

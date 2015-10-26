@@ -48,6 +48,7 @@ namespace Helper
         public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
+        public Entry[] entries { get { return this.m_entries; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
         public int interval { get { return Int16.Parse(this.toolStripTextBoxInterval.Text); } }
         public String category
@@ -69,6 +70,7 @@ namespace Helper
         private IOrc m_orcPriceSM;
         private IOrc m_orcCaptchaLoading;
         private IOrc[] m_orcCaptchaTip;
+        private Entry[] m_entries;
         private CaptchaUtil m_orcCaptchaTipsUtil;
 
         private Scheduler m_schedulerKeepAlive;
@@ -134,6 +136,7 @@ namespace Helper
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
             this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
+            this.m_entries = configResource.Entries;
 
             //加载配置项2
             KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
@@ -955,7 +958,7 @@ namespace Helper
 
         private void buttonURL_Click(object sender, EventArgs e) {
 
-            IEUtil.openURL(this.category);
+            IEUtil.openURL(this.category, this);
         }
 
         private void buttonLogin_Click_1(object sender, EventArgs e)

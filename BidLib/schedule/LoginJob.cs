@@ -118,19 +118,26 @@ namespace tobid.scheduler.jobs
                     System.Drawing.Image numImage = System.Windows.Forms.Clipboard.GetImage();
                     System.IO.MemoryStream ms = new System.IO.MemoryStream();
                     numImage.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    System.IO.File.WriteAllBytes("LOGIN-CAPTCHA.bmp", ms.GetBuffer());
                     String strCaptcha = this.orcCaptcha.IdentifyStringFromPic(new System.Drawing.Bitmap(ms), 5);
 
                     mshtml.IHTMLElementCollection inputs = (mshtml.IHTMLElementCollection)doc2.all.tags("INPUT");
                     mshtml.HTMLInputElement input1 = (mshtml.HTMLInputElement)inputs.item("bidnumber");
-                    input1.value = LoginJob.config.no;
+                    if(null != input1)
+                        input1.value = LoginJob.config.no;
                     mshtml.HTMLInputElement input2 = (mshtml.HTMLInputElement)inputs.item("bidpassword");
-                    input2.value = LoginJob.config.passwd;
+                    if (null != input2)
+                        input2.value = LoginJob.config.passwd;
                     mshtml.HTMLInputElement input3 = (mshtml.HTMLInputElement)inputs.item("idcard");
-                    input3.value = LoginJob.config.pid;
+                    if (null != input3)
+                        input3.value = LoginJob.config.pid;
                     mshtml.HTMLInputElement input4 = (mshtml.HTMLInputElement)inputs.item("imagenumber");
-                    input4.value = strCaptcha;
+                    if (null != input4)
+                        input4.value = strCaptcha;
 
                     mshtml.IHTMLElement loginBtn = doc2.all.item("btnlogin") as mshtml.IHTMLElement;
+                    if (loginBtn != null)
+                        loginBtn.click();
                 }
                 else
                 {

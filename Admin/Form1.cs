@@ -64,6 +64,7 @@ namespace Admin {
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }
         public int interval { get { return 25; } }
+        public Entry[] entries { get { return null; } }
         public String category
         {
             get

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
 using System.Threading;
+using tobid.scheduler.jobs;
 
 namespace tobid.util
 {
@@ -88,7 +89,7 @@ namespace tobid.util
             return new Point(rectX.X, rectX.Y);
         }
 
-        static public void openURL(String category) {
+        static public void openURL(String category, IRepository repository) {
 
             const int GWL_STYLE = -16;
             const long WS_THICKFRAME = 0x40000L;
@@ -119,10 +120,12 @@ namespace tobid.util
                     SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
 
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
-                    if ("real".Equals(category))
-                        Browser.Navigate("https://paimai.alltobid.com/");
-                    else
-                        Browser.Navigate("http://moni.51hupai.org:8081");
+                    //if ("real".Equals(category))
+                    //    Browser.Navigate("https://paimai.alltobid.com/");
+                    //else
+                    //    Browser.Navigate("http://moni.51hupai.org:8081");
+                    System.Console.WriteLine("Openning {0},{1}", repository.entries[0].description, repository.entries[0].url);
+                    Browser.Navigate(repository.entries[0].url);
                     try
                     {
                         DocComplete.WaitOne();
