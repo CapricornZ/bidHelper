@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
 using tobid.scheduler.jobs;
+using tobid.rest;
 
 namespace tobid.util
 {
@@ -89,7 +90,7 @@ namespace tobid.util
             return new Point(rectX.X, rectX.Y);
         }
 
-        static public void openURL(String category, IRepository repository) {
+        static public void openURL(String category, Entry entry) {
 
             const int GWL_STYLE = -16;
             const long WS_THICKFRAME = 0x40000L;
@@ -120,15 +121,11 @@ namespace tobid.util
                     SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
 
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
-                    //if ("real".Equals(category))
-                    //    Browser.Navigate("https://paimai.alltobid.com/");
-                    //else
-                    //    Browser.Navigate("http://moni.51hupai.org:8081");
-                    System.Console.WriteLine("Openning {0},{1}", repository.entries[0].description, repository.entries[0].url);
-                    Browser.Navigate(repository.entries[0].url);
+                    System.Console.WriteLine("Openning {0},{1}", entry.description, entry.url);
+                    Browser.Navigate(entry.url);
                     try
                     {
-                        DocComplete.WaitOne();
+                        DocComplete.WaitOne(5000);
                         mshtml.IHTMLDocument2 doc = (mshtml.IHTMLDocument2)Browser.Document;
                         mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)doc.parentWindow;
                         win.execScript("document.body.style.overflow='hidden';", "javascript");

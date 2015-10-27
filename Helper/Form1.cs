@@ -82,6 +82,7 @@ namespace Helper
         private System.Threading.Thread submitPriceV2Thread;
 
         private Step2ConfigDialog step2Dialog;
+        private EntrySelForm entryForm;
         private Object lockSubmit = new Object();
         private Object lockPrice = new Object();
 
@@ -177,6 +178,7 @@ namespace Helper
             this.dateTimePicker1.Value = DateTime.Now;
             this.dateTimePicker2.Value = DateTime.Now;
             this.step2Dialog = new Step2ConfigDialog(this);
+            this.entryForm = new EntrySelForm();
 
             String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
             this.toolStripTextBoxInterval.Text = keyInterval;
@@ -887,18 +889,7 @@ namespace Helper
         }
         #endregion        
 
-        private void buttonLogin_Click(object sender, EventArgs e) {
-
-            LoginJob loginJob = new LoginJob(this.m_orcCaptchaLoading);
-            loginJob.Execute();
-
-            //SubmitPriceStep1Job submitPriceJob = new SubmitPriceStep1Job(
-            //    this.m_orcCaptchaLoading,
-            //    this.m_orcCaptchaTipsUtil,
-            //    this.m_orcCaptcha);
-            //submitPriceJob.Execute();
-        }
-
+        #region 菜单ACTION
         private void 国拍ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.国拍ToolStripMenuItem.Checked = true;
@@ -943,14 +934,10 @@ namespace Helper
                     logger.Error(ex);
                 }
             }
-        }   
+        }
+        #endregion
 
-        //[System.Runtime.InteropServices.DllImport("user32.dll")]
-        //private static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags);
-        //[System.Runtime.InteropServices.DllImport("user32.dll")]
-        //private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        //[System.Runtime.InteropServices.DllImport("user32.dll")]
-        //private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        #region 网页ACTION
         private void buttonIE_Click(object sender, EventArgs e) {
 
             IEUtil.openIE(this.category);
@@ -958,17 +945,21 @@ namespace Helper
 
         private void buttonURL_Click(object sender, EventArgs e) {
 
-            IEUtil.openURL(this.category, this);
+            if (this.entries.Length > 1) {
+                this.entryForm.Entries = this.entries;
+                this.entryForm.ShowDialog(this);
+                if(this.entryForm.SelectedEntry != null)
+                    IEUtil.openURL(this.category, this.entryForm.SelectedEntry);
+            } else
+                IEUtil.openURL(this.category, this.entries[0]);
+            
         }
 
         private void buttonLogin_Click_1(object sender, EventArgs e)
         {
-            //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 600);
-            //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 800);
-            //this.submit("", SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
-            //this.submit("", SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
-        }     
+        }
+        #endregion
     }
 }
