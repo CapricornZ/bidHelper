@@ -341,8 +341,9 @@ namespace Admin {
             
         }
 
-        private void receiveLogin(Operation operation, Config config) {
+        private void receiveLogin(Client client) {
 
+            Config config = client.config;
             if (null != config) {
                 this.labelName.Text = config.pname;
                 this.labelNo.Text = config.no;

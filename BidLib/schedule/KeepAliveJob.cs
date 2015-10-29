@@ -18,7 +18,7 @@ using tobid.util;
 namespace tobid.scheduler.jobs
 {
     public delegate void ReceiveOperation(rest.Operation operation);
-    public delegate void ReceiveLogin(rest.Operation operation, rest.Config config);
+    public delegate void ReceiveLogin(rest.Client client);
     
     /// <summary>
     /// KeepAlive : 向服务器发布主机名，获取配置项
@@ -75,14 +75,15 @@ namespace tobid.scheduler.jobs
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
             client = Filter.remain(this.repository.category, client);
 
+            this.receiveLogin(client);
             if (!this.isManual && client.operation != null && client.operation.Count > 0)
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {
                     if (operation is tobid.rest.LoginOperation){
 
-                        if (LoginJob.setConfig(client.config, operation as LoginOperation))
-                            this.receiveLogin(operation, client.config);
+                        LoginJob.setConfig(client.config, operation as LoginOperation);
+                            
                     } else if (operation is tobid.rest.Step1Operation) {
 
                         if(SubmitPriceStep1Job.setConfig(operation as Step1Operation))

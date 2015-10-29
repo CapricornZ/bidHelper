@@ -62,17 +62,22 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.国拍ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
-            this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxPID = new System.Windows.Forms.TextBox();
+            this.textBoxBPass = new System.Windows.Forms.TextBox();
+            this.textBoxBNO = new System.Windows.Forms.TextBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -80,6 +85,7 @@
             this.groupBoxPolicy.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -343,7 +349,7 @@
             this.panel2.Controls.Add(this.radioLocalPolicyV2);
             this.panel2.Controls.Add(this.radioLocalPolicyV1);
             this.panel2.Controls.Add(this.radioServPolicy);
-            this.panel2.Location = new System.Drawing.Point(48, 177);
+            this.panel2.Location = new System.Drawing.Point(48, 193);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(358, 29);
             this.panel2.TabIndex = 8;
@@ -365,7 +371,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 77);
+            this.label3.Location = new System.Drawing.Point(3, 49);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 3;
@@ -374,7 +380,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 37);
+            this.label2.Location = new System.Drawing.Point(3, 23);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 2;
@@ -383,7 +389,7 @@
             // textBox2
             // 
             this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(63, 74);
+            this.textBox2.Location = new System.Drawing.Point(63, 46);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(89, 20);
             this.textBox2.TabIndex = 1;
@@ -391,7 +397,7 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(63, 34);
+            this.textBox1.Location = new System.Drawing.Point(63, 20);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(89, 20);
             this.textBox1.TabIndex = 0;
@@ -404,7 +410,7 @@
             this.groupBoxPolicy.Controls.Add(this.textBox1);
             this.groupBoxPolicy.Location = new System.Drawing.Point(12, 27);
             this.groupBoxPolicy.Name = "groupBoxPolicy";
-            this.groupBoxPolicy.Size = new System.Drawing.Size(166, 143);
+            this.groupBoxPolicy.Size = new System.Drawing.Size(166, 73);
             this.groupBoxPolicy.TabIndex = 7;
             this.groupBoxPolicy.TabStop = false;
             this.groupBoxPolicy.Text = "服务器策略";
@@ -412,7 +418,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(532, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(383, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -429,12 +435,20 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
+            this.toolStripStatusLabel3,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 206);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 226);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(606, 24);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.Red;
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(118, 19);
+            this.toolStripStatusLabel3.Text = "toolStripStatusLabel3";
             // 
             // menuStrip1
             // 
@@ -489,6 +503,13 @@
             this.stepToolStripMenuItem.Text = "阶段2坐标";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
+            // ToolStripMenuItemAuthCode
+            // 
+            this.ToolStripMenuItemAuthCode.Name = "ToolStripMenuItemAuthCode";
+            this.ToolStripMenuItemAuthCode.Size = new System.Drawing.Size(160, 22);
+            this.ToolStripMenuItemAuthCode.Text = "授权码";
+            this.ToolStripMenuItemAuthCode.Click += new System.EventHandler(this.ToolStripMenuItemAuthCode_Click);
+            // 
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
@@ -496,7 +517,7 @@
             // 
             // buttonIE
             // 
-            this.buttonIE.Location = new System.Drawing.Point(421, 178);
+            this.buttonIE.Location = new System.Drawing.Point(421, 194);
             this.buttonIE.Name = "buttonIE";
             this.buttonIE.Size = new System.Drawing.Size(54, 23);
             this.buttonIE.TabIndex = 11;
@@ -506,7 +527,7 @@
             // 
             // buttonURL
             // 
-            this.buttonURL.Location = new System.Drawing.Point(481, 178);
+            this.buttonURL.Location = new System.Drawing.Point(481, 194);
             this.buttonURL.Name = "buttonURL";
             this.buttonURL.Size = new System.Drawing.Size(54, 23);
             this.buttonURL.TabIndex = 12;
@@ -516,7 +537,7 @@
             // 
             // buttonLogin
             // 
-            this.buttonLogin.Location = new System.Drawing.Point(542, 177);
+            this.buttonLogin.Location = new System.Drawing.Point(542, 194);
             this.buttonLogin.Name = "buttonLogin";
             this.buttonLogin.Size = new System.Drawing.Size(51, 23);
             this.buttonLogin.TabIndex = 13;
@@ -524,18 +545,45 @@
             this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click_1);
             // 
-            // ToolStripMenuItemAuthCode
+            // groupBox1
             // 
-            this.ToolStripMenuItemAuthCode.Name = "ToolStripMenuItemAuthCode";
-            this.ToolStripMenuItemAuthCode.Size = new System.Drawing.Size(160, 22);
-            this.ToolStripMenuItemAuthCode.Text = "授权码";
-            this.ToolStripMenuItemAuthCode.Click += new System.EventHandler(this.ToolStripMenuItemAuthCode_Click);
+            this.groupBox1.Controls.Add(this.textBoxPID);
+            this.groupBox1.Controls.Add(this.textBoxBPass);
+            this.groupBox1.Controls.Add(this.textBoxBNO);
+            this.groupBox1.Location = new System.Drawing.Point(12, 106);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(166, 86);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // textBoxPID
+            // 
+            this.textBoxPID.Location = new System.Drawing.Point(23, 60);
+            this.textBoxPID.Name = "textBoxPID";
+            this.textBoxPID.Size = new System.Drawing.Size(129, 20);
+            this.textBoxPID.TabIndex = 2;
+            // 
+            // textBoxBPass
+            // 
+            this.textBoxBPass.Location = new System.Drawing.Point(23, 39);
+            this.textBoxBPass.Name = "textBoxBPass";
+            this.textBoxBPass.Size = new System.Drawing.Size(129, 20);
+            this.textBoxBPass.TabIndex = 1;
+            // 
+            // textBoxBNO
+            // 
+            this.textBoxBNO.Location = new System.Drawing.Point(23, 19);
+            this.textBoxBNO.Name = "textBoxBNO";
+            this.textBoxBNO.Size = new System.Drawing.Size(129, 20);
+            this.textBoxBNO.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 230);
+            this.ClientSize = new System.Drawing.Size(606, 250);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonLogin);
             this.Controls.Add(this.buttonURL);
             this.Controls.Add(this.buttonIE);
@@ -568,6 +616,8 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -618,6 +668,11 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton radioManual;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAuthCode;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBoxPID;
+        private System.Windows.Forms.TextBox textBoxBPass;
+        private System.Windows.Forms.TextBox textBoxBNO;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
     }
 }
 

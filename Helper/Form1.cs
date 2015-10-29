@@ -143,9 +143,9 @@ namespace Helper
             KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
                 new ReceiveLogin(this.receiveLogin),
                 new ReceiveOperation[]{
-                            new ReceiveOperation(this.receiveOperation),
-                            new ReceiveOperation(this.receiveOperation)},
-                this);
+                        new ReceiveOperation(this.receiveOperation),
+                        new ReceiveOperation(this.receiveOperation)},
+                    this);
             keepAliveJob.Execute();
         }
 
@@ -313,7 +313,33 @@ namespace Helper
             base.WndProc(ref m);
         }
 
-        private void receiveLogin(Operation operation, Config config) {
+        private void receiveLogin(Client client) {
+
+            Config config = client.config;
+            if ( config != null) {
+
+                this.groupBox1.Text = String.Format("标书:{0}", config.pname);
+                this.groupBox1.Enabled = true;
+                this.textBoxBNO.Text = config.no;
+                this.textBoxBPass.Text = config.passwd;
+                this.textBoxPID.Text = config.pid;
+
+            } else {
+
+                this.groupBox1.Text = "标书:NULL";
+                this.groupBox1.Enabled = false;
+                this.textBoxBNO.Text = "";
+                this.textBoxBPass.Text = "";
+                this.textBoxPID.Text = "";
+            }
+
+            if (!String.IsNullOrEmpty(client.memo)) {
+
+                this.toolStripStatusLabel3.Text = client.memo;
+                MessageBoxButtons messButton = MessageBoxButtons.OK;
+                DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);;
+            }else
+                this.toolStripStatusLabel3.Text = "";
         }
 
         private void receiveOperation(Operation operation) {
@@ -961,5 +987,7 @@ namespace Helper
             job.Execute();
         }
         #endregion
+
+
     }
 }

@@ -13,8 +13,8 @@ namespace tobid.rest
         public String ip { get; set; }
         public DateTime updateTime { get; set; }
         public Config config { get; set; }
-        //public Operation[] operation { get; set; }
         public List<Operation> operation { get; set; }
+        public String memo { get; set; }
     }
 
     /// <summary>
@@ -26,8 +26,8 @@ namespace tobid.rest
         public String passwd { get; set; }
         public String pid { get; set; }
         public String pname { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime expireTime { get; set; }
+        //public DateTime startTime { get; set; }
+        //public DateTime expireTime { get; set; }
         public DateTime updateTime { get; set; }
     }
 
