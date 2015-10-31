@@ -397,15 +397,18 @@ namespace Helper
                     txtPrice = String.Format("{0:D}", price);
 
                     logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-                    for (int i = 0; i < txtPrice.Length; i++) {
-                        System.Threading.Thread.Sleep(interval);
-                        //ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
-                        KeyBoardUtil.sendKeyDown(txtPrice[i].ToString());
-                        System.Threading.Thread.Sleep(interval);
-                        //ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
-                        KeyBoardUtil.sendKeyUp(txtPrice[i].ToString());
 
-                    } System.Threading.Thread.Sleep(50);
+                    KeyBoardUtil.sendMessage(txtPrice);
+                    //for (int i = 0; i < txtPrice.Length; i++) {
+                        //System.Threading.Thread.Sleep(interval);
+                        ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
+                        //KeyBoardUtil.sendKeyDown(txtPrice[i].ToString());
+                        //System.Threading.Thread.Sleep(interval);
+                        ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
+                        //KeyBoardUtil.sendKeyUp(txtPrice[i].ToString());
+
+                    //}
+                    System.Threading.Thread.Sleep(50);
 
                     logger.Info("\tEND   input PRICE");
 
@@ -601,15 +604,16 @@ namespace Helper
                         }
                         if (CaptchaInput.AUTO == input) {
 
-                            for (int i = 0; i < txtActive.Length; i++) {
+                            //for (int i = 0; i < txtActive.Length; i++) {
 
-                                System.Threading.Thread.Sleep(interval);
-                                //ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0, 0);
-                                KeyBoardUtil.sendKeyDown(txtActive[i].ToString());
-                                System.Threading.Thread.Sleep(interval);
-                                //ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0x2, 0);
-                                KeyBoardUtil.sendKeyUp(txtActive[i].ToString());
-                            }
+                                //System.Threading.Thread.Sleep(interval);
+                                ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0, 0);
+                                //KeyBoardUtil.sendKeyDown(txtActive[i].ToString());
+                                //System.Threading.Thread.Sleep(interval);
+                                ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0x2, 0);
+                                //KeyBoardUtil.sendKeyUp(txtActive[i].ToString());
+                            //}
+                            KeyBoardUtil.sendMessage(txtActive);
                         }
                     }
                     System.Threading.Thread.Sleep(50);

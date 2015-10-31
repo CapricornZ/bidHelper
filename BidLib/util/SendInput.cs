@@ -11,6 +11,20 @@ namespace tobid.util {
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint SendInput(uint nInput, ref INPUT pInput, int cbSize);
 
+        private enum InputType
+        {
+            INPUT_MOUSE = 0,
+            INPUT_KEYBOARD = 1,
+            INPUT_HARDWARE = 2,
+        }
+        [Flags()]
+        private enum KEYEVENTF
+        {
+            EXTENDEDKEY = 0x0001,
+            KEYUP = 0x0002,
+            UNICODE = 0x0004,
+            SCANCODE = 0x0008,
+        }  
 
         [StructLayout(LayoutKind.Explicit)]
         internal struct INPUT {
@@ -48,6 +62,24 @@ namespace tobid.util {
             internal int dwFlags;
             internal int time;
             internal IntPtr dwExtraInfo;
+        }
+
+        static public void sendMessage(String message, int interval = 0)
+        {
+            for (int i = 0; i < message.Length; i++)
+            {
+                byte sendChar = ScreenUtil.keycode[message[i].ToString()];
+                INPUT[] keyUpDown = new INPUT[2];
+                keyUpDown[0] = new INPUT();
+                keyUpDown[0].type = (int)InputType.INPUT_KEYBOARD;
+                keyUpDown[0].ki.dwFlags = 0;
+                keyUpDown[0].ki.wVk = sendChar;
+                keyUpDown[1] = new INPUT();
+                keyUpDown[1].type = (int)InputType.INPUT_KEYBOARD;
+                keyUpDown[1].ki.wVk = sendChar;
+                keyUpDown[1].ki.dwFlags = (int)KEYEVENTF.KEYUP;
+                SendInput(2, ref keyUpDown[0], Marshal.SizeOf(keyUpDown[0]));
+            }
         }
 
         static public void sendKeyDown(String keyCode) {
