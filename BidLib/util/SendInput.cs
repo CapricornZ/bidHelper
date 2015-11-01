@@ -64,21 +64,39 @@ namespace tobid.util {
             internal IntPtr dwExtraInfo;
         }
 
+        private static IDictionary<string, WindowsInput.VirtualKeyCode> keycode = new Dictionary<string, WindowsInput.VirtualKeyCode>();
+        static KeyBoardUtil()
+        {
+            keycode.Add("LCONTROL", WindowsInput.VirtualKeyCode.LCONTROL);
+            keycode.Add("RCONTROL", WindowsInput.VirtualKeyCode.RCONTROL);
+        }
+
+        static public void simulateKeyUP(String key)
+        {
+            WindowsInput.InputSimulator.SimulateKeyUp(keycode[key]);
+        }
+
         static public void sendMessage(String message, int interval = 0)
         {
-            for (int i = 0; i < message.Length; i++)
+            if (interval == 0)
+                WindowsInput.InputSimulator.SimulateTextEntry(message);
+            else
             {
-                byte sendChar = ScreenUtil.keycode[message[i].ToString()];
-                INPUT[] keyUpDown = new INPUT[2];
-                keyUpDown[0] = new INPUT();
-                keyUpDown[0].type = (int)InputType.INPUT_KEYBOARD;
-                keyUpDown[0].ki.dwFlags = 0;
-                keyUpDown[0].ki.wVk = sendChar;
-                keyUpDown[1] = new INPUT();
-                keyUpDown[1].type = (int)InputType.INPUT_KEYBOARD;
-                keyUpDown[1].ki.wVk = sendChar;
-                keyUpDown[1].ki.dwFlags = (int)KEYEVENTF.KEYUP;
-                SendInput(2, ref keyUpDown[0], Marshal.SizeOf(keyUpDown[0]));
+                for (int i = 0; i < message.Length; i++)
+                {
+                    byte sendChar = ScreenUtil.keycode[message[i].ToString()];
+                    INPUT[] keyUpDown = new INPUT[2];
+                    keyUpDown[0] = new INPUT();
+                    keyUpDown[0].type = (int)InputType.INPUT_KEYBOARD;
+                    keyUpDown[0].ki.dwFlags = 0;
+                    keyUpDown[0].ki.wVk = sendChar;
+                    keyUpDown[1] = new INPUT();
+                    keyUpDown[1].type = (int)InputType.INPUT_KEYBOARD;
+                    keyUpDown[1].ki.wVk = sendChar;
+                    keyUpDown[1].ki.dwFlags = (int)KEYEVENTF.KEYUP;
+                    SendInput(2, ref keyUpDown[0], Marshal.SizeOf(keyUpDown[0]));
+                    System.Threading.Thread.Sleep(interval);
+                }
             }
         }
 
@@ -109,7 +127,6 @@ namespace tobid.util {
 
         static public void moveMouse(int x, int y)
         {
-
             INPUT Input = new INPUT();
             Input.type = 0;
             Input.mi.dx = x;

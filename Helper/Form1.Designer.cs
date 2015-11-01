@@ -78,6 +78,7 @@
             this.textBoxPID = new System.Windows.Forms.TextBox();
             this.textBoxBPass = new System.Windows.Forms.TextBox();
             this.textBoxBNO = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -86,6 +87,7 @@
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -121,7 +123,7 @@
             this.panel1.Controls.Add(this.radioPrice);
             this.panel1.Location = new System.Drawing.Point(6, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(77, 56);
+            this.panel1.Size = new System.Drawing.Size(77, 63);
             this.panel1.TabIndex = 3;
             // 
             // radioDeltaPrice
@@ -349,7 +351,7 @@
             this.panel2.Controls.Add(this.radioLocalPolicyV2);
             this.panel2.Controls.Add(this.radioLocalPolicyV1);
             this.panel2.Controls.Add(this.radioServPolicy);
-            this.panel2.Location = new System.Drawing.Point(48, 193);
+            this.panel2.Location = new System.Drawing.Point(20, 192);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(358, 29);
             this.panel2.TabIndex = 8;
@@ -418,7 +420,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(383, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(414, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -517,7 +519,7 @@
             // 
             // buttonIE
             // 
-            this.buttonIE.Location = new System.Drawing.Point(421, 194);
+            this.buttonIE.Location = new System.Drawing.Point(8, 3);
             this.buttonIE.Name = "buttonIE";
             this.buttonIE.Size = new System.Drawing.Size(54, 23);
             this.buttonIE.TabIndex = 11;
@@ -527,7 +529,7 @@
             // 
             // buttonURL
             // 
-            this.buttonURL.Location = new System.Drawing.Point(481, 194);
+            this.buttonURL.Location = new System.Drawing.Point(68, 3);
             this.buttonURL.Name = "buttonURL";
             this.buttonURL.Size = new System.Drawing.Size(54, 23);
             this.buttonURL.TabIndex = 12;
@@ -537,7 +539,7 @@
             // 
             // buttonLogin
             // 
-            this.buttonLogin.Location = new System.Drawing.Point(542, 194);
+            this.buttonLogin.Location = new System.Drawing.Point(128, 3);
             this.buttonLogin.Name = "buttonLogin";
             this.buttonLogin.Size = new System.Drawing.Size(51, 23);
             this.buttonLogin.TabIndex = 13;
@@ -550,12 +552,13 @@
             this.groupBox1.Controls.Add(this.textBoxPID);
             this.groupBox1.Controls.Add(this.textBoxBPass);
             this.groupBox1.Controls.Add(this.textBoxBNO);
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(12, 106);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(166, 86);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "标书信息";
             // 
             // textBoxPID
             // 
@@ -578,15 +581,23 @@
             this.textBoxBNO.Size = new System.Drawing.Size(129, 20);
             this.textBoxBNO.TabIndex = 0;
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.buttonLogin);
+            this.panel3.Controls.Add(this.buttonIE);
+            this.panel3.Controls.Add(this.buttonURL);
+            this.panel3.Location = new System.Drawing.Point(406, 192);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(188, 29);
+            this.panel3.TabIndex = 15;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 250);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.buttonLogin);
-            this.Controls.Add(this.buttonURL);
-            this.Controls.Add(this.buttonIE);
             this.Controls.Add(this.groupBoxLocal);
             this.Controls.Add(this.groupBoxLocalV2);
             this.Controls.Add(this.panel2);
@@ -618,6 +629,7 @@
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -673,6 +685,7 @@
         private System.Windows.Forms.TextBox textBoxBPass;
         private System.Windows.Forms.TextBox textBoxBNO;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.Panel panel3;
     }
 }
 

@@ -55,6 +55,7 @@ namespace tobid.util
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
             } catch (Exception ex) {
                 logger.ErrorFormat("获取全局配置异常:{0}", ex);
+                throw ex;
             }
 
             try {

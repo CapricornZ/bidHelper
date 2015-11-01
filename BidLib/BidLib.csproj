@@ -34,6 +34,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="InputSimulator">
+      <HintPath>..\..\InputSimulator.0.1.0.0-bin\Release\InputSimulator.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\log4net.dll</HintPath>
     </Reference>

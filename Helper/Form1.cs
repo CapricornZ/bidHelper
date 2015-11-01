@@ -122,9 +122,21 @@ namespace Helper
             logger.Info("Application Form Closed");
         }
 
+        private void disableForm()
+        {
+            this.groupBoxPolicy.Enabled = false;
+            this.panel2.Enabled = false;
+            this.panel3.Enabled = false;
+        }
+        private void enableForm()
+        {
+            this.groupBoxPolicy.Enabled = true;
+            this.panel2.Enabled = true;
+            this.panel3.Enabled = true;
+        }
+
         private void loadResource(String category)
         {
-
             //加载配置项1
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
             
@@ -183,16 +195,41 @@ namespace Helper
             String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
             this.toolStripTextBoxInterval.Text = keyInterval;
 
-            this.loadResource("real");
+            try
+            {
+                this.loadResource("real");
+                this.enableForm();
+            }
+            catch (System.Net.WebException webEx)
+            {
+                MessageBoxButtons messButton = MessageBoxButtons.OK;
+                DialogResult dr = MessageBox.Show("请按[菜单]->[配置]->[授权码]步骤，输入有效的授权码", "需要授权码", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                this.disableForm();
+                logger.Error(webEx);
+            }
+            catch (Exception ex)
+            {
+                this.disableForm();
+                logger.Error(ex);
+            }
 
-            //加载配置项2
-            //KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
-            //    new ReceiveLogin(this.receiveLogin),
-            //    new ReceiveOperation[]{
-            //        new ReceiveOperation(this.receiveOperation),
-            //        new ReceiveOperation(this.receiveOperation)},
-            //    this);
-            //keepAliveJob.Execute();
+            Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
+            Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
+            Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
+            Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
+            Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
+            Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
+            Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
+
+            Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
+            Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
+            Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
+            Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
+
+            Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
+            Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+
+            Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -214,24 +251,7 @@ namespace Helper
             configStepV2.Job = new SubmitPriceV2Job(repository: this, notify: this);
             m_schedulerSubmitStepV2 = new Scheduler(configStepV2);
 
-            Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
-            Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
-            Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
-            Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
-            Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
-            Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
-            Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
-
-            Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
-            Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
-            Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
-            Boolean result = Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
-            System.Console.WriteLine(result);
-
-            Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
-            Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
-
-            Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
+            
         }
 
         /// <summary>
@@ -369,12 +389,14 @@ namespace Helper
         /// <param name="delta">差价</param>
         private void giveDeltaPrice(tobid.rest.position.BidStep2 bid, int delta) {
 
+            KeyBoardUtil.simulateKeyUP("LCONTROL");
+            KeyBoardUtil.simulateKeyUP("RCONTROL");
+
             System.Threading.Thread startPrice = new System.Threading.Thread(delegate() {
 
                 if (System.Threading.Monitor.TryEnter(this.lockPrice)) {
 
-                    ScreenUtil.keybd_event(ScreenUtil.keycode["CTRL"], 0, 0x2, 0);//释放CTRL
-                    int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
+                    int interval = this.interval;
                     Point origin = findOrigin();
                     int x = origin.X;
                     int y = origin.Y;
@@ -398,7 +420,7 @@ namespace Helper
 
                     logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
 
-                    KeyBoardUtil.sendMessage(txtPrice);
+                    KeyBoardUtil.sendMessage(txtPrice, this.interval);
                     //for (int i = 0; i < txtPrice.Length; i++) {
                         //System.Threading.Thread.Sleep(interval);
                         ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
@@ -408,7 +430,7 @@ namespace Helper
                         //KeyBoardUtil.sendKeyUp(txtPrice[i].ToString());
 
                     //}
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(100);
 
                     logger.Info("\tEND   input PRICE");
 
@@ -489,7 +511,7 @@ namespace Helper
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
 
             ScreenUtil.keybd_event(ScreenUtil.keycode["CTRL"], 0, 0x2, 0);//释放CTRL
-            int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
+            int interval = this.interval;
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
@@ -536,13 +558,15 @@ namespace Helper
         /// <returns></returns>
         private void submit(String URL, tobid.rest.position.BidStep2 bid, CaptchaInput input) {
 
-            ScreenUtil.keybd_event(ScreenUtil.keycode["CTRL"], 0, 0x2, 0);
+            //ScreenUtil.keybd_event(ScreenUtil.keycode["CTRL"], 0, 0x2, 0);
+            KeyBoardUtil.simulateKeyUP("LCONTROL");
+            KeyBoardUtil.simulateKeyUP("RCONTROL");
 
             System.Threading.Thread startSubmit = new System.Threading.Thread(delegate() {
 
                 if (System.Threading.Monitor.TryEnter(this.lockSubmit)) {
 
-                    int interval = Int16.Parse(this.toolStripTextBoxInterval.Text);
+                    int interval = this.interval;
                     Point origin = findOrigin();
                     int x = origin.X;
                     int y = origin.Y;
@@ -613,14 +637,14 @@ namespace Helper
                                 ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0x2, 0);
                                 //KeyBoardUtil.sendKeyUp(txtActive[i].ToString());
                             //}
-                            KeyBoardUtil.sendMessage(txtActive);
+                            KeyBoardUtil.sendMessage(txtActive, this.interval);
                         }
                     }
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(100);
                     logger.Info("\tEND   input CAPTCHA");
 
                     MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-                    DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (dr == DialogResult.OK) {
 
                         logger.InfoFormat("用户选择确定出价");
@@ -667,7 +691,7 @@ namespace Helper
         {
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
-                messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK)
             {
                 Step2Operation bidOps = SubmitPriceStep2Job.bidOperation;
@@ -707,7 +731,7 @@ namespace Helper
             //DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
             //    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
-                messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
                 Step2Operation bidOps = SubmitPriceStep2Job.getConfig();
                 bidOps.updateTime = DateTime.Now;
@@ -792,7 +816,7 @@ namespace Helper
             if (!this.radioServPolicy.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioServPolicy.Text), "策略选择",
-                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK) {
                     this.radioServPolicy.Checked = true;
                     this.radioLocalPolicyV1.Checked = false;
@@ -832,7 +856,7 @@ namespace Helper
             if (!this.radioLocalPolicyV1.Checked) {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicyV1.Text), "策略选择",
-                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK) {
                     this.radioServPolicy.Checked = false;
                     this.radioLocalPolicyV1.Checked = true;
@@ -860,7 +884,7 @@ namespace Helper
             {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioLocalPolicyV2.Text), "策略选择",
-                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK)
                 {
                     this.radioServPolicy.Checked = false;
@@ -890,7 +914,7 @@ namespace Helper
             {
                 MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                 DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", this.radioManual.Text), "策略选择",
-                    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.OK)
                 {
                     this.radioServPolicy.Checked = false;
@@ -913,10 +937,6 @@ namespace Helper
             }
         }
 
-        private void radioManualPolicy_Click(object sender, EventArgs e) {
-
-            
-        }
         #endregion        
 
         #region 菜单ACTION
@@ -924,14 +944,32 @@ namespace Helper
         {
             this.国拍ToolStripMenuItem.Checked = true;
             this.模拟ToolStripMenuItem.Checked = false;
-            this.loadResource("real");
+            try
+            {
+                this.loadResource("real");
+                this.enableForm();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                this.disableForm();
+            }
         }
 
         private void 模拟ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.国拍ToolStripMenuItem.Checked = false;
             this.模拟ToolStripMenuItem.Checked = true;
-            this.loadResource("simulate");
+            try
+            {
+                this.loadResource("simulate");
+                this.enableForm();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                this.disableForm();
+            }
         }
 
         private void stepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -958,10 +996,15 @@ namespace Helper
                     config.AppSettings.Settings["credential"].Value = authCode;
                     config.Save();
                     ConfigurationManager.RefreshSection("appSettings");
+
+                    MessageBoxButtons messButton = MessageBoxButtons.OK;
+                    DialogResult dr = MessageBox.Show(String.Format("请重新启动应用程序!\r\n主机名:{0}\r\n授权码:{1}", hostName, authCode), "授权成功", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 }
                 catch (Exception ex)
                 {
                     logger.Error(ex);
+                    MessageBoxButtons messButton = MessageBoxButtons.OK;
+                    DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
             }
         }
@@ -991,7 +1034,5 @@ namespace Helper
             job.Execute();
         }
         #endregion
-
-
     }
 }
