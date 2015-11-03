@@ -17,8 +17,7 @@ using tobid.scheduler;
 namespace tobid.scheduler.jobs
 {
     public interface IRepository
-    {
-        String endPoint { get; }
+    {   
         IOrc orcTitle { get; }
         IOrc orcCaptcha { get; }
         IOrc orcPrice { get; }
@@ -28,8 +27,12 @@ namespace tobid.scheduler.jobs
         CaptchaUtil orcCaptchaTipsUtil { get; }
 
         int interval { get; }
+        String endPoint { get; }
         String category { get; }
         Entry[] entries { get; }
+
+        GivePriceStep2 givePriceStep2 { get; }
+        SubmitPrice submitPrice { get; }
     }
 
     public interface INotify {
@@ -105,7 +108,7 @@ namespace tobid.scheduler.jobs
                 Monitor.Exit(SubmitPriceStep2Job.lockObj);
             }
             else
-                logger.Error("obtain SubmitPriceJob.lockObj timeout on setConfig(...)");
+                logger.Warn("obtain SubmitPriceJob.lockObj timeout on setConfig(...)");
             return rtn;
         }
 
@@ -133,7 +136,7 @@ namespace tobid.scheduler.jobs
                 Monitor.Exit(SubmitPriceStep2Job.lockObj);
             }
             else
-                logger.Error("obtain SubmitPriceJob.lockObj timeout on setConfig(...)");
+                logger.Warn("obtain SubmitPriceJob.lockObj timeout on setConfig(...)");
 
             return rtn;
         }
@@ -202,7 +205,7 @@ namespace tobid.scheduler.jobs
                 Monitor.Exit(SubmitPriceStep2Job.lockObj);
             }
             else
-                logger.Error("obtain SubmitPriceJob.lockObj timeout on Execute(...)");
+                logger.Warn("obtain SubmitPriceJob.lockObj timeout on Execute(...)");
 
         }
 

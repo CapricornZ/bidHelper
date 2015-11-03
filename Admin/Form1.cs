@@ -75,6 +75,16 @@ namespace Admin {
                     return "simulate";
             }
         }
+        public GivePriceStep2 givePriceStep2 {
+            get {
+                return SubmitPriceStep2Job.getPosition().give;
+            }
+        }
+        public SubmitPrice submitPrice {
+            get {
+                return SubmitPriceStep2Job.getPosition().submit;
+            }
+        }
         #endregion
 
         private System.Threading.Thread keepAliveThread;
@@ -155,6 +165,9 @@ namespace Admin {
             SchedulerConfiguration config1S = new SchedulerConfiguration(1000);
             config1S.Job = new SubmitPriceStep2Job(repository: this, notify: this);
             m_schedulerSubmit = new Scheduler(config1S);
+
+            config1S = new SchedulerConfiguration(1000);
+            config1S.Job = new CustomJob(null);
 
             Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
             Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);

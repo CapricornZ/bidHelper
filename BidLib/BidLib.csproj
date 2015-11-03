@@ -58,12 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="action\Action.cs" />
+    <Compile Include="action\InputPriceAction.cs" />
+    <Compile Include="action\InputCaptchaAction.cs" />
+    <Compile Include="action\SubmitCaptchaAction.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="rest\Client.cs" />
-    <Compile Include="rest\GlobalConfig.cs" />
-    <Compile Include="rest\Position.cs" />
+    <Compile Include="schedule\rest\Client.cs" />
+    <Compile Include="schedule\rest\GlobalConfig.cs" />
+    <Compile Include="schedule\rest\Position.cs" />
+    <Compile Include="schedule\CustomJob.cs" />
     <Compile Include="schedule\LoginJob.cs" />
     <Compile Include="schedule\Scheduler.cs" />
     <Compile Include="schedule\KeepAliveJob.cs" />
