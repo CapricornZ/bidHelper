@@ -48,6 +48,7 @@ namespace tobid.scheduler
                     Thread.Sleep(this.configuration.SleepInterval);
                     ThreadStart myThreadDelegate = new ThreadStart(this.configuration.Job.Execute);
                     Thread myThread = new Thread(myThreadDelegate);
+                    myThread.SetApartmentState(ApartmentState.STA);
                     myThread.Name = String.Format("{0}-{1}", Thread.CurrentThread.Name, ++no);
                     myThread.Start();
                 } catch (ThreadAbortException abortException) {//线程任务终止

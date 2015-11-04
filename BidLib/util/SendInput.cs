@@ -82,20 +82,31 @@ namespace tobid.util {
                 WindowsInput.InputSimulator.SimulateTextEntry(message);
             else
             {
-                for (int i = 0; i < message.Length; i++)
-                {
-                    byte sendChar = ScreenUtil.keycode[message[i].ToString()];
-                    INPUT[] keyUpDown = new INPUT[2];
-                    keyUpDown[0] = new INPUT();
-                    keyUpDown[0].type = (int)InputType.INPUT_KEYBOARD;
-                    keyUpDown[0].ki.dwFlags = 0;
-                    keyUpDown[0].ki.wVk = sendChar;
-                    keyUpDown[1] = new INPUT();
-                    keyUpDown[1].type = (int)InputType.INPUT_KEYBOARD;
-                    keyUpDown[1].ki.wVk = sendChar;
-                    keyUpDown[1].ki.dwFlags = (int)KEYEVENTF.KEYUP;
-                    SendInput(2, ref keyUpDown[0], Marshal.SizeOf(keyUpDown[0]));
-                    System.Threading.Thread.Sleep(interval);
+                if (interval > 0) {
+                    for (int i = 0; i < message.Length; i++) {
+                        byte sendChar = ScreenUtil.keycode[message[i].ToString()];
+                        INPUT[] keyUpDown = new INPUT[2];
+                        keyUpDown[0] = new INPUT();
+                        keyUpDown[0].type = (int)InputType.INPUT_KEYBOARD;
+                        keyUpDown[0].ki.dwFlags = 0;
+                        keyUpDown[0].ki.wVk = sendChar;
+                        keyUpDown[1] = new INPUT();
+                        keyUpDown[1].type = (int)InputType.INPUT_KEYBOARD;
+                        keyUpDown[1].ki.wVk = sendChar;
+                        keyUpDown[1].ki.dwFlags = (int)KEYEVENTF.KEYUP;
+                        SendInput(2, ref keyUpDown[0], Marshal.SizeOf(keyUpDown[0]));
+                        System.Threading.Thread.Sleep(interval);
+                    }
+                } else {//interval<0
+
+                    System.Windows.Forms.Clipboard.Clear();
+                    System.Windows.Forms.Clipboard.SetText(message);
+                    System.Windows.Forms.Clipboard.SetText(message);
+
+                    //WindowsInput.InputSimulator.SimulateModifiedKeyStroke(
+                    //    WindowsInput.VirtualKeyCode.CONTROL, 
+                    //    WindowsInput.VirtualKeyCode.VK_C);
+                    System.Windows.Forms.SendKeys.SendWait("^v");
                 }
             }
         }

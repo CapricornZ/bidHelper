@@ -438,7 +438,11 @@ namespace Helper
 
                     logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
 
-                    KeyBoardUtil.sendMessage(txtPrice, this.interval);
+                    Clipboard.Clear();
+                    Clipboard.SetText(txtPrice);
+
+                    SendKeys.SendWait("^v");
+                    //KeyBoardUtil.sendMessage(txtPrice, this.interval);
                     //for (int i = 0; i < txtPrice.Length; i++) {
                         //System.Threading.Thread.Sleep(interval);
                         ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
@@ -464,6 +468,7 @@ namespace Helper
                     logger.Error("PRICE Lock is not released");
 
             });
+            startPrice.SetApartmentState(System.Threading.ApartmentState.STA);
             startPrice.Start();
         }
 
@@ -685,6 +690,7 @@ namespace Helper
                 } else
                     logger.Error("SUBMIT Lock is not released!");
             });
+            startSubmit.SetApartmentState(System.Threading.ApartmentState.STA);
             startSubmit.Start();
         }
         #endregion
