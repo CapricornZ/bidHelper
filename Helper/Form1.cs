@@ -740,8 +740,9 @@ namespace Helper
                         Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
                     } else {
 
-                        SequenceAction actionSeq = new SequenceAction(new List<IBidAction>() { actionInputCaptcha, actionSubmitCaptcha });
-                        Task taskCaptcha = new Task(action: actionSeq, notify: this, fireTime: fire2); tasks.Add(taskCaptcha);
+                        //SequenceAction actionSeq = new SequenceAction(new List<IBidAction>() { actionInputCaptcha, actionSubmitCaptcha });
+                        //Task taskCaptcha = new Task(action: actionSeq, notify: this, fireTime: fire2); tasks.Add(taskCaptcha);
+                        Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
                     }
 
                 } else {

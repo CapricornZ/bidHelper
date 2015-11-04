@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace tobid.util.orc{
 
-    class ImageTool {
+    public class ImageTool {
         private Bitmap image;
         private int width;
         private int height;

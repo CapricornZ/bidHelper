@@ -12,9 +12,13 @@ using System.Runtime.InteropServices;
 
 using tobid.rest;
 using tobid.scheduler.jobs;
+using System.IO;
+using tobid.util.orc;
+using tobid.util;
+using tobid.rest.position;
 
 namespace Cheater {
-    public partial class Form1 : Form {
+    public partial class Form1 : Form, IRepository {
 
         [DllImport("user32.dll")]
         private static extern int GetDC(int hwnd);
@@ -30,6 +34,79 @@ namespace Cheater {
             //orc = tobid.util.orc.OrcUtil.getInstance(new int[] { 0, 8, 16, 24, 32 }, 0, 0, 7, 10, @"price");
         }
 
+        private IOrc m_orcLogin;
+        private IOrc m_orcTitle;
+        private IOrc m_orcCaptcha;
+        private IOrc m_orcPrice;
+        private IOrc m_orcPriceSM;
+        private IOrc m_orcCaptchaLoading;
+        private IOrc[] m_orcCaptchaTip;
+        private Entry[] m_entries;
+        private CaptchaUtil m_orcCaptchaTipsUtil;
+
+        #region IRepository
+        public String endPoint { get { return this.EndPoint; } }
+        public IOrc orcTitle { get { return this.m_orcTitle; } }
+        public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
+        public IOrc orcPrice { get { return this.m_orcPrice; } }
+        public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
+        public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
+        public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
+        public Entry[] entries { get { return this.m_entries; } }
+        public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil; } }
+        public int interval { get { return 0; } }
+        public String category { get { return "simulate"; } }
+
+        public GivePriceStep2 givePriceStep2 { get { return SubmitPriceStep2Job.getPosition().give; } }
+        public SubmitPrice submitPrice { get { return SubmitPriceStep2Job.getPosition().submit; } }
+        #endregion
+
+        private void loadResource(String category) {
+            //加载配置项1
+            IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
+
+            this.Text = configResource.tag;
+            this.m_orcLogin = configResource.Login;
+            this.m_orcTitle = configResource.Title;
+            this.m_orcCaptcha = configResource.Captcha;//
+            this.m_orcPrice = configResource.Price;//价格识别
+            this.m_orcPriceSM = configResource.PriceSM;//价格（小）
+            this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
+            this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
+            this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
+            this.m_entries = configResource.Entries;
+
+            //加载配置项2
+            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint,
+                new ReceiveLogin(this.receiveLogin),
+                new ReceiveOperation[]{
+                        new ReceiveOperation(this.receiveOperation),
+                        new ReceiveOperation(this.receiveOperation)},
+                    this);
+            keepAliveJob.Execute();
+        }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern int GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
+        static private Point findOrigin() {
+
+            Rectangle rectX = new Rectangle();
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+
+                    IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
+                    IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
+                    int rtnX = GetWindowRect(tabWindow, out rectX);
+                }
+            }
+            return new Point(rectX.X, rectX.Y);
+        }
+
         private void Form1_Load(object sender, EventArgs e) {
 
             this.bitmaps = new String[]{
@@ -38,13 +115,14 @@ namespace Cheater {
                 "964932.bmp", "992986.bmp"
             };
 
-            KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, 
-                new ReceiveLogin(this.receiveLogin),
-                new ReceiveOperation[]{
-                    new ReceiveOperation(this.receiveOperation),
-                    new ReceiveOperation(this.receiveOperation)},
-                null);
+            //KeepAliveJob keepAliveJob = new KeepAliveJob(this.EndPoint, 
+            //    new ReceiveLogin(this.receiveLogin),
+            //    new ReceiveOperation[]{
+            //        new ReceiveOperation(this.receiveOperation),
+            //        new ReceiveOperation(this.receiveOperation)},
+            //    null);
             //keepAliveJob.Execute();
+            this.loadResource("simulate");
             
             this.chart1.Series.Clear();
             Series series = new Series();
@@ -91,6 +169,9 @@ namespace Cheater {
 
         private void showCaptcha(int second) {
 
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y + 4;
             int RandKey = ran.Next(0, 11);
             byte[] binary = System.IO.File.ReadAllBytes(this.bitmaps[RandKey]);
             Bitmap bitmap = new Bitmap(new System.IO.MemoryStream(binary));
@@ -99,13 +180,16 @@ namespace Cheater {
 
             for (int i = 0; i < 20 * second; i++) {
                 //g.DrawImage(bitmap, new Point(966, 482));
-                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x + 4, SubmitPriceStep2Job.getPosition().submit.captcha[0].y));
+                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x + x, SubmitPriceStep2Job.getPosition().submit.captcha[0].y + y));
                 System.Threading.Thread.Sleep(50);
             }
         }
 
         private void showLoading(int second) {
 
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y + 4;
             byte[] binary = System.IO.File.ReadAllBytes("loading.bmp");
             Bitmap bitmap = new Bitmap(new System.IO.MemoryStream(binary));
             System.IntPtr p = (IntPtr)GetDC(0);// '取得屏幕
@@ -113,7 +197,7 @@ namespace Cheater {
 
             for (int i = 0; i < 20 * second; i++) {
                 //g.DrawImage(bitmap, new Point(962, 486));
-                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x, SubmitPriceStep2Job.getPosition().submit.captcha[0].y + 4));
+                g.DrawImage(bitmap, new Point(SubmitPriceStep2Job.getPosition().submit.captcha[0].x + x, SubmitPriceStep2Job.getPosition().submit.captcha[0].y + y));
                 System.Threading.Thread.Sleep(50);
             }
         }

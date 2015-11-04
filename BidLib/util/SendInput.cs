@@ -137,5 +137,18 @@ namespace tobid.util {
             Input.mi.dwExtraInfo = (IntPtr)0;
             SendInput(1, ref Input, Marshal.SizeOf(Input));
         }
+
+        static public void mouseClick(int x, int y) {
+
+            INPUT Input = new INPUT();
+            Input.type = 0;
+            Input.mi.dx = x;
+            Input.mi.dy = y;
+            Input.mi.mouseData = 0;
+            Input.mi.dwFlags = (int)(MouseEventFlags.Absolute | MouseEventFlags.Move | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp);   //MOUSEEVENTF_ABSOLUTE 代表决对位置  MOUSEEVENTF_MOVE代表移动事件
+            Input.mi.time = 0;
+            Input.mi.dwExtraInfo = (IntPtr)0;
+            SendInput(1, ref Input, Marshal.SizeOf(Input));
+        }
     }
 }
