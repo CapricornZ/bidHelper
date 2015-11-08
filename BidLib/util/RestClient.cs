@@ -52,9 +52,9 @@ namespace tobid.util.http
             this.PostData = Newtonsoft.Json.JsonConvert.SerializeObject(postObj);
         }
 
-        public string MakeRequest()
+        public string MakeRequest(Boolean isBasicAuth=true)
         {
-            return MakeRequest(null);
+            return MakeRequest(null, isBasicAuth:isBasicAuth);
         }
 
         public string MakeRequest(string parameters, Boolean isBasicAuth=true)

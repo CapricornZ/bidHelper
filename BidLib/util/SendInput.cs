@@ -78,7 +78,7 @@ namespace tobid.util {
 
         static public void sendMessage(String message, int interval = 0)
         {
-            if (interval == 0)
+            if (interval == 0)  
                 WindowsInput.InputSimulator.SimulateTextEntry(message);
             else
             {
