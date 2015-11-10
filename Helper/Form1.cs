@@ -52,7 +52,9 @@ namespace Helper
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public Entry[] entries { get { return this.m_entries; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
-        public int interval { get { return Int16.Parse(this.toolStripTextBoxInterval.Text); } }
+        public int interval { get { 
+            return Int16.Parse(this.toolStripTextBoxInterval.Text); 
+        } }
         public String category
         {
             get
@@ -422,7 +424,7 @@ namespace Helper
                     //INPUT BOX
                     ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(100);
 
                     SendKeys.SendWait("{BACKSPACE 5}");
                     SendKeys.SendWait("{DEL 5}");
@@ -437,21 +439,7 @@ namespace Helper
                     txtPrice = String.Format("{0:D}", price);
 
                     logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-
-                    Clipboard.Clear();
-                    Clipboard.SetText(txtPrice);
-
-                    SendKeys.SendWait("^v");
-                    //KeyBoardUtil.sendMessage(txtPrice, this.interval);
-                    //for (int i = 0; i < txtPrice.Length; i++) {
-                        //System.Threading.Thread.Sleep(interval);
-                        ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0, 0);
-                        //KeyBoardUtil.sendKeyDown(txtPrice[i].ToString());
-                        //System.Threading.Thread.Sleep(interval);
-                        ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
-                        //KeyBoardUtil.sendKeyUp(txtPrice[i].ToString());
-
-                    //}
+                    KeyBoardUtil.sendMessage(txtPrice, interval);
                     System.Threading.Thread.Sleep(100);
 
                     logger.Info("\tEND   input PRICE");
@@ -622,49 +610,30 @@ namespace Helper
                     {
                         if (CaptchaInput.LEFT == input) {
 
-                            for (int i = 0; i <= 3; i++) {
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
-                            }
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(0, 4), this.interval);
                         }
                         if (CaptchaInput.MIDDLE == input) {
 
-                            for (int i = 1; i <= 4; i++) {
-
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
-                            }
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(1, 4), this.interval);
                         }
                         if (CaptchaInput.RIGHT == input) {
 
-                            for (int i = 2; i <= 5; i++) {
-
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0, 0);
-                                System.Threading.Thread.Sleep(interval);
-                                ScreenUtil.keybd_event(ScreenUtil.keycode[txtCaptcha[i].ToString()], 0, 0x2, 0);
-                            }
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(2, 4), this.interval);
                         }
                         if (CaptchaInput.AUTO == input) {
 
-                            //for (int i = 0; i < txtActive.Length; i++) {
-
-                                //System.Threading.Thread.Sleep(interval);
-                                ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0, 0);
-                                //KeyBoardUtil.sendKeyDown(txtActive[i].ToString());
-                                //System.Threading.Thread.Sleep(interval);
-                                ////ScreenUtil.keybd_event(ScreenUtil.keycode[txtActive[i].ToString()], 0, 0x2, 0);
-                                //KeyBoardUtil.sendKeyUp(txtActive[i].ToString());
-                            //}
                             KeyBoardUtil.sendMessage(txtActive, this.interval);
                         }
                     }
                     System.Threading.Thread.Sleep(100);
                     logger.Info("\tEND   input CAPTCHA");
+
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                    System.Threading.Thread.Sleep(50);
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
+                    System.Threading.Monitor.Exit(this.lockSubmit);
+                    return;
 
                     MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
                     DialogResult dr = MessageBox.Show("确定要提交出价吗?", "提交出价", messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -675,8 +644,6 @@ namespace Helper
                         ScreenUtil.SetCursorPos(x + bid.submit.buttons[0].x, y + bid.submit.buttons[0].y);//确定按钮
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         logger.Info("END   submitCAPTCHA");
-                        System.Threading.Monitor.Exit(this.lockSubmit);
-                        //return true;
                     } else {
 
                         logger.InfoFormat("用户选择取消出价");
@@ -684,8 +651,6 @@ namespace Helper
                         ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         logger.Info("END   submitCAPTCHA");
-                        System.Threading.Monitor.Exit(this.lockSubmit);
-                        //return false;
                     }
                 } else
                     logger.Error("SUBMIT Lock is not released!");
