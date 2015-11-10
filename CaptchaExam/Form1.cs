@@ -20,6 +20,7 @@ namespace CaptchaExam {
 
         private Captcha[] repository;
         private String endPoint = "http://139.196.24.58/captcha.server";
+        //private String endPoint = "http://10.228.89.102/captcha1";
 
         private void Form1_Load(object sender, EventArgs e) {
 
@@ -44,7 +45,7 @@ namespace CaptchaExam {
                         lastIndex = index;
                     else
                         goto reGen;
-                    String url = String.Format("{0}/{1}.bmp", this.endPoint, this.repository[index].value);
+                    String url = String.Format("{0}/{1}", this.endPoint, this.repository[index].url);
                     this.label2.Text = this.repository[index].tip;
                     this.pictureBox2.Image = null;
 
@@ -118,5 +119,6 @@ namespace CaptchaExam {
             mreg.Close();
             label1.Text = IEVersion;
         }
+
     }
 }

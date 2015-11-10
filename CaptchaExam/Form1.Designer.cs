@@ -25,21 +25,21 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.radioEasy = new System.Windows.Forms.RadioButton();
-            this.radioNormal = new System.Windows.Forms.RadioButton();
             this.radioHard = new System.Windows.Forms.RadioButton();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.radioNormal = new System.Windows.Forms.RadioButton();
+            this.radioEasy = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -56,10 +56,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "校验码测试";
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(220, 35);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(26, 24);
+            this.pictureBox2.TabIndex = 4;
+            this.pictureBox2.TabStop = false;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 68);
+            this.label2.Location = new System.Drawing.Point(15, 93);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 3;
@@ -68,7 +76,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(133, 68);
+            this.label1.Location = new System.Drawing.Point(137, 61);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
@@ -80,6 +88,14 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(79, 20);
             this.textBox1.TabIndex = 1;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(18, 32);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 33);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // timer1
             // 
@@ -107,15 +123,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "难度";
             // 
-            // radioEasy
+            // radioHard
             // 
-            this.radioEasy.AutoSize = true;
-            this.radioEasy.Location = new System.Drawing.Point(34, 18);
-            this.radioEasy.Name = "radioEasy";
-            this.radioEasy.Size = new System.Drawing.Size(49, 17);
-            this.radioEasy.TabIndex = 0;
-            this.radioEasy.Text = "天堂";
-            this.radioEasy.UseVisualStyleBackColor = true;
+            this.radioHard.AutoSize = true;
+            this.radioHard.Location = new System.Drawing.Point(177, 18);
+            this.radioHard.Name = "radioHard";
+            this.radioHard.Size = new System.Drawing.Size(49, 17);
+            this.radioHard.TabIndex = 2;
+            this.radioHard.Text = "地狱";
+            this.radioHard.UseVisualStyleBackColor = true;
             // 
             // radioNormal
             // 
@@ -129,31 +145,15 @@
             this.radioNormal.Text = "人间";
             this.radioNormal.UseVisualStyleBackColor = true;
             // 
-            // radioHard
+            // radioEasy
             // 
-            this.radioHard.AutoSize = true;
-            this.radioHard.Location = new System.Drawing.Point(177, 18);
-            this.radioHard.Name = "radioHard";
-            this.radioHard.Size = new System.Drawing.Size(49, 17);
-            this.radioHard.TabIndex = 2;
-            this.radioHard.Text = "地狱";
-            this.radioHard.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Location = new System.Drawing.Point(220, 35);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(26, 24);
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(18, 32);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 33);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.radioEasy.AutoSize = true;
+            this.radioEasy.Location = new System.Drawing.Point(34, 18);
+            this.radioEasy.Name = "radioEasy";
+            this.radioEasy.Size = new System.Drawing.Size(49, 17);
+            this.radioEasy.TabIndex = 0;
+            this.radioEasy.Text = "天堂";
+            this.radioEasy.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -169,10 +169,10 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }

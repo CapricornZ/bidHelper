@@ -8,5 +8,6 @@ namespace CaptchaExam {
     public class Captcha {
         public String tip { set; get; }
         public String value { get; set; }
+        public String url { get; set; }
     }
 }
