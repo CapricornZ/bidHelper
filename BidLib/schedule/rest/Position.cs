@@ -68,6 +68,8 @@ namespace tobid.rest.position
         public SubmitPrice submit { get; set; }
         public Position title { get; set; }
         public Position okButton { get; set; }
+        public Position time { get; set; }
+        /// <summary>PRICE(sm)</summary>
         public Position price { get; set; }
     }
 }

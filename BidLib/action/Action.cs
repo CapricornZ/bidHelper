@@ -51,7 +51,7 @@ namespace tobid.scheduler.jobs.action {
 
             this.fireTime = Convert.ToDateTime(fireTime);
             if (String.IsNullOrEmpty(expireTime))
-                this.expireTime = this.fireTime.AddSeconds(5);
+                this.expireTime = this.fireTime.AddMinutes(5);
             else
                 this.expireTime = Convert.ToDateTime(expireTime);
             this.action = action;

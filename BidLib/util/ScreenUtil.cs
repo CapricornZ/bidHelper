@@ -197,11 +197,20 @@ namespace tobid.util
         {
             System.IntPtr DesktopHandle = GetDC(System.IntPtr.Zero);
             Graphics g = Graphics.FromHdc(DesktopHandle);
-            //g.DrawRectangle(new Pen(Color.Red), new Rectangle(10, 10, 100, 100));
 
-            SolidBrush brush = new SolidBrush(Color.Red);
-            Font font = new System.Drawing.Font("黑体", 16);
-            g.DrawString(something, font, brush, new PointF(x, y));
+            int width = 70;
+            int height = 18;
+            Bitmap b = new Bitmap(width, height);
+            Graphics dc = Graphics.FromImage(b);
+
+            SolidBrush brush = new SolidBrush(Color.White);
+            SolidBrush brush1 = new SolidBrush(Color.Red);
+            Font font = new System.Drawing.Font("simsum", 10, FontStyle.Bold);
+
+            dc.FillRectangle(brush, 0, 0, width, height);
+            dc.DrawString(something, font, brush1, new PointF(0, 0));
+            g.DrawImage(b, x, y);
+            dc.Dispose();
         }
 
         public void screenCapture(int x, int y, int width, int height)

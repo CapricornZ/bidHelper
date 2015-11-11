@@ -30,8 +30,10 @@ namespace tobid.scheduler.jobs {
 
                 if (this.nextTask < this.tasks.Count) {
 
-                    if (this.tasks[this.nextTask].execute())
+                    if (this.tasks[this.nextTask].execute()) {
+                        Console.WriteLine("Execute OK");
                         this.nextTask++;
+                    }
 
                 }
                 Monitor.Exit(CustomJob.lockObj);

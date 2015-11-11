@@ -33,14 +33,17 @@ namespace Helper
             InitializeComponent();
         }
 
-        public Form1(String endPoint){
+        public Form1(String endPoint, String timePos){
 
             this.EndPoint = endPoint;
+            string[] pos = timePos.Split(new char[] { ',' });
+            this.TimePos = new Point(Convert.ToInt16(pos[0]), Convert.ToInt16(pos[1]));
             InitializeComponent();
         }
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
+        private Point TimePos { get; set; }
 
         #region IRepository
         public String endPoint { get { return this.EndPoint; } }
@@ -134,6 +137,7 @@ namespace Helper
             Hotkey.UnregisterHotKey(this.Handle, 221);
             Hotkey.UnregisterHotKey(this.Handle, 222);
             Hotkey.UnregisterHotKey(this.Handle, 223);
+            Hotkey.UnregisterHotKey(this.Handle, 224);
 
             logger.Info("Application Form Closed");
         }
@@ -235,23 +239,25 @@ namespace Helper
                 logger.Error(ex);
             }
 
-            Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
-            Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
-            Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
-            Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
-            Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
-            Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
-            Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
+            Boolean isOk = false;
+            isOk = Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
 
-            Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
-            Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
-            Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
-            Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
 
-            Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
-            Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
 
-            Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -284,68 +290,72 @@ namespace Helper
                 case WM_HOTKEY:
                     switch (m.WParam.ToInt32()) {
                         case 103://CTRL+3
-                            logger.Info("HOT KEY CTRL + 3 (103)");
+                            logger.Info("HOT KEY CTRL + 3 (103) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 104://CTRL+4
-                            logger.Info("HOT KEY CTRL + 4 (104)");
+                            logger.Info("HOT KEY CTRL + 4 (104) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 400);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 105://CTRL+5
-                            logger.Info("HOT KEY CTRL + 5 (105)");
+                            logger.Info("HOT KEY CTRL + 5 (105) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 500);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 106://CTRL+6
-                            logger.Info("HOT KEY CTRL + 6 (106)");
+                            logger.Info("HOT KEY CTRL + 6 (106) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 600);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 107://CTRL+7
-                            logger.Info("HOT KEY CTRL + 7 (107)");
+                            logger.Info("HOT KEY CTRL + 7 (107) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 700);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 108://CTRL+8
-                            logger.Info("HOT KEY CTRL + 8 (108)");
+                            logger.Info("HOT KEY CTRL + 8 (108) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 800);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 109://CTRL+9
-                            logger.Info("HOT KEY CTRL + 9 (109)");
+                            logger.Info("HOT KEY CTRL + 9 (109) trigger");
                             this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 900);
                             //ScreenUtil.SetForegroundWindow(this.Handle);
                             break;
                         case 201://LEFT
-                            logger.Info("HOT KEY CTRL + LEFT (201)");
+                            logger.Info("HOT KEY CTRL + LEFT (201) trigger");
                             this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
                             break;
                         case 202://UP
-                            logger.Info("HOT KEY CTRL + UP (202)");
+                            logger.Info("HOT KEY CTRL + UP (202) trigger");
                             this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.MIDDLE);
                             break;
                         case 203://RIGHT
-                            logger.Info("HOT KEY CTRL + RIGIHT (203)");
+                            logger.Info("HOT KEY CTRL + RIGIHT (203) trigger");
                             this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.RIGHT);
                             break;
                         case 204://CTRL + ENTER
-                            logger.Info("HOT KEY CTRL + ENTER (204)");
+                            logger.Info("HOT KEY CTRL + ENTER (204) trigger");
                             this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.AUTO);
                             break;
                         case 221://ESC
-                            logger.Info("HOT KEY ESCAPE");
+                            logger.Info("HOT KEY ESCAPE (221) trigger");
                             this.closeDialog(SubmitPriceStep2Job.getPosition());
                             break;
                         case 222://ENTER
-                            logger.Info("HOT KEY ENTER");
+                            logger.Info("HOT KEY ENTER (222) trigger");
                             //this.submitCaptcha(SubmitPriceStep2Job.getPosition());
                             this.processEnter(SubmitPriceStep2Job.getPosition());
                             break;
                         case 223://F9
-                            logger.Info("HOT KEY F9");
+                            logger.Info("HOT KEY F9 (223) trigger, +300");
                             this.fire(SubmitPriceStep2Job.getPosition(), 300);
+                            break;
+                        case 224://F12
+                            logger.Info("HOT KEY F12 (224) trigger, +1000");
+                            exam4Fire(1000);
                             break;
                     }
                     break;
@@ -383,8 +393,10 @@ namespace Helper
         }
 
         private void receiveOperation(Operation operation) {
+
             Step2Operation bid = operation as Step2Operation;
             if (null != bid) {
+                
                 this.textBox1.Text = bid.startTime.ToString("MM/dd HH:mm:ss");
                 this.textBox2.Text = String.Format("+{0}", bid.price);
             }
@@ -393,6 +405,7 @@ namespace Helper
         private void timer1_Tick(object sender, EventArgs e) {
 
             this.toolStripStatusLabel2.Text = String.Format("当前时间 {0}", DateTime.Now.ToString("HH:mm:ss"));
+            new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
         }
 
         public void acceptMessage(String msg){
@@ -424,10 +437,12 @@ namespace Helper
                     //INPUT BOX
                     ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(50);
 
                     SendKeys.SendWait("{BACKSPACE 5}");
                     SendKeys.SendWait("{DEL 5}");
+
+                    System.Threading.Thread.Sleep(50);
 
                     logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
                     logger.Info("\tBEGIN identify PRICE...");
@@ -513,10 +528,32 @@ namespace Helper
 
             ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            System.Threading.Thread.Sleep(150);
 
-            System.Threading.Thread.Sleep(250);
             SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
             job.Fire(delta);
+        }
+
+        private void exam4Fire(int delta) {
+
+            String fire1 = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            String fire2 = DateTime.Now.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
+
+            List<Task> tasks = new List<Task>();
+            Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
+                action: new tobid.scheduler.jobs.action.InputPriceAction(delta: delta, repo: this),
+                notify: this,
+                fireTime: fire1);
+            tasks.Add(taskInputPrice);
+
+            InputCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.InputCaptchaAction(repo: this);
+            Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); 
+            tasks.Add(taskInputCaptcha);
+
+            CustomJob job = new CustomJob(tasks: tasks);
+            job.Execute();
+            System.Threading.Thread.Sleep(2000);
+            job.Execute();
         }
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {

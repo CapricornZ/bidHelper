@@ -17,6 +17,7 @@ namespace Helper
         {
             String endPoint = ConfigurationManager.AppSettings["ENDPOINT"];
             String debug = ConfigurationManager.AppSettings["DEBUG"];
+            String timePos = ConfigurationManager.AppSettings["TimePosition"];
 
             if ("true".Equals(debug.ToLower()))
             {
@@ -30,7 +31,7 @@ namespace Helper
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(endPoint:endPoint));
+            Application.Run(new Form1(endPoint: endPoint, timePos: timePos));
         }
     }
 }
