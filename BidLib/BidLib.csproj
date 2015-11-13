@@ -86,6 +86,7 @@
     <Compile Include="util\RestClient.cs" />
     <Compile Include="util\ScreenUtil.cs" />
     <Compile Include="util\SendInput.cs" />
+    <Compile Include="util\SystemTime.cs" />
     <Compile Include="util\WinIO.cs" />
   </ItemGroup>
   <ItemGroup>

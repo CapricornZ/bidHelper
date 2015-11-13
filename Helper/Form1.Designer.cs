@@ -61,6 +61,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.国拍ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +94,10 @@
             this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
+            this.buttonAdd = new System.Windows.Forms.Button();
+            this.buttonMinus = new System.Windows.Forms.Button();
+            this.buttonSync = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -108,6 +113,7 @@
             this.tabPagePolicyV1.SuspendLayout();
             this.tabPagePolicyV2.SuspendLayout();
             this.tabPagePolicyCustom.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -423,6 +429,7 @@
             // 
             this.xToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.国拍ToolStripMenuItem,
+            this.toolStripSeparator1,
             this.模拟ToolStripMenuItem});
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
             this.xToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
@@ -433,16 +440,21 @@
             this.国拍ToolStripMenuItem.Checked = true;
             this.国拍ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.国拍ToolStripMenuItem.Name = "国拍ToolStripMenuItem";
-            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.国拍ToolStripMenuItem.Text = "国拍";
             this.国拍ToolStripMenuItem.Click += new System.EventHandler(this.国拍ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(107, 6);
             // 
             // 模拟ToolStripMenuItem
             // 
             this.模拟ToolStripMenuItem.Name = "模拟ToolStripMenuItem";
-            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
-            this.模拟ToolStripMenuItem.Text = "模拟";
-            this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.模拟ToolStripMenuItem_Click);
+            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.模拟ToolStripMenuItem.Text = "模拟51";
+            this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Simulate51_Click);
             // 
             // 配置ToolStripMenuItem
             // 
@@ -764,11 +776,54 @@
             this.tabPagePolicyCustom.Text = "策略(自定义)";
             this.tabPagePolicyCustom.UseVisualStyleBackColor = true;
             // 
+            // buttonAdd
+            // 
+            this.buttonAdd.Location = new System.Drawing.Point(74, 14);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(17, 23);
+            this.buttonAdd.TabIndex = 18;
+            this.buttonAdd.Text = "+";
+            this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.button_Add_Click);
+            // 
+            // buttonMinus
+            // 
+            this.buttonMinus.Location = new System.Drawing.Point(51, 14);
+            this.buttonMinus.Name = "buttonMinus";
+            this.buttonMinus.Size = new System.Drawing.Size(17, 23);
+            this.buttonMinus.TabIndex = 19;
+            this.buttonMinus.Text = "-";
+            this.buttonMinus.UseVisualStyleBackColor = true;
+            this.buttonMinus.Click += new System.EventHandler(this.button_Minus_Click);
+            // 
+            // buttonSync
+            // 
+            this.buttonSync.Location = new System.Drawing.Point(97, 14);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(57, 23);
+            this.buttonSync.TabIndex = 20;
+            this.buttonSync.Text = "Sync";
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.button_sync_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttonSync);
+            this.groupBox3.Controls.Add(this.buttonMinus);
+            this.groupBox3.Controls.Add(this.buttonAdd);
+            this.groupBox3.Location = new System.Drawing.Point(13, 255);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(165, 43);
+            this.groupBox3.TabIndex = 21;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "系统时间";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(485, 325);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBox1);
@@ -808,6 +863,7 @@
             this.tabPagePolicyV1.ResumeLayout(false);
             this.tabPagePolicyV2.ResumeLayout(false);
             this.tabPagePolicyCustom.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -878,6 +934,11 @@
         private System.Windows.Forms.Button buttonUpdateCustom;
         private System.Windows.Forms.CheckBox checkBoxInputCaptcha;
         private System.Windows.Forms.CheckBox checkBoxSubmitCaptcha;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.Button buttonMinus;
+        private System.Windows.Forms.Button buttonSync;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
 

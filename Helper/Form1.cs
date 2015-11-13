@@ -142,19 +142,18 @@ namespace Helper
             logger.Info("Application Form Closed");
         }
 
-        private void disableForm()
-        {
+        private void disableForm(){
             this.groupBoxPolicy.Enabled = false;
             this.panel3.Enabled = false;
         }
-        private void enableForm()
-        {
+
+        private void enableForm(){
             this.groupBoxPolicy.Enabled = true;
             this.panel3.Enabled = true;
         }
 
-        private void loadResource(String category)
-        {
+        private void loadResource(String category){
+
             //加载配置项1
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
             
@@ -901,55 +900,49 @@ namespace Helper
         #endregion
 
         #region 菜单ACTION
-        private void 国拍ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void 国拍ToolStripMenuItem_Click(object sender, EventArgs e){
+
             this.国拍ToolStripMenuItem.Checked = true;
             this.模拟ToolStripMenuItem.Checked = false;
-            try
-            {
+            try{
+
                 this.loadResource("real");
                 this.enableForm();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 logger.Error(ex);
                 this.disableForm();
             }
         }
 
-        private void 模拟ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void ToolStripMenuItem_Simulate51_Click(object sender, EventArgs e){
+
             this.国拍ToolStripMenuItem.Checked = false;
             this.模拟ToolStripMenuItem.Checked = true;
-            try
-            {
+            try {
+
                 this.loadResource("simulate");
                 this.enableForm();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 logger.Error(ex);
                 this.disableForm();
             }
         }
 
-        private void stepToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void stepToolStripMenuItem_Click(object sender, EventArgs e){
             this.step2Dialog.ShowDialog(this);
         }
 
-        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e)
-        {
+        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e){
+
             String credential = ConfigurationManager.AppSettings["credential"];
             String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入授权码", "", credential);
-            if (!String.IsNullOrEmpty(authCode))
-            {
+            if (!String.IsNullOrEmpty(authCode)){
+
                 Warrant warrant = new Warrant(authCode);
                 String hostName = System.Net.Dns.GetHostName();
                 String epKeepAlive = this.EndPoint + "/rest/service/command/register/" + hostName;
                 RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, warrant);
-                try
-                {
+                try{
                     String rtn = rest.MakeRequest(null, false);
 
                     Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -960,9 +953,7 @@ namespace Helper
 
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
                     DialogResult dr = MessageBox.Show(String.Format("请重新启动应用程序!\r\n主机名:{0}\r\n授权码:{1}", hostName, authCode), "授权成功", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                }
-                catch (Exception ex)
-                {
+                }catch (Exception ex){
                     logger.Error(ex);
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
                     DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
@@ -989,8 +980,8 @@ namespace Helper
             
         }
 
-        private void buttonLogin_Click_1(object sender, EventArgs e)
-        {
+        private void buttonLogin_Click_1(object sender, EventArgs e){
+
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
         }
@@ -1064,5 +1055,17 @@ namespace Helper
                 this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
         }
 
+        private void button_Add_Click(object sender, EventArgs e) {
+            SystemTimeUtil.addTime(1);
+        }
+
+        private void button_Minus_Click(object sender, EventArgs e) {
+            SystemTimeUtil.addTime(-1);
+        }
+
+        private void button_sync_Click(object sender, EventArgs e) {
+
+            SystemTimeUtil.SetInternetTime();
+        }
     }
 }

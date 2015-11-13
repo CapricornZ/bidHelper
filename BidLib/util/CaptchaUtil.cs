@@ -22,6 +22,9 @@ namespace tobid.util.orc{
 
         public String getActive(String captcha, Bitmap bitmapTips) {
 
+            String strThread = System.Threading.Thread.CurrentThread.Name;
+            System.Console.WriteLine(strThread);
+
             String strActive = "";
             String strTips = this.orcTips[0].IdentifyStringFromPic(bitmapTips);
             logger.Debug(strTips);
