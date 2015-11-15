@@ -391,8 +391,9 @@ namespace Helper
             if (!String.IsNullOrEmpty(client.memo)) {
 
                 this.toolStripStatusLabel3.Text = client.memo;
-                MessageBoxButtons messButton = MessageBoxButtons.OK;
-                DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);;
+                //MessageBoxButtons messButton = MessageBoxButtons.OK;
+                //DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);
+                this.notifyIcon1.ShowBalloonTip(5000, "操作提示", client.memo, ToolTipIcon.Info);
             }else
                 this.toolStripStatusLabel3.Text = "";
         }
@@ -916,6 +917,36 @@ namespace Helper
         #endregion
 
         #region 菜单ACTION
+
+        private void toolStripMenuReload_Click(object sender, EventArgs e) {
+
+            MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+            DialogResult dr = MessageBox.Show("放弃当前坐标配置，重新加载服务器配置？", "?", messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (dr == System.Windows.Forms.DialogResult.Cancel)
+                return;
+
+            if (this.国拍ToolStripMenuItem.Checked) {
+
+                try {
+                    this.loadResource("real");
+                    this.enableForm();
+                } catch (Exception ex) {
+                    logger.Error(ex);
+                    this.disableForm();
+                }
+            }
+            if (this.模拟ToolStripMenuItem.Checked) {
+
+                try {
+                    this.loadResource("simulate");
+                    this.enableForm();
+                } catch (Exception ex) {
+                    logger.Error(ex);
+                    this.disableForm();
+                }
+            }
+        }
+
         private void 国拍ToolStripMenuItem_Click(object sender, EventArgs e){
 
             this.国拍ToolStripMenuItem.Checked = true;
@@ -1084,5 +1115,7 @@ namespace Helper
             SystemTimeUtil.SetInternetTime();
         }
         #endregion
+
+        
     }
 }

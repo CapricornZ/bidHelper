@@ -98,6 +98,12 @@
             this.buttonMinus = new System.Windows.Forms.Button();
             this.buttonSync = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuReload = new System.Windows.Forms.ToolStripMenuItem();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -372,9 +378,9 @@
             this.groupBoxPolicy.Controls.Add(this.label2);
             this.groupBoxPolicy.Controls.Add(this.textBox2);
             this.groupBoxPolicy.Controls.Add(this.textBox1);
-            this.groupBoxPolicy.Location = new System.Drawing.Point(12, 27);
+            this.groupBoxPolicy.Location = new System.Drawing.Point(8, 27);
             this.groupBoxPolicy.Name = "groupBoxPolicy";
-            this.groupBoxPolicy.Size = new System.Drawing.Size(166, 96);
+            this.groupBoxPolicy.Size = new System.Drawing.Size(197, 96);
             this.groupBoxPolicy.TabIndex = 7;
             this.groupBoxPolicy.TabStop = false;
             this.groupBoxPolicy.Text = "服务器策略";
@@ -430,7 +436,9 @@
             this.xToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.国拍ToolStripMenuItem,
             this.toolStripSeparator1,
-            this.模拟ToolStripMenuItem});
+            this.模拟ToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.toolStripMenuReload});
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
             this.xToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.xToolStripMenuItem.Text = "环境选择";
@@ -440,19 +448,19 @@
             this.国拍ToolStripMenuItem.Checked = true;
             this.国拍ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.国拍ToolStripMenuItem.Name = "国拍ToolStripMenuItem";
-            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.国拍ToolStripMenuItem.Text = "国拍";
             this.国拍ToolStripMenuItem.Click += new System.EventHandler(this.国拍ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(107, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // 模拟ToolStripMenuItem
             // 
             this.模拟ToolStripMenuItem.Name = "模拟ToolStripMenuItem";
-            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.模拟ToolStripMenuItem.Text = "模拟51";
             this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Simulate51_Click);
             // 
@@ -517,35 +525,41 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.textBoxPID);
             this.groupBox1.Controls.Add(this.textBoxBPass);
             this.groupBox1.Controls.Add(this.textBoxBNO);
             this.groupBox1.Enabled = false;
-            this.groupBox1.Location = new System.Drawing.Point(12, 151);
+            this.groupBox1.Location = new System.Drawing.Point(8, 135);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(166, 102);
+            this.groupBox1.Size = new System.Drawing.Size(197, 102);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "标书信息";
             // 
             // textBoxPID
             // 
-            this.textBoxPID.Location = new System.Drawing.Point(23, 60);
+            this.textBoxPID.Location = new System.Drawing.Point(54, 60);
             this.textBoxPID.Name = "textBoxPID";
+            this.textBoxPID.ReadOnly = true;
             this.textBoxPID.Size = new System.Drawing.Size(129, 20);
             this.textBoxPID.TabIndex = 2;
             // 
             // textBoxBPass
             // 
-            this.textBoxBPass.Location = new System.Drawing.Point(23, 39);
+            this.textBoxBPass.Location = new System.Drawing.Point(54, 39);
             this.textBoxBPass.Name = "textBoxBPass";
+            this.textBoxBPass.ReadOnly = true;
             this.textBoxBPass.Size = new System.Drawing.Size(129, 20);
             this.textBoxBPass.TabIndex = 1;
             // 
             // textBoxBNO
             // 
-            this.textBoxBNO.Location = new System.Drawing.Point(23, 19);
+            this.textBoxBNO.Location = new System.Drawing.Point(54, 19);
             this.textBoxBNO.Name = "textBoxBNO";
+            this.textBoxBNO.ReadOnly = true;
             this.textBoxBNO.Size = new System.Drawing.Size(129, 20);
             this.textBoxBNO.TabIndex = 0;
             // 
@@ -687,10 +701,10 @@
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
             this.tabControl1.Controls.Add(this.tabPagePolicyV2);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
-            this.tabControl1.Location = new System.Drawing.Point(197, 27);
+            this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(280, 226);
+            this.tabControl1.Size = new System.Drawing.Size(266, 226);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
@@ -700,7 +714,7 @@
             this.tabPageManual.Controls.Add(this.groupBox2);
             this.tabPageManual.Location = new System.Drawing.Point(4, 22);
             this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(272, 200);
+            this.tabPageManual.Size = new System.Drawing.Size(258, 200);
             this.tabPageManual.TabIndex = 3;
             this.tabPageManual.Text = "手动";
             this.tabPageManual.UseVisualStyleBackColor = true;
@@ -771,14 +785,14 @@
             this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
             this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
-            this.tabPagePolicyCustom.Size = new System.Drawing.Size(272, 200);
+            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 200);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
             this.tabPagePolicyCustom.UseVisualStyleBackColor = true;
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(74, 14);
+            this.buttonAdd.Location = new System.Drawing.Point(96, 14);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(17, 23);
             this.buttonAdd.TabIndex = 18;
@@ -788,7 +802,7 @@
             // 
             // buttonMinus
             // 
-            this.buttonMinus.Location = new System.Drawing.Point(51, 14);
+            this.buttonMinus.Location = new System.Drawing.Point(73, 14);
             this.buttonMinus.Name = "buttonMinus";
             this.buttonMinus.Size = new System.Drawing.Size(17, 23);
             this.buttonMinus.TabIndex = 19;
@@ -798,7 +812,7 @@
             // 
             // buttonSync
             // 
-            this.buttonSync.Location = new System.Drawing.Point(97, 14);
+            this.buttonSync.Location = new System.Drawing.Point(119, 14);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(57, 23);
             this.buttonSync.TabIndex = 20;
@@ -811,12 +825,57 @@
             this.groupBox3.Controls.Add(this.buttonSync);
             this.groupBox3.Controls.Add(this.buttonMinus);
             this.groupBox3.Controls.Add(this.buttonAdd);
-            this.groupBox3.Location = new System.Drawing.Point(13, 255);
+            this.groupBox3.Location = new System.Drawing.Point(8, 247);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(165, 43);
+            this.groupBox3.Size = new System.Drawing.Size(197, 43);
             this.groupBox3.TabIndex = 21;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "系统时间";
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // toolStripMenuReload
+            // 
+            this.toolStripMenuReload.Name = "toolStripMenuReload";
+            this.toolStripMenuReload.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuReload.Text = "重新加载配置";
+            this.toolStripMenuReload.Click += new System.EventHandler(this.toolStripMenuReload_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(5, 22);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "投标号";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 42);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(31, 13);
+            this.label10.TabIndex = 5;
+            this.label10.Text = "密码";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 63);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(43, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "身份证";
             // 
             // Form1
             // 
@@ -940,6 +999,12 @@
         private System.Windows.Forms.Button buttonMinus;
         private System.Windows.Forms.Button buttonSync;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuReload;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
     }
 }
 
