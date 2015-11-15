@@ -65,7 +65,8 @@ namespace tobid.scheduler.jobs.action {
             DateTime now = DateTime.Now;
             TimeSpan diffFire = now - this.fireTime;
             TimeSpan diffExpire = now - this.expireTime;
-            if (diffFire.TotalSeconds >= 0) {
+            if (diffFire.TotalMilliseconds >= 500){
+            //if (diffFire.TotalSeconds >= 0) {
 
                 if (diffExpire.TotalSeconds <= 0)
                     this.action.execute();

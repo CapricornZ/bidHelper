@@ -122,6 +122,7 @@ namespace tobid.util
 
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     System.Console.WriteLine("Openning {0},{1}", entry.description, entry.url);
+                    
                     Browser.Navigate(entry.url);
                     try
                     {

@@ -138,6 +138,7 @@ namespace Helper
             Hotkey.UnregisterHotKey(this.Handle, 222);
             Hotkey.UnregisterHotKey(this.Handle, 223);
             Hotkey.UnregisterHotKey(this.Handle, 224);
+            Hotkey.UnregisterHotKey(this.Handle, 225);
 
             logger.Info("Application Form Closed");
         }
@@ -257,6 +258,7 @@ namespace Helper
 
             isOk = Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
             isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -354,7 +356,11 @@ namespace Helper
                             break;
                         case 224://F12
                             logger.Info("HOT KEY F12 (224) trigger, +1000");
-                            exam4Fire(1000);
+                            this.exam4Fire(1000);
+                            break;
+                        case 225://F4
+                            logger.Info("HOT KEY F4 (225) trigger");
+                            this.stopCurrentJob();
                             break;
                     }
                     break;
@@ -517,6 +523,18 @@ namespace Helper
                 logger.Info("proces Enter in [投标拍卖]");
                 this.submitCaptcha(SubmitPriceStep2Job.getPosition());
             }
+        }
+
+        private void stopCurrentJob() {
+
+            if (null != this.submitPriceStep2Thread)
+                this.submitPriceStep2Thread.Abort();
+
+            if (null != this.submitPriceV2Thread)
+                this.submitPriceV2Thread.Abort();
+
+            if (null != this.customThread)
+                this.customThread.Abort();
         }
 
         private void fire(tobid.rest.position.BidStep2 bid, int delta) {
@@ -763,16 +781,14 @@ namespace Helper
                 if (null != this.customThread)
                     this.customThread.Abort();
 
-                SchedulerConfiguration customConf = new SchedulerConfiguration(1000);
+                SchedulerConfiguration customConf = new SchedulerConfiguration(500);
                 customConf.Job = new CustomJob(tasks: tasks);
                 this.m_schedulerCustom = new Scheduler(customConf);
 
                 System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
                 this.customThread = new System.Threading.Thread(customThreadStart);
                 this.customThread.Name = "customThread";
-                this.customThread.Start();
-
-                
+                this.customThread.Start();                
             }
         }
 
@@ -1017,9 +1033,6 @@ namespace Helper
                     this.groupBoxCustom.Enabled = true;
                 }
 
-                if (null != this.keepAliveThread)
-                    this.keepAliveThread.Abort();
-
                 if (null != this.submitPriceStep2Thread)
                     this.submitPriceStep2Thread.Abort();
 
@@ -1041,6 +1054,7 @@ namespace Helper
         }
         #endregion
 
+        #region 时间
         private void checkBoxInputCaptcha_CheckedChanged(object sender, EventArgs e) {
             if (this.checkBoxInputCaptcha.Checked)
                 this.dateTimePickerCustomInputCaptcha.Enabled = true;
@@ -1056,16 +1070,19 @@ namespace Helper
         }
 
         private void button_Add_Click(object sender, EventArgs e) {
+            logger.Debug("+1 second");
             SystemTimeUtil.addTime(1);
         }
 
         private void button_Minus_Click(object sender, EventArgs e) {
+            logger.Debug("-1 second");
             SystemTimeUtil.addTime(-1);
         }
 
         private void button_sync_Click(object sender, EventArgs e) {
-
+            logger.Debug("internet time sync");
             SystemTimeUtil.SetInternetTime();
         }
+        #endregion
     }
 }

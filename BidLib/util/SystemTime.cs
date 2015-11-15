@@ -79,7 +79,7 @@ namespace tobid.util {
 
             //建立IPAddress对象与端口，创建IPEndPoint节点:  
             int port = 13;
-            string[] whost = { "5time.nist.gov", "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov", "tick.mit.edu", "time.windows.com", "clock.sgi.com" };
+            string[] whost = { "time-nw.nist.gov", "time-a.nist.gov", "time-b.nist.gov", "tick.mit.edu", "time.windows.com", "clock.sgi.com", "5time.nist.gov" };
 
             IPHostEntry iphostinfo;
             IPAddress ip;
@@ -111,37 +111,43 @@ namespace tobid.util {
                 return;
             }
 
-            //SOCKET同步接受数据  
-            byte[] RecvBuffer = new byte[1024];
-            int nBytes, nTotalBytes = 0;
-            StringBuilder sb = new StringBuilder();
-            System.Text.Encoding myE = Encoding.UTF8;
+            //SOCKET同步接受数据
+            try {
+                StringBuilder sb = new StringBuilder();
+            
+                byte[] RecvBuffer = new byte[1024];
+                int nBytes, nTotalBytes = 0;
+                System.Text.Encoding myE = Encoding.UTF8;
 
-            while ((nBytes = c.Receive(RecvBuffer, 0, 1024, SocketFlags.None)) > 0) {
-                nTotalBytes += nBytes;
-                sb.Append(myE.GetString(RecvBuffer, 0, nBytes));
+                while ((nBytes = c.Receive(RecvBuffer, 0, 1024, SocketFlags.None)) > 0) {
+                    nTotalBytes += nBytes;
+                    sb.Append(myE.GetString(RecvBuffer, 0, nBytes));
+                }
+
+                string[] o = sb.ToString().Split(' '); // 打断字符串
+
+                TimeSpan k = new TimeSpan();
+                k = (TimeSpan)(DateTime.Now - startDT);// 得到开始到现在所消耗的时间  
+
+                DateTime SetDT = Convert.ToDateTime(o[1] + " " + o[2]).Subtract(-k);// 减去中途消耗的时间
+
+                //处置北京时间 +8时
+                SetDT = SetDT.AddHours(8);
+
+                //转换System.DateTime到SystemTime
+                SystemTime st = new SystemTime();
+                st.FromDateTime(SetDT);
+                logger.Info("SET TIME " + SetDT);
+
+                //调用Win32 API设置系统时间  
+                SystemTimeUtil.SetLocalTime(ref st);
+                logger.Info("时间已同步");
+            } catch (Exception ex) {
+                logger.Warn(ex.Message);
+            } finally {
+                //关闭连接  
+                c.Close();
             }
-            //关闭连接  
-            c.Close();
-
-            string[] o = sb.ToString().Split(' '); // 打断字符串
-
-            TimeSpan k = new TimeSpan();
-            k = (TimeSpan)(DateTime.Now - startDT);// 得到开始到现在所消耗的时间  
-
-            DateTime SetDT = Convert.ToDateTime(o[1] + " " + o[2]).Subtract(-k);// 减去中途消耗的时间
-
-            //处置北京时间 +8时
-            SetDT = SetDT.AddHours(8);
-
-            //转换System.DateTime到SystemTime
-            SystemTime st = new SystemTime();
-            st.FromDateTime(SetDT);
-            logger.Info("SET TIME " + SetDT);
-
-            //调用Win32 API设置系统时间  
-            SystemTimeUtil.SetLocalTime(ref st);
-            logger.Info("时间已同步");
         }  
     }  
 }

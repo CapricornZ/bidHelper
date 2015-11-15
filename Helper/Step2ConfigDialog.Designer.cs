@@ -501,6 +501,7 @@
             this.Controls.Add(this.groupBoxOrigin);
             this.Controls.Add(this.groupBoxCaptcha);
             this.Controls.Add(this.groupBoxPrice);
+            this.MinimizeBox = false;
             this.Name = "Step2ConfigDialog";
             this.Text = "Step2ConfigDialog";
             this.Load += new System.EventHandler(this.Step2ConfigDialog_Load);

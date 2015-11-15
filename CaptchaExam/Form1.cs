@@ -37,6 +37,11 @@ namespace CaptchaExam {
                 this.button1.Enabled = false;
                 int correct = 0;
 
+                for (int i = 3; i > 0; i--) {//count down
+                    this.label1.Text = String.Format("{0}", i);
+                    System.Threading.Thread.Sleep(1000);
+                }
+
                 int lastIndex = -1;
                 for (int i = 0; i < 15; i++) {
                     reGen:
