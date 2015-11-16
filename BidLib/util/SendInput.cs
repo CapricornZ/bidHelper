@@ -87,19 +87,33 @@ namespace tobid.util {
             WindowsInput.InputSimulator.SimulateKeyUp(keycode[key]);
         }
 
-        static public void sendMessage(String message, int interval = 0){
+        static public void sendMessage(String message, int interval = 0, Boolean needClean=false){
 
             if(String.IsNullOrEmpty(message))
                 return;
 
+            int size = message.Length;
             if (interval == 0) {
 
                 logger.Debug(String.Format("INTERVAL:{0}, [SendInput]:{1}", interval, message));
+                if (needClean)
+                    for (int i = 0; i < size; i++)
+                    {
+                        WindowsInput.InputSimulator.SimulateKeyPress(WindowsInput.VirtualKeyCode.DELETE);
+                        WindowsInput.InputSimulator.SimulateKeyPress(WindowsInput.VirtualKeyCode.BACK);
+                    }
                 WindowsInput.InputSimulator.SimulateTextEntry(message);
             } else {
 
                 if (interval > 0) {
                     logger.Debug(String.Format("INTERVAL:{0}, [SendInput]:{1}", interval, message));
+
+                    if (needClean)
+                        for (int i = 0; i < size; i++)
+                        {
+                            WindowsInput.InputSimulator.SimulateKeyPress(WindowsInput.VirtualKeyCode.DELETE);
+                            WindowsInput.InputSimulator.SimulateKeyPress(WindowsInput.VirtualKeyCode.BACK);
+                        }
                     for (int i = 0; i < message.Length; i++) {
                         
                         //byte sendChar = ScreenUtil.keycode[message[i].ToString()];
@@ -126,8 +140,12 @@ namespace tobid.util {
                     System.Threading.Thread.Sleep(50);
                     String clipboard = System.Windows.Forms.Clipboard.GetText();
                     System.Console.WriteLine("ClipBoard:" + clipboard);
-                    System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}^v");
-                    //System.Windows.Forms.SendKeys.SendWait("^v");
+                    if (needClean)
+                    {
+                        
+                        System.Windows.Forms.SendKeys.SendWait(String.Format("{{BACKSPACE {0}}}{{DEL {0}}}^v", size));
+                    } else
+                        System.Windows.Forms.SendKeys.SendWait("^v");
                     //System.Windows.Forms.SendKeys.SendWait(message);
                     
                     //WindowsInput.InputSimulator.SimulateModifiedKeyStroke(

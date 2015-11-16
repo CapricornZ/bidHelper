@@ -68,6 +68,7 @@ namespace Helper
         private void Step2ConfigDialog_Load(object sender, EventArgs e)
         {
             BidStep2 bid = SubmitPriceStep2Job.getPosition();
+            this.checkboxDelta.Checked = this.m_repository.deltaPriceOnUI;
             if (bid != null) {
                 this.object2InputBox(this.textBox1, bid.give.price);
                 this.object2InputBox(this.textBox2, bid.give.inputBox);

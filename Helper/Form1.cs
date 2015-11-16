@@ -464,13 +464,12 @@ namespace Helper
                     }
                     else
                     {
-
                         //INPUT BOX
                         ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         System.Threading.Thread.Sleep(50);
 
-                        SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
+                        //SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
 
                         System.Threading.Thread.Sleep(50);
 
@@ -484,7 +483,7 @@ namespace Helper
                         txtPrice = String.Format("{0:D}", price);
 
                         logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-                        KeyBoardUtil.sendMessage(txtPrice, interval);
+                        KeyBoardUtil.sendMessage(txtPrice, interval:interval, needClean:true);
                         System.Threading.Thread.Sleep(100);
                         logger.Info("\tEND   input PRICE");
                     }
@@ -668,7 +667,7 @@ namespace Helper
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                     System.Threading.Thread.Sleep(50);
 
-                    SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
+                    //SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
                     logger.Info("\tEND   make INPUT blank");
 
                     logger.Info("\tBEGIN identify CAPTCHA...");
@@ -688,19 +687,19 @@ namespace Helper
                     {
                         if (CaptchaInput.LEFT == input) {
 
-                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(0, 4), this.interval);
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(0, 4), this.interval, true);
                         }
                         if (CaptchaInput.MIDDLE == input) {
 
-                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(1, 4), this.interval);
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(1, 4), this.interval, true);
                         }
                         if (CaptchaInput.RIGHT == input) {
 
-                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(2, 4), this.interval);
+                            KeyBoardUtil.sendMessage(txtCaptcha.Substring(2, 4), this.interval, true);
                         }
                         if (CaptchaInput.AUTO == input) {
 
-                            KeyBoardUtil.sendMessage(txtActive, this.interval);
+                            KeyBoardUtil.sendMessage(txtActive, this.interval, true);
                         }
                     }
                     System.Threading.Thread.Sleep(100);
