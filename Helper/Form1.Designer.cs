@@ -450,7 +450,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // 模拟ToolStripMenuItem
             // 
@@ -462,7 +462,7 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(158, 6);
             // 
             // toolStripMenuReload
             // 
@@ -662,7 +662,7 @@
             this.dateTimePickerCustomSubmitCaptcha.CustomFormat = "";
             this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
             this.dateTimePickerCustomSubmitCaptcha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomSubmitCaptcha.Location = new System.Drawing.Point(94, 104);
+            this.dateTimePickerCustomSubmitCaptcha.Location = new System.Drawing.Point(94, 102);
             this.dateTimePickerCustomSubmitCaptcha.Name = "dateTimePickerCustomSubmitCaptcha";
             this.dateTimePickerCustomSubmitCaptcha.ShowUpDown = true;
             this.dateTimePickerCustomSubmitCaptcha.Size = new System.Drawing.Size(82, 20);
@@ -674,7 +674,7 @@
             this.dateTimePickerCustomInputCaptcha.CustomFormat = "";
             this.dateTimePickerCustomInputCaptcha.Enabled = false;
             this.dateTimePickerCustomInputCaptcha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomInputCaptcha.Location = new System.Drawing.Point(94, 75);
+            this.dateTimePickerCustomInputCaptcha.Location = new System.Drawing.Point(94, 74);
             this.dateTimePickerCustomInputCaptcha.Name = "dateTimePickerCustomInputCaptcha";
             this.dateTimePickerCustomInputCaptcha.ShowUpDown = true;
             this.dateTimePickerCustomInputCaptcha.Size = new System.Drawing.Size(82, 20);
@@ -685,7 +685,7 @@
             // 
             this.dateTimePickerCustomPrice.CustomFormat = "";
             this.dateTimePickerCustomPrice.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomPrice.Location = new System.Drawing.Point(94, 47);
+            this.dateTimePickerCustomPrice.Location = new System.Drawing.Point(94, 46);
             this.dateTimePickerCustomPrice.Name = "dateTimePickerCustomPrice";
             this.dateTimePickerCustomPrice.ShowUpDown = true;
             this.dateTimePickerCustomPrice.Size = new System.Drawing.Size(82, 20);

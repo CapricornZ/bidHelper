@@ -146,6 +146,8 @@ namespace Helper
             SubmitPriceStep2Job.setPosition(bid);
 
             this.BidStep2 = bid;
+
+            this.m_repository.deltaPriceOnUI = this.checkboxDelta.Checked;
             
             this.cancel = false;
             this.Close();

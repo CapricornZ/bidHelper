@@ -45,6 +45,7 @@ namespace Helper
         private String EndPoint { get; set; }
 
         #region IRepository
+        public Boolean deltaPriceOnUI { get; set; }
         public Point TimePos { get; set; }
         public String endPoint { get { return this.EndPoint; } }
         public IOrc orcTitle { get { return this.m_orcTitle; } }
@@ -356,7 +357,8 @@ namespace Helper
                             break;
                         case 224://F12
                             logger.Info("HOT KEY F12 (224) trigger, +1000");
-                            this.exam4Fire(1000);
+                            //this.exam4Fire(1000);
+                            this.fire(SubmitPriceStep2Job.getPosition(), 1000);
                             break;
                         case 225://F4
                             logger.Info("HOT KEY F4 (225) trigger");
@@ -440,22 +442,27 @@ namespace Helper
                     int x = origin.X;
                     int y = origin.Y;
 
-                    /*if (bid.give.delta != null)
+                    if(this.deltaPriceOnUI && bid.give.delta != null)
                     {
+                        logger.Info("\tBEGIN make delta PRICE blank...");
                         ScreenUtil.SetCursorPos(x + bid.give.delta.inputBox.x, y + bid.give.delta.inputBox.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         System.Threading.Thread.Sleep(50);
+                        SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
+                        logger.Info("\tEND   make delta PRICE blank.");
 
-                        SendKeys.SendWait("{BACKSPACE 5}");
-                        SendKeys.SendWait("{DEL 5}");
+                        logger.Info("\tBEGIN input delta PRICE...");
                         KeyBoardUtil.sendMessage(Convert.ToString(delta), interval);
+                        logger.Info("\tEND   input delta PRICE.");
                         System.Threading.Thread.Sleep(50);
 
+                        logger.Info("\tBEGIN click delta PRICE button");
                         ScreenUtil.SetCursorPos(x + bid.give.delta.button.x, y + bid.give.delta.button.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                        logger.Info("\tEND   click delta PRICE button");
                         System.Threading.Thread.Sleep(50);
                     }
-                    else*/
+                    else
                     {
 
                         //INPUT BOX
@@ -463,8 +470,7 @@ namespace Helper
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         System.Threading.Thread.Sleep(50);
 
-                        SendKeys.SendWait("{BACKSPACE 5}");
-                        SendKeys.SendWait("{DEL 5}");
+                        SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
 
                         System.Threading.Thread.Sleep(50);
 
@@ -564,7 +570,7 @@ namespace Helper
 
             ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            System.Threading.Thread.Sleep(150);
+            System.Threading.Thread.Sleep(100);
 
             SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
             job.Fire(delta);
@@ -662,8 +668,7 @@ namespace Helper
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                     System.Threading.Thread.Sleep(50);
 
-                    SendKeys.SendWait("{BACKSPACE 4}");
-                    SendKeys.SendWait("{DEL 4}");
+                    SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
                     logger.Info("\tEND   make INPUT blank");
 
                     logger.Info("\tBEGIN identify CAPTCHA...");

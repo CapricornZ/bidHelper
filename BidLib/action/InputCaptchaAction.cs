@@ -37,8 +37,7 @@ namespace tobid.scheduler.jobs.action {
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             System.Threading.Thread.Sleep(50);
 
-            System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}");
-            System.Windows.Forms.SendKeys.SendWait("{DEL 4}");
+            System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
             logger.Info("\tEND   make INPUT blank");
 
             logger.Info("\tBEGIN identify CAPTCHA...");

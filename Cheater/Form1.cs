@@ -45,6 +45,7 @@ namespace Cheater {
         private CaptchaUtil m_orcCaptchaTipsUtil;
 
         #region IRepository
+        public Boolean deltaPriceOnUI { get; set; }
         public Point TimePos { get; set; }
         public String endPoint { get { return this.EndPoint; } }
         public IOrc orcTitle { get { return this.m_orcTitle; } }

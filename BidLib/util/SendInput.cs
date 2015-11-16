@@ -126,7 +126,8 @@ namespace tobid.util {
                     System.Threading.Thread.Sleep(50);
                     String clipboard = System.Windows.Forms.Clipboard.GetText();
                     System.Console.WriteLine("ClipBoard:" + clipboard);
-                    System.Windows.Forms.SendKeys.SendWait("^v");
+                    System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}^v");
+                    //System.Windows.Forms.SendKeys.SendWait("^v");
                     //System.Windows.Forms.SendKeys.SendWait(message);
                     
                     //WindowsInput.InputSimulator.SimulateModifiedKeyStroke(

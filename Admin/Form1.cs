@@ -55,6 +55,7 @@ namespace Admin {
         private Step1Form m_step1Form;
 
         #region IRepository
+        public Boolean deltaPriceOnUI { get; set; }
         public Point TimePos { get; set; }
         public String endPoint { get { return this.m_endPoint; } }
         public IOrc orcTitle { get { return this.m_orcTitle; } }
