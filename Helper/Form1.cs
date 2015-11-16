@@ -43,9 +43,9 @@ namespace Helper
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
-        private Point TimePos { get; set; }
 
         #region IRepository
+        public Point TimePos { get; set; }
         public String endPoint { get { return this.EndPoint; } }
         public IOrc orcTitle { get { return this.m_orcTitle; } }
         public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
@@ -440,30 +440,48 @@ namespace Helper
                     int x = origin.X;
                     int y = origin.Y;
 
-                    //INPUT BOX
-                    ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
-                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                    System.Threading.Thread.Sleep(50);
+                    /*if (bid.give.delta != null)
+                    {
+                        ScreenUtil.SetCursorPos(x + bid.give.delta.inputBox.x, y + bid.give.delta.inputBox.y);
+                        ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                        System.Threading.Thread.Sleep(50);
 
-                    SendKeys.SendWait("{BACKSPACE 5}");
-                    SendKeys.SendWait("{DEL 5}");
+                        SendKeys.SendWait("{BACKSPACE 5}");
+                        SendKeys.SendWait("{DEL 5}");
+                        KeyBoardUtil.sendMessage(Convert.ToString(delta), interval);
+                        System.Threading.Thread.Sleep(50);
 
-                    System.Threading.Thread.Sleep(50);
+                        ScreenUtil.SetCursorPos(x + bid.give.delta.button.x, y + bid.give.delta.button.y);
+                        ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                        System.Threading.Thread.Sleep(50);
+                    }
+                    else*/
+                    {
 
-                    logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
-                    logger.Info("\tBEGIN identify PRICE...");
-                    byte[] content = new ScreenUtil().screenCaptureAsByte(x + bid.give.price.x, y + bid.give.price.y, 52, 18);
-                    String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
-                    int price = Int32.Parse(txtPrice);
-                    price += delta;
-                    logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
-                    txtPrice = String.Format("{0:D}", price);
+                        //INPUT BOX
+                        ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
+                        ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                        System.Threading.Thread.Sleep(50);
 
-                    logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-                    KeyBoardUtil.sendMessage(txtPrice, interval);
-                    System.Threading.Thread.Sleep(100);
+                        SendKeys.SendWait("{BACKSPACE 5}");
+                        SendKeys.SendWait("{DEL 5}");
 
-                    logger.Info("\tEND   input PRICE");
+                        System.Threading.Thread.Sleep(50);
+
+                        logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
+                        logger.Info("\tBEGIN identify PRICE...");
+                        byte[] content = new ScreenUtil().screenCaptureAsByte(x + bid.give.price.x, y + bid.give.price.y, 52, 18);
+                        String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+                        int price = Int32.Parse(txtPrice);
+                        price += delta;
+                        logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
+                        txtPrice = String.Format("{0:D}", price);
+
+                        logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
+                        KeyBoardUtil.sendMessage(txtPrice, interval);
+                        System.Threading.Thread.Sleep(100);
+                        logger.Info("\tEND   input PRICE");
+                    }
 
                     //点击出价
                     logger.Info("\tBEGIN click BUTTON[出价]");
@@ -1099,23 +1117,7 @@ namespace Helper
             else
                 this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
         }
-
-        private void button_Add_Click(object sender, EventArgs e) {
-            logger.Debug("+1 second");
-            SystemTimeUtil.addTime(1);
-        }
-
-        private void button_Minus_Click(object sender, EventArgs e) {
-            logger.Debug("-1 second");
-            SystemTimeUtil.addTime(-1);
-        }
-
-        private void button_sync_Click(object sender, EventArgs e) {
-            logger.Debug("internet time sync");
-            SystemTimeUtil.SetInternetTime();
-        }
         #endregion
 
-        
     }
 }

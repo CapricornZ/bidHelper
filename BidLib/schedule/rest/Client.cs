@@ -77,8 +77,7 @@ namespace tobid.rest
     /// </summary>
     public class Warrant
     {
-        public Warrant(String code)
-        {
+        public Warrant(String code){
             this.code = code;
         }
 

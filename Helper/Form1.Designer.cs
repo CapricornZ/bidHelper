@@ -63,6 +63,8 @@
             this.国拍ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.模拟ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuReload = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +73,9 @@
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.textBoxPID = new System.Windows.Forms.TextBox();
             this.textBoxBPass = new System.Windows.Forms.TextBox();
             this.textBoxBNO = new System.Windows.Forms.TextBox();
@@ -94,16 +99,7 @@
             this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
-            this.buttonAdd = new System.Windows.Forms.Button();
-            this.buttonMinus = new System.Windows.Forms.Button();
-            this.buttonSync = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuReload = new System.Windows.Forms.ToolStripMenuItem();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -119,7 +115,6 @@
             this.tabPagePolicyV1.SuspendLayout();
             this.tabPagePolicyV2.SuspendLayout();
             this.tabPagePolicyCustom.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -407,7 +402,7 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 301);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 283);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(485, 24);
             this.statusStrip1.TabIndex = 6;
@@ -440,29 +435,41 @@
             this.toolStripSeparator2,
             this.toolStripMenuReload});
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.xToolStripMenuItem.Text = "环境选择";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.xToolStripMenuItem.Text = "环境选择(&E)";
             // 
             // 国拍ToolStripMenuItem
             // 
             this.国拍ToolStripMenuItem.Checked = true;
             this.国拍ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.国拍ToolStripMenuItem.Name = "国拍ToolStripMenuItem";
-            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.国拍ToolStripMenuItem.Text = "国拍";
+            this.国拍ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.国拍ToolStripMenuItem.Text = "国拍(&G)";
             this.国拍ToolStripMenuItem.Click += new System.EventHandler(this.国拍ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // 模拟ToolStripMenuItem
             // 
             this.模拟ToolStripMenuItem.Name = "模拟ToolStripMenuItem";
-            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.模拟ToolStripMenuItem.Text = "模拟51";
+            this.模拟ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.模拟ToolStripMenuItem.Text = "模拟51(&H)";
             this.模拟ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Simulate51_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
+            // 
+            // toolStripMenuReload
+            // 
+            this.toolStripMenuReload.Name = "toolStripMenuReload";
+            this.toolStripMenuReload.Size = new System.Drawing.Size(161, 22);
+            this.toolStripMenuReload.Text = "重新加载配置(&R)";
+            this.toolStripMenuReload.Click += new System.EventHandler(this.toolStripMenuReload_Click);
             // 
             // 配置ToolStripMenuItem
             // 
@@ -471,21 +478,21 @@
             this.ToolStripMenuItemAuthCode,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
-            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.配置ToolStripMenuItem.Text = "配置";
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.配置ToolStripMenuItem.Text = "配置(&P)";
             // 
             // stepToolStripMenuItem
             // 
             this.stepToolStripMenuItem.Name = "stepToolStripMenuItem";
             this.stepToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.stepToolStripMenuItem.Text = "阶段2坐标";
+            this.stepToolStripMenuItem.Text = "阶段2(&2)";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
             // ToolStripMenuItemAuthCode
             // 
             this.ToolStripMenuItemAuthCode.Name = "ToolStripMenuItemAuthCode";
             this.ToolStripMenuItemAuthCode.Size = new System.Drawing.Size(160, 22);
-            this.ToolStripMenuItemAuthCode.Text = "授权码";
+            this.ToolStripMenuItemAuthCode.Text = "授权码(&A)";
             this.ToolStripMenuItemAuthCode.Click += new System.EventHandler(this.ToolStripMenuItemAuthCode_Click);
             // 
             // toolStripTextBoxInterval
@@ -532,12 +539,39 @@
             this.groupBox1.Controls.Add(this.textBoxBPass);
             this.groupBox1.Controls.Add(this.textBoxBNO);
             this.groupBox1.Enabled = false;
-            this.groupBox1.Location = new System.Drawing.Point(8, 135);
+            this.groupBox1.Location = new System.Drawing.Point(8, 131);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(197, 102);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "标书信息";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 63);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(43, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "身份证";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 42);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(31, 13);
+            this.label10.TabIndex = 5;
+            this.label10.Text = "密码";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(5, 22);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "投标号";
             // 
             // textBoxPID
             // 
@@ -568,7 +602,7 @@
             this.panel3.Controls.Add(this.buttonLogin);
             this.panel3.Controls.Add(this.buttonIE);
             this.panel3.Controls.Add(this.buttonURL);
-            this.panel3.Location = new System.Drawing.Point(242, 261);
+            this.panel3.Location = new System.Drawing.Point(14, 243);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(188, 29);
             this.panel3.TabIndex = 15;
@@ -704,20 +738,20 @@
             this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(266, 226);
+            this.tabControl1.Size = new System.Drawing.Size(266, 242);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
             // 
             // tabPageManual
             // 
+            this.tabPageManual.BackColor = System.Drawing.SystemColors.Control;
             this.tabPageManual.Controls.Add(this.groupBox2);
             this.tabPageManual.Location = new System.Drawing.Point(4, 22);
             this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(258, 200);
+            this.tabPageManual.Size = new System.Drawing.Size(258, 216);
             this.tabPageManual.TabIndex = 3;
             this.tabPageManual.Text = "手动";
-            this.tabPageManual.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -764,7 +798,7 @@
             this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV1.Name = "tabPagePolicyV1";
             this.tabPagePolicyV1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV1.Size = new System.Drawing.Size(272, 200);
+            this.tabPagePolicyV1.Size = new System.Drawing.Size(258, 216);
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
             this.tabPagePolicyV1.UseVisualStyleBackColor = true;
@@ -775,7 +809,7 @@
             this.tabPagePolicyV2.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV2.Name = "tabPagePolicyV2";
             this.tabPagePolicyV2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV2.Size = new System.Drawing.Size(272, 200);
+            this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 216);
             this.tabPagePolicyV2.TabIndex = 1;
             this.tabPagePolicyV2.Text = "策略V2";
             this.tabPagePolicyV2.UseVisualStyleBackColor = true;
@@ -785,52 +819,10 @@
             this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
             this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
-            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 200);
+            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 216);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
             this.tabPagePolicyCustom.UseVisualStyleBackColor = true;
-            // 
-            // buttonAdd
-            // 
-            this.buttonAdd.Location = new System.Drawing.Point(96, 14);
-            this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(17, 23);
-            this.buttonAdd.TabIndex = 18;
-            this.buttonAdd.Text = "+";
-            this.buttonAdd.UseVisualStyleBackColor = true;
-            this.buttonAdd.Click += new System.EventHandler(this.button_Add_Click);
-            // 
-            // buttonMinus
-            // 
-            this.buttonMinus.Location = new System.Drawing.Point(73, 14);
-            this.buttonMinus.Name = "buttonMinus";
-            this.buttonMinus.Size = new System.Drawing.Size(17, 23);
-            this.buttonMinus.TabIndex = 19;
-            this.buttonMinus.Text = "-";
-            this.buttonMinus.UseVisualStyleBackColor = true;
-            this.buttonMinus.Click += new System.EventHandler(this.button_Minus_Click);
-            // 
-            // buttonSync
-            // 
-            this.buttonSync.Location = new System.Drawing.Point(119, 14);
-            this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(57, 23);
-            this.buttonSync.TabIndex = 20;
-            this.buttonSync.Text = "Sync";
-            this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.button_sync_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.buttonSync);
-            this.groupBox3.Controls.Add(this.buttonMinus);
-            this.groupBox3.Controls.Add(this.buttonAdd);
-            this.groupBox3.Location = new System.Drawing.Point(8, 247);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(197, 43);
-            this.groupBox3.TabIndex = 21;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "系统时间";
             // 
             // notifyIcon1
             // 
@@ -838,51 +830,11 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripMenuReload
-            // 
-            this.toolStripMenuReload.Name = "toolStripMenuReload";
-            this.toolStripMenuReload.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuReload.Text = "重新加载配置";
-            this.toolStripMenuReload.Click += new System.EventHandler(this.toolStripMenuReload_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(5, 22);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(43, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "投标号";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 42);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(31, 13);
-            this.label10.TabIndex = 5;
-            this.label10.Text = "密码";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 63);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(43, 13);
-            this.label14.TabIndex = 6;
-            this.label14.Text = "身份证";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 325);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(485, 307);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBox1);
@@ -923,7 +875,6 @@
             this.tabPagePolicyV1.ResumeLayout(false);
             this.tabPagePolicyV2.ResumeLayout(false);
             this.tabPagePolicyCustom.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -995,10 +946,6 @@
         private System.Windows.Forms.CheckBox checkBoxInputCaptcha;
         private System.Windows.Forms.CheckBox checkBoxSubmitCaptcha;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.Button buttonAdd;
-        private System.Windows.Forms.Button buttonMinus;
-        private System.Windows.Forms.Button buttonSync;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuReload;

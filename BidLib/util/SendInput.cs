@@ -126,11 +126,13 @@ namespace tobid.util {
                     System.Threading.Thread.Sleep(50);
                     String clipboard = System.Windows.Forms.Clipboard.GetText();
                     System.Console.WriteLine("ClipBoard:" + clipboard);
-                    System.Windows.Forms.SendKeys.SendWait("^V");
+                    System.Windows.Forms.SendKeys.SendWait("^v");
+                    //System.Windows.Forms.SendKeys.SendWait(message);
                     
                     //WindowsInput.InputSimulator.SimulateModifiedKeyStroke(
-                    //    WindowsInput.VirtualKeyCode.CONTROL, 
-                    //    WindowsInput.VirtualKeyCode.VK_C);
+                    //    WindowsInput.VirtualKeyCode.RCONTROL, 
+                    //    WindowsInput.VirtualKeyCode.VK_V);
+
                     System.Windows.Forms.Clipboard.Clear();
                 }
             }

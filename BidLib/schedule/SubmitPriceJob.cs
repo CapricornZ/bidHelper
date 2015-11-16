@@ -17,7 +17,8 @@ using tobid.scheduler;
 namespace tobid.scheduler.jobs
 {
     public interface IRepository
-    {   
+    {
+        Point TimePos { get; set; }
         IOrc orcTitle { get; }
         IOrc orcCaptcha { get; }
         IOrc orcPrice { get; }

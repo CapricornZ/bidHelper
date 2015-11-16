@@ -17,6 +17,7 @@ namespace Helper
 {
     public partial class Step2ConfigDialog : Form
     {
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Step2ConfigDialog));
         public Boolean cancel { get; set; }
         private PictureBox[] m_pictureSubs;
         private IRepository m_repository;
@@ -71,20 +72,32 @@ namespace Helper
                 this.object2InputBox(this.textBox1, bid.give.price);
                 this.object2InputBox(this.textBox2, bid.give.inputBox);
                 this.object2InputBox(this.textBox3, bid.give.button);
+                if (bid.give.delta != null)
+                {
+                    this.object2InputBox(this.textDeltaInput, bid.give.delta.inputBox);
+                    this.object2InputBox(this.textDeltaButton, bid.give.delta.button);
+                }
+                else
+                {
+                    this.object2InputBox(this.textDeltaButton, new Position(0, 0));
+                    this.object2InputBox(this.textDeltaInput, new Position(0, 0));
+                }
 
                 this.object2InputBox(this.textBox4, bid.submit.captcha[0]);
                 this.object2InputBox(this.textBox5, bid.submit.captcha[1]);
                 this.object2InputBox(this.textBox6, bid.submit.inputBox);
                 this.object2InputBox(this.textBox7, bid.submit.buttons[0]);
 
-                //this.object2InputBox(this.textBoxOrigin, bid.Origin);
                 this.object2InputBox(this.textBoxTitle, bid.title);
                 this.object2InputBox(this.textBoxTitleOk, bid.okButton);
                 this.object2InputBox(this.textBoxPriceSM, bid.price);
             } else {
+
                 this.object2InputBox(this.textBox1, new Position(0, 0));
                 this.object2InputBox(this.textBox2, new Position(0, 0));
                 this.object2InputBox(this.textBox3, new Position(0, 0));
+                this.object2InputBox(this.textDeltaButton, new Position(0, 0));
+                this.object2InputBox(this.textDeltaInput, new Position(0, 0));
 
                 this.object2InputBox(this.textBox4, new Position(0, 0));
                 this.object2InputBox(this.textBox5, new Position(0, 0));
@@ -100,10 +113,15 @@ namespace Helper
 
         private void buttonOK_Click(object sender, EventArgs e) {
 
+            Delta delta = new Delta();
+            delta.inputBox = this.inputBox2Object(this.textDeltaInput);
+            delta.button = this.inputBox2Object(this.textDeltaButton);
+
             GivePriceStep2 givePrice = new GivePriceStep2();
             givePrice.price = this.inputBox2Object(this.textBox1);//价格
             givePrice.inputBox = this.inputBox2Object(this.textBox2);//输入价格
             givePrice.button = this.inputBox2Object(this.textBox3);//出价按钮
+            givePrice.delta = delta;//
 
             SubmitPrice submit = new SubmitPrice();
             submit.captcha = new Position[]{
@@ -217,6 +235,66 @@ namespace Helper
             System.Console.WriteLine(String.Format("goto : {{ x:{0}, y:{1} }}", pos.x, pos.y));
         }
 
-        
+        #region timer position
+        private void buttonUp_Click(object sender, EventArgs e)
+        {
+            Point pos = this.m_repository.TimePos;
+            pos.Y-=5;
+            this.m_repository.TimePos = pos;
+        }
+
+        private void buttonDown_Click(object sender, EventArgs e)
+        {
+            Point pos = this.m_repository.TimePos;
+            pos.Y+=5;
+            this.m_repository.TimePos = pos;
+        }
+
+        private void buttonLeft_Click(object sender, EventArgs e)
+        {
+            Point pos = this.m_repository.TimePos;
+            pos.X-=5;
+            this.m_repository.TimePos = pos;
+        }
+
+        private void buttonRight_Click(object sender, EventArgs e)
+        {
+            Point pos = this.m_repository.TimePos;
+            pos.X+=5;
+            this.m_repository.TimePos = pos;
+        }
+
+        private void buttonTimeSync_Click(object sender, EventArgs e)
+        {
+            logger.Debug("internet time sync");
+            SystemTimeUtil.SetInternetTime();
+        }
+
+        private void buttonSecAdd_Click(object sender, EventArgs e)
+        {
+            logger.Debug("+1 second");
+            SystemTimeUtil.addTime(1);
+        }
+
+        private void buttonSecMinus_Click(object sender, EventArgs e)
+        {
+            logger.Debug("-1 second");
+            SystemTimeUtil.addTime(-1);
+        }
+        #endregion
+
+        private void Delta_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkboxDelta.Checked)
+            {
+                this.textDeltaButton.Enabled = true;
+                this.textDeltaInput.Enabled = true;
+            }
+            else
+            {
+                this.textDeltaInput.Enabled = false;
+                this.textDeltaButton.Enabled = false;
+            }
+        }
     }
 }

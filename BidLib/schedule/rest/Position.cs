@@ -33,6 +33,13 @@ namespace tobid.rest.position
         public Position price { get; set; }
         public Position inputBox { get; set; }
         public Position button { get; set; }
+        public Delta delta { get; set; }
+    }
+
+    public class Delta
+    {
+        public Position inputBox { get; set; }
+        public Position button { get; set; }
     }
 
     /// <summary>
