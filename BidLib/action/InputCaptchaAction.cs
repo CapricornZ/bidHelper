@@ -22,7 +22,8 @@ namespace tobid.scheduler.jobs.action {
             logger.Debug(message);
         }
 
-        public bool execute() {
+        public bool execute()
+        {
 
             Point origin = IEUtil.findOrigin();
             int x = origin.X;
@@ -45,7 +46,8 @@ namespace tobid.scheduler.jobs.action {
             int retry = 0;
             byte[] binaryCaptcha = null;
             Bitmap bitMap = null;
-            while (isLoading) {//1.5秒后，放弃
+            while (isLoading)
+            {//1.5秒后，放弃
 
                 System.Threading.Thread.Sleep(100);
 
@@ -56,7 +58,8 @@ namespace tobid.scheduler.jobs.action {
 
                 int count = 0;
                 for (int nX = 0; nX < bitMap.Width; nX++)
-                    for (int nY = 0; nY < bitMap.Height; nY++) {
+                    for (int nY = 0; nY < bitMap.Height; nY++)
+                    {
                         Color color = bitMap.GetPixel(nX, nY);
                         if (color.R == color.G && color.G == color.B && color.B < 200)
                             count++;
@@ -64,10 +67,18 @@ namespace tobid.scheduler.jobs.action {
 
                 System.Console.WriteLine("COUNT:" + count);
                 isLoading = count > 500;
-                if (isLoading && retry > 15) {
+                if (isLoading && retry > 15)
+                {
                     logger.InfoFormat("\tLoading captcha timeout.");
                     return false;//放弃本次出价
                 }
+            }
+
+            {//保存
+                String fileName = DateTime.Now.ToString("MMdd-HHmmss");
+                if (!System.IO.Directory.Exists("Captchas"))
+                    System.IO.Directory.CreateDirectory("Captchas");
+                bitMap.Save(String.Format("Captchas/{0}.bmp", fileName));
             }
 
             String txtCaptcha = this.repository.orcCaptcha.IdentifyStringFromPic(bitMap);
@@ -83,7 +94,7 @@ namespace tobid.scheduler.jobs.action {
             System.Threading.Thread.Sleep(50);
 
             ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero); 
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
 
             System.Threading.Thread.Sleep(50);

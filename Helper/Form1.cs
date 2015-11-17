@@ -355,10 +355,10 @@ namespace Helper
                             logger.Info("HOT KEY F9 (223) trigger, +300");
                             this.fire(SubmitPriceStep2Job.getPosition(), 300);
                             break;
-                        case 224://F12
-                            logger.Info("HOT KEY F12 (224) trigger, +1000");
-                            //this.exam4Fire(1000);
-                            this.fire(SubmitPriceStep2Job.getPosition(), 1000);
+                        case 224://F11
+                            logger.Info("HOT KEY F11 (224) trigger, +1000");
+                            this.exam4Fire(1000);
+                            //this.fire(SubmitPriceStep2Job.getPosition(), 1000);
                             break;
                         case 225://F4
                             logger.Info("HOT KEY F4 (225) trigger");
@@ -578,7 +578,7 @@ namespace Helper
         private void exam4Fire(int delta) {
 
             String fire1 = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            String fire2 = DateTime.Now.AddSeconds(1).ToString("yyyy-MM-dd HH:mm:ss");
+            String fire2 = DateTime.Now.AddSeconds(2).ToString("yyyy-MM-dd HH:mm:ss");
 
             List<Task> tasks = new List<Task>();
             Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
@@ -592,9 +592,11 @@ namespace Helper
             tasks.Add(taskInputCaptcha);
 
             CustomJob job = new CustomJob(tasks: tasks);
-            job.Execute();
-            System.Threading.Thread.Sleep(2000);
-            job.Execute();
+            for (int i = 0; i < 5; i++)
+            {
+                job.Execute();
+                System.Threading.Thread.Sleep(500);
+            }
         }
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {

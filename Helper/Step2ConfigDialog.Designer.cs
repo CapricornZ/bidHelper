@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxPrice = new System.Windows.Forms.GroupBox();
+            this.checkboxDelta = new System.Windows.Forms.CheckBox();
             this.textDeltaButton = new System.Windows.Forms.TextBox();
             this.textDeltaInput = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -75,14 +76,13 @@
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.buttonUp = new System.Windows.Forms.Button();
-            this.buttonDown = new System.Windows.Forms.Button();
-            this.buttonLeft = new System.Windows.Forms.Button();
-            this.buttonRight = new System.Windows.Forms.Button();
-            this.buttonTimeSync = new System.Windows.Forms.Button();
-            this.buttonSecAdd = new System.Windows.Forms.Button();
             this.buttonSecMinus = new System.Windows.Forms.Button();
-            this.checkboxDelta = new System.Windows.Forms.CheckBox();
+            this.buttonSecAdd = new System.Windows.Forms.Button();
+            this.buttonTimeSync = new System.Windows.Forms.Button();
+            this.buttonRight = new System.Windows.Forms.Button();
+            this.buttonLeft = new System.Windows.Forms.Button();
+            this.buttonDown = new System.Windows.Forms.Button();
+            this.buttonUp = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -116,6 +116,17 @@
             this.groupBoxPrice.TabIndex = 0;
             this.groupBoxPrice.TabStop = false;
             this.groupBoxPrice.Text = "价格";
+            // 
+            // checkboxDelta
+            // 
+            this.checkboxDelta.AutoSize = true;
+            this.checkboxDelta.Location = new System.Drawing.Point(202, 91);
+            this.checkboxDelta.Name = "checkboxDelta";
+            this.checkboxDelta.Size = new System.Drawing.Size(84, 17);
+            this.checkboxDelta.TabIndex = 16;
+            this.checkboxDelta.Text = "\"加价\"功能";
+            this.checkboxDelta.UseVisualStyleBackColor = true;
+            this.checkboxDelta.CheckedChanged += new System.EventHandler(this.Delta_CheckedChanged);
             // 
             // textDeltaButton
             // 
@@ -561,55 +572,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Timer";
             // 
-            // buttonUp
+            // buttonSecMinus
             // 
-            this.buttonUp.Location = new System.Drawing.Point(58, 19);
-            this.buttonUp.Name = "buttonUp";
-            this.buttonUp.Size = new System.Drawing.Size(46, 23);
-            this.buttonUp.TabIndex = 0;
-            this.buttonUp.Text = "&Up";
-            this.buttonUp.UseVisualStyleBackColor = true;
-            this.buttonUp.Click += new System.EventHandler(this.buttonUp_Click);
-            // 
-            // buttonDown
-            // 
-            this.buttonDown.Location = new System.Drawing.Point(58, 58);
-            this.buttonDown.Name = "buttonDown";
-            this.buttonDown.Size = new System.Drawing.Size(46, 23);
-            this.buttonDown.TabIndex = 1;
-            this.buttonDown.Text = "&Down";
-            this.buttonDown.UseVisualStyleBackColor = true;
-            this.buttonDown.Click += new System.EventHandler(this.buttonDown_Click);
-            // 
-            // buttonLeft
-            // 
-            this.buttonLeft.Location = new System.Drawing.Point(13, 38);
-            this.buttonLeft.Name = "buttonLeft";
-            this.buttonLeft.Size = new System.Drawing.Size(46, 23);
-            this.buttonLeft.TabIndex = 2;
-            this.buttonLeft.Text = "&Left";
-            this.buttonLeft.UseVisualStyleBackColor = true;
-            this.buttonLeft.Click += new System.EventHandler(this.buttonLeft_Click);
-            // 
-            // buttonRight
-            // 
-            this.buttonRight.Location = new System.Drawing.Point(103, 38);
-            this.buttonRight.Name = "buttonRight";
-            this.buttonRight.Size = new System.Drawing.Size(46, 23);
-            this.buttonRight.TabIndex = 3;
-            this.buttonRight.Text = "&Right";
-            this.buttonRight.UseVisualStyleBackColor = true;
-            this.buttonRight.Click += new System.EventHandler(this.buttonRight_Click);
-            // 
-            // buttonTimeSync
-            // 
-            this.buttonTimeSync.Location = new System.Drawing.Point(166, 58);
-            this.buttonTimeSync.Name = "buttonTimeSync";
-            this.buttonTimeSync.Size = new System.Drawing.Size(55, 23);
-            this.buttonTimeSync.TabIndex = 4;
-            this.buttonTimeSync.Text = "Sync";
-            this.buttonTimeSync.UseVisualStyleBackColor = true;
-            this.buttonTimeSync.Click += new System.EventHandler(this.buttonTimeSync_Click);
+            this.buttonSecMinus.Location = new System.Drawing.Point(196, 29);
+            this.buttonSecMinus.Name = "buttonSecMinus";
+            this.buttonSecMinus.Size = new System.Drawing.Size(27, 23);
+            this.buttonSecMinus.TabIndex = 6;
+            this.buttonSecMinus.Text = "-";
+            this.buttonSecMinus.UseVisualStyleBackColor = true;
+            this.buttonSecMinus.Click += new System.EventHandler(this.buttonSecMinus_Click);
             // 
             // buttonSecAdd
             // 
@@ -621,26 +592,55 @@
             this.buttonSecAdd.UseVisualStyleBackColor = true;
             this.buttonSecAdd.Click += new System.EventHandler(this.buttonSecAdd_Click);
             // 
-            // buttonSecMinus
+            // buttonTimeSync
             // 
-            this.buttonSecMinus.Location = new System.Drawing.Point(196, 29);
-            this.buttonSecMinus.Name = "buttonSecMinus";
-            this.buttonSecMinus.Size = new System.Drawing.Size(27, 23);
-            this.buttonSecMinus.TabIndex = 6;
-            this.buttonSecMinus.Text = "-";
-            this.buttonSecMinus.UseVisualStyleBackColor = true;
-            this.buttonSecMinus.Click += new System.EventHandler(this.buttonSecMinus_Click);
+            this.buttonTimeSync.Location = new System.Drawing.Point(166, 58);
+            this.buttonTimeSync.Name = "buttonTimeSync";
+            this.buttonTimeSync.Size = new System.Drawing.Size(55, 23);
+            this.buttonTimeSync.TabIndex = 4;
+            this.buttonTimeSync.Text = "Sync";
+            this.buttonTimeSync.UseVisualStyleBackColor = true;
+            this.buttonTimeSync.Click += new System.EventHandler(this.buttonTimeSync_Click);
             // 
-            // checkboxDelta
+            // buttonRight
             // 
-            this.checkboxDelta.AutoSize = true;
-            this.checkboxDelta.Location = new System.Drawing.Point(202, 91);
-            this.checkboxDelta.Name = "checkboxDelta";
-            this.checkboxDelta.Size = new System.Drawing.Size(84, 17);
-            this.checkboxDelta.TabIndex = 16;
-            this.checkboxDelta.Text = "\"加价\"功能";
-            this.checkboxDelta.UseVisualStyleBackColor = true;
-            this.checkboxDelta.CheckedChanged += new System.EventHandler(this.Delta_CheckedChanged);
+            this.buttonRight.Location = new System.Drawing.Point(103, 38);
+            this.buttonRight.Name = "buttonRight";
+            this.buttonRight.Size = new System.Drawing.Size(46, 23);
+            this.buttonRight.TabIndex = 3;
+            this.buttonRight.Text = "&Right";
+            this.buttonRight.UseVisualStyleBackColor = true;
+            this.buttonRight.Click += new System.EventHandler(this.buttonRight_Click);
+            // 
+            // buttonLeft
+            // 
+            this.buttonLeft.Location = new System.Drawing.Point(13, 38);
+            this.buttonLeft.Name = "buttonLeft";
+            this.buttonLeft.Size = new System.Drawing.Size(46, 23);
+            this.buttonLeft.TabIndex = 2;
+            this.buttonLeft.Text = "&Left";
+            this.buttonLeft.UseVisualStyleBackColor = true;
+            this.buttonLeft.Click += new System.EventHandler(this.buttonLeft_Click);
+            // 
+            // buttonDown
+            // 
+            this.buttonDown.Location = new System.Drawing.Point(58, 58);
+            this.buttonDown.Name = "buttonDown";
+            this.buttonDown.Size = new System.Drawing.Size(46, 23);
+            this.buttonDown.TabIndex = 1;
+            this.buttonDown.Text = "&Down";
+            this.buttonDown.UseVisualStyleBackColor = true;
+            this.buttonDown.Click += new System.EventHandler(this.buttonDown_Click);
+            // 
+            // buttonUp
+            // 
+            this.buttonUp.Location = new System.Drawing.Point(58, 19);
+            this.buttonUp.Name = "buttonUp";
+            this.buttonUp.Size = new System.Drawing.Size(46, 23);
+            this.buttonUp.TabIndex = 0;
+            this.buttonUp.Text = "&Up";
+            this.buttonUp.UseVisualStyleBackColor = true;
+            this.buttonUp.Click += new System.EventHandler(this.buttonUp_Click);
             // 
             // Step2ConfigDialog
             // 
@@ -656,7 +656,7 @@
             this.Controls.Add(this.groupBoxPrice);
             this.MinimizeBox = false;
             this.Name = "Step2ConfigDialog";
-            this.Text = "jf";
+            this.Text = "BID配置";
             this.Load += new System.EventHandler(this.Step2ConfigDialog_Load);
             this.groupBoxPrice.ResumeLayout(false);
             this.groupBoxPrice.PerformLayout();

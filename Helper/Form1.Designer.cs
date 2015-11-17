@@ -738,7 +738,7 @@
             this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(266, 242);
+            this.tabControl1.Size = new System.Drawing.Size(266, 228);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
@@ -749,7 +749,7 @@
             this.tabPageManual.Controls.Add(this.groupBox2);
             this.tabPageManual.Location = new System.Drawing.Point(4, 22);
             this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(258, 216);
+            this.tabPageManual.Size = new System.Drawing.Size(258, 202);
             this.tabPageManual.TabIndex = 3;
             this.tabPageManual.Text = "手动";
             // 
