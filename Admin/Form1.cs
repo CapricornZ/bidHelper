@@ -356,7 +356,7 @@ namespace Admin {
             
         }
 
-        private void receiveLogin(Client client) {
+        private void receiveLogin(Client client, Trigger trigger) {
 
             Config config = client.config;
             if (null != config) {

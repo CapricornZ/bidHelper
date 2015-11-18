@@ -15,6 +15,19 @@ namespace tobid.rest
         public Config config { get; set; }
         public List<Operation> operation { get; set; }
         public String memo { get; set; }
+        public String tips { get; set; }
+        public String trigger { get; set; }
+    }
+
+    /// <summary>
+    /// 自定义Trigger配置
+    /// </summary>
+    public class Trigger
+    {
+        public int deltaPrice { get; set; }
+        public String priceTime { get; set; }
+        public String captchaTime { get; set; }
+        public String submitTime { get; set; }
     }
 
     /// <summary>

@@ -39,11 +39,11 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
 
-                System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
+                //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
                 logger.Info("\tEND   make delta PRICE blank...");
 
                 logger.Info("\tBEGIN input delta PRICE...");
-                KeyBoardUtil.sendMessage(Convert.ToString(delta), this.repository.interval);
+                KeyBoardUtil.sendMessage(Convert.ToString(delta), interval:this.repository.interval, needClean:true);
                 logger.Info("\tEND   input delta PRICE...");
                 System.Threading.Thread.Sleep(100);
 
@@ -64,7 +64,7 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
 
-                System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
+                //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
                 logger.Info("\tEND   make PRICE blank...");
 
                 logger.Info("\tBEGIN identify PRICE...");
@@ -74,7 +74,7 @@ namespace tobid.scheduler.jobs.action {
                 txtPrice = String.Format("{0:D}", price);
 
                 logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
-                KeyBoardUtil.sendMessage(txtPrice, this.repository.interval);
+                KeyBoardUtil.sendMessage(txtPrice, interval:this.repository.interval, needClean:true);
                 logger.Info("\tEND   input PRICE");
             }
 

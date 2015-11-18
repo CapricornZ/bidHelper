@@ -38,7 +38,7 @@ namespace tobid.scheduler.jobs.action {
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             System.Threading.Thread.Sleep(50);
 
-            System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
+            //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
             logger.Info("\tEND   make INPUT blank");
 
             logger.Info("\tBEGIN identify CAPTCHA...");
@@ -56,17 +56,18 @@ namespace tobid.scheduler.jobs.action {
                 bitMap = new Bitmap(new MemoryStream(binaryCaptcha));
                 File.WriteAllBytes(String.Format("AUTO-CAPTCHA{0}.BMP", retry), binaryCaptcha);
 
-                int count = 0;
-                for (int nX = 0; nX < bitMap.Width; nX++)
-                    for (int nY = 0; nY < bitMap.Height; nY++)
-                    {
-                        Color color = bitMap.GetPixel(nX, nY);
-                        if (color.R == color.G && color.G == color.B && color.B < 200)
-                            count++;
-                    }
+                //int count = 0;
+                //for (int nX = 0; nX < bitMap.Width; nX++)
+                //    for (int nY = 0; nY < bitMap.Height; nY++)
+                //    {
+                //        Color color = bitMap.GetPixel(nX, nY);
+                //        if (color.R == color.G && color.G == color.B && color.B < 200)
+                //            count++;
+                //    }
 
-                System.Console.WriteLine("COUNT:" + count);
-                isLoading = count > 500;
+                //System.Console.WriteLine("COUNT:" + count);
+                //isLoading = count > 500;
+                isLoading = tobid.util.orc.CaptchaHelper.isLoading(bitMap);
                 if (isLoading && retry > 15)
                 {
                     logger.InfoFormat("\tLoading captcha timeout.");
@@ -90,7 +91,7 @@ namespace tobid.scheduler.jobs.action {
             logger.InfoFormat("\tEND   identify CAPTCHA = {0}, ACTIVE = {1}.", txtCaptcha, strActive);
 
             logger.Info("\tBEGIN input CAPTCHA");
-            KeyBoardUtil.sendMessage(strActive, this.repository.interval);
+            KeyBoardUtil.sendMessage(strActive, interval:this.repository.interval, needClean:true);
             System.Threading.Thread.Sleep(50);
 
             ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);

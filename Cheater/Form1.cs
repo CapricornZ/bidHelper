@@ -134,7 +134,7 @@ namespace Cheater {
             this.chart1.ChartAreas[0].AxisY.Minimum = 79900;
         }
 
-        private void receiveLogin(Client client) {
+        private void receiveLogin(Client client, Trigger trigger) {
         }
         private void receiveOperation(Operation operation) {
         }

@@ -18,7 +18,7 @@ using tobid.util;
 namespace tobid.scheduler.jobs
 {
     public delegate void ReceiveOperation(rest.Operation operation);
-    public delegate void ReceiveLogin(rest.Client client);
+    public delegate void ReceiveLogin(rest.Client client, rest.Trigger trigger);
     
     /// <summary>
     /// KeepAlive : 向服务器发布主机名，获取配置项
@@ -75,7 +75,10 @@ namespace tobid.scheduler.jobs
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
             client = Filter.remain(this.repository.category, client);
 
-            this.receiveLogin(client);
+            rest.Trigger trigger = null;
+            if(!String.IsNullOrEmpty(client.tips))
+                trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<rest.Trigger>(client.tips);
+            this.receiveLogin(client, trigger);
             if (!this.isManual && client.operation != null && client.operation.Count > 0)
             {
                 foreach (tobid.rest.Operation operation in client.operation)

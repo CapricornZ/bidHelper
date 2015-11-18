@@ -72,6 +72,21 @@ namespace tobid.util
             Rectangle rectX = new Rectangle();
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+                if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
+
+                    IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
+                    IntPtr tabWindow = FindWindowEx(frameTab, IntPtr.Zero, "TabWindowClass", null);
+                    int rtnX = GetWindowRect(tabWindow, out rectX);
+                }
+            }
+            return new Point(rectX.X, rectX.Y);
+        }
+
+        /*static public Point findOrigin() {
+
+            Rectangle rectX = new Rectangle();
+            SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
+            foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
 
                 uint process = 0;
                 GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
@@ -88,7 +103,7 @@ namespace tobid.util
                 }
             }
             return new Point(rectX.X, rectX.Y);
-        }
+        }*/
 
         static public void openURL(String category, Entry entry) {
 

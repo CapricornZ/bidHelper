@@ -255,11 +255,17 @@ namespace Helper
             isOk = Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
 
             isOk = Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+            String hotKey = System.Configuration.ConfigurationManager.AppSettings["SubmitHotKey"];
+            if("ENTER".Equals(hotKey))
+                isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+            if("SPACE".Equals(hotKey))
+                isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Space);
 
             isOk = Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
             isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
             isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
+            isOk = Hotkey.RegisterHotKey(this.Handle, 226, Hotkey.KeyModifiers.Ctrl, Keys.R);
+            
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -344,7 +350,8 @@ namespace Helper
                             break;
                         case 221://ESC
                             logger.Info("HOT KEY ESCAPE (221) trigger");
-                            this.closeDialog(SubmitPriceStep2Job.getPosition());
+                            //this.closeDialog(SubmitPriceStep2Job.getPosition());
+                            this.processEsc(SubmitPriceStep2Job.getPosition());
                             break;
                         case 222://ENTER
                             logger.Info("HOT KEY ENTER (222) trigger");
@@ -364,13 +371,17 @@ namespace Helper
                             logger.Info("HOT KEY F4 (225) trigger");
                             this.stopCurrentJob();
                             break;
+                        case 226:
+                            logger.Info("HOT KEY CTRL+R (226) trigger");
+                            this.refreshCaptcha(SubmitPriceStep2Job.getPosition());
+                            break;
                     }
                     break;
             }
             base.WndProc(ref m);
         }
 
-        private void receiveLogin(Client client) {
+        private void receiveLogin(Client client, Trigger trigger) {
 
             Config config = client.config;
             if ( config != null) {
@@ -392,7 +403,20 @@ namespace Helper
 
             if (!String.IsNullOrEmpty(client.memo)) {
 
-                this.toolStripStatusLabel3.Text = client.memo;
+                this.toolStripStatusLabel3.Text = client.memo.Replace("\r\n", ";");
+                if (null != trigger) {
+                    int idx = trigger.deltaPrice / 100 - 1;
+                    this.comboBoxCustomDelta.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+
+                    this.dateTimePickerCustomPrice.Text = trigger.priceTime;
+                    this.checkBoxInputCaptcha.Checked = null != trigger.captchaTime;
+                    if (null != trigger.captchaTime)
+                        this.dateTimePickerCustomInputCaptcha.Text = trigger.captchaTime;
+
+                    this.checkBoxSubmitCaptcha.Checked = null != trigger.submitTime;
+                    if (null != trigger.submitTime)
+                        this.dateTimePickerCustomSubmitCaptcha.Text = trigger.submitTime;
+                }
                 //MessageBoxButtons messButton = MessageBoxButtons.OK;
                 //DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);
                 this.notifyIcon1.ShowBalloonTip(5000, "操作提示", client.memo, ToolTipIcon.Info);
@@ -412,7 +436,7 @@ namespace Helper
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            this.toolStripStatusLabel2.Text = String.Format("当前时间 {0}", DateTime.Now.ToString("HH:mm:ss"));
+            this.toolStripStatusLabel2.Text = String.Format("当前 {0}", DateTime.Now.ToString("HH:mm:ss"));
             new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
         }
 
@@ -442,6 +466,7 @@ namespace Helper
                     int x = origin.X;
                     int y = origin.Y;
 
+                    logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
                     if(this.deltaPriceOnUI && bid.give.delta != null)
                     {
                         logger.Info("\tBEGIN make delta PRICE blank...");
@@ -460,34 +485,34 @@ namespace Helper
                         ScreenUtil.SetCursorPos(x + bid.give.delta.button.x, y + bid.give.delta.button.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         logger.Info("\tEND   click delta PRICE button");
-                        System.Threading.Thread.Sleep(50);
+                        
                     }
                     else
                     {
                         //INPUT BOX
+                        logger.Info("\tBEGIN click INPUTBOX");
                         ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         System.Threading.Thread.Sleep(50);
+                        logger.Info("\tEND   click INPUTBOX.");
 
                         //SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
+                        //System.Threading.Thread.Sleep(50);
 
-                        System.Threading.Thread.Sleep(50);
-
-                        logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
                         logger.Info("\tBEGIN identify PRICE...");
                         byte[] content = new ScreenUtil().screenCaptureAsByte(x + bid.give.price.x, y + bid.give.price.y, 52, 18);
                         String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
                         int price = Int32.Parse(txtPrice);
                         price += delta;
-                        logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
                         txtPrice = String.Format("{0:D}", price);
+                        logger.InfoFormat("\tEND   identified PRICE = {0}", txtPrice);
 
                         logger.InfoFormat("\tBEGIN input PRICE : {0}", txtPrice);
                         KeyBoardUtil.sendMessage(txtPrice, interval:interval, needClean:true);
-                        System.Threading.Thread.Sleep(100);
                         logger.Info("\tEND   input PRICE");
                     }
 
+                    System.Threading.Thread.Sleep(100);
                     //点击出价
                     logger.Info("\tBEGIN click BUTTON[出价]");
                     ScreenUtil.SetCursorPos(x + bid.give.button.x, y + bid.give.button.y);
@@ -504,6 +529,17 @@ namespace Helper
             startPrice.Start();
         }
 
+        private void submitCaptcha(tobid.rest.position.BidStep2 bid) {
+
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+
+            logger.Info("提交验证码");
+            ScreenUtil.SetCursorPos(x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);//确定按钮
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+        }
+
         private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
             Point origin = findOrigin();
@@ -515,15 +551,39 @@ namespace Helper
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
         }
 
-        private void submitCaptcha(tobid.rest.position.BidStep2 bid) {
+        private void refreshCaptcha(tobid.rest.position.BidStep2 bid) {
 
             Point origin = findOrigin();
             int x = origin.X;
             int y = origin.Y;
 
-            logger.Info("提交验证码");
-            ScreenUtil.SetCursorPos(x+bid.submit.buttons[0].x, y+bid.submit.buttons[0].y);//确定按钮
+            ScreenUtil.SetCursorPos(x + bid.submit.captcha[0].x + 55, y + bid.submit.captcha[0].y + 12);//校验码区域
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+        }
+
+        private void processEsc(tobid.rest.position.BidStep2 bid) {
+
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
+            File.WriteAllBytes("TITLE.bmp", title);
+            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+            String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+            logger.Debug(strTitle);
+
+            if ("系统提示".Equals(strTitle)) {
+
+                logger.Info("proces ESC in [系统提示]");
+                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            } else if ("投标拍卖".Equals(strTitle)) {
+
+                logger.Info("proces ESC in [投标拍卖]");
+                ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            }
         }
 
         private void processEnter(tobid.rest.position.BidStep2 bid) {

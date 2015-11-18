@@ -75,6 +75,7 @@
     <Compile Include="schedule\SubmitPriceJob.cs" />
     <Compile Include="schedule\SubmitPriceStep1Job.cs" />
     <Compile Include="schedule\SubmitPriceV2.cs" />
+    <Compile Include="util\CaptchaHelper.cs" />
     <Compile Include="util\CaptchaUtil.cs" />
     <Compile Include="util\DomUtil.cs" />
     <Compile Include="util\DynamicOrcUtil.cs" />
