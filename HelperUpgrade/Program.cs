@@ -7,6 +7,7 @@ using System.Net;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Reflection;
 using System.Configuration;
+using vbAccelerator.Components.Shell;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 namespace HelperUpgrade {
@@ -30,6 +31,17 @@ namespace HelperUpgrade {
                 if("Q".Equals(command)){
                     break;
                 }
+            }
+        }
+
+        static void createShortCut(String filePath, String workingPath) {
+
+            using (ShellLink shortcut = new ShellLink()) {
+                shortcut.Target = filePath;
+                shortcut.WorkingDirectory = workingPath;
+                shortcut.Description = "助手";
+                shortcut.DisplayMode = ShellLink.LinkDisplayMode.edmNormal;
+                shortcut.Save("HELPER.lnk");
             }
         }
 
@@ -113,6 +125,11 @@ namespace HelperUpgrade {
             }
             FStream.Close();
             System.Console.WriteLine("下载、更新成功");
+
+            String current = System.Environment.CurrentDirectory;
+            String fileDir = current + @"\Release\helper.exe";
+            String workDir = current + @"\Release";
+            createShortCut(fileDir, workDir);
         }
     }
 }

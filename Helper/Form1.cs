@@ -1008,7 +1008,7 @@ namespace Helper
             String localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             String remoteVer = null;
             try {
-                remoteVer = new HttpUtil().getAsPlain("http://192.168.1.11/captcha.restful/Release.ver");
+                remoteVer = new HttpUtil().getAsPlain(this.EndPoint + "/Release.ver");
             } catch (Exception ex) {
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 return;
