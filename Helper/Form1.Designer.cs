@@ -69,6 +69,8 @@
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
+            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
@@ -383,7 +385,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(262, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(293, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -393,8 +395,8 @@
             this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.toolStripStatusLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(59, 19);
-            this.toolStripStatusLabel1.Text = "XX:XX:XX";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(47, 19);
+            this.toolStripStatusLabel1.Text = "倒计时";
             // 
             // statusStrip1
             // 
@@ -413,14 +415,15 @@
             // 
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.Red;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(118, 19);
-            this.toolStripStatusLabel3.Text = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(55, 19);
+            this.toolStripStatusLabel3.Text = "操作提示";
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xToolStripMenuItem,
-            this.配置ToolStripMenuItem});
+            this.配置ToolStripMenuItem,
+            this.AboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(485, 24);
@@ -500,6 +503,21 @@
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
             this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
+            // 
+            // AboutToolStripMenuItem
+            // 
+            this.AboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CheckUpdateToolStripMenuItem});
+            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.AboutToolStripMenuItem.Text = "关于(&A)";
+            // 
+            // CheckUpdateToolStripMenuItem
+            // 
+            this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
+            this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // buttonIE
             // 
@@ -795,6 +813,7 @@
             // 
             // tabPagePolicyV1
             // 
+            this.tabPagePolicyV1.BackColor = System.Drawing.SystemColors.Control;
             this.tabPagePolicyV1.Controls.Add(this.groupBoxLocal);
             this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV1.Name = "tabPagePolicyV1";
@@ -802,10 +821,10 @@
             this.tabPagePolicyV1.Size = new System.Drawing.Size(258, 189);
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
-            this.tabPagePolicyV1.UseVisualStyleBackColor = true;
             // 
             // tabPagePolicyV2
             // 
+            this.tabPagePolicyV2.BackColor = System.Drawing.SystemColors.Control;
             this.tabPagePolicyV2.Controls.Add(this.groupBoxLocalV2);
             this.tabPagePolicyV2.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV2.Name = "tabPagePolicyV2";
@@ -813,17 +832,16 @@
             this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 189);
             this.tabPagePolicyV2.TabIndex = 1;
             this.tabPagePolicyV2.Text = "策略V2";
-            this.tabPagePolicyV2.UseVisualStyleBackColor = true;
             // 
             // tabPagePolicyCustom
             // 
+            this.tabPagePolicyCustom.BackColor = System.Drawing.SystemColors.Control;
             this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
             this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
             this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 189);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
-            this.tabPagePolicyCustom.UseVisualStyleBackColor = true;
             // 
             // notifyIcon1
             // 
@@ -953,6 +971,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CheckUpdateToolStripMenuItem;
     }
 }
 

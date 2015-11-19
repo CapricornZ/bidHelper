@@ -436,7 +436,7 @@ namespace Helper
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            this.toolStripStatusLabel2.Text = String.Format("当前 {0}", DateTime.Now.ToString("HH:mm:ss"));
+            this.toolStripStatusLabel2.Text = String.Format("当前{0}", DateTime.Now.ToString("HH:mm:ss"));
             new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
         }
 
@@ -1002,6 +1002,24 @@ namespace Helper
 
         #region 菜单ACTION
 
+        private void CheckUpdateToolStripMenuItem_Click(object sender, EventArgs e) {
+
+            MessageBoxButtons messButton = MessageBoxButtons.OK;
+            String localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            String remoteVer = null;
+            try {
+                remoteVer = new HttpUtil().getAsPlain("http://192.168.1.11/captcha.restful/Release.ver");
+            } catch (Exception ex) {
+                MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            if (!localVer.Equals(remoteVer))
+                MessageBox.Show(String.Format("请用工具更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现更新", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            else
+                MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+        }
+
         private void toolStripMenuReload_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
@@ -1185,5 +1203,6 @@ namespace Helper
         }
         #endregion
 
+        
     }
 }

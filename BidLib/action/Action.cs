@@ -73,7 +73,7 @@ namespace tobid.scheduler.jobs.action {
                 rtn = true;
             } else {
 
-                String msg = String.Format("当前时间:{0}, 剩余(s):{1}", now.ToString("yyyy-MM-dd HH:mm:ss"), diffFire.TotalSeconds);
+                String msg = String.Format("当前:{0}, 剩(s):{1}", now.ToString("yyyy-MM-dd HH:mm:ss"), -diffFire.TotalSeconds);
                 if (null != this.notify)
                     this.notify.acceptMessage(String.Format("SECs:{0}", -diffFire.TotalSeconds));
                 this.action.notify(msg);

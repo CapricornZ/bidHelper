@@ -28,11 +28,24 @@ namespace tobid.util.http
             HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
             httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             httpReq.Method = "GET";
-            httpReq.Timeout = 1000 * 60;
+            httpReq.Timeout = 1000 * 30;
             
             WebResponse webRespon = httpReq.GetResponse();
             Stream s = webRespon.GetResponseStream();
             return s;
+        }
+
+        public String getAsPlain(String address) {
+
+            HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
+            httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth)));
+            httpReq.Method = "GET";
+            httpReq.Timeout = 1000 * 30;
+
+            WebResponse webRespon = httpReq.GetResponse();
+            Stream s = webRespon.GetResponseStream();
+            StreamReader sr = new StreamReader(s);
+            return sr.ReadToEnd();
         }
 
         /// <summary>
