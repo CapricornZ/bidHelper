@@ -67,7 +67,6 @@
             this.toolStripMenuReload = new System.Windows.Forms.ToolStripMenuItem();
             this.配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemAuthCode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,6 +101,7 @@
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.AuthCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -385,7 +385,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(293, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(368, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -479,7 +479,6 @@
             // 
             this.配置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stepToolStripMenuItem,
-            this.ToolStripMenuItemAuthCode,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
             this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
@@ -492,13 +491,6 @@
             this.stepToolStripMenuItem.Text = "阶段2(&2)";
             this.stepToolStripMenuItem.Click += new System.EventHandler(this.stepToolStripMenuItem_Click);
             // 
-            // ToolStripMenuItemAuthCode
-            // 
-            this.ToolStripMenuItemAuthCode.Name = "ToolStripMenuItemAuthCode";
-            this.ToolStripMenuItemAuthCode.Size = new System.Drawing.Size(160, 22);
-            this.ToolStripMenuItemAuthCode.Text = "授权码(&A)";
-            this.ToolStripMenuItemAuthCode.Click += new System.EventHandler(this.ToolStripMenuItemAuthCode_Click);
-            // 
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
@@ -507,7 +499,8 @@
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CheckUpdateToolStripMenuItem});
+            this.CheckUpdateToolStripMenuItem,
+            this.AuthCodeToolStripMenuItem});
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
             this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.AboutToolStripMenuItem.Text = "关于(&A)";
@@ -849,6 +842,13 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // AuthCodeToolStripMenuItem
+            // 
+            this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
+            this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -938,7 +938,6 @@
         private System.Windows.Forms.ComboBox comboBoxDelta;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAuthCode;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBoxPID;
         private System.Windows.Forms.TextBox textBoxBPass;
@@ -973,6 +972,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CheckUpdateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AuthCodeToolStripMenuItem;
     }
 }
 

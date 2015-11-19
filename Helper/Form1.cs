@@ -1081,17 +1081,17 @@ namespace Helper
             this.step2Dialog.ShowDialog(this);
         }
 
-        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e){
+        private void AuthCodeToolStripMenuItem_Click(object sender, EventArgs e) {
 
             String credential = ConfigurationManager.AppSettings["credential"];
             String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入授权码", "", credential);
-            if (!String.IsNullOrEmpty(authCode)){
+            if (!String.IsNullOrEmpty(authCode)) {
 
                 Warrant warrant = new Warrant(authCode);
                 String hostName = System.Net.Dns.GetHostName();
                 String epKeepAlive = this.EndPoint + "/rest/service/command/register/" + hostName;
                 RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, warrant);
-                try{
+                try {
                     String rtn = rest.MakeRequest(null, false);
 
                     Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -1102,12 +1102,17 @@ namespace Helper
 
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
                     DialogResult dr = MessageBox.Show(String.Format("请重新启动应用程序!\r\n主机名:{0}\r\n授权码:{1}", hostName, authCode), "授权成功", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     logger.Error(ex);
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
                     DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
             }
+        }
+
+        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e){
+
+            
         }
         #endregion
 
@@ -1202,6 +1207,8 @@ namespace Helper
                 this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
         }
         #endregion
+
+        
 
         
     }

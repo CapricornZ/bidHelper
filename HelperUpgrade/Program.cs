@@ -22,13 +22,13 @@ namespace HelperUpgrade {
 
                 System.Console.WriteLine("请输入指令，U：更新、下载HELPER，C：检查版本，Q：结束应用");
                 string command = System.Console.ReadLine();
-                if("U".Equals(command)){
+                if("U".Equals(command.ToUpper())){
                     Download(endPoint);
                 }
-                if("C".Equals(command)){
+                if("C".Equals(command.ToUpper())){
                     Check(endPoint);
                 }
-                if("Q".Equals(command)){
+                if("Q".Equals(command.ToUpper())){
                     break;
                 }
             }
@@ -73,8 +73,38 @@ namespace HelperUpgrade {
             }
         }
 
+        static String readConfig(String config) {
+
+            Configuration cfg = ConfigurationManager.OpenExeConfiguration(config);
+            String principal = cfg.AppSettings.Settings["principal"].Value.ToString();
+            String credential = cfg.AppSettings.Settings["credential"].Value.ToString();
+            return principal + "," + credential;
+        }
+
+        static void writeConfig(String config, String identity) {
+            
+            string[] id = identity.Split(new char[] { ',' });
+            Configuration cfg = ConfigurationManager.OpenExeConfiguration(config);
+            cfg.AppSettings.Settings["principal"].Value = id[0];
+            cfg.AppSettings.Settings["credential"].Value = id[1];
+            cfg.Save(ConfigurationSaveMode.Modified);
+        }
+
+        static String GetAppConfig(Configuration cfg, String strkey) {
+            foreach (string key in cfg.AppSettings.Settings.AllKeys)
+                if (key.Equals(strkey))
+                    return cfg.AppSettings.Settings[strkey].Value.ToString();
+            return null;
+        }
+
         static void Download(String endpoint) {
 
+            String current = System.Environment.CurrentDirectory;
+            String fileDir = current + @"\Release\helper.exe";
+            //Boolean exists = File.Exists(fileDir+".config");
+            //String id = ",";
+            //if (exists)
+            //    id = readConfig(fileDir);
             String strFileName = "Release.zip";
             FileStream FStream = new FileStream(strFileName, FileMode.Create);
 
@@ -126,10 +156,9 @@ namespace HelperUpgrade {
             FStream.Close();
             System.Console.WriteLine("下载、更新成功");
 
-            String current = System.Environment.CurrentDirectory;
-            String fileDir = current + @"\Release\helper.exe";
             String workDir = current + @"\Release";
             createShortCut(fileDir, workDir);
+            //writeConfig(fileDir, id);
         }
     }
 }
