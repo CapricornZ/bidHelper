@@ -75,14 +75,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.buttonSecMinus = new System.Windows.Forms.Button();
-            this.buttonSecAdd = new System.Windows.Forms.Button();
-            this.buttonTimeSync = new System.Windows.Forms.Button();
-            this.buttonRight = new System.Windows.Forms.Button();
-            this.buttonLeft = new System.Windows.Forms.Button();
-            this.buttonDown = new System.Windows.Forms.Button();
-            this.buttonUp = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -94,7 +86,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub6)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxPrice
@@ -366,7 +357,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(323, 339);
+            this.buttonOK.Location = new System.Drawing.Point(40, 297);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -376,7 +367,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(425, 339);
+            this.buttonCancel.Location = new System.Drawing.Point(133, 297);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -463,7 +454,7 @@
             this.btnCaptcha.Name = "btnCaptcha";
             this.btnCaptcha.Size = new System.Drawing.Size(75, 23);
             this.btnCaptcha.TabIndex = 13;
-            this.btnCaptcha.Text = "验证码(&C)";
+            this.btnCaptcha.Text = "验证码(&P)";
             this.btnCaptcha.UseVisualStyleBackColor = true;
             this.btnCaptcha.Click += new System.EventHandler(this.btnCaptcha_Click);
             // 
@@ -556,98 +547,11 @@
             this.textBox8.Size = new System.Drawing.Size(75, 20);
             this.textBox8.TabIndex = 17;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.buttonSecMinus);
-            this.groupBox2.Controls.Add(this.buttonSecAdd);
-            this.groupBox2.Controls.Add(this.buttonTimeSync);
-            this.groupBox2.Controls.Add(this.buttonRight);
-            this.groupBox2.Controls.Add(this.buttonLeft);
-            this.groupBox2.Controls.Add(this.buttonDown);
-            this.groupBox2.Controls.Add(this.buttonUp);
-            this.groupBox2.Location = new System.Drawing.Point(12, 291);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(230, 87);
-            this.groupBox2.TabIndex = 18;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Timer";
-            // 
-            // buttonSecMinus
-            // 
-            this.buttonSecMinus.Location = new System.Drawing.Point(196, 29);
-            this.buttonSecMinus.Name = "buttonSecMinus";
-            this.buttonSecMinus.Size = new System.Drawing.Size(27, 23);
-            this.buttonSecMinus.TabIndex = 6;
-            this.buttonSecMinus.Text = "-";
-            this.buttonSecMinus.UseVisualStyleBackColor = true;
-            this.buttonSecMinus.Click += new System.EventHandler(this.buttonSecMinus_Click);
-            // 
-            // buttonSecAdd
-            // 
-            this.buttonSecAdd.Location = new System.Drawing.Point(166, 29);
-            this.buttonSecAdd.Name = "buttonSecAdd";
-            this.buttonSecAdd.Size = new System.Drawing.Size(27, 23);
-            this.buttonSecAdd.TabIndex = 5;
-            this.buttonSecAdd.Text = "+";
-            this.buttonSecAdd.UseVisualStyleBackColor = true;
-            this.buttonSecAdd.Click += new System.EventHandler(this.buttonSecAdd_Click);
-            // 
-            // buttonTimeSync
-            // 
-            this.buttonTimeSync.Location = new System.Drawing.Point(166, 58);
-            this.buttonTimeSync.Name = "buttonTimeSync";
-            this.buttonTimeSync.Size = new System.Drawing.Size(55, 23);
-            this.buttonTimeSync.TabIndex = 4;
-            this.buttonTimeSync.Text = "Sync";
-            this.buttonTimeSync.UseVisualStyleBackColor = true;
-            this.buttonTimeSync.Click += new System.EventHandler(this.buttonTimeSync_Click);
-            // 
-            // buttonRight
-            // 
-            this.buttonRight.Location = new System.Drawing.Point(103, 38);
-            this.buttonRight.Name = "buttonRight";
-            this.buttonRight.Size = new System.Drawing.Size(46, 23);
-            this.buttonRight.TabIndex = 3;
-            this.buttonRight.Text = "&Right";
-            this.buttonRight.UseVisualStyleBackColor = true;
-            this.buttonRight.Click += new System.EventHandler(this.buttonRight_Click);
-            // 
-            // buttonLeft
-            // 
-            this.buttonLeft.Location = new System.Drawing.Point(13, 38);
-            this.buttonLeft.Name = "buttonLeft";
-            this.buttonLeft.Size = new System.Drawing.Size(46, 23);
-            this.buttonLeft.TabIndex = 2;
-            this.buttonLeft.Text = "&Left";
-            this.buttonLeft.UseVisualStyleBackColor = true;
-            this.buttonLeft.Click += new System.EventHandler(this.buttonLeft_Click);
-            // 
-            // buttonDown
-            // 
-            this.buttonDown.Location = new System.Drawing.Point(58, 58);
-            this.buttonDown.Name = "buttonDown";
-            this.buttonDown.Size = new System.Drawing.Size(46, 23);
-            this.buttonDown.TabIndex = 1;
-            this.buttonDown.Text = "&Down";
-            this.buttonDown.UseVisualStyleBackColor = true;
-            this.buttonDown.Click += new System.EventHandler(this.buttonDown_Click);
-            // 
-            // buttonUp
-            // 
-            this.buttonUp.Location = new System.Drawing.Point(58, 19);
-            this.buttonUp.Name = "buttonUp";
-            this.buttonUp.Size = new System.Drawing.Size(46, 23);
-            this.buttonUp.TabIndex = 0;
-            this.buttonUp.Text = "&Up";
-            this.buttonUp.UseVisualStyleBackColor = true;
-            this.buttonUp.Click += new System.EventHandler(this.buttonUp_Click);
-            // 
             // Step2ConfigDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 390);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(562, 334);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -673,7 +577,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureSub6)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -726,14 +629,6 @@
         private System.Windows.Forms.TextBox textDeltaInput;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button buttonRight;
-        private System.Windows.Forms.Button buttonLeft;
-        private System.Windows.Forms.Button buttonDown;
-        private System.Windows.Forms.Button buttonUp;
-        private System.Windows.Forms.Button buttonSecMinus;
-        private System.Windows.Forms.Button buttonSecAdd;
-        private System.Windows.Forms.Button buttonTimeSync;
         private System.Windows.Forms.CheckBox checkboxDelta;
     }
 }

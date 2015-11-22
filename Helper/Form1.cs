@@ -99,6 +99,7 @@ namespace Helper
         private System.Threading.Thread customThread;
 
         private Step2ConfigDialog step2Dialog;
+        private FloatingForm floatingForm;
         private EntrySelForm entryForm;
         private Object lockSubmit = new Object();
         private Object lockPrice = new Object();
@@ -146,12 +147,15 @@ namespace Helper
 
         private void disableForm(){
             this.groupBoxPolicy.Enabled = false;
-            this.panel3.Enabled = false;
+            this.panelIE.Enabled = false;
+            this.groupBoxInternetTime.Enabled = false;
+
         }
 
         private void enableForm(){
             this.groupBoxPolicy.Enabled = true;
-            this.panel3.Enabled = true;
+            this.panelIE.Enabled = true;
+            this.groupBoxInternetTime.Enabled = true;
         }
 
         private void loadResource(String category){
@@ -213,6 +217,7 @@ namespace Helper
             this.dateTimePickerCustomSubmitCaptcha.Value = DateTime.Now;
 
             this.step2Dialog = new Step2ConfigDialog(this);
+            this.floatingForm = new FloatingForm();
             this.entryForm = new EntrySelForm();
 
             String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
@@ -286,6 +291,7 @@ namespace Helper
             configStepV2.Job = new SubmitPriceV2Job(repository: this, notify: this);
             m_schedulerSubmitStepV2 = new Scheduler(configStepV2);
 
+            this.floatingForm.Show();
         }
 
         /// <summary>
@@ -437,7 +443,7 @@ namespace Helper
         private void timer1_Tick(object sender, EventArgs e) {
 
             this.toolStripStatusLabel2.Text = String.Format("当前{0}", DateTime.Now.ToString("HH:mm:ss"));
-            new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
+            //new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
         }
 
         public void acceptMessage(String msg){
@@ -1015,7 +1021,7 @@ namespace Helper
             }
 
             if (!localVer.Equals(remoteVer))
-                MessageBox.Show(String.Format("请用工具更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现更新", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             else
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
@@ -1213,8 +1219,21 @@ namespace Helper
         }
         #endregion
 
-        
+        #region 北京时间
+        private void buttonSync_Click(object sender, EventArgs e) {
+            logger.Debug("internet time sync");
+            SystemTimeUtil.SetInternetTime();
+        }
 
-        
+        private void buttonAdd_Click(object sender, EventArgs e) {
+            logger.Debug("+1 second");
+            SystemTimeUtil.addSecond(1);
+        }
+
+        private void buttonMinus_Click(object sender, EventArgs e) {
+            logger.Debug("-1 second");
+            SystemTimeUtil.addSecond(-1);
+        }
+        #endregion
     }
 }

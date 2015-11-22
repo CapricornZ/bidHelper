@@ -81,7 +81,7 @@
             this.textBoxPID = new System.Windows.Forms.TextBox();
             this.textBoxBPass = new System.Windows.Forms.TextBox();
             this.textBoxBNO = new System.Windows.Forms.TextBox();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelIE = new System.Windows.Forms.Panel();
             this.groupBoxCustom = new System.Windows.Forms.GroupBox();
             this.checkBoxInputCaptcha = new System.Windows.Forms.CheckBox();
             this.checkBoxSubmitCaptcha = new System.Windows.Forms.CheckBox();
@@ -102,6 +102,10 @@
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
+            this.buttonSync = new System.Windows.Forms.Button();
+            this.buttonAdd = new System.Windows.Forms.Button();
+            this.buttonMinus = new System.Windows.Forms.Button();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -109,7 +113,7 @@
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panelIE.SuspendLayout();
             this.groupBoxCustom.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageManual.SuspendLayout();
@@ -117,6 +121,7 @@
             this.tabPagePolicyV1.SuspendLayout();
             this.tabPagePolicyV2.SuspendLayout();
             this.tabPagePolicyCustom.SuspendLayout();
+            this.groupBoxInternetTime.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxLocal
@@ -131,7 +136,7 @@
             this.groupBoxLocal.Enabled = false;
             this.groupBoxLocal.Location = new System.Drawing.Point(20, 14);
             this.groupBoxLocal.Name = "groupBoxLocal";
-            this.groupBoxLocal.Size = new System.Drawing.Size(187, 143);
+            this.groupBoxLocal.Size = new System.Drawing.Size(219, 143);
             this.groupBoxLocal.TabIndex = 5;
             this.groupBoxLocal.TabStop = false;
             this.groupBoxLocal.Text = "策略V1";
@@ -255,7 +260,7 @@
             this.groupBoxLocalV2.Enabled = false;
             this.groupBoxLocalV2.Location = new System.Drawing.Point(20, 14);
             this.groupBoxLocalV2.Name = "groupBoxLocalV2";
-            this.groupBoxLocalV2.Size = new System.Drawing.Size(188, 147);
+            this.groupBoxLocalV2.Size = new System.Drawing.Size(222, 147);
             this.groupBoxLocalV2.TabIndex = 9;
             this.groupBoxLocalV2.TabStop = false;
             this.groupBoxLocalV2.Text = "策略V2";
@@ -405,7 +410,7 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 283);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 289);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(485, 24);
             this.statusStrip1.TabIndex = 6;
@@ -508,14 +513,14 @@
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -616,15 +621,15 @@
             this.textBoxBNO.Size = new System.Drawing.Size(129, 20);
             this.textBoxBNO.TabIndex = 0;
             // 
-            // panel3
+            // panelIE
             // 
-            this.panel3.Controls.Add(this.buttonLogin);
-            this.panel3.Controls.Add(this.buttonIE);
-            this.panel3.Controls.Add(this.buttonURL);
-            this.panel3.Location = new System.Drawing.Point(14, 243);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(188, 29);
-            this.panel3.TabIndex = 15;
+            this.panelIE.Controls.Add(this.buttonLogin);
+            this.panelIE.Controls.Add(this.buttonIE);
+            this.panelIE.Controls.Add(this.buttonURL);
+            this.panelIE.Location = new System.Drawing.Point(244, 255);
+            this.panelIE.Name = "panelIE";
+            this.panelIE.Size = new System.Drawing.Size(188, 29);
+            this.panelIE.TabIndex = 15;
             // 
             // groupBoxCustom
             // 
@@ -849,13 +854,56 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // groupBoxInternetTime
+            // 
+            this.groupBoxInternetTime.Controls.Add(this.buttonMinus);
+            this.groupBoxInternetTime.Controls.Add(this.buttonAdd);
+            this.groupBoxInternetTime.Controls.Add(this.buttonSync);
+            this.groupBoxInternetTime.Location = new System.Drawing.Point(8, 239);
+            this.groupBoxInternetTime.Name = "groupBoxInternetTime";
+            this.groupBoxInternetTime.Size = new System.Drawing.Size(197, 45);
+            this.groupBoxInternetTime.TabIndex = 18;
+            this.groupBoxInternetTime.TabStop = false;
+            this.groupBoxInternetTime.Text = "北京时间";
+            // 
+            // buttonSync
+            // 
+            this.buttonSync.Location = new System.Drawing.Point(111, 13);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(44, 23);
+            this.buttonSync.TabIndex = 0;
+            this.buttonSync.Text = "&Sync";
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            // 
+            // buttonAdd
+            // 
+            this.buttonAdd.Location = new System.Drawing.Point(87, 13);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(18, 23);
+            this.buttonAdd.TabIndex = 1;
+            this.buttonAdd.Text = "+";
+            this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            // 
+            // buttonMinus
+            // 
+            this.buttonMinus.Location = new System.Drawing.Point(63, 13);
+            this.buttonMinus.Name = "buttonMinus";
+            this.buttonMinus.Size = new System.Drawing.Size(18, 23);
+            this.buttonMinus.TabIndex = 2;
+            this.buttonMinus.Text = "-";
+            this.buttonMinus.UseVisualStyleBackColor = true;
+            this.buttonMinus.Click += new System.EventHandler(this.buttonMinus_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 307);
+            this.ClientSize = new System.Drawing.Size(485, 313);
+            this.Controls.Add(this.groupBoxInternetTime);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panelIE);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxPolicy);
             this.Controls.Add(this.statusStrip1);
@@ -884,7 +932,7 @@
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.panel3.ResumeLayout(false);
+            this.panelIE.ResumeLayout(false);
             this.groupBoxCustom.ResumeLayout(false);
             this.groupBoxCustom.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -894,6 +942,7 @@
             this.tabPagePolicyV1.ResumeLayout(false);
             this.tabPagePolicyV2.ResumeLayout(false);
             this.tabPagePolicyCustom.ResumeLayout(false);
+            this.groupBoxInternetTime.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -943,7 +992,7 @@
         private System.Windows.Forms.TextBox textBoxBPass;
         private System.Windows.Forms.TextBox textBoxBNO;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelIE;
         private System.Windows.Forms.GroupBox groupBoxCustom;
         private System.Windows.Forms.DateTimePicker dateTimePickerCustomSubmitCaptcha;
         private System.Windows.Forms.DateTimePicker dateTimePickerCustomInputCaptcha;
@@ -973,6 +1022,10 @@
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CheckUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AuthCodeToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBoxInternetTime;
+        private System.Windows.Forms.Button buttonMinus;
+        private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.Button buttonSync;
     }
 }
 

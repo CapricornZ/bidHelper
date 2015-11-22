@@ -276,13 +276,13 @@ namespace Helper
         private void buttonSecAdd_Click(object sender, EventArgs e)
         {
             logger.Debug("+1 second");
-            SystemTimeUtil.addTime(1);
+            SystemTimeUtil.addSecond(1);
         }
 
         private void buttonSecMinus_Click(object sender, EventArgs e)
         {
             logger.Debug("-1 second");
-            SystemTimeUtil.addTime(-1);
+            SystemTimeUtil.addSecond(-1);
         }
         #endregion
 

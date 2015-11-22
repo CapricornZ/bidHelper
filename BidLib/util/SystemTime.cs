@@ -58,7 +58,7 @@ namespace tobid.util {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SystemTimeUtil));
 
-        static public void addTime(int second) {
+        static public void addSecond(int second) {
 
             DateTime startDT = DateTime.Now;
 
