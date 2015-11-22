@@ -1138,6 +1138,11 @@ namespace Helper
 
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
+            //for (int i = 1; i < 22; i++) {
+            //    Image img = Image.FromFile(@"e:\captcha" + i + ".png");
+            //    String val = this.m_orcLogin.IdentifyStringFromPic((Bitmap)img);
+            //    System.Console.WriteLine(val);
+            //}
         }
         #endregion
 

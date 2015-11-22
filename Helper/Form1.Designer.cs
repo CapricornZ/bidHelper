@@ -70,6 +70,7 @@
             this.toolStripTextBoxInterval = new System.Windows.Forms.ToolStripTextBox();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AuthCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonIE = new System.Windows.Forms.Button();
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
@@ -101,7 +102,6 @@
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.AuthCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -508,9 +508,16 @@
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
+            // 
+            // AuthCodeToolStripMenuItem
+            // 
+            this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
+            this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
             // buttonIE
             // 
@@ -772,7 +779,7 @@
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Location = new System.Drawing.Point(20, 14);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(227, 174);
+            this.groupBox2.Size = new System.Drawing.Size(227, 160);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "手动";
@@ -841,13 +848,6 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            // 
-            // AuthCodeToolStripMenuItem
-            // 
-            this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
-            this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
             // Form1
             // 
