@@ -20,99 +20,62 @@ namespace CaptchaExam {
 
         private Captcha[] repository;
         private String endPoint = "http://139.196.24.58/captcha.server";
-        //private String endPoint = "http://10.228.89.102/captcha1";
 
         private void Form1_Load(object sender, EventArgs e) {
 
             RestClient rest = new RestClient(this.endPoint + "/repository.json", HttpVerb.GET);
             String repository = rest.MakeRequest(false);
-            //repository = repository.Replace("{", "").Replace("}", "");
             this.repository = Newtonsoft.Json.JsonConvert.DeserializeObject<Captcha[]>(repository);
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            
-            this.startCaptcha = new System.Threading.Thread(delegate() {
 
-                this.button1.Enabled = false;
-                int correct = 0;
+            this.button1.Enabled = false;
+            int result = 0;
+            int max = 25;
+            double totalMS = 0;
+            for (int i = 0; i < max; i++)
+            {
+                int maxMS = 0;
+                if (radioEasy.Checked)
+                    maxMS = 3000;
+                if (radioNormal.Checked)
+                    maxMS = 2000;
+                if (radioHard.Checked)
+                    maxMS = 1500;
 
-                for (int i = 3; i > 0; i--) {//count down
-                    this.label1.Text = String.Format("{0}", i);
-                    System.Threading.Thread.Sleep(1000);
-                }
+                Form2 frm = new Form2(maxMS);
+                frm.ShowDialog();
+                System.Console.WriteLine("COST:{0}, RESULT:{1}", frm.Cost.TotalMilliseconds, frm.Result);
 
-                int lastIndex = -1;
-                for (int i = 0; i < 15; i++) {
-                    reGen:
-                        int index = rd.Next(this.repository.Length);
-                    if (index != lastIndex)
-                        lastIndex = index;
-                    else
-                        goto reGen;
-                    String url = String.Format("{0}/{1}", this.endPoint, this.repository[index].url);
-                    this.label2.Text = this.repository[index].tip;
-                    this.pictureBox2.Image = null;
+                totalMS += frm.Cost.TotalMilliseconds;
+                if (frm.isManual && frm.Cost.TotalMilliseconds <= (maxMS + 500) && frm.Result)
+                    result++;
 
-                    HttpUtil httpReq = new HttpUtil();
-                    System.IO.Stream ms = httpReq.getAsBinary(url);
-                    this.pictureBox1.Image = new Bitmap(ms);
+                if (!frm.isManual && frm.Result)
+                    result++;
+            }
 
-                    this.textBox1.Text = "";
-                    this.textBox1.Focus();
-
-                    if(radioEasy.Checked){
-
-                        for (int sleep = 6; sleep > 0; sleep--) {
-                            this.label1.Text = String.Format("{0:f}", (float)sleep / 2);
-                            System.Threading.Thread.Sleep(500);
-                        }
-                    }
-                    if (radioNormal.Checked) {
-                        for (int sleep = 4; sleep > 0; sleep--) {
-                            this.label1.Text = String.Format("{0:f}", (float)sleep / 2);
-                            System.Threading.Thread.Sleep(500);
-                        }
-                    }
-                    if (radioHard.Checked) {
-                        for (int sleep = 3; sleep > 0; sleep--) {
-                            this.label1.Text = String.Format("{0:f}", (float)sleep / 2);
-                            System.Threading.Thread.Sleep(500);
-                        }
-                    }
-
-                    if (this.textBox1.Text.Equals(this.repository[index].value)) {
-
-                        correct++;
-                        this.pictureBox2.Image = Resources.OK_24px_1114048_easyicon_net;
-                    } else
-                        this.pictureBox2.Image = Resources.Error_24px_1114051_easyicon_net;
-                    System.Threading.Thread.Sleep(1000);
-                }
-
-                this.label1.Text = String.Format("测试结束\r\n正确：{0}, 分数：{1}", correct, correct*100/15);
-                this.button1.Enabled = true;
-            });
-
-            startCaptcha.SetApartmentState(System.Threading.ApartmentState.MTA);
-            startCaptcha.Start();
-            
+            float score = result * 100 / max;
+            double avgMS = totalMS / max;
+            this.label1.Text = String.Format("测试结束\r\n正确：{0}, 分数：{1}\r\n平均耗时：{2}", result, score, avgMS);
+            if (score >= 80)
+                this.pictureBox1.Image = Properties.Resources.like;
+            else
+                this.pictureBox1.Image = Properties.Resources.dislike;
+            this.button1.Enabled = true;
         }
 
         Random rd = new Random();
-        System.Threading.Thread startCaptcha;
         private void timer1_Tick(object sender, EventArgs e) {
             
             int index = rd.Next(this.repository.Length);
             String url = String.Format("{0}/{1}", this.endPoint, this.repository[index]);
             HttpUtil httpReq = new HttpUtil();
             System.IO.Stream ms = httpReq.getAsBinary(url);
-            this.pictureBox1.Image = new Bitmap(ms);
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
-            if (null != this.startCaptcha)
-                this.startCaptcha.Abort();
         }
 
         private void GET_IE(object sender, EventArgs e)
