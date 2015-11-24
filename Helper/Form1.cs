@@ -565,6 +565,9 @@ namespace Helper
 
             ScreenUtil.SetCursorPos(x + bid.submit.captcha[0].x + 55, y + bid.submit.captcha[0].y + 12);//校验码区域
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
+            ScreenUtil.SetCursorPos(x + bid.submit.inputBox.x, y + bid.submit.inputBox.y);//校验码输入框
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
         }
 
         private void processEsc(tobid.rest.position.BidStep2 bid) {

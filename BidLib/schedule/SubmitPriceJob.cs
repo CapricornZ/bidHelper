@@ -272,12 +272,10 @@ namespace tobid.scheduler.jobs
                 ScreenUtil.SetCursorPos(x + givePrice.delta.inputBox.x, y + givePrice.delta.inputBox.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
-
-                System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
                 logger.Info("\tEND   make delta PRICE blank...");
 
                 logger.Info("\tBEGIN input delta PRICE...");
-                KeyBoardUtil.sendMessage(Convert.ToString(delta), this.orcRepository.interval);
+                KeyBoardUtil.sendMessage(Convert.ToString(delta), this.orcRepository.interval, needClean:true);
                 logger.Info("\tEND   input delta PRICE...");
                 System.Threading.Thread.Sleep(100);
 
@@ -297,7 +295,7 @@ namespace tobid.scheduler.jobs
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
 
-                System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
+                //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
                 //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
                 //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
                 //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
@@ -325,7 +323,7 @@ namespace tobid.scheduler.jobs
                 //    System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[i].ToString()], 0, 0x2, 0);
                 //    KeyBoardUtil.sendKeyUp(txtPrice[i].ToString());
                 //}
-                KeyBoardUtil.sendMessage(txtPrice, this.orcRepository.interval);
+                KeyBoardUtil.sendMessage(txtPrice, this.orcRepository.interval, needClean:true);
                 logger.Info("\tEND   input PRICE");
             }
 
@@ -352,7 +350,7 @@ namespace tobid.scheduler.jobs
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             System.Threading.Thread.Sleep(50);
 
-            System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
+            //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 4}{DEL 4}");
             //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
             //System.Threading.Thread.Sleep(25); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0x2, 0);
@@ -419,7 +417,7 @@ namespace tobid.scheduler.jobs
                 //    System.Threading.Thread.Sleep(this.orcRepository.interval); //ScreenUtil.keybd_event(ScreenUtil.keycode[strActive[i].ToString()], 0, 0x2, 0);
                 //    KeyBoardUtil.sendKeyUp(strActive[i].ToString());
                 //}
-                KeyBoardUtil.sendMessage(strActive, this.orcRepository.interval);
+                KeyBoardUtil.sendMessage(strActive, this.orcRepository.interval, needClean:true);
             } System.Threading.Thread.Sleep(100);
             logger.Info("\tEND   input CAPTCHA");
 

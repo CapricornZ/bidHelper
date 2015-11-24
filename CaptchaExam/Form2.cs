@@ -22,7 +22,7 @@ namespace CaptchaExam
         private String endPoint = "http://139.196.24.58/captcha.server";
 
         Random rd = new Random();
-        private string captcha = "";
+        private string captcha = "captcha";
         private DateTime start = DateTime.Now;
         private DateTime end = DateTime.Now;
         private int max;
