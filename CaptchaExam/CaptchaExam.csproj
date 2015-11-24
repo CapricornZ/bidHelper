@@ -106,6 +106,7 @@
     <Content Include="Loading.bmp" />
     <Content Include="ok.bmp" />
     <Content Include="OK_24px_1114048_easyicon.net.ico" />
+    <None Include="refreshBTN.png" />
     <None Include="Resources\like.png" />
     <None Include="Resources\dislike.png" />
   </ItemGroup>

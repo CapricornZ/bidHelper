@@ -26,13 +26,15 @@ namespace CaptchaExam {
             RestClient rest = new RestClient(this.endPoint + "/repository.json", HttpVerb.GET);
             String repository = rest.MakeRequest(false);
             this.repository = Newtonsoft.Json.JsonConvert.DeserializeObject<Captcha[]>(repository);
+
+            this.label2.Text = String.Format("训练数量:{0}", this.hScrollBar1.Value);
         }
 
         private void button1_Click(object sender, EventArgs e) {
 
             this.button1.Enabled = false;
             int result = 0;
-            int max = 25;
+            int max = this.hScrollBar1.Value;
             double totalMS = 0;
             for (int i = 0; i < max; i++)
             {
@@ -48,17 +50,20 @@ namespace CaptchaExam {
                 frm.ShowDialog();
                 System.Console.WriteLine("COST:{0}, RESULT:{1}", frm.Cost.TotalMilliseconds, frm.Result);
 
-                totalMS += frm.Cost.TotalMilliseconds;
-                if (frm.isManual && frm.Cost.TotalMilliseconds <= (maxMS + 500) && frm.Result)
+                if (frm.isManual && frm.Cost.TotalMilliseconds <= (maxMS + 500) && frm.Result) {
                     result++;
+                    totalMS += frm.Cost.TotalMilliseconds;
+                }
 
-                if (!frm.isManual && frm.Result)
+                if (!frm.isManual && frm.Result) {
                     result++;
+                    totalMS += frm.Cost.TotalMilliseconds;
+                }
             }
 
             float score = result * 100 / max;
-            double avgMS = totalMS / max;
-            this.label1.Text = String.Format("测试结束\r\n正确：{0}, 分数：{1}\r\n平均耗时：{2}", result, score, avgMS);
+            double avgMS = totalMS / result;
+            this.label1.Text = String.Format("测试结束\r\n正确：{0}, 分数：{1}\r\n平均耗时：{2:000.000}", result, score, avgMS);
             if (score >= 80)
                 this.pictureBox1.Image = Properties.Resources.like;
             else
@@ -86,6 +91,10 @@ namespace CaptchaExam {
             string IEVersion="当前IE浏览器的版本信息："+(String)mreg.GetValue("Version");
             mreg.Close();
             label1.Text = IEVersion;
+        }
+
+        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e) {
+            this.label2.Text = String.Format("训练数量:{0}", this.hScrollBar1.Value);
         }
 
     }

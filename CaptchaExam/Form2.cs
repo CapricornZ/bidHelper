@@ -23,17 +23,21 @@ namespace CaptchaExam
 
         Random rd = new Random();
         private string captcha = "";
-        private DateTime start;
-        private DateTime end;
+        private DateTime start = DateTime.Now;
+        private DateTime end = DateTime.Now;
         private int max;
 
         public Boolean Result { get; set; }
         public TimeSpan Cost { get { return end - start; } }
         public Boolean isManual { get; set; }
 
+        private Object lockObj = new Object();
+
         private void Form2_Load(object sender, EventArgs e)
         {
             Control.CheckForIllegalCrossThreadCalls = false;
+
+            System.Threading.Monitor.Enter(this.lockObj);
 
             this.isManual = false;
             RestClient rest = new RestClient(this.endPoint + "/repository.json", HttpVerb.GET);
@@ -48,10 +52,31 @@ namespace CaptchaExam
                 this.labelTips.Text = "                    ";
                 this.pictureBoxCaptcha.Image = Properties.Resources.Loading;
 
+                Random random = new Random();
+                int refresh = random.Next(100);
+                System.Console.WriteLine(refresh);
+                if (refresh > 89) {//刷新按钮
 
+                    
+                    System.Threading.Thread.Sleep(1500);
+                    this.pictureBoxCaptcha.Image = Properties.Resources.refreshBTN;
+                    for (int left = 1000; left >= 0; left -= 250) {
+
+                        this.label1.Text = String.Format("{0}ms", left);
+                        System.Threading.Thread.Sleep(250);
+                        if (System.Threading.Monitor.TryEnter(this.lockObj)) {
+                            goto ShowCpatcha;
+                        }
+                    }
+                    this.Result = false;
+                    this.Close();
+                    return;
+                }
+
+            ShowCpatcha:
                 HttpUtil httpReq = new HttpUtil();
                 System.IO.Stream ms = httpReq.getAsBinary(url);
-
+                
                 this.pictureBoxCaptcha.Image = new Bitmap(ms);
                 this.captcha = this.repository[index].value;
                 this.labelTips.Text = this.repository[index].tip;
@@ -99,6 +124,25 @@ namespace CaptchaExam
                 this.end = DateTime.Now;
                 this.Result = this.textBox1.Text.Equals(this.captcha);
                 this.Close();
+            }
+        }
+
+        private void pictureBoxCaptcha_Click(object sender, EventArgs e) {
+            
+            System.Threading.Monitor.Exit(this.lockObj);
+        }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e) {
+            if(System.Threading.Monitor.TryEnter(this.lockObj))
+                System.Threading.Monitor.Exit(this.lockObj);
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e) {
+
+            System.Console.WriteLine(e.KeyData);
+            if (e.KeyData == (Keys.R | Keys.Control)) {
+                System.Threading.Monitor.Exit(this.lockObj);
+                System.Console.WriteLine("Release lock");
             }
         }
     }
