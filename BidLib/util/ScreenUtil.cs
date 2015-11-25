@@ -133,7 +133,7 @@ namespace tobid.util
                     Browser.Left = 0;
                     Browser.Height = 800;
                     Browser.Width = 1100;
-                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX));
 
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     System.Console.WriteLine("Openning {0},{1}", entry.description, entry.url);

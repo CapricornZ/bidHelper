@@ -661,7 +661,7 @@ namespace Helper
             tasks.Add(taskInputCaptcha);
 
             CustomJob job = new CustomJob(tasks: tasks);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 job.Execute();
                 System.Threading.Thread.Sleep(500);

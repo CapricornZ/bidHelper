@@ -13,11 +13,19 @@ namespace Helper
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(String[] args)
         {
             String endPoint = ConfigurationManager.AppSettings["ENDPOINT"];
             String debug = ConfigurationManager.AppSettings["DEBUG"];
             String timePos = ConfigurationManager.AppSettings["TimePosition"];
+
+            if (args.Length == 2) {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["principal"].Value = args[0];
+                config.AppSettings.Settings["credential"].Value = args[1];
+                ConfigurationManager.RefreshSection("appSettings");
+                config.Save();
+            }
 
             if ("true".Equals(debug.ToLower()))
             {
@@ -26,7 +34,7 @@ namespace Helper
                 IntPtr closeMenu = WindowHelper.GetSystemMenu(windowHandle, IntPtr.Zero);
                 uint SC_CLOSE = 0xF060;
                 WindowHelper.RemoveMenu(closeMenu, SC_CLOSE, 0x0);
-                WindowHelper.SetConsoleTitle("千万不要关掉我!");
+                WindowHelper.SetConsoleTitle("嫑要关掉我!");
             }
 
             Application.EnableVisualStyles();

@@ -35,6 +35,9 @@ namespace CaptchaExam
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(134)));
+
             Control.CheckForIllegalCrossThreadCalls = false;
 
             System.Threading.Monitor.Enter(this.lockObj);

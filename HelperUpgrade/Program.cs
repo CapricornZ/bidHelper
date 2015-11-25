@@ -100,11 +100,12 @@ namespace HelperUpgrade {
         static void Download(String endpoint) {
 
             String current = System.Environment.CurrentDirectory;
+            String workDir = current + @"\Release";
             String fileDir = current + @"\Release\helper.exe";
-            //Boolean exists = File.Exists(fileDir+".config");
-            //String id = ",";
-            //if (exists)
-            //    id = readConfig(fileDir);
+            Boolean exists = File.Exists(fileDir+".config");
+            String id = ",";
+            if (exists)
+                id = readConfig(fileDir);
             String strFileName = "Release.zip";
             FileStream FStream = new FileStream(strFileName, FileMode.Create);
 
@@ -130,35 +131,40 @@ namespace HelperUpgrade {
             FStream.Seek(0, 0);
             ZipInputStream zip = new ZipInputStream(FStream);
             ZipEntry entry = null;
-            while ((entry = zip.GetNextEntry()) != null) {
-                if (entry.IsFile) {
+            try {
 
-                    String[] array = entry.Name.Split(new char[] { '/' });
+                while ((entry = zip.GetNextEntry()) != null) {
+                    if (entry.IsFile) {
 
-                    logger.DebugFormat("Create File {0}", entry.Name);
-                    FileStream fs = new FileStream(entry.Name, FileMode.Create);
-                    int size = 2048;
-                    byte[] data = new byte[2048];
-                    while (true) {
-                        size = zip.Read(data, 0, data.Length);
-                        if (size > 0)
-                            fs.Write(data, 0, size);
-                        else
-                            break;
+                        String[] array = entry.Name.Split(new char[] { '/' });
+                        logger.DebugFormat("Create File {0}", entry.Name);
+                        FileStream fs = new FileStream(entry.Name, FileMode.Create);
+                        int size = 2048;
+                        byte[] data = new byte[2048];
+                        while (true) {
+                            size = zip.Read(data, 0, data.Length);
+                            if (size > 0)
+                                fs.Write(data, 0, size);
+                            else
+                                break;
+                        }
+                        fs.Close();
                     }
-                    fs.Close();
+                    if (entry.IsDirectory) {
+                        Directory.CreateDirectory(entry.Name);
+                        logger.DebugFormat("Create Directory {0}", entry.Name);
+                    }
                 }
-                if (entry.IsDirectory) {
-                    Directory.CreateDirectory(entry.Name);
-                    logger.DebugFormat("Create Directory {0}", entry.Name);
-                }
+            } catch (Exception ex) {
+                
+                logger.Error("更新Helper错误，请关闭正在运行的Helper，稍后再试");
+                logger.Error(ex);
             }
             FStream.Close();
             System.Console.WriteLine("下载、更新成功");
 
-            String workDir = current + @"\Release";
             createShortCut(fileDir, workDir);
-            //writeConfig(fileDir, id);
+            writeConfig(fileDir, id);
         }
     }
 }
