@@ -18,6 +18,7 @@ using tobid.scheduler.jobs;
 using System.Configuration;
 using tobid.rest.position;
 using tobid.scheduler.jobs.action;
+using tobid.util.hook;
 
 namespace Helper
 {
@@ -144,6 +145,8 @@ namespace Helper
             Hotkey.UnregisterHotKey(this.Handle, 224);
             Hotkey.UnregisterHotKey(this.Handle, 225);
 
+            kh.UnHook();
+
             logger.Info("Application Form Closed");
         }
 
@@ -208,9 +211,14 @@ namespace Helper
             return new Point(rectX.X, rectX.Y);
         }
 
+        KeyboardHook kh;
         private void Form1_Load(object sender, EventArgs e){
 
             logger.Info("Application Form Load");
+
+            kh = new KeyboardHook();
+            kh.SetHook();
+            kh.OnKeyDownEvent += kh_OnKeyDownEvent;
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
@@ -249,30 +257,30 @@ namespace Helper
             }
 
             Boolean isOk = false;
-            isOk = Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 105, Hotkey.KeyModifiers.Ctrl, Keys.D5);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 106, Hotkey.KeyModifiers.Ctrl, Keys.D6);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 107, Hotkey.KeyModifiers.Ctrl, Keys.D7);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 108, Hotkey.KeyModifiers.Ctrl, Keys.D8);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 109, Hotkey.KeyModifiers.Ctrl, Keys.D9);
 
-            isOk = Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 202, Hotkey.KeyModifiers.Ctrl, Keys.Up);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 201, Hotkey.KeyModifiers.Ctrl, Keys.Left);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 203, Hotkey.KeyModifiers.Ctrl, Keys.Right);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 204, Hotkey.KeyModifiers.Ctrl, Keys.Enter);
 
-            isOk = Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
-            String hotKey = System.Configuration.ConfigurationManager.AppSettings["SubmitHotKey"];
-            if("ENTER".Equals(hotKey))
-                isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
-            if("SPACE".Equals(hotKey))
-                isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Space);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 221, Hotkey.KeyModifiers.None, Keys.Escape);
+            //String hotKey = System.Configuration.ConfigurationManager.AppSettings["SubmitHotKey"];
+            //if("ENTER".Equals(hotKey))
+            //    isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Enter);
+            //if("SPACE".Equals(hotKey))
+            //    isOk = Hotkey.RegisterHotKey(this.Handle, 222, Hotkey.KeyModifiers.None, Keys.Space);
 
-            isOk = Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
-            isOk = Hotkey.RegisterHotKey(this.Handle, 226, Hotkey.KeyModifiers.Ctrl, Keys.R);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 223, Hotkey.KeyModifiers.None, Keys.F9);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
+            //isOk = Hotkey.RegisterHotKey(this.Handle, 226, Hotkey.KeyModifiers.Ctrl, Keys.R);
             
 
             //keepAlive任务配置
@@ -295,6 +303,59 @@ namespace Helper
             m_schedulerSubmitStepV2 = new Scheduler(configStepV2);
 
             this.floatingForm.Show();
+        }
+
+        void kh_OnKeyDownEvent(object sender, KeyEventArgs e) {
+
+            //System.Console.Write(e.KeyValue);
+            //System.Console.WriteLine("," + e.KeyData);
+            switch (e.KeyData) {
+                case Keys.Control | Keys.D3:
+                case Keys.Control | Keys.D4:
+                case Keys.Control | Keys.D5:
+                case Keys.Control | Keys.D6:
+                case Keys.Control | Keys.D7:
+                case Keys.Control | Keys.D8:
+                case Keys.Control | Keys.D9:
+                    int number = ((int)e.KeyData) & 0xFF - (int)Keys.D0;
+                    logger.InfoFormat("HOT KEY [CTRL + {0}] trigger", number);
+                    this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), number*100);
+                    break;
+                case Keys.Control|Keys.Left:
+                    logger.Info("HOT KEY [CTRL + LEFT] trigger");
+                    this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.LEFT);
+                    break;
+                case Keys.Control | Keys.Right:
+                    logger.Info("HOT KEY [CTRL + Right] trigger");
+                    this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.RIGHT);
+                    break;
+                case Keys.Control | Keys.Up:
+                case Keys.Control | Keys.Down:
+                    logger.Info("HOT KEY [CTRL + UP|DOWN] trigger");
+                    this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.MIDDLE);
+                    break;
+                case Keys.Control|Keys.Enter:
+                    logger.Info("HOT KEY [CTRL + ENTER] trigger");
+                    this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.AUTO);
+                    break;
+                case Keys.F4:
+                    logger.Info("HOT KEY [F4] trigger : STOP current JOB");
+                    this.stopCurrentJob();
+                    break;
+                case Keys.F9:
+                    logger.InfoFormat("HOT KEY [F9] trigger : +300");
+                    this.fire(SubmitPriceStep2Job.getPosition(), 300);
+                    break;
+                case Keys.F11:
+                    logger.InfoFormat("HOT KEY [F11] trigger : +1000");
+                    this.exam4Fire(1000);
+                    break;
+                case Keys.Enter:
+                case Keys.Space:
+                    logger.InfoFormat("HOT KEY [ENTER|SPACE] trigger : submit CAPTCHA");
+                    this.processEnter(SubmitPriceStep2Job.getPosition());
+                    break;
+            }
         }
 
         /// <summary>
@@ -1143,8 +1204,9 @@ namespace Helper
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
-            LoginJob job = new LoginJob(m_orcLogin);
-            job.Execute();
+            //LoginJob job = new LoginJob(m_orcLogin);
+            //job.Execute();
+            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
             //for (int i = 1; i < 22; i++) {
             //    Image img = Image.FromFile(@"e:\captcha" + i + ".png");
             //    String val = this.m_orcLogin.IdentifyStringFromPic((Bitmap)img);

@@ -64,6 +64,8 @@
     <Compile Include="action\SubmitCaptchaAction.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
+    <Compile Include="util\Hook\KeyboardHook.cs" />
+    <Compile Include="util\Hook\MouseHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="schedule\rest\Client.cs" />
     <Compile Include="schedule\rest\GlobalConfig.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="util\SendInput.cs" />
     <Compile Include="util\SystemTime.cs" />
     <Compile Include="util\WinIO.cs" />
+    <Compile Include="util\Hook\Win32Api.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SHDocVw">
