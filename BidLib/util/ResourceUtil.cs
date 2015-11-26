@@ -23,6 +23,7 @@ namespace tobid.util
         IOrc Captcha { get; }
         IOrc Login { get; }
         IOrc Title { get; }
+        IOrc Time { get; }
         Entry[] Entries { get; }
     }
 
@@ -35,6 +36,7 @@ namespace tobid.util
         private orc.IOrc m_price;
         private orc.IOrc m_priceSM;
         private orc.IOrc m_loading;
+        private orc.IOrc m_time;
         private orc.IOrc[] m_tips;
         private Entry[] m_entries;
         private String m_tag;
@@ -74,6 +76,7 @@ namespace tobid.util
             IDictionary<Bitmap, String> dictCaptcha = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictLogin = new Dictionary<Bitmap, String>();
             IDictionary<Bitmap, String> dictTitle = new Dictionary<Bitmap, String>();
+            IDictionary<Bitmap, String> dictTime = new Dictionary<Bitmap, String>();
 
             ZipInputStream zip = new ZipInputStream(stream);
             ZipEntry entry = null;
@@ -97,7 +100,9 @@ namespace tobid.util
 
                     String[] array = entry.Name.Split(new char[] { '.', '/' });
                     Bitmap bitmap = new Bitmap(binaryStream);
-                    if (entry.Name.ToLower().StartsWith("captcha/"))
+                    if (entry.Name.ToLower().StartsWith("time/"))
+                        dictTime.Add(bitmap, array[array.Length - 2]);
+                    else if (entry.Name.ToLower().StartsWith("captcha/"))
                         dictCaptcha.Add(bitmap, array[array.Length - 2]);
                     else if (entry.Name.ToLower().StartsWith("price/"))
                         dictPrice.Add(bitmap, array[array.Length - 2]);
@@ -128,6 +133,7 @@ namespace tobid.util
             rtn.m_title = DynamicOrcUtil.getInstance(global.title, dictTitle);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_priceSM = OrcUtil.getInstance(global.priceSM, dictPriceSM);
+            rtn.m_time = OrcUtil.getInstance(global.time, dictTime);
             rtn.m_tips = new IOrc[]{
                 OrcUtilEx.getInstance(global.tips0, dictTips, dictTipsNo),
                 OrcUtilEx.getInstance(global.tips1, dictTips, dictTipsNo)
@@ -147,6 +153,7 @@ namespace tobid.util
         public IOrc Captcha { get { return this.m_captcha; } }
         public IOrc Login { get { return this.m_login; } }
         public IOrc Title { get { return this.m_title; } }
+        public IOrc Time { get { return this.m_time; } }
         public Entry[] Entries { get { return this.m_entries; } }
         #endregion
     }

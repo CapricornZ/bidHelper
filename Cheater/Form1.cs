@@ -52,6 +52,7 @@ namespace Cheater {
         public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
         public IOrc orcPrice { get { return this.m_orcPrice; } }
         public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
+        public IOrc orcTime{get{return null;}}
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public Entry[] entries { get { return this.m_entries; } }

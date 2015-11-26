@@ -24,6 +24,7 @@ namespace tobid.scheduler.jobs
         IOrc orcCaptcha { get; }
         IOrc orcPrice { get; }
         IOrc orcPriceSM { get; }
+        IOrc orcTime { get; }
         IOrc orcCaptchaLoading { get; }
         IOrc[] orcCaptchaTip { get; }
         CaptchaUtil orcCaptchaTipsUtil { get; }

@@ -92,6 +92,7 @@ namespace Helper
                 this.object2InputBox(this.textBoxTitle, bid.title);
                 this.object2InputBox(this.textBoxTitleOk, bid.okButton);
                 this.object2InputBox(this.textBoxPriceSM, bid.price);
+                this.object2InputBox(this.textBoxTime, bid.time);
             } else {
 
                 this.object2InputBox(this.textBox1, new Position(0, 0));
@@ -105,10 +106,10 @@ namespace Helper
                 this.object2InputBox(this.textBox6, new Position(0, 0));
                 this.object2InputBox(this.textBox7, new Position(0, 0));
 
-                //this.object2InputBox(this.textBoxOrigin, new Position(0, 0));
                 this.object2InputBox(this.textBoxTitle, new Position(0, 0));
                 this.object2InputBox(this.textBoxTitleOk, new Position(0, 0));
                 this.object2InputBox(this.textBoxPriceSM, new Position(0, 0));
+                this.object2InputBox(this.textBoxTime, new Position(0, 0));
             }
         }
 
@@ -144,6 +145,7 @@ namespace Helper
             bid.title = this.inputBox2Object(this.textBoxTitle);
             bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
             bid.price = this.inputBox2Object(this.textBoxPriceSM);
+            bid.time = this.inputBox2Object(this.textBoxTime);
             SubmitPriceStep2Job.setPosition(bid);
 
             this.BidStep2 = bid;
@@ -160,6 +162,7 @@ namespace Helper
             this.Close();
         }
 
+        #region 测试按钮组
         private void btnPrice_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
@@ -227,6 +230,24 @@ namespace Helper
                 this.m_pictureSubs[i].Image = this.m_repository.orcCaptchaTipsUtil.SubImgs[i];
         }
 
+        private void buttonTime_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBoxTime);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+
+            String strTime = this.m_repository.orcTime.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+            for (int i = 0; i < 6; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcTime.SubImgs[i];
+            this.labelResult.Text = strTime;
+        }
+        #endregion
+
         private void btnGoto_Click(object sender, EventArgs e)
         {
             Position pos = this.inputBox2Object(this.textBox8);
@@ -237,54 +258,6 @@ namespace Helper
             //KeyBoardUtil.moveMouse(origin.X + pos.x, origin.Y + pos.y);
             System.Console.WriteLine(String.Format("goto : {{ x:{0}, y:{1} }}", pos.x, pos.y));
         }
-
-        #region timer position
-        private void buttonUp_Click(object sender, EventArgs e)
-        {
-            Point pos = this.m_repository.TimePos;
-            pos.Y-=5;
-            this.m_repository.TimePos = pos;
-        }
-
-        private void buttonDown_Click(object sender, EventArgs e)
-        {
-            Point pos = this.m_repository.TimePos;
-            pos.Y+=5;
-            this.m_repository.TimePos = pos;
-        }
-
-        private void buttonLeft_Click(object sender, EventArgs e)
-        {
-            Point pos = this.m_repository.TimePos;
-            pos.X-=5;
-            this.m_repository.TimePos = pos;
-        }
-
-        private void buttonRight_Click(object sender, EventArgs e)
-        {
-            Point pos = this.m_repository.TimePos;
-            pos.X+=5;
-            this.m_repository.TimePos = pos;
-        }
-
-        private void buttonTimeSync_Click(object sender, EventArgs e)
-        {
-            logger.Debug("internet time sync");
-            SystemTimeUtil.SetInternetTime();
-        }
-
-        private void buttonSecAdd_Click(object sender, EventArgs e)
-        {
-            logger.Debug("+1 second");
-            SystemTimeUtil.addSecond(1);
-        }
-
-        private void buttonSecMinus_Click(object sender, EventArgs e)
-        {
-            logger.Debug("-1 second");
-            SystemTimeUtil.addSecond(-1);
-        }
-        #endregion
 
         private void Delta_CheckedChanged(object sender, EventArgs e)
         {
@@ -299,5 +272,7 @@ namespace Helper
                 this.textDeltaButton.Enabled = false;
             }
         }
+
+        
     }
 }

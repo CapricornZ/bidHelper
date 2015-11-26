@@ -50,6 +50,7 @@ namespace tobid.rest
         public OrcConfig login { get { return this.orcConfigs[5] as OrcConfig; } }
         public OrcConfig title { get { return this.orcConfigs[6] as OrcConfig; } }
         public OrcConfig priceSM { get { return this.orcConfigs[7] as OrcConfig; } }
+        public OrcConfig time { get { return this.orcConfigs[8] as OrcConfig; } }
 
         public Boolean dynamic { get; set; }
     }

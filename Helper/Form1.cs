@@ -52,6 +52,7 @@ namespace Helper
         public IOrc orcCaptcha { get { return this.m_orcCaptcha; } }
         public IOrc orcPrice { get { return this.m_orcPrice; } }
         public IOrc orcPriceSM { get { return this.m_orcPriceSM; } }
+        public IOrc orcTime { get { return this.m_orcTime; } }
         public IOrc orcCaptchaLoading { get { return this.m_orcCaptchaLoading; } }
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public Entry[] entries { get { return this.m_entries; } }
@@ -83,6 +84,7 @@ namespace Helper
         private IOrc m_orcCaptcha;
         private IOrc m_orcPrice;
         private IOrc m_orcPriceSM;
+        private IOrc m_orcTime;
         private IOrc m_orcCaptchaLoading;
         private IOrc[] m_orcCaptchaTip;
         private Entry[] m_entries;
@@ -169,6 +171,7 @@ namespace Helper
             this.m_orcCaptcha = configResource.Captcha;//
             this.m_orcPrice = configResource.Price;//价格识别
             this.m_orcPriceSM = configResource.PriceSM;//价格（小）
+            this.m_orcTime = configResource.Time;
             this.m_orcCaptchaLoading = configResource.Loading;//LOADING识别
             this.m_orcCaptchaTip = configResource.Tips;//验证码提示（文字）
             this.m_orcCaptchaTipsUtil = new CaptchaUtil(m_orcCaptchaTip);
@@ -1117,11 +1120,6 @@ namespace Helper
                     DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
             }
-        }
-
-        private void ToolStripMenuItemAuthCode_Click(object sender, EventArgs e){
-
-            
         }
         #endregion
 
