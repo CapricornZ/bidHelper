@@ -26,6 +26,8 @@ namespace tobid.util.http
         public Stream getAsBinary(String address)
         {
             HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
+            httpReq.Proxy = null;//程序启动后第一次Request非常慢的解决法
+
             httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             httpReq.Method = "GET";
             httpReq.Timeout = 1000 * 30;

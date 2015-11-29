@@ -60,6 +60,7 @@ namespace tobid.util.http
         public string MakeRequest(string parameters, Boolean isBasicAuth=true)
         {
             WebRequest request = WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
+            request.Proxy = null;//程序启动后第一次Request非常慢解决法
 
             request.Method = Method.ToString();
             if(isBasicAuth)

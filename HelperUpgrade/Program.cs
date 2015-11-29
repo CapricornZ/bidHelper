@@ -20,7 +20,7 @@ namespace HelperUpgrade {
             String endPoint = ConfigurationManager.AppSettings["ENDPOINT"];
             while (true) {
 
-                System.Console.WriteLine("请输入指令，U：更新、下载HELPER，C：检查版本，Q：结束应用");
+                System.Console.WriteLine("请输入指令，\r\n\tU：更新、下载HELPER\r\n\tC：检查版本\r\n\tQ：结束应用");
                 string command = System.Console.ReadLine();
                 if("U".Equals(command.ToUpper())){
                     Download(endPoint);
@@ -61,6 +61,8 @@ namespace HelperUpgrade {
 
             try {
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(endPoint + "/Release.ver");
+                request.Proxy = null;
+
                 Stream myStream = request.GetResponse().GetResponseStream();
                 StreamReader sr = new StreamReader(myStream);
                 remoteVer = sr.ReadLine();                
@@ -113,6 +115,8 @@ namespace HelperUpgrade {
                 String url = endpoint + "/" + strFileName;
                 logger.DebugFormat("DOWNLOADING Release.zip ... from {0}", url);
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
+                request.Proxy = null;
+
                 Stream myStream = request.GetResponse().GetResponseStream();
                 byte[] btContent = new byte[512];
                 int intSize = 0;

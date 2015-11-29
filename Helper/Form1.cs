@@ -338,6 +338,10 @@ namespace Helper
                     logger.Info("HOT KEY [CTRL + ENTER] trigger");
                     this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.AUTO);
                     break;
+                case Keys.Control|Keys.R:
+                    logger.Info("HOT KEY [CTRL + R] trigger");
+                    this.refreshCaptcha(SubmitPriceStep2Job.getPosition());
+                    break;
                 case Keys.F4:
                     logger.Info("HOT KEY [F4] trigger : STOP current JOB");
                     this.stopCurrentJob();
@@ -354,6 +358,10 @@ namespace Helper
                 case Keys.Space:
                     logger.InfoFormat("HOT KEY [ENTER|SPACE] trigger : submit CAPTCHA");
                     this.processEnter(SubmitPriceStep2Job.getPosition());
+                    break;
+                case Keys.Escape:
+                    logger.InfoFormat("HOT KEY [ESCAPE] trigger : close DIALOG");
+                    this.processEsc(SubmitPriceStep2Job.getPosition());
                     break;
             }
         }
@@ -543,11 +551,10 @@ namespace Helper
                         ScreenUtil.SetCursorPos(x + bid.give.delta.inputBox.x, y + bid.give.delta.inputBox.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         System.Threading.Thread.Sleep(50);
-                        SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
                         logger.Info("\tEND   make delta PRICE blank.");
 
                         logger.Info("\tBEGIN input delta PRICE...");
-                        KeyBoardUtil.sendMessage(Convert.ToString(delta), interval);
+                        KeyBoardUtil.sendMessage(Convert.ToString(delta), interval:interval, needClean:true);
                         logger.Info("\tEND   input delta PRICE.");
                         System.Threading.Thread.Sleep(50);
 
@@ -582,7 +589,7 @@ namespace Helper
                         logger.Info("\tEND   input PRICE");
                     }
 
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(150);
                     //点击出价
                     logger.Info("\tBEGIN click BUTTON[出价]");
                     ScreenUtil.SetCursorPos(x + bid.give.button.x, y + bid.give.button.y);
@@ -612,74 +619,91 @@ namespace Helper
 
         private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
+            //System.Threading.Thread closeDialog = new System.Threading.Thread(delegate(){
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
 
-            logger.Info("关闭校验码窗口");
-            ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                logger.Info("关闭校验码窗口");
+                logger.DebugFormat("close BUTTON POS({0}, {1})", x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);
+                ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            //});
         }
 
         private void refreshCaptcha(tobid.rest.position.BidStep2 bid) {
 
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
+            System.Threading.Thread refreshCaptcha = new System.Threading.Thread(delegate() {
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
 
-            ScreenUtil.SetCursorPos(x + bid.submit.captcha[0].x + 55, y + bid.submit.captcha[0].y + 12);//校验码区域
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                ScreenUtil.SetCursorPos(x + bid.submit.captcha[0].x + 55, y + bid.submit.captcha[0].y + 12);//校验码区域
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                
+                System.Threading.Thread.Sleep(250);
 
-            ScreenUtil.SetCursorPos(x + bid.submit.inputBox.x, y + bid.submit.inputBox.y);//校验码输入框
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                ScreenUtil.SetCursorPos(x + bid.submit.inputBox.x, y + bid.submit.inputBox.y);//校验码输入框
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            });
+            refreshCaptcha.Start();
         }
 
         private void processEsc(tobid.rest.position.BidStep2 bid) {
 
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
+            System.Threading.Thread processEsc = new System.Threading.Thread(delegate() {
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
 
-            byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
-            File.WriteAllBytes("TITLE.bmp", title);
-            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
-            String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
-            logger.Debug(strTitle);
+                byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
+                //File.WriteAllBytes("TITLE.bmp", title);
+                Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+                String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+                logger.Debug(strTitle);
 
-            if ("系统提示".Equals(strTitle)) {
+                if ("系统提示".Equals(strTitle)) {
 
-                logger.Info("proces ESC in [系统提示]");
-                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
-                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            } else if ("投标拍卖".Equals(strTitle)) {
+                    logger.Info("proces ESC in [系统提示]");
+                    ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                }
+                else if ("投标拍卖".Equals(strTitle)) {
 
-                logger.Info("proces ESC in [投标拍卖]");
-                ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
-                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            }
+                    logger.Info("proces ESC in [投标拍卖]");
+                    ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                }
+            });
+            processEsc.Start();
         }
 
         private void processEnter(tobid.rest.position.BidStep2 bid) {
 
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
+            System.Threading.Thread processEnter = new System.Threading.Thread(delegate() {
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
 
-            byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
-            File.WriteAllBytes("TITLE.bmp", title);
-            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
-            String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
-            logger.Debug(strTitle);
-            if ("系统提示".Equals(strTitle)){
+                byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
+                //File.WriteAllBytes("TITLE.bmp", title);
+                Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+                String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+                logger.Debug(strTitle);
+                if ("系统提示".Equals(strTitle)) {
 
-                logger.Info("proces Enter in [系统提示]");
-                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
-                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            } else if ("投标拍卖".Equals(strTitle)) {
+                    logger.Info("proces Enter in [系统提示]");
+                    ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                }
+                else if ("投标拍卖".Equals(strTitle)) {
 
-                logger.Info("proces Enter in [投标拍卖]");
-                this.submitCaptcha(SubmitPriceStep2Job.getPosition());
-            }
+                    logger.Info("proces Enter in [投标拍卖]");
+                    this.submitCaptcha(SubmitPriceStep2Job.getPosition());
+                }
+            });
+            processEnter.Start();
+
         }
 
         private void stopCurrentJob() {
