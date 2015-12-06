@@ -60,16 +60,33 @@ namespace tobid.util {
 
         static public void addSecond(int second) {
 
-            DateTime startDT = DateTime.Now;
+            DateTime startDT = DateTime.Now.AddSeconds(second);
 
             SystemTime st = new SystemTime();
-            st.wYear = (ushort)startDT.Year;
-            st.wMonth = (ushort)startDT.Month;
-            st.wDay = (ushort)startDT.Day;
-            st.wHour = (ushort)startDT.Hour;
-            st.wMinute = (ushort)startDT.Minute;
-            st.wSecond = (ushort)(startDT.Second + second);
+            st.FromDateTime(startDT);
             SystemTimeUtil.SetLocalTime(ref st);
+        }
+
+        static public void addMilliSecond(int milliSecond) {
+
+            DateTime startDT = DateTime.Now.AddMilliseconds(milliSecond);
+
+            SystemTime st = new SystemTime();
+            st.FromDateTime(startDT);
+            SystemTimeUtil.SetLocalTime(ref st);
+        }
+
+        static public void SetCustomTime(int Hour, int Minute, int Second) {
+
+            DateTime now = DateTime.Now;
+            DateTime newTime = new DateTime(now.Year, now.Month, now.Day, Hour, Minute, Second);
+
+            SystemTime st = new SystemTime();
+            st.FromDateTime(newTime);
+            logger.Info("SET TIME " + newTime);
+
+            SystemTimeUtil.SetLocalTime(ref st);
+            logger.Info("时间已同步");
         }
 
         static public void SetInternetTime() {

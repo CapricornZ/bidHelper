@@ -248,7 +248,8 @@ namespace Helper
             String strTime = this.m_repository.orcTime.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
             for (int i = 0; i < 6; i++)
                 this.m_pictureSubs[i].Image = this.m_repository.orcTime.SubImgs[i];
-            this.labelResult.Text = strTime;
+            char[] array = strTime.ToArray<char>();
+            this.labelResult.Text = String.Format("{0}{1}:{2}{3}:{4}{5}", array[0], array[1], array[2], array[3], array[4], array[5]);
         }
 
         private void btnWifi_Click(object sender, EventArgs e) {

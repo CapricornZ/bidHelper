@@ -35,9 +35,11 @@ namespace Helper
             InitializeComponent();
         }
 
-        public Form1(String endPoint, String timePos){
+        public Form1(String endPoint, String timePos, IntPtr consoleHWND){
 
             this.EndPoint = endPoint;
+            this.ConsoleHWND = consoleHWND;
+
             string[] pos = timePos.Split(new char[] { ',' });
             this.TimePos = new Point(Convert.ToInt16(pos[0]), Convert.ToInt16(pos[1]));
             InitializeComponent();
@@ -45,6 +47,7 @@ namespace Helper
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
+        private IntPtr ConsoleHWND { get; set; }
 
         #region IRepository
         public Boolean deltaPriceOnUI { get; set; }
@@ -220,6 +223,17 @@ namespace Helper
         private void Form1_Load(object sender, EventArgs e){
 
             logger.Info("Application Form Load");
+
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - 50);
+
+            if (this.ConsoleHWND != IntPtr.Zero) {
+
+                int SWP_NOSIZE = 1;
+                Rect rect = new Rect();
+                WindowHelper.GetWindowRect(this.ConsoleHWND, out rect);
+                WindowHelper.SetWindowPos(this.ConsoleHWND, 0,
+                    Screen.PrimaryScreen.Bounds.Width - (rect.Right-rect.Left), 0, 0, 0, SWP_NOSIZE);
+            }
 
             kh = new KeyboardHook();
             kh.SetHook();
@@ -1425,18 +1439,31 @@ namespace Helper
 
         #region 北京时间
         private void buttonSync_Click(object sender, EventArgs e) {
-            logger.Debug("internet time sync");
-            SystemTimeUtil.SetInternetTime();
+            
+            //logger.Debug("internet time sync");
+            //SystemTimeUtil.SetInternetTime();
+
+            logger.Debug("bid time sync");
+            BidStep2 bidStep = SubmitPriceStep2Job.getPosition();
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = bidStep.time;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
+            String strTime = this.orcTime.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+            
+            char[] array = strTime.ToArray<char>();
+            String timestamp = String.Format("{0}{1}:{2}{3}:{4}{5}", array[0], array[1], array[2], array[3], array[4], array[5]);
+            SystemTimeUtil.SetCustomTime(Int16.Parse(strTime.Substring(0,2)), Int16.Parse(strTime.Substring(2,2)), Int16.Parse(strTime.Substring(4,2)));
         }
 
         private void buttonAdd_Click(object sender, EventArgs e) {
             logger.Debug("+1 second");
-            SystemTimeUtil.addSecond(1);
+            SystemTimeUtil.addMilliSecond(500);
         }
 
         private void buttonMinus_Click(object sender, EventArgs e) {
             logger.Debug("-1 second");
-            SystemTimeUtil.addSecond(-1);
+            SystemTimeUtil.addMilliSecond(-500);
         }
         #endregion
     }

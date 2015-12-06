@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace Helper
 {
+    public struct Rect {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
     public class WindowHelper
     {
         [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "ShowWindow")]
@@ -30,5 +38,11 @@ namespace Helper
 
         [System.Runtime.InteropServices.DllImport("Kernel32.dll")]
         public static extern bool SetConsoleTitle(string strMessage);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int GetWindowRect(IntPtr hwnd, out Rect lpRect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int Width, int Height, int flags);
     }
 }

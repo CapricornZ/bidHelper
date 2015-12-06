@@ -46,7 +46,7 @@ namespace CaptchaExam {
                 this.button1.Enabled = false;
 
                 MessageBoxButtons messButton = MessageBoxButtons.OK;
-                DialogResult dr = MessageBox.Show("请输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                DialogResult dr = MessageBox.Show("无效或已过期，请输入正确的授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
             }
 
             
@@ -134,7 +134,6 @@ namespace CaptchaExam {
                     String rtn = rest.MakeRequest(null, false);
 
                     Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    config.AppSettings.Settings["principal"].Value = hostName;
                     config.AppSettings.Settings["credential"].Value = authCode;
                     config.Save();
                     ConfigurationManager.RefreshSection("appSettings");

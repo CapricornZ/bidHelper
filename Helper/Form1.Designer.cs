@@ -394,7 +394,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(336, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(367, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -890,7 +890,7 @@
             // 
             // buttonMinus
             // 
-            this.buttonMinus.Location = new System.Drawing.Point(63, 13);
+            this.buttonMinus.Location = new System.Drawing.Point(76, 13);
             this.buttonMinus.Name = "buttonMinus";
             this.buttonMinus.Size = new System.Drawing.Size(18, 23);
             this.buttonMinus.TabIndex = 2;
@@ -900,7 +900,7 @@
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(87, 13);
+            this.buttonAdd.Location = new System.Drawing.Point(100, 13);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(18, 23);
             this.buttonAdd.TabIndex = 1;
@@ -910,7 +910,7 @@
             // 
             // buttonSync
             // 
-            this.buttonSync.Location = new System.Drawing.Point(111, 13);
+            this.buttonSync.Location = new System.Drawing.Point(139, 13);
             this.buttonSync.Name = "buttonSync";
             this.buttonSync.Size = new System.Drawing.Size(44, 23);
             this.buttonSync.TabIndex = 0;
@@ -935,6 +935,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.Form1_Activated);
