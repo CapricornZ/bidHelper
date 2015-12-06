@@ -50,6 +50,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,6 +63,7 @@
     <Compile Include="action\InputPriceAction.cs" />
     <Compile Include="action\InputCaptchaAction.cs" />
     <Compile Include="action\SubmitCaptchaAction.cs" />
+    <Compile Include="Computer.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
     <Compile Include="util\Hook\KeyboardHook.cs" />

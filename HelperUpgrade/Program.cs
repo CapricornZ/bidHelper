@@ -8,27 +8,120 @@ using ICSharpCode.SharpZipLib.Zip;
 using System.Reflection;
 using System.Configuration;
 using vbAccelerator.Components.Shell;
+using System.Drawing;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 namespace HelperUpgrade {
+
+    public class DialogHelper {
+
+        public static int Hues { get { return 0; } }
+        public static int Saturation { get { return 1; } }
+        public static int Brightness { get { return 2; } }
+
+        public class HSBColor {
+
+            public  float Hues { get; set; }
+            public  float Saturation { get; set; }
+            public  float Brightness { get; set; }
+
+            public HSBColor(float Hues, float Saturation, float Brightness) {
+                this.Hues = Hues;
+                this.Saturation = Saturation;
+                this.Brightness = Brightness;
+            }
+        }
+
+        public static HSBColor rgb2hsb(Color point) {
+
+            int[] rgb = new int[] { point.R, point.G, point.B};
+            Array.Sort(rgb);
+            int max = rgb[2];  
+            int min = rgb[0];  
+  
+            float hsbB = max / 255.0f;  
+            float hsbS = max == 0 ? 0 : (max - min) / (float) max;  
+  
+            float hsbH = 0;  
+            if (max == point.R && point.G >= point.B) {  
+                hsbH = (point.G - point.B) * 60f / (max - min) + 0;  
+            } else if (max == point.R && point.G < point.B) {  
+                hsbH = (point.G - point.B) * 60f / (max - min) + 360;  
+            } else if (max == point.G) {  
+                hsbH = (point.B - point.R) * 60f / (max - min) + 120;  
+            } else if (max == point.B) {  
+                hsbH = (point.R - point.G) * 60f / (max - min) + 240;  
+            }
+
+            return new HSBColor(hsbH, hsbS, hsbB);
+        }
+
+        static public Boolean isWifiGreen(Bitmap bitmap) {
+
+            int green = 0;
+            for(int x=0; x<bitmap.Width; x++)
+                for (int y = 0; y < bitmap.Height; y++) {
+
+                    HSBColor hsb = rgb2hsb(bitmap.GetPixel(x, y));
+                    //if(hsb.Hues > 142 && hsb.Hues < 185)
+                    //if(hsb.Hues >= 130 && hsb.Hues <= 148)//real
+                    if(hsb.Hues >= 130 && hsb.Hues <= 187)//real&simu
+                        green++;
+                }
+            int pixel = bitmap.Width * bitmap.Height;
+            int percent = green * 100 / pixel;
+            return percent >= 80;
+        }
+
+        static public Boolean isFinish(Bitmap bitmap) {
+
+            int blue = 0;
+            for(int x=0; x<bitmap.Width; x++)
+                for (int y = 0; y < bitmap.Height; y++) {
+
+                    HSBColor hsb = rgb2hsb(bitmap.GetPixel(x, y));
+                    if (hsb.Hues > 200 && hsb.Hues < 215)
+                        blue++;
+                }
+
+            int pixel = bitmap.Width * bitmap.Height;
+            int percent = blue * 100 / pixel;
+            System.Console.WriteLine(String.Format("{0}/{1} : {2}%", blue, pixel, percent));
+            return percent>60;
+        }
+    }
     class Program {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Program));
 
         static void Main(string[] args) {
 
+            {
+                Bitmap bitmap = (Bitmap)Bitmap.FromFile(@"C:\Users\0392xl\Desktop\8040.png");
+                for(int x=0; x<bitmap.Width; x++)
+                    for (int y = 0; y < bitmap.Height; y++) {
+                        
+                        Color color = bitmap.GetPixel(x, y);
+                        if (color.GetHue() < 15 || color.GetHue() > 345)
+                            ;
+                        else
+                            bitmap.SetPixel(x, y, Color.White);
+                    }
+                bitmap.Save(@"C:\Users\0392xl\Desktop\8040x.png");
+            }
+
             String endPoint = ConfigurationManager.AppSettings["ENDPOINT"];
             while (true) {
 
                 System.Console.WriteLine("请输入指令，\r\n\tU：更新、下载HELPER\r\n\tC：检查版本\r\n\tQ：结束应用");
                 string command = System.Console.ReadLine();
-                if("U".Equals(command.ToUpper())){
+                if ("U".Equals(command.ToUpper())) {
                     Download(endPoint);
                 }
-                if("C".Equals(command.ToUpper())){
+                if ("C".Equals(command.ToUpper())) {
                     Check(endPoint);
                 }
-                if("Q".Equals(command.ToUpper())){
+                if ("Q".Equals(command.ToUpper())) {
                     break;
                 }
             }

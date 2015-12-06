@@ -28,6 +28,77 @@ namespace tobid.util
         Absolute = 0x8000
     }
 
+    public enum ShowWindowCommands {
+        /// <summary>
+        /// Hides the window and activates another window.
+        /// </summary>
+        Hide = 0,
+        /// <summary>
+        /// Activates and displays a window. If the window is minimized or
+        /// maximized, the system restores it to its original size and position.
+        /// An application should specify this flag when displaying the window
+        /// for the first time.
+        /// </summary>
+        Normal = 1,
+        /// <summary>
+        /// Activates the window and displays it as a minimized window.
+        /// </summary>
+        ShowMinimized = 2,
+        /// <summary>
+        /// Maximizes the specified window.
+        /// </summary>
+        Maximize = 3, // is this the right value?
+        /// <summary>
+        /// Activates the window and displays it as a maximized window.
+        /// </summary>      
+        ShowMaximized = 3,
+        /// <summary>
+        /// Displays a window in its most recent size and position. This value
+        /// is similar to <see cref="Win32.ShowWindowCommand.Normal"/>, except
+        /// the window is not activated.
+        /// </summary>
+        ShowNoActivate = 4,
+        /// <summary>
+        /// Activates the window and displays it in its current size and position.
+        /// </summary>
+        Show = 5,
+        /// <summary>
+        /// Minimizes the specified window and activates the next top-level
+        /// window in the Z order.
+        /// </summary>
+        Minimize = 6,
+        /// <summary>
+        /// Displays the window as a minimized window. This value is similar to
+        /// <see cref="Win32.ShowWindowCommand.ShowMinimized"/>, except the
+        /// window is not activated.
+        /// </summary>
+        ShowMinNoActive = 7,
+        /// <summary>
+        /// Displays the window in its current size and position. This value is
+        /// similar to <see cref="Win32.ShowWindowCommand.Show"/>, except the
+        /// window is not activated.
+        /// </summary>
+        ShowNA = 8,
+        /// <summary>
+        /// Activates and displays the window. If the window is minimized or
+        /// maximized, the system restores it to its original size and position.
+        /// An application should specify this flag when restoring a minimized window.
+        /// </summary>
+        Restore = 9,
+        /// <summary>
+        /// Sets the show state based on the SW_* value specified in the
+        /// STARTUPINFO structure passed to the CreateProcess function by the
+        /// program that started the application.
+        /// </summary>
+        ShowDefault = 10,
+        /// <summary>
+        ///  <b>Windows 2000/XP:</b> Minimizes a window, even if the thread
+        /// that owns the window is not responding. This flag should only be
+        /// used when minimizing windows from a different thread.
+        /// </summary>
+        ForceMinimize = 11
+    }
+
     public class IEUtil{
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -45,6 +116,12 @@ namespace tobid.util
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("user32.dll")]
+        static extern bool IsIconic(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        static extern bool IsZoomed(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommands nCmdShow);
 
         static private int processID;
 
@@ -108,7 +185,6 @@ namespace tobid.util
         static public void openURL(String category, Entry entry) {
 
             const int GWL_STYLE = -16;
-            const long WS_THICKFRAME = 0x40000L;
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
             const long WS_VSCROLL = 0x00200000L;
@@ -126,6 +202,12 @@ namespace tobid.util
 
                     //SetWindowPos((IntPtr)Browser.HWND, 0, 0, 0, 1000, 1100, 0x40);
                     long value = (long)GetWindowLong((IntPtr)Browser.HWND, GWL_STYLE);
+
+                    bool isMax = IsZoomed((IntPtr)Browser.HWND);
+                    bool isMin = IsIconic((IntPtr)Browser.HWND);
+
+                    if (isMax || isMin) 
+                        ShowWindow((IntPtr)Browser.HWND, ShowWindowCommands.Normal);
 
                     Browser.MenuBar = false;
                     Browser.AddressBar = true;
@@ -231,11 +313,9 @@ namespace tobid.util
 
         public void screenCapture(int x, int y, int width, int height)
         {
-
             Bitmap image = new Bitmap(width, height);
             Graphics imgGraphics = Graphics.FromImage(image);
             imgGraphics.CopyFromScreen(x, y, 0, 0, new Size(width, height));
-            //image.Save("e:\\xxx.jpg", ImageFormat.Jpeg);
         }
 
         public byte[] screenCaptureAsByte(int x, int y, int width, int height)
@@ -245,7 +325,6 @@ namespace tobid.util
             imgGraphics.CopyFromScreen(x, y, 0, 0, new Size(width, height));
             MemoryStream ms = new MemoryStream();
             image.Save(ms, ImageFormat.Bmp);
-            //image.Save("e:\\xxx.bmp", ImageFormat.Bmp);
             byte[] bytes = ms.GetBuffer();
             ms.Close();
             return bytes;

@@ -19,6 +19,7 @@ using System.Configuration;
 using tobid.rest.position;
 using tobid.scheduler.jobs.action;
 using tobid.util.hook;
+using System.Threading;
 
 namespace Helper
 {
@@ -100,6 +101,7 @@ namespace Helper
         private System.Threading.Thread submitPriceStep2Thread;
         private System.Threading.Thread submitPriceV2Thread;
         private System.Threading.Thread customThread;
+        private System.Threading.Thread wifiMonitorThread;
 
         private Step2ConfigDialog step2Dialog;
         private FloatingForm floatingForm;
@@ -125,6 +127,9 @@ namespace Helper
 
             if (null != this.customThread && (this.customThread.ThreadState == System.Threading.ThreadState.Running || this.customThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
                 this.customThread.Abort();
+
+            if (null != this.wifiMonitorThread)
+                this.wifiMonitorThread.Abort();
 
             Hotkey.UnregisterHotKey(this.Handle, 103);
             Hotkey.UnregisterHotKey(this.Handle, 104);
@@ -305,9 +310,64 @@ namespace Helper
             this.floatingForm.Show();
         }
 
+        void monitorWifi() {
+
+            BidStep2 step2 = SubmitPriceStep2Job.getPosition();
+
+            Point origin = findOrigin();
+            int x = origin.X, y = origin.Y;
+            if (step2.wifi != null) {
+                x += step2.wifi.x;
+                y += step2.wifi.y;
+            }
+            ScreenUtil screenUtil = new ScreenUtil();
+            int count = 0;
+            while (true) {
+
+                logger.DebugFormat("IE frame origin({0},{1})", origin.X, origin.Y);
+                logger.DebugFormat("scan CONNECTION STATUS({0},{1}) ...", x, y);
+                count++;
+
+                if (origin.X == 0 && origin.Y == 0) {
+
+                    this.toolStripStatusLabelStatus.BackColor = Color.Orange;
+                    this.toolStripStatusLabelStatus.Text = "[未知]";
+                }
+                else {
+
+                    byte[] wifiSpot = screenUtil.screenCaptureAsByte(x, y, 6, 5);
+                    File.WriteAllBytes(@"wifi-spot.bmp", wifiSpot);
+                    if (CaptchaHelper.isWifiRed(Bitmap.FromStream(new MemoryStream(wifiSpot)) as Bitmap)) {
+                        
+                        this.toolStripStatusLabelStatus.BackColor = Color.Red;
+                        this.toolStripStatusLabelStatus.Text = "[离线]";
+                        this.notifyIcon1.ShowBalloonTip(5000, "国拍", "检测到掉线，F5刷新或重新登录", ToolTipIcon.Warning);
+                    }
+                    else {
+                        this.toolStripStatusLabelStatus.BackColor = Color.Lime;
+                        this.toolStripStatusLabelStatus.Text = "[在线]";
+                    }
+                }
+
+                if (count % 60 == 0) {//5mins
+                    try {
+                        origin = findOrigin();
+                        if (step2.wifi != null) {
+                            x = origin.X + step2.wifi.x;
+                            y = origin.Y + step2.wifi.y;
+                        }
+                    }
+                    catch (Exception ex) {
+                        logger.Error(ex.Message);
+                    }
+                }
+                System.Threading.Thread.Sleep(5000);
+            }
+        }
+
         void kh_OnKeyDownEvent(object sender, KeyEventArgs e) {
 
-            //System.Console.Write(e.KeyValue);
+            System.Console.WriteLine(e.KeyCode);
             //System.Console.WriteLine("," + e.KeyData);
             switch (e.KeyData) {
                 case Keys.Control | Keys.D3:
@@ -513,9 +573,8 @@ namespace Helper
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
-
+            
             this.toolStripStatusLabel2.Text = String.Format("当前{0}", DateTime.Now.ToString("HH:mm:ss"));
-            //new ScreenUtil().drawSomething(this.TimePos.X, this.TimePos.Y, DateTime.Now.ToString("HH:mm:ss"));
         }
 
         public void acceptMessage(String msg){
@@ -617,7 +676,7 @@ namespace Helper
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
         }
 
-        private void closeDialog(tobid.rest.position.BidStep2 bid) {
+        /*private void closeDialog(tobid.rest.position.BidStep2 bid) {
 
             //System.Threading.Thread closeDialog = new System.Threading.Thread(delegate(){
                 Point origin = findOrigin();
@@ -629,7 +688,7 @@ namespace Helper
                 ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             //});
-        }
+        }*/
 
         private void refreshCaptcha(tobid.rest.position.BidStep2 bid) {
 
@@ -657,7 +716,6 @@ namespace Helper
                 int y = origin.Y;
 
                 byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
-                //File.WriteAllBytes("TITLE.bmp", title);
                 Bitmap bitTitle = new Bitmap(new MemoryStream(title));
                 String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
                 logger.Debug(strTitle);
@@ -686,7 +744,6 @@ namespace Helper
                 int y = origin.Y;
 
                 byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
-                //File.WriteAllBytes("TITLE.bmp", title);
                 Bitmap bitTitle = new Bitmap(new MemoryStream(title));
                 String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
                 logger.Debug(strTitle);
@@ -720,40 +777,51 @@ namespace Helper
 
         private void fire(tobid.rest.position.BidStep2 bid, int delta) {
 
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
+            System.Threading.Thread startFire = new System.Threading.Thread(delegate() {
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
 
-            ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
-            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-            System.Threading.Thread.Sleep(100);
+                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                System.Threading.Thread.Sleep(100);
+                
+                //SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
+                //job.Fire(delta);
 
-            SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
-            job.Fire(delta);
+                IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
+                IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
+                IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
+                IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
+                actions.execute();
+            });
+            startFire.Start();
         }
 
         private void exam4Fire(int delta) {
 
-            String fire1 = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            String fire2 = DateTime.Now.AddSeconds(2).ToString("yyyy-MM-dd HH:mm:ss");
+            System.Threading.Thread startExam = new System.Threading.Thread(delegate() {
+                String fire1 = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                String fire2 = DateTime.Now.AddSeconds(2).ToString("yyyy-MM-dd HH:mm:ss");
 
-            List<Task> tasks = new List<Task>();
-            Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
-                action: new tobid.scheduler.jobs.action.InputPriceAction(delta: delta, repo: this),
-                notify: this,
-                fireTime: fire1);
-            tasks.Add(taskInputPrice);
+                List<Task> tasks = new List<Task>();
+                Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
+                    action: new tobid.scheduler.jobs.action.InputPriceAction(delta: delta, repo: this),
+                    notify: this,
+                    fireTime: fire1);
+                tasks.Add(taskInputPrice);
 
-            InputCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.InputCaptchaAction(repo: this);
-            Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); 
-            tasks.Add(taskInputCaptcha);
+                ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
+                Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2);
+                tasks.Add(taskInputCaptcha);
 
-            CustomJob job = new CustomJob(tasks: tasks);
-            for (int i = 0; i < 6; i++)
-            {
-                job.Execute();
-                System.Threading.Thread.Sleep(500);
-            }
+                CustomJob job = new CustomJob(tasks: tasks);
+                for (int i = 0; i < 6; i++) {
+                    job.Execute();
+                    System.Threading.Thread.Sleep(500);
+                }
+            });
+            startExam.Start();
         }
 
         private void submit(tobid.rest.position.BidStep2 bid, String activeCaptcha) {
@@ -940,7 +1008,7 @@ namespace Helper
 
                 if (checkBoxInputCaptcha.Checked) {
 
-                    InputCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.InputCaptchaAction(repo: this);
+                    ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
                     SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
                     if (checkBoxSubmitCaptcha.Checked) {
                         Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
@@ -970,7 +1038,7 @@ namespace Helper
                 System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
                 this.customThread = new System.Threading.Thread(customThreadStart);
                 this.customThread.Name = "customThread";
-                this.customThread.Start();                
+                this.customThread.Start();
             }
         }
 
@@ -1017,16 +1085,20 @@ namespace Helper
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             //DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
             //    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
+            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
+
                 Step2Operation bidOps = SubmitPriceStep2Job.getConfig();
                 bidOps.updateTime = DateTime.Now;
                 bidOps.startTime = this.dateTimePicker1.Value;
                 bidOps.expireTime = bidOps.startTime.AddHours(1);
 
+                String fireTime = this.dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 this.textBox1.Text = this.dateTimePicker1.Value.ToString("MM/dd HH:mm:ss");
+                this.textBox2.Text = this.comboBox1.Text;
 
+                /*
                 if (radioDeltaPrice.Checked) {
                     object obj = this.comboBox1.SelectedItem;
                     if (obj == null) {
@@ -1036,7 +1108,7 @@ namespace Helper
                     }
                     this.textBox2.Text = this.comboBox1.Text;
                     bidOps.price = Int32.Parse(this.comboBox1.Text);
-                    SubmitPriceStep2Job.setConfig(bidOps, this.checkPriceOnly.Checked, updatePos:false);
+                    SubmitPriceStep2Job.setConfig(bidOps, this.checkPriceOnly.Checked, updatePos: false);
                 }
 
                 if (radioPrice.Checked) {
@@ -1055,7 +1127,38 @@ namespace Helper
                 this.submitPriceStep2Thread = new System.Threading.Thread(submitPriceThreadStart);
                 this.submitPriceStep2Thread.Name = "submitPriceThread";
                 this.submitPriceStep2Thread.Start();
+                */
+
+                {
+                    int delta = Int32.Parse(this.comboBox1.Text);
+
+                    IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
+                    IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
+                    IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
+                    IBidAction actions = null;
+                    if(!this.checkPriceOnly.Checked)
+                        actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
+                    else
+                        actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha});
+
+                    Task scheduledTask = new Task(action: actions, notify: this, fireTime: fireTime);
+
+                    if (null != this.submitPriceStep2Thread)
+                        this.submitPriceStep2Thread.Abort();
+
+                    SchedulerConfiguration customConf = new SchedulerConfiguration(500);
+                    customConf.Job = new CustomJob(tasks: new List<Task>() { scheduledTask });
+                    Scheduler schedulerCustom = new Scheduler(customConf);
+
+                    System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(schedulerCustom.Start);
+                    this.submitPriceStep2Thread = new System.Threading.Thread(customThreadStart);
+                    this.submitPriceStep2Thread.Name = "submitV1";
+                    this.submitPriceStep2Thread.Start();                
+                }
+                
             }
+
+            
         }
 
         private void textInputPrice_KeyPress(object sender, KeyPressEventArgs e) {
@@ -1223,19 +1326,33 @@ namespace Helper
                     IEUtil.openURL(this.category, this.entryForm.SelectedEntry);
             } else
                 IEUtil.openURL(this.category, this.entries[0]);
-            
+
+            if (this.wifiMonitorThread != null)
+                this.wifiMonitorThread.Abort();
+            this.wifiMonitorThread = new System.Threading.Thread(new ThreadStart(this.monitorWifi));
+            this.wifiMonitorThread.Start();
         }
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
             //LoginJob job = new LoginJob(m_orcLogin);
             //job.Execute();
-            this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
+
+            //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
+
             //for (int i = 1; i < 22; i++) {
             //    Image img = Image.FromFile(@"e:\captcha" + i + ".png");
             //    String val = this.m_orcLogin.IdentifyStringFromPic((Bitmap)img);
             //    System.Console.WriteLine(val);
             //}
+
+            //214,203
+            Point origin = findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            byte[] content = new ScreenUtil().screenCaptureAsByte(x+214, y+203, 6, 5);
+            File.WriteAllBytes(@"e:\point.bmp", content);
+            //H:143-184
         }
         #endregion
 

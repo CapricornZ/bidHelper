@@ -52,6 +52,16 @@ namespace tobid.util.http
             this.PostData = Newtonsoft.Json.JsonConvert.SerializeObject(postObj);
         }
 
+        public RestClient(string endpoint, HttpVerb method, String basicAuth){
+
+            this.EndPoint = endpoint;
+            this.Method = method;
+            this.ContentType = "text/xml";
+            this.PostData = "";
+
+            this.basicAuth = basicAuth;
+        }
+
         public string MakeRequest(Boolean isBasicAuth=true)
         {
             return MakeRequest(null, isBasicAuth:isBasicAuth);
@@ -61,6 +71,9 @@ namespace tobid.util.http
         {
             WebRequest request = WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
             request.Proxy = null;//程序启动后第一次Request非常慢解决法
+            //WebProxy proxy = new WebProxy(new Uri("10.16.95.12:80"));
+            //proxy.Credentials = new NetworkCredential("hq\0392xl", "Pass2012");
+            //request.Proxy = proxy;
 
             request.Method = Method.ToString();
             if(isBasicAuth)

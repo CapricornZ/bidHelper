@@ -34,11 +34,11 @@
             this.labelTime.BackColor = System.Drawing.Color.Black;
             this.labelTime.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labelTime.ForeColor = System.Drawing.Color.Red;
-            this.labelTime.Location = new System.Drawing.Point(51, 9);
+            this.labelTime.Location = new System.Drawing.Point(10, 16);
             this.labelTime.Name = "labelTime";
-            this.labelTime.Size = new System.Drawing.Size(62, 16);
+            this.labelTime.Size = new System.Drawing.Size(116, 16);
             this.labelTime.TabIndex = 0;
-            this.labelTime.Text = "label1";
+            this.labelTime.Text = "12:23:34.000";
             // 
             // timer1
             // 
@@ -51,7 +51,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(169, 35);
+            this.ClientSize = new System.Drawing.Size(137, 35);
             this.Controls.Add(this.labelTime);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;

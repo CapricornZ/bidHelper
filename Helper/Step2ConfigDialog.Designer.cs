@@ -40,6 +40,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.btnPrice = new System.Windows.Forms.Button();
             this.groupBoxCaptcha = new System.Windows.Forms.GroupBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
@@ -49,7 +50,16 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnTips = new System.Windows.Forms.Button();
+            this.btnCaptcha = new System.Windows.Forms.Button();
             this.groupBoxOrigin = new System.Windows.Forms.GroupBox();
+            this.buttonTime = new System.Windows.Forms.Button();
+            this.btnWifi = new System.Windows.Forms.Button();
+            this.btnPriceSM = new System.Windows.Forms.Button();
+            this.textBoxWifi = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxTime = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.textBoxPriceSM = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -65,19 +75,13 @@
             this.pictureSub4 = new System.Windows.Forms.PictureBox();
             this.pictureSub5 = new System.Windows.Forms.PictureBox();
             this.pictureSub6 = new System.Windows.Forms.PictureBox();
-            this.btnPrice = new System.Windows.Forms.Button();
-            this.btnCaptcha = new System.Windows.Forms.Button();
-            this.btnTips = new System.Windows.Forms.Button();
             this.labelResult = new System.Windows.Forms.Label();
             this.labelTips = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnPriceSM = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
+            this.buttonSaveAs = new System.Windows.Forms.Button();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBoxTime = new System.Windows.Forms.TextBox();
-            this.buttonTime = new System.Windows.Forms.Button();
+            this.buttonDialog = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -104,6 +108,7 @@
             this.groupBoxPrice.Controls.Add(this.textBox1);
             this.groupBoxPrice.Controls.Add(this.textBox2);
             this.groupBoxPrice.Controls.Add(this.textBox3);
+            this.groupBoxPrice.Controls.Add(this.btnPrice);
             this.groupBoxPrice.Location = new System.Drawing.Point(12, 12);
             this.groupBoxPrice.Name = "groupBoxPrice";
             this.groupBoxPrice.Size = new System.Drawing.Size(292, 141);
@@ -208,6 +213,16 @@
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 4;
             // 
+            // btnPrice
+            // 
+            this.btnPrice.Location = new System.Drawing.Point(214, 19);
+            this.btnPrice.Name = "btnPrice";
+            this.btnPrice.Size = new System.Drawing.Size(49, 23);
+            this.btnPrice.TabIndex = 12;
+            this.btnPrice.Text = "测(&P)";
+            this.btnPrice.UseVisualStyleBackColor = true;
+            this.btnPrice.Click += new System.EventHandler(this.btnPrice_Click);
+            // 
             // groupBoxCaptcha
             // 
             this.groupBoxCaptcha.Controls.Add(this.textBox7);
@@ -218,6 +233,8 @@
             this.groupBoxCaptcha.Controls.Add(this.label6);
             this.groupBoxCaptcha.Controls.Add(this.label5);
             this.groupBoxCaptcha.Controls.Add(this.label4);
+            this.groupBoxCaptcha.Controls.Add(this.btnTips);
+            this.groupBoxCaptcha.Controls.Add(this.btnCaptcha);
             this.groupBoxCaptcha.Location = new System.Drawing.Point(323, 12);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
             this.groupBoxCaptcha.Size = new System.Drawing.Size(224, 141);
@@ -227,30 +244,30 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(103, 104);
+            this.textBox7.Location = new System.Drawing.Point(92, 104);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 20);
+            this.textBox7.Size = new System.Drawing.Size(73, 20);
             this.textBox7.TabIndex = 8;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(103, 77);
+            this.textBox6.Location = new System.Drawing.Point(92, 77);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 20);
+            this.textBox6.Size = new System.Drawing.Size(73, 20);
             this.textBox6.TabIndex = 7;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(103, 50);
+            this.textBox5.Location = new System.Drawing.Point(92, 50);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
+            this.textBox5.Size = new System.Drawing.Size(73, 20);
             this.textBox5.TabIndex = 6;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(103, 23);
+            this.textBox4.Location = new System.Drawing.Point(92, 23);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
+            this.textBox4.Size = new System.Drawing.Size(73, 20);
             this.textBox4.TabIndex = 5;
             // 
             // label7
@@ -293,8 +310,34 @@
             this.label4.TabIndex = 14;
             this.label4.Text = "校验码：";
             // 
+            // btnTips
+            // 
+            this.btnTips.Location = new System.Drawing.Point(169, 49);
+            this.btnTips.Name = "btnTips";
+            this.btnTips.Size = new System.Drawing.Size(49, 23);
+            this.btnTips.TabIndex = 14;
+            this.btnTips.Text = "测(&T)";
+            this.btnTips.UseVisualStyleBackColor = true;
+            this.btnTips.Click += new System.EventHandler(this.btnTips_Click);
+            // 
+            // btnCaptcha
+            // 
+            this.btnCaptcha.Location = new System.Drawing.Point(169, 22);
+            this.btnCaptcha.Name = "btnCaptcha";
+            this.btnCaptcha.Size = new System.Drawing.Size(49, 23);
+            this.btnCaptcha.TabIndex = 13;
+            this.btnCaptcha.Text = "测&A)";
+            this.btnCaptcha.UseVisualStyleBackColor = true;
+            this.btnCaptcha.Click += new System.EventHandler(this.btnCaptcha_Click);
+            // 
             // groupBoxOrigin
             // 
+            this.groupBoxOrigin.Controls.Add(this.buttonDialog);
+            this.groupBoxOrigin.Controls.Add(this.buttonTime);
+            this.groupBoxOrigin.Controls.Add(this.btnWifi);
+            this.groupBoxOrigin.Controls.Add(this.btnPriceSM);
+            this.groupBoxOrigin.Controls.Add(this.textBoxWifi);
+            this.groupBoxOrigin.Controls.Add(this.label15);
             this.groupBoxOrigin.Controls.Add(this.textBoxTime);
             this.groupBoxOrigin.Controls.Add(this.label14);
             this.groupBoxOrigin.Controls.Add(this.textBoxPriceSM);
@@ -305,16 +348,82 @@
             this.groupBoxOrigin.Controls.Add(this.textBoxTitle);
             this.groupBoxOrigin.Location = new System.Drawing.Point(12, 159);
             this.groupBoxOrigin.Name = "groupBoxOrigin";
-            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 122);
+            this.groupBoxOrigin.Size = new System.Drawing.Size(230, 145);
             this.groupBoxOrigin.TabIndex = 2;
             this.groupBoxOrigin.TabStop = false;
             this.groupBoxOrigin.Text = "标题";
+            // 
+            // buttonTime
+            // 
+            this.buttonTime.Location = new System.Drawing.Point(175, 66);
+            this.buttonTime.Name = "buttonTime";
+            this.buttonTime.Size = new System.Drawing.Size(49, 23);
+            this.buttonTime.TabIndex = 21;
+            this.buttonTime.Text = "测(&i)";
+            this.buttonTime.UseVisualStyleBackColor = true;
+            this.buttonTime.Click += new System.EventHandler(this.buttonTime_Click);
+            // 
+            // btnWifi
+            // 
+            this.btnWifi.Location = new System.Drawing.Point(175, 111);
+            this.btnWifi.Name = "btnWifi";
+            this.btnWifi.Size = new System.Drawing.Size(49, 23);
+            this.btnWifi.TabIndex = 22;
+            this.btnWifi.Text = "测(&w)";
+            this.btnWifi.UseVisualStyleBackColor = true;
+            this.btnWifi.Click += new System.EventHandler(this.btnWifi_Click);
+            // 
+            // btnPriceSM
+            // 
+            this.btnPriceSM.Location = new System.Drawing.Point(175, 89);
+            this.btnPriceSM.Name = "btnPriceSM";
+            this.btnPriceSM.Size = new System.Drawing.Size(49, 23);
+            this.btnPriceSM.TabIndex = 20;
+            this.btnPriceSM.Text = "测(&s)";
+            this.btnPriceSM.UseVisualStyleBackColor = true;
+            this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
+            // 
+            // textBoxWifi
+            // 
+            this.textBoxWifi.Location = new System.Drawing.Point(96, 112);
+            this.textBoxWifi.Name = "textBoxWifi";
+            this.textBoxWifi.Size = new System.Drawing.Size(73, 20);
+            this.textBoxWifi.TabIndex = 21;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.Red;
+            this.label15.Location = new System.Drawing.Point(15, 115);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(30, 13);
+            this.label15.TabIndex = 20;
+            this.label15.Text = "wifi:";
+            // 
+            // textBoxTime
+            // 
+            this.textBoxTime.Location = new System.Drawing.Point(96, 67);
+            this.textBoxTime.Name = "textBoxTime";
+            this.textBoxTime.Size = new System.Drawing.Size(73, 20);
+            this.textBoxTime.TabIndex = 19;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.Red;
+            this.label14.Location = new System.Drawing.Point(15, 70);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(46, 13);
+            this.label14.TabIndex = 18;
+            this.label14.Text = "时间：";
             // 
             // textBoxPriceSM
             // 
             this.textBoxPriceSM.Location = new System.Drawing.Point(96, 90);
             this.textBoxPriceSM.Name = "textBoxPriceSM";
-            this.textBoxPriceSM.Size = new System.Drawing.Size(100, 20);
+            this.textBoxPriceSM.Size = new System.Drawing.Size(73, 20);
             this.textBoxPriceSM.TabIndex = 17;
             // 
             // label11
@@ -341,7 +450,7 @@
             // 
             this.textBoxTitleOk.Location = new System.Drawing.Point(96, 44);
             this.textBoxTitleOk.Name = "textBoxTitleOk";
-            this.textBoxTitleOk.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTitleOk.Size = new System.Drawing.Size(73, 20);
             this.textBoxTitleOk.TabIndex = 14;
             // 
             // label8
@@ -357,12 +466,12 @@
             // 
             this.textBoxTitle.Location = new System.Drawing.Point(96, 21);
             this.textBoxTitle.Name = "textBoxTitle";
-            this.textBoxTitle.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTitle.Size = new System.Drawing.Size(73, 20);
             this.textBoxTitle.TabIndex = 1;
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(40, 297);
+            this.buttonOK.Location = new System.Drawing.Point(313, 289);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -372,7 +481,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(133, 297);
+            this.buttonCancel.Location = new System.Drawing.Point(406, 289);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -383,11 +492,13 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Location = new System.Drawing.Point(17, 18);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(121, 28);
+            this.pictureBox1.Size = new System.Drawing.Size(121, 57);
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             // 
             // pictureSub1
             // 
@@ -443,40 +554,10 @@
             this.pictureSub6.TabIndex = 11;
             this.pictureSub6.TabStop = false;
             // 
-            // btnPrice
-            // 
-            this.btnPrice.Location = new System.Drawing.Point(46, 73);
-            this.btnPrice.Name = "btnPrice";
-            this.btnPrice.Size = new System.Drawing.Size(59, 23);
-            this.btnPrice.TabIndex = 12;
-            this.btnPrice.Text = "价格(&P)";
-            this.btnPrice.UseVisualStyleBackColor = true;
-            this.btnPrice.Click += new System.EventHandler(this.btnPrice_Click);
-            // 
-            // btnCaptcha
-            // 
-            this.btnCaptcha.Location = new System.Drawing.Point(120, 73);
-            this.btnCaptcha.Name = "btnCaptcha";
-            this.btnCaptcha.Size = new System.Drawing.Size(75, 23);
-            this.btnCaptcha.TabIndex = 13;
-            this.btnCaptcha.Text = "验证码(&P)";
-            this.btnCaptcha.UseVisualStyleBackColor = true;
-            this.btnCaptcha.Click += new System.EventHandler(this.btnCaptcha_Click);
-            // 
-            // btnTips
-            // 
-            this.btnTips.Location = new System.Drawing.Point(210, 73);
-            this.btnTips.Name = "btnTips";
-            this.btnTips.Size = new System.Drawing.Size(56, 23);
-            this.btnTips.TabIndex = 14;
-            this.btnTips.Text = "提示(&T)";
-            this.btnTips.UseVisualStyleBackColor = true;
-            this.btnTips.Click += new System.EventHandler(this.btnTips_Click);
-            // 
             // labelResult
             // 
             this.labelResult.AutoSize = true;
-            this.labelResult.Location = new System.Drawing.Point(27, 56);
+            this.labelResult.Location = new System.Drawing.Point(223, 52);
             this.labelResult.Name = "labelResult";
             this.labelResult.Size = new System.Drawing.Size(41, 13);
             this.labelResult.TabIndex = 15;
@@ -485,7 +566,7 @@
             // labelTips
             // 
             this.labelTips.AutoSize = true;
-            this.labelTips.Location = new System.Drawing.Point(163, 56);
+            this.labelTips.Location = new System.Drawing.Point(223, 74);
             this.labelTips.Name = "labelTips";
             this.labelTips.Size = new System.Drawing.Size(41, 13);
             this.labelTips.TabIndex = 16;
@@ -493,9 +574,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.buttonTime);
-            this.groupBox1.Controls.Add(this.btnPriceSM);
-            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.buttonSaveAs);
             this.groupBox1.Controls.Add(this.btnGoto);
             this.groupBox1.Controls.Add(this.textBox8);
             this.groupBox1.Controls.Add(this.pictureBox1);
@@ -503,42 +582,30 @@
             this.groupBox1.Controls.Add(this.pictureSub1);
             this.groupBox1.Controls.Add(this.labelResult);
             this.groupBox1.Controls.Add(this.pictureSub2);
-            this.groupBox1.Controls.Add(this.btnTips);
             this.groupBox1.Controls.Add(this.pictureSub3);
-            this.groupBox1.Controls.Add(this.btnCaptcha);
             this.groupBox1.Controls.Add(this.pictureSub4);
-            this.groupBox1.Controls.Add(this.btnPrice);
             this.groupBox1.Controls.Add(this.pictureSub5);
             this.groupBox1.Controls.Add(this.pictureSub6);
             this.groupBox1.Location = new System.Drawing.Point(260, 159);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(291, 161);
+            this.groupBox1.Size = new System.Drawing.Size(291, 124);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "验证";
             // 
-            // btnPriceSM
+            // buttonSaveAs
             // 
-            this.btnPriceSM.Location = new System.Drawing.Point(79, 99);
-            this.btnPriceSM.Name = "btnPriceSM";
-            this.btnPriceSM.Size = new System.Drawing.Size(59, 23);
-            this.btnPriceSM.TabIndex = 20;
-            this.btnPriceSM.Text = "价格(&S)";
-            this.btnPriceSM.UseVisualStyleBackColor = true;
-            this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(199, 132);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
-            this.label10.TabIndex = 19;
-            this.label10.Text = "label10";
+            this.buttonSaveAs.Location = new System.Drawing.Point(146, 52);
+            this.buttonSaveAs.Name = "buttonSaveAs";
+            this.buttonSaveAs.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveAs.TabIndex = 19;
+            this.buttonSaveAs.Text = "saveAs";
+            this.buttonSaveAs.UseVisualStyleBackColor = true;
+            this.buttonSaveAs.Click += new System.EventHandler(this.buttonSaveAs_Click);
             // 
             // btnGoto
             // 
-            this.btnGoto.Location = new System.Drawing.Point(111, 128);
+            this.btnGoto.Location = new System.Drawing.Point(109, 87);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
             this.btnGoto.TabIndex = 18;
@@ -548,44 +615,26 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(30, 130);
+            this.textBox8.Location = new System.Drawing.Point(28, 89);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(75, 20);
             this.textBox8.TabIndex = 17;
             // 
-            // label14
+            // buttonDialog
             // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.Red;
-            this.label14.Location = new System.Drawing.Point(15, 70);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(46, 13);
-            this.label14.TabIndex = 18;
-            this.label14.Text = "时间：";
-            // 
-            // textBoxTime
-            // 
-            this.textBoxTime.Location = new System.Drawing.Point(96, 67);
-            this.textBoxTime.Name = "textBoxTime";
-            this.textBoxTime.Size = new System.Drawing.Size(100, 20);
-            this.textBoxTime.TabIndex = 19;
-            // 
-            // buttonTime
-            // 
-            this.buttonTime.Location = new System.Drawing.Point(156, 99);
-            this.buttonTime.Name = "buttonTime";
-            this.buttonTime.Size = new System.Drawing.Size(59, 23);
-            this.buttonTime.TabIndex = 21;
-            this.buttonTime.Text = "时间(&i)";
-            this.buttonTime.UseVisualStyleBackColor = true;
-            this.buttonTime.Click += new System.EventHandler(this.buttonTime_Click);
+            this.buttonDialog.Location = new System.Drawing.Point(175, 19);
+            this.buttonDialog.Name = "buttonDialog";
+            this.buttonDialog.Size = new System.Drawing.Size(49, 23);
+            this.buttonDialog.TabIndex = 23;
+            this.buttonDialog.Text = "测(&d)";
+            this.buttonDialog.UseVisualStyleBackColor = true;
+            this.buttonDialog.Click += new System.EventHandler(this.buttonDialog_Click);
             // 
             // Step2ConfigDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 334);
+            this.ClientSize = new System.Drawing.Size(562, 319);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -655,7 +704,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnGoto;
         private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxPriceSM;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnPriceSM;
@@ -667,5 +715,10 @@
         private System.Windows.Forms.TextBox textBoxTime;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button buttonTime;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBoxWifi;
+        private System.Windows.Forms.Button btnWifi;
+        private System.Windows.Forms.Button buttonSaveAs;
+        private System.Windows.Forms.Button buttonDialog;
     }
 }

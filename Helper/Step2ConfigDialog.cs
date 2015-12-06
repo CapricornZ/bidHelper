@@ -93,6 +93,8 @@ namespace Helper
                 this.object2InputBox(this.textBoxTitleOk, bid.okButton);
                 this.object2InputBox(this.textBoxPriceSM, bid.price);
                 this.object2InputBox(this.textBoxTime, bid.time);
+                this.object2InputBox(this.textBoxWifi, bid.wifi);
+
             } else {
 
                 this.object2InputBox(this.textBox1, new Position(0, 0));
@@ -110,6 +112,7 @@ namespace Helper
                 this.object2InputBox(this.textBoxTitleOk, new Position(0, 0));
                 this.object2InputBox(this.textBoxPriceSM, new Position(0, 0));
                 this.object2InputBox(this.textBoxTime, new Position(0, 0));
+                this.object2InputBox(this.textBoxWifi, new Position(0, 0));
             }
         }
 
@@ -146,6 +149,7 @@ namespace Helper
             bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
             bid.price = this.inputBox2Object(this.textBoxPriceSM);
             bid.time = this.inputBox2Object(this.textBoxTime);
+            bid.wifi = this.inputBox2Object(this.textBoxWifi);
             SubmitPriceStep2Job.setPosition(bid);
 
             this.BidStep2 = bid;
@@ -246,6 +250,50 @@ namespace Helper
                 this.m_pictureSubs[i].Image = this.m_repository.orcTime.SubImgs[i];
             this.labelResult.Text = strTime;
         }
+
+        private void btnWifi_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBoxWifi);
+
+            ScreenUtil screenUtil = new ScreenUtil();
+            int x = origin.X + pos.x;
+            int y = origin.Y + pos.y;
+            byte[] spot = screenUtil.screenCaptureAsByte(x, y, 6, 5);
+            byte[] content = screenUtil.screenCaptureAsByte(x - 12, y - 18, 30, 25);
+            
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+
+            System.Console.WriteLine(tobid.util.orc.CaptchaHelper.isWifiRed(Bitmap.FromStream(new MemoryStream(spot)) as Bitmap));
+
+            File.WriteAllBytes(@"wifi-spot.bmp", spot);
+            File.WriteAllBytes(@"wifi.bmp", content);
+        }
+
+        private void buttonSaveAs_Click(object sender, EventArgs e) {
+
+            if (this.pictureBox1.Image != null)
+                this.pictureBox1.Image.Save(@"capture.bmp");
+        }
+
+        private void buttonDialog_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+            Position pos = this.inputBox2Object(this.textBoxTitle);
+
+            byte[] title = new ScreenUtil().screenCaptureAsByte(x + pos.x, y + pos.y, 170, 50);
+            Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+            this.pictureBox1.Image = bitTitle;
+            String strTitle = this.m_repository.orcTitle.IdentifyStringFromPic(bitTitle);
+            this.labelResult.Text = strTitle;
+            foreach (PictureBox picBox in this.m_pictureSubs) 
+                picBox.Image = null;
+
+            for (int i = 0; i < this.m_repository.orcTitle.SubImgs.Count; i++)
+                this.m_pictureSubs[i].Image = this.m_repository.orcTitle.SubImgs[i];
+        }
         #endregion
 
         private void btnGoto_Click(object sender, EventArgs e)
@@ -271,6 +319,29 @@ namespace Helper
                 this.textDeltaInput.Enabled = false;
                 this.textDeltaButton.Enabled = false;
             }
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e) {
+
+            Bitmap bmp = (Bitmap)this.pictureBox1.Image;
+            Rectangle oldrct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            this.pictureBox1.Image = bmp;
+            Bitmap tmpbmp = null;
+            int i = e.Delta;
+            if (e.Button == MouseButtons.Left)
+                tmpbmp = new Bitmap(bmp.Width * 2, bmp.Height * 2);
+            if (e.Button == MouseButtons.Right)
+                tmpbmp = new Bitmap(bmp.Width / 2, bmp.Height / 2);
+            
+            Graphics g = Graphics.FromImage(tmpbmp);
+            Rectangle newrct = new Rectangle(0, 0, tmpbmp.Width, tmpbmp.Height);
+
+            g.DrawImage(bmp, newrct, oldrct, GraphicsUnit.Pixel);//newrct是你的目标矩形位置，oldrct是你原始图片的起始矩形位置 
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            //oldrct = oldrct;
+            this.pictureBox1.Image = tmpbmp;
+            g.Dispose();
+            this.pictureBox1.Update();
         }
 
         

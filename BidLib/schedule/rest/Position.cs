@@ -78,5 +78,6 @@ namespace tobid.rest.position
         public Position time { get; set; }
         /// <summary>PRICE(sm)</summary>
         public Position price { get; set; }
+        public Position wifi { get; set; }
     }
 }

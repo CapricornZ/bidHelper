@@ -57,6 +57,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +96,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageManual = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -103,9 +105,9 @@
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
-            this.buttonSync = new System.Windows.Forms.Button();
-            this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonMinus = new System.Windows.Forms.Button();
+            this.buttonAdd = new System.Windows.Forms.Button();
+            this.buttonSync = new System.Windows.Forms.Button();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -175,6 +177,7 @@
             // radioPrice
             // 
             this.radioPrice.AutoSize = true;
+            this.radioPrice.Enabled = false;
             this.radioPrice.Location = new System.Drawing.Point(3, 38);
             this.radioPrice.Name = "radioPrice";
             this.radioPrice.Size = new System.Drawing.Size(73, 17);
@@ -215,6 +218,7 @@
             // 
             // textPrice2
             // 
+            this.textPrice2.Enabled = false;
             this.textPrice2.Location = new System.Drawing.Point(89, 86);
             this.textPrice2.Name = "textPrice2";
             this.textPrice2.Size = new System.Drawing.Size(82, 20);
@@ -382,7 +386,7 @@
             this.groupBoxPolicy.Controls.Add(this.textBox1);
             this.groupBoxPolicy.Location = new System.Drawing.Point(8, 27);
             this.groupBoxPolicy.Name = "groupBoxPolicy";
-            this.groupBoxPolicy.Size = new System.Drawing.Size(197, 96);
+            this.groupBoxPolicy.Size = new System.Drawing.Size(197, 83);
             this.groupBoxPolicy.TabIndex = 7;
             this.groupBoxPolicy.TabStop = false;
             this.groupBoxPolicy.Text = "服务器策略";
@@ -390,7 +394,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(368, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(336, 19);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -407,14 +411,22 @@
             // 
             this.statusStrip1.AutoSize = false;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelStatus,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 289);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(485, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(499, 24);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelStatus
+            // 
+            this.toolStripStatusLabelStatus.BackColor = System.Drawing.Color.Orange;
+            this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
+            this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(15, 19);
+            this.toolStripStatusLabelStatus.Text = "[]";
             // 
             // toolStripStatusLabel3
             // 
@@ -431,7 +443,7 @@
             this.AboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(485, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(499, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -513,14 +525,14 @@
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -626,7 +638,7 @@
             this.panelIE.Controls.Add(this.buttonLogin);
             this.panelIE.Controls.Add(this.buttonIE);
             this.panelIE.Controls.Add(this.buttonURL);
-            this.panelIE.Location = new System.Drawing.Point(244, 255);
+            this.panelIE.Location = new System.Drawing.Point(228, 252);
             this.panelIE.Name = "panelIE";
             this.panelIE.Size = new System.Drawing.Size(188, 29);
             this.panelIE.TabIndex = 15;
@@ -759,7 +771,7 @@
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
             this.tabControl1.Controls.Add(this.tabPagePolicyV2);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
-            this.tabControl1.Location = new System.Drawing.Point(211, 27);
+            this.tabControl1.Location = new System.Drawing.Point(228, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(266, 215);
@@ -779,6 +791,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.label11);
@@ -788,6 +801,15 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "手动";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 114);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(143, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Enter | Space：提交验证码";
             // 
             // label13
             // 
@@ -866,15 +888,15 @@
             this.groupBoxInternetTime.TabStop = false;
             this.groupBoxInternetTime.Text = "北京时间";
             // 
-            // buttonSync
+            // buttonMinus
             // 
-            this.buttonSync.Location = new System.Drawing.Point(111, 13);
-            this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(44, 23);
-            this.buttonSync.TabIndex = 0;
-            this.buttonSync.Text = "&Sync";
-            this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
+            this.buttonMinus.Location = new System.Drawing.Point(63, 13);
+            this.buttonMinus.Name = "buttonMinus";
+            this.buttonMinus.Size = new System.Drawing.Size(18, 23);
+            this.buttonMinus.TabIndex = 2;
+            this.buttonMinus.Text = "-";
+            this.buttonMinus.UseVisualStyleBackColor = true;
+            this.buttonMinus.Click += new System.EventHandler(this.buttonMinus_Click);
             // 
             // buttonAdd
             // 
@@ -886,21 +908,21 @@
             this.buttonAdd.UseVisualStyleBackColor = true;
             this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
-            // buttonMinus
+            // buttonSync
             // 
-            this.buttonMinus.Location = new System.Drawing.Point(63, 13);
-            this.buttonMinus.Name = "buttonMinus";
-            this.buttonMinus.Size = new System.Drawing.Size(18, 23);
-            this.buttonMinus.TabIndex = 2;
-            this.buttonMinus.Text = "-";
-            this.buttonMinus.UseVisualStyleBackColor = true;
-            this.buttonMinus.Click += new System.EventHandler(this.buttonMinus_Click);
+            this.buttonSync.Location = new System.Drawing.Point(111, 13);
+            this.buttonSync.Name = "buttonSync";
+            this.buttonSync.Size = new System.Drawing.Size(44, 23);
+            this.buttonSync.TabIndex = 0;
+            this.buttonSync.Text = "&Sync";
+            this.buttonSync.UseVisualStyleBackColor = true;
+            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 313);
+            this.ClientSize = new System.Drawing.Size(499, 313);
             this.Controls.Add(this.groupBoxInternetTime);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelIE);
@@ -951,12 +973,9 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBoxLocal;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioDeltaPrice;
-        private System.Windows.Forms.RadioButton radioPrice;
         private System.Windows.Forms.Button btnUpdatePolicy;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textPrice2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Timer timer1;
@@ -1026,6 +1045,11 @@
         private System.Windows.Forms.Button buttonMinus;
         private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.Button buttonSync;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelStatus;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radioPrice;
+        private System.Windows.Forms.TextBox textPrice2;
     }
 }
 

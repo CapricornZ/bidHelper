@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace tobid.util.orc {
 
-    struct ColorRGB {
+    class ColorRGB {
 
         public byte R;
         public byte G;
@@ -61,9 +61,48 @@ namespace tobid.util.orc {
 
             h /= 6.0;
         }
+
+        public class HSBColor {
+
+            public float Hues { get; set; }
+            public float Saturation { get; set; }
+            public float Brightness { get; set; }
+
+            public HSBColor(float Hues, float Saturation, float Brightness) {
+                this.Hues = Hues;
+                this.Saturation = Saturation;
+                this.Brightness = Brightness;
+            }
+        }
+
+        public static HSBColor rgb2hsb(Color point) {
+
+            int[] rgb = new int[] { point.R, point.G, point.B };
+            Array.Sort(rgb);
+            int max = rgb[2];
+            int min = rgb[0];
+
+            float hsbB = max / 255.0f;
+            float hsbS = max == 0 ? 0 : (max - min) / (float)max;
+
+            float hsbH = 0;
+            if (max == point.R && point.G >= point.B) {
+                hsbH = (point.G - point.B) * 60f / (max - min) + 0;
+            } else if (max == point.R && point.G < point.B) {
+                hsbH = (point.G - point.B) * 60f / (max - min) + 360;
+            } else if (max == point.G) {
+                hsbH = (point.B - point.R) * 60f / (max - min) + 120;
+            } else if (max == point.B) {
+                hsbH = (point.R - point.G) * 60f / (max - min) + 240;
+            }
+
+            return new HSBColor(hsbH, hsbS, hsbB);
+        }
     }
 
     public class CaptchaHelper {
+
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(CaptchaHelper));
 
         /// <summary>
         /// 是否为蓝色“刷新校验码”
@@ -112,6 +151,24 @@ namespace tobid.util.orc {
 
             System.Console.WriteLine("COUNT:" + count);
             return count > 500;
+        }
+
+        public static Boolean isWifiRed(Bitmap bitmap) {
+
+            int red = 0;
+            for (int x = 0; x < bitmap.Width; x++)
+                for (int y = 0; y < bitmap.Height; y++) {
+
+                    Color color = bitmap.GetPixel(x, y);
+                    //tobid.util.orc.ColorRGB.HSBColor hsb = ColorRGB.rgb2hsb(color);
+                    //float hues = hsb.Hues < 100 ? hsb.Hues + 361 : hsb.Hues;
+                    float hues = color.GetHue() < 100 ? color.GetHue() + 361 : color.GetHue();
+                    if (hues > 352 && hues <= 363 && color.GetSaturation() != 0)
+                        red++;
+                }
+            int pixel = bitmap.Width * bitmap.Height;
+            int percent = red * 100 / pixel;
+            return percent >= 80;
         }
     }
 }

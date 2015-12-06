@@ -81,7 +81,10 @@ namespace tobid.util.hook {
         private bool isAllow(Keys keyData) {
             return (keyData >= Keys.D0 && keyData <= Keys.D9)
                 || (keyData >= Keys.NumPad0 && keyData <= Keys.NumPad9)
-                || keyData == Keys.Back || keyData == Keys.Delete || keyData == (Keys)231;
+                || (keyData >= Keys.A && keyData <= Keys.Z)
+                || keyData == (Keys)231//packet
+                || keyData == Keys.Oemcomma
+                || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete;
         }
 
         //根据已经按下的控制键生成key

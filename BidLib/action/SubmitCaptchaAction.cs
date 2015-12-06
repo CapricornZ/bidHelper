@@ -37,4 +37,22 @@ namespace tobid.scheduler.jobs.action {
             return true;
         }
     }
+
+    public class SubmitCaptchaAIAction : IBidAction {
+
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SubmitCaptchaAIAction));
+
+        private IRepository repository;
+        public SubmitCaptchaAIAction(IRepository repo) {
+            this.repository = repo;
+        }
+
+        public void notify(string message) {
+            logger.Debug(message);
+        }
+
+        public bool execute() {
+            return false;
+        }
+    }
 }

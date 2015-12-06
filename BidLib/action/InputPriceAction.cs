@@ -8,6 +8,9 @@ using tobid.rest.position;
 
 namespace tobid.scheduler.jobs.action {
     
+    /// <summary>
+    /// 输入Delta价格
+    /// </summary>
     public class InputPriceAction : IBidAction {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(InputPriceAction));
