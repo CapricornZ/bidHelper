@@ -525,14 +525,14 @@
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 

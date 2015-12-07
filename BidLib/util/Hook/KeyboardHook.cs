@@ -83,7 +83,7 @@ namespace tobid.util.hook {
                 || (keyData >= Keys.NumPad0 && keyData <= Keys.NumPad9)
                 || (keyData >= Keys.A && keyData <= Keys.Z)
                 || keyData == (Keys)231//packet
-                || keyData == Keys.Oemcomma
+                || keyData == Keys.Oemcomma || keyData == Keys.OemPeriod
                 || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete;
         }
 

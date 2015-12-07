@@ -220,21 +220,49 @@ namespace Helper
         }
 
         KeyboardHook kh;
-        private void Form1_Load(object sender, EventArgs e){
+        private void Form1_Load(object sender, EventArgs e) {
 
-            logger.Info("Application Form Load");
+            Version localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            logger.Info("Helper Version : " + localVer.ToString());
 
-            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - 50);
-
+            //HELPER FORM位置设置
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - 150);
+            //DEBUG窗口位置设置
             if (this.ConsoleHWND != IntPtr.Zero) {
 
                 int SWP_NOSIZE = 1;
                 Rect rect = new Rect();
                 WindowHelper.GetWindowRect(this.ConsoleHWND, out rect);
                 WindowHelper.SetWindowPos(this.ConsoleHWND, 0,
-                    Screen.PrimaryScreen.Bounds.Width - (rect.Right-rect.Left), 0, 0, 0, SWP_NOSIZE);
+                    Screen.PrimaryScreen.Bounds.Width - (rect.Right - rect.Left), 0, 0, 0, SWP_NOSIZE);
+            }
+            //检查新版本
+            {
+                MessageBoxButtons messButton = MessageBoxButtons.OK;
+                Version remoteVer = null;
+                try {
+
+                    String endPoint = ConfigurationManager.AppSettings["CHECKUPDATE"];
+                    String ver = new HttpUtil().getAsPlain(endPoint + "/Release.ver");
+                    remoteVer = new Version(ver);
+                }
+                catch (Exception ex) {
+                    System.Console.WriteLine(ex);
+                    MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    return;
+                }
+
+                if (remoteVer.CompareTo(localVer) > 0)
+                    MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             }
 
+            {
+                System.Diagnostics.Process[] myProcesses = System.Diagnostics.Process.GetProcessesByName("KK");
+                foreach (System.Diagnostics.Process instance in myProcesses)
+                    instance.Kill();
+            }
+
+            //键盘HOOK
             kh = new KeyboardHook();
             kh.SetHook();
             kh.OnKeyDownEvent += kh_OnKeyDownEvent;
@@ -253,24 +281,21 @@ namespace Helper
             String keyInterval = System.Configuration.ConfigurationManager.AppSettings["KeyInterval"];
             this.toolStripTextBoxInterval.Text = keyInterval;
 
-            try
-            {
+            try {
                 this.loadResource("real");
                 this.enableForm();
             }
-            catch (System.Net.WebException webEx)
-            {
+            catch (System.Net.WebException webEx) {
                 MessageBoxButtons messButton = MessageBoxButtons.OK;
-                if(webEx.Status == System.Net.WebExceptionStatus.ConnectFailure)
+                if (webEx.Status == System.Net.WebExceptionStatus.ConnectFailure)
                     MessageBox.Show(webEx.InnerException.ToString(), "网络连接异常", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                if(webEx.Status == System.Net.WebExceptionStatus.ProtocolError)
+                if (webEx.Status == System.Net.WebExceptionStatus.ProtocolError)
                     MessageBox.Show("请按[菜单]->[配置]->[授权码]步骤，输入有效的授权码", "需要授权码", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
                 this.disableForm();
                 logger.Error(webEx);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 this.disableForm();
                 logger.Error(ex);
             }
@@ -300,12 +325,12 @@ namespace Helper
             //isOk = Hotkey.RegisterHotKey(this.Handle, 224, Hotkey.KeyModifiers.None, Keys.F11);
             //isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
             //isOk = Hotkey.RegisterHotKey(this.Handle, 226, Hotkey.KeyModifiers.Ctrl, Keys.R);
-            
+
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
             config1M.Job = new KeepAliveJob(this.EndPoint,
-                new ReceiveLogin(this.receiveLogin), 
+                new ReceiveLogin(this.receiveLogin),
                 new ReceiveOperation[]{
                     new ReceiveOperation(this.receiveOperation),
                     new ReceiveOperation(this.receiveOperation)},
@@ -363,7 +388,7 @@ namespace Helper
                     }
                 }
 
-                if (count % 60 == 0) {//5mins
+                if (count % 10 == 0) {//5mins
                     try {
                         origin = findOrigin();
                         if (step2.wifi != null) {
@@ -375,7 +400,7 @@ namespace Helper
                         logger.Error(ex.Message);
                     }
                 }
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(30000);
             }
         }
 
@@ -1222,8 +1247,11 @@ namespace Helper
             String localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             String remoteVer = null;
             try {
-                remoteVer = new HttpUtil().getAsPlain(this.EndPoint + "/Release.ver");
+
+                String endPoint = ConfigurationManager.AppSettings["CHECKUPDATE"];
+                remoteVer = new HttpUtil().getAsPlain(endPoint + "/Release.ver");
             } catch (Exception ex) {
+                System.Console.WriteLine(ex);
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 return;
             }

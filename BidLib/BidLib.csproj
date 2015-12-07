@@ -63,6 +63,7 @@
     <Compile Include="action\InputPriceAction.cs" />
     <Compile Include="action\InputCaptchaAction.cs" />
     <Compile Include="action\SubmitCaptchaAction.cs" />
+    <Compile Include="action\Tasks.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
