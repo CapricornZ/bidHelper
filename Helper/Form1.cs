@@ -112,6 +112,10 @@ namespace Helper
         private Object lockSubmit = new Object();
         private Object lockPrice = new Object();
 
+        private KeyboardHook kh;
+        private String triggerF11;
+        private String triggerSetPolicy;
+
         private void Form1_Activated(object sender, EventArgs e) {
 
             //logger.Info("Application Form Activated");
@@ -219,7 +223,7 @@ namespace Helper
             return new Point(rectX.X, rectX.Y);
         }
 
-        KeyboardHook kh;
+        
         private void Form1_Load(object sender, EventArgs e) {
 
             Version localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -256,11 +260,15 @@ namespace Helper
                     MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             }
 
+            //关闭KK录像机
             {
                 System.Diagnostics.Process[] myProcesses = System.Diagnostics.Process.GetProcessesByName("KK");
                 foreach (System.Diagnostics.Process instance in myProcesses)
                     instance.Kill();
             }
+
+            triggerF11 = ConfigurationManager.AppSettings["triggerF11"];
+            triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
 
             //键盘HOOK
             kh = new KeyboardHook();
@@ -451,7 +459,7 @@ namespace Helper
                     break;
                 case Keys.F11:
                     logger.InfoFormat("HOT KEY [F11] trigger : +1000");
-                    this.exam4Fire(1000);
+                    this.fire(SubmitPriceStep2Job.getPosition(), 1200);
                     break;
                 case Keys.Enter:
                 case Keys.Space:
@@ -612,8 +620,19 @@ namespace Helper
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
-            
-            this.toolStripStatusLabel2.Text = String.Format("当前{0}", DateTime.Now.ToString("HH:mm:ss"));
+
+            DateTime now = DateTime.Now;
+            String current = now.ToString("HH:mm:ss");
+            this.toolStripStatusLabel2.Text = String.Format("NOW:{0}", current);
+
+            if (current.Equals(this.triggerF11)) {
+                logger.Info("@{} auto F11 triggered");
+                this.fire(SubmitPriceStep2Job.getPosition(), 1200);
+            }
+            if (current.Equals(this.triggerSetPolicy)) {
+                logger.Info("@{} auto SET Custom Policy triggered");
+                this.updateCustomPolicy();
+            }
         }
 
         public void acceptMessage(String msg){
@@ -804,14 +823,20 @@ namespace Helper
 
         private void stopCurrentJob() {
 
-            if (null != this.submitPriceStep2Thread)
+            if (null != this.submitPriceStep2Thread) {
                 this.submitPriceStep2Thread.Abort();
+                this.submitPriceStep2Thread = null;
+            }
 
-            if (null != this.submitPriceV2Thread)
+            if (null != this.submitPriceV2Thread) {
                 this.submitPriceV2Thread.Abort();
+                this.submitPriceV2Thread = null;
+            }
 
-            if (null != this.customThread)
+            if (null != this.customThread) {
                 this.customThread.Abort();
+                this.customThread = null;
+            }
         }
 
         private void fire(tobid.rest.position.BidStep2 bid, int delta) {
@@ -825,9 +850,6 @@ namespace Helper
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(100);
                 
-                //SubmitPriceStep2Job job = new SubmitPriceStep2Job(repository: this, notify: this);
-                //job.Fire(delta);
-
                 IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
                 IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
@@ -1019,6 +1041,64 @@ namespace Helper
                 e.Handled = true;
         }
 
+        void updateCustomPolicy() {
+
+            this.textBox1.Text = this.dateTimePickerCustomPrice.Value.ToString("MM/dd HH:mm:ss");
+            object obj = this.comboBoxCustomDelta.SelectedItem;
+            if (obj == null) {
+                MessageBox.Show("请选择价格");
+                this.comboBoxCustomDelta.Focus();
+                return;
+            }
+            this.textBox2.Text = this.comboBoxCustomDelta.Text;
+
+            String fire1 = this.dateTimePickerCustomPrice.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            String fire2 = this.dateTimePickerCustomInputCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            String fire3 = this.dateTimePickerCustomSubmitCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
+
+            List<Task> tasks = new List<Task>();
+            Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
+                action: new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this),
+                notify: this,
+                fireTime: fire1);
+            tasks.Add(taskInputPrice);
+
+            if (checkBoxInputCaptcha.Checked) {
+
+                ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
+                SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                if (checkBoxSubmitCaptcha.Checked) {
+                    Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
+                    Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
+                } else {
+
+                    //SequenceAction actionSeq = new SequenceAction(new List<IBidAction>() { actionInputCaptcha, actionSubmitCaptcha });
+                    //Task taskCaptcha = new Task(action: actionSeq, notify: this, fireTime: fire2); tasks.Add(taskCaptcha);
+                    Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
+                }
+
+            } else {
+
+                SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                if (checkBoxSubmitCaptcha.Checked) {
+                    Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
+                }
+            }
+
+            if (null != this.customThread)
+                this.customThread.Abort();
+
+            SchedulerConfiguration customConf = new SchedulerConfiguration(500);
+            customConf.Job = new CustomJob(tasks: tasks);
+            this.m_schedulerCustom = new Scheduler(customConf);
+
+            System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
+            this.customThread = new System.Threading.Thread(customThreadStart);
+            this.customThread.Name = "customThread";
+            this.customThread.Start();
+
+        }
+
         private void buttonUpdateCustom_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
@@ -1026,58 +1106,7 @@ namespace Helper
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK){
 
-                this.textBox1.Text = this.dateTimePickerCustomPrice.Value.ToString("MM/dd HH:mm:ss");
-                object obj = this.comboBoxCustomDelta.SelectedItem;
-                if (obj == null) {
-                    MessageBox.Show("请选择价格");
-                    this.comboBoxCustomDelta.Focus();
-                    return;
-                }
-                this.textBox2.Text = this.comboBoxCustomDelta.Text;
-
-                String fire1 = this.dateTimePickerCustomPrice.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                String fire2 = this.dateTimePickerCustomInputCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                String fire3 = this.dateTimePickerCustomSubmitCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
-
-                List<Task> tasks = new List<Task>();
-                Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
-                    action: new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this),
-                    notify: this,
-                    fireTime: fire1); tasks.Add(taskInputPrice);
-
-                if (checkBoxInputCaptcha.Checked) {
-
-                    ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
-                    SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                    if (checkBoxSubmitCaptcha.Checked) {
-                        Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
-                        Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
-                    } else {
-
-                        //SequenceAction actionSeq = new SequenceAction(new List<IBidAction>() { actionInputCaptcha, actionSubmitCaptcha });
-                        //Task taskCaptcha = new Task(action: actionSeq, notify: this, fireTime: fire2); tasks.Add(taskCaptcha);
-                        Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
-                    }
-
-                } else {
-
-                    SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                    if (checkBoxSubmitCaptcha.Checked) {
-                        Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
-                    }
-                }
-
-                if (null != this.customThread)
-                    this.customThread.Abort();
-
-                SchedulerConfiguration customConf = new SchedulerConfiguration(500);
-                customConf.Job = new CustomJob(tasks: tasks);
-                this.m_schedulerCustom = new Scheduler(customConf);
-
-                System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
-                this.customThread = new System.Threading.Thread(customThreadStart);
-                this.customThread.Name = "customThread";
-                this.customThread.Start();
+                this.updateCustomPolicy();
             }
         }
 
