@@ -116,6 +116,7 @@ namespace Helper
         private String triggerF11;
         private String triggerSetPolicy;
         private String triggerLoadResource;
+        private String m_submitHotKey;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -310,6 +311,7 @@ namespace Helper
                 logger.Error(ex);
             }
 
+            this.m_submitHotKey = System.Configuration.ConfigurationManager.AppSettings["SubmitHotKey"];
             Boolean isOk = false;
             //isOk = Hotkey.RegisterHotKey(this.Handle, 103, Hotkey.KeyModifiers.Ctrl, Keys.D3);
             //isOk = Hotkey.RegisterHotKey(this.Handle, 104, Hotkey.KeyModifiers.Ctrl, Keys.D4);
@@ -464,9 +466,14 @@ namespace Helper
                     this.fire(SubmitPriceStep2Job.getPosition(), 1200);
                     break;
                 case Keys.Enter:
+                    logger.InfoFormat("HOT KEY [ENTER] trigger : submit CAPTCHA");
+                    if(this.m_submitHotKey.Equals("ENTER"))
+                        this.processEnter(SubmitPriceStep2Job.getPosition());
+                    break;
                 case Keys.Space:
-                    logger.InfoFormat("HOT KEY [ENTER|SPACE] trigger : submit CAPTCHA");
-                    this.processEnter(SubmitPriceStep2Job.getPosition());
+                    logger.InfoFormat("HOT KEY [SPACE] trigger : submit CAPTCHA");
+                    if (this.m_submitHotKey.Equals("SPACE"))
+                        this.processEnter(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.Escape:
                     logger.InfoFormat("HOT KEY [ESCAPE] trigger : close DIALOG");
@@ -806,7 +813,7 @@ namespace Helper
         private void processEnter(tobid.rest.position.BidStep2 bid) {
 
             System.Threading.Thread processEnter = new System.Threading.Thread(delegate() {
-                Point origin = findOrigin();
+                /*Point origin = findOrigin();
                 int x = origin.X;
                 int y = origin.Y;
 
@@ -824,7 +831,9 @@ namespace Helper
 
                     logger.Info("proces Enter in [投标拍卖]");
                     this.submitCaptcha(SubmitPriceStep2Job.getPosition());
-                }
+                }*/
+                SubmitCaptchaAction submitCaptcha = new SubmitCaptchaAction(this);
+                submitCaptcha.execute();
             });
             processEnter.Start();
 
@@ -861,7 +870,7 @@ namespace Helper
                 
                 IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
-                //IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
+                IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
                 //IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
                 IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
                 actions.execute();
@@ -1112,7 +1121,7 @@ namespace Helper
         private void buttonUpdateCustom_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
+            DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK){
 
@@ -1123,7 +1132,7 @@ namespace Helper
         private void btnUpdateV2_Click(object sender, EventArgs e)
         {
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
+            DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK)
             {
@@ -1163,7 +1172,7 @@ namespace Helper
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             //DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略", 
             //    messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-            DialogResult dr = MessageBox.Show("确定要更新出价策略吗?", "更新策略",
+            DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
 
@@ -1445,7 +1454,7 @@ namespace Helper
             System.Console.WriteLine("selecting " + selecting);
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-            DialogResult dr = MessageBox.Show(String.Format("确定使用{0}吗?", selecting), "策略选择",
+            DialogResult dr = MessageBox.Show(this, String.Format("确定使用{0}吗?", selecting), "策略选择",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
 

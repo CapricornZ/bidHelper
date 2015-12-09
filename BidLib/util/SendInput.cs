@@ -163,7 +163,7 @@ namespace tobid.util {
 
             INPUT Input=new INPUT();
             Input.type = 1; //keyboard_input
-            Input.ki.wVk = ScreenUtil.keycode[keyCode];
+            Input.ki.wVk = (ushort)keycode[keyCode];
             Input.ki.dwFlags = 0;
             SendInput(1, ref Input, Marshal.SizeOf(Input));
         }
@@ -172,7 +172,7 @@ namespace tobid.util {
 
             INPUT Input = new INPUT();
             Input.type = 1;
-            Input.ki.wVk = ScreenUtil.keycode[keyCode];
+            Input.ki.wVk = (ushort)keycode[keyCode];
             Input.ki.dwFlags = 2;//key_up
             SendInput(1, ref Input, Marshal.SizeOf(Input));
         }

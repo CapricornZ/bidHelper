@@ -35,21 +35,33 @@ namespace tobid.scheduler.jobs.action {
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("END   click BUTTON[确定]");
 
+            BidStatus status = BidStatus.INPROGRESS;
             DateTime start = DateTime.Now;
             while (true) {
 
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(250);
 
-                byte[] content = new ScreenUtil().screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
-                Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
+                if (status == BidStatus.INPROGRESS) {
 
-                BidStatus status = CaptchaHelper.detectBidStatus(bitmap);
-                if (BidStatus.FINISH == status) {
-                    TimeSpan diff = DateTime.Now - start;
-                    if (diff.TotalMilliseconds >= 5000)
-                        break;
+                    byte[] content = new ScreenUtil().screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
+                    Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
+                    status = CaptchaHelper.detectBidStatus(bitmap);
                 }
+
+                TimeSpan diff = DateTime.Now - start;
+                if (status == BidStatus.FINISH) {
+                    System.Console.WriteLine(BidStatus.FINISH);
+                    ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x + 50 + 38, y + submitPrice.buttons[0].y);
+                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                }
+
+                if (diff.TotalMilliseconds >= 5000)
+                    break;//超过5秒
+
+                if (diff.TotalMilliseconds > 10000)//超过10s也停止
+                    break;
             }
+
 
             KeyBoardUtil.clickKey("F9", 50);
             return true;
