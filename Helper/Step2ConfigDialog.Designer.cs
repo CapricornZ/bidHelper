@@ -42,6 +42,7 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.btnPrice = new System.Windows.Forms.Button();
             this.groupBoxCaptcha = new System.Windows.Forms.GroupBox();
+            this.btnConfirm = new System.Windows.Forms.Button();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
@@ -53,6 +54,7 @@
             this.btnTips = new System.Windows.Forms.Button();
             this.btnCaptcha = new System.Windows.Forms.Button();
             this.groupBoxOrigin = new System.Windows.Forms.GroupBox();
+            this.buttonDialog = new System.Windows.Forms.Button();
             this.buttonTime = new System.Windows.Forms.Button();
             this.btnWifi = new System.Windows.Forms.Button();
             this.btnPriceSM = new System.Windows.Forms.Button();
@@ -81,7 +83,6 @@
             this.buttonSaveAs = new System.Windows.Forms.Button();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
-            this.buttonDialog = new System.Windows.Forms.Button();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -225,6 +226,7 @@
             // 
             // groupBoxCaptcha
             // 
+            this.groupBoxCaptcha.Controls.Add(this.btnConfirm);
             this.groupBoxCaptcha.Controls.Add(this.textBox7);
             this.groupBoxCaptcha.Controls.Add(this.textBox6);
             this.groupBoxCaptcha.Controls.Add(this.textBox5);
@@ -241,6 +243,16 @@
             this.groupBoxCaptcha.TabIndex = 1;
             this.groupBoxCaptcha.TabStop = false;
             this.groupBoxCaptcha.Text = "校验码";
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Location = new System.Drawing.Point(169, 102);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(49, 23);
+            this.btnConfirm.TabIndex = 18;
+            this.btnConfirm.Text = "测(&T)";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // textBox7
             // 
@@ -352,6 +364,16 @@
             this.groupBoxOrigin.TabIndex = 2;
             this.groupBoxOrigin.TabStop = false;
             this.groupBoxOrigin.Text = "标题";
+            // 
+            // buttonDialog
+            // 
+            this.buttonDialog.Location = new System.Drawing.Point(175, 19);
+            this.buttonDialog.Name = "buttonDialog";
+            this.buttonDialog.Size = new System.Drawing.Size(49, 23);
+            this.buttonDialog.TabIndex = 23;
+            this.buttonDialog.Text = "测(&d)";
+            this.buttonDialog.UseVisualStyleBackColor = true;
+            this.buttonDialog.Click += new System.EventHandler(this.buttonDialog_Click);
             // 
             // buttonTime
             // 
@@ -620,16 +642,6 @@
             this.textBox8.Size = new System.Drawing.Size(75, 20);
             this.textBox8.TabIndex = 17;
             // 
-            // buttonDialog
-            // 
-            this.buttonDialog.Location = new System.Drawing.Point(175, 19);
-            this.buttonDialog.Name = "buttonDialog";
-            this.buttonDialog.Size = new System.Drawing.Size(49, 23);
-            this.buttonDialog.TabIndex = 23;
-            this.buttonDialog.Text = "测(&d)";
-            this.buttonDialog.UseVisualStyleBackColor = true;
-            this.buttonDialog.Click += new System.EventHandler(this.buttonDialog_Click);
-            // 
             // Step2ConfigDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -720,5 +732,6 @@
         private System.Windows.Forms.Button btnWifi;
         private System.Windows.Forms.Button buttonSaveAs;
         private System.Windows.Forms.Button buttonDialog;
+        private System.Windows.Forms.Button btnConfirm;
     }
 }

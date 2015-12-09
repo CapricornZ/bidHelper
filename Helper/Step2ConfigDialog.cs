@@ -234,6 +234,21 @@ namespace Helper
                 this.m_pictureSubs[i].Image = this.m_repository.orcCaptchaTipsUtil.SubImgs[i];
         }
 
+        private void btnConfirm_Click(object sender, EventArgs e) {
+
+            Point origin = tobid.util.IEUtil.findOrigin();
+            Position pos = this.inputBox2Object(this.textBox7);
+
+            foreach (PictureBox picBox in this.m_pictureSubs)
+                picBox.Image = null;
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x + 50, origin.Y + pos.y - 22, 76, 29);
+            this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
+
+
+            tobid.util.orc.CaptchaHelper.detectBidStatus(Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap);
+        }
+
         private void buttonTime_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
@@ -343,8 +358,6 @@ namespace Helper
             this.pictureBox1.Image = tmpbmp;
             g.Dispose();
             this.pictureBox1.Update();
-        }
-
-        
+        }        
     }
 }

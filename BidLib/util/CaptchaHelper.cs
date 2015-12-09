@@ -100,9 +100,38 @@ namespace tobid.util.orc {
         }
     }
 
+    public enum BidStatus {
+        INPROGRESS,
+        FINISH
+    }
+
     public class CaptchaHelper {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(CaptchaHelper));
+
+        /// <summary>
+        /// 判断出价状态INPROGRESS|FINISH
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static BidStatus detectBidStatus(Bitmap bitmap) {
+            
+            int blue = 0;
+            for(int x=0; x < bitmap.Width; x++)
+                for (int y = 0; y < bitmap.Height; y++) {
+
+                    Color color = bitmap.GetPixel(x, y);
+                    float hue = color.GetHue();
+                    float sat = color.GetSaturation() * 100;
+                    if (hue > 200 && hue < 215 && sat >= 65 && sat <= 87)
+                        blue++;
+                }
+
+            int percent = blue * 100 / bitmap.Width / bitmap.Height;
+            logger.DebugFormat("detect BidStatus blue percent : {0}%", percent);
+
+            return percent > 75 ? BidStatus.FINISH : BidStatus.INPROGRESS;
+        }
 
         /// <summary>
         /// 是否为蓝色“刷新校验码”
@@ -130,7 +159,7 @@ namespace tobid.util.orc {
                     }
                 }
             percent = active * 100 / width / height;
-            System.Console.WriteLine(String.Format("ACTIVE {0:f}%", percent));
+            logger.DebugFormat("is Refresh blue percent : {0}%", percent);
             return percent > 60;
         }
 
@@ -149,7 +178,7 @@ namespace tobid.util.orc {
                         count++;
                 }
 
-            System.Console.WriteLine("COUNT:" + count);
+            logger.DebugFormat("is Loading black count : {0}", count);
             return count > 500;
         }
 
@@ -168,6 +197,8 @@ namespace tobid.util.orc {
                 }
             int pixel = bitmap.Width * bitmap.Height;
             int percent = red * 100 / pixel;
+
+            logger.DebugFormat("is WifiRed red percent : {0}%", percent);
             return percent >= 80;
         }
     }

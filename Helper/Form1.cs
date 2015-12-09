@@ -861,8 +861,9 @@ namespace Helper
                 
                 IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
-                IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
-                IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
+                //IBidAction actionInputCaptcha = new InputCaptchaAction(repo: this);
+                //IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
+                IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
                 actions.execute();
             });
             startFire.Start();

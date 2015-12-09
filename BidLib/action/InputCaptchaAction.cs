@@ -63,7 +63,7 @@ namespace tobid.scheduler.jobs.action {
             logger.Info("\tEND   input CAPTCHA");
 
             logger.Info("\tBEGIN double click inputbox");
-            ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x + 55, y + submitPrice.inputBox.y + 12);//校验码区域
+            ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);//校验码区域
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             System.Threading.Thread.Sleep(50);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
