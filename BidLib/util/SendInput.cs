@@ -80,6 +80,8 @@ namespace tobid.util {
             keycode.Add("7", WindowsInput.VirtualKeyCode.NUMPAD7);
             keycode.Add("8", WindowsInput.VirtualKeyCode.NUMPAD8);
             keycode.Add("9", WindowsInput.VirtualKeyCode.NUMPAD9);
+            
+            keycode.Add("F9", WindowsInput.VirtualKeyCode.F9);
         }
 
         static public void simulateKeyUP(String key){
