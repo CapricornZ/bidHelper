@@ -115,6 +115,7 @@ namespace Helper
         private KeyboardHook kh;
         private String triggerF11;
         private String triggerSetPolicy;
+        private String triggerLoadResource;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -267,8 +268,9 @@ namespace Helper
                     instance.Kill();
             }
 
-            triggerF11 = ConfigurationManager.AppSettings["triggerF11"];
-            triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
+            this.triggerF11 = ConfigurationManager.AppSettings["triggerF11"];
+            this.triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
+            this.triggerLoadResource = ConfigurationManager.AppSettings["triggerLoadResource"];
 
             //键盘HOOK
             kh = new KeyboardHook();
@@ -625,13 +627,20 @@ namespace Helper
             String current = now.ToString("HH:mm:ss");
             this.toolStripStatusLabel2.Text = String.Format("NOW:{0}", current);
 
-            if (current.Equals(this.triggerF11)) {
-                logger.Info("@{} auto F11 triggered");
+            if (current.Equals(this.triggerF11)) {//F11
+                logger.InfoFormat("@{0} auto F11 triggered", current);
                 this.fire(SubmitPriceStep2Job.getPosition(), 1200);
             }
-            if (current.Equals(this.triggerSetPolicy)) {
-                logger.Info("@{} auto SET Custom Policy triggered");
+            if (current.Equals(this.triggerSetPolicy)) {//设置策略
+                logger.InfoFormat("@{0} auto SET Custom Policy triggered", current);
                 this.updateCustomPolicy();
+            }
+            if (current.Equals(this.triggerLoadResource)) {//加载配置
+                logger.InfoFormat("@{0} auto LOAD Configuration triggered", current);
+                if (this.国拍ToolStripMenuItem.Checked)
+                    this.loadResource("real");
+                if (this.模拟ToolStripMenuItem.Checked)
+                    this.loadResource("simulate");
             }
         }
 
