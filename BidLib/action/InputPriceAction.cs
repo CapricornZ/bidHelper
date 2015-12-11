@@ -22,6 +22,8 @@ namespace tobid.scheduler.jobs.action {
             this.repository = repo;
         }
 
+        public int BasePrice { get; set; }
+
         public void notify(String message) {
             logger.Debug(message);
         }
@@ -35,6 +37,7 @@ namespace tobid.scheduler.jobs.action {
 
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
 
+            int price = 0;
             if (this.repository.deltaPriceOnUI && givePrice.delta != null)
             {
                 logger.Info("\tBEGIN make delta PRICE blank...");
@@ -72,7 +75,7 @@ namespace tobid.scheduler.jobs.action {
 
                 logger.Info("\tBEGIN identify PRICE...");
                 String txtPrice = this.repository.orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
-                int price = Int32.Parse(txtPrice) + delta;
+                price = Int32.Parse(txtPrice) + delta;
                 logger.InfoFormat("\tEND identified PRICE = {0}", txtPrice);
                 txtPrice = String.Format("{0:D}", price);
 
@@ -80,6 +83,7 @@ namespace tobid.scheduler.jobs.action {
                 KeyBoardUtil.sendMessage(txtPrice, interval:this.repository.interval, needClean:true);
                 logger.Info("\tEND   input PRICE");
             }
+            this.BasePrice = price;
 
             System.Threading.Thread.Sleep(50);
             //点击出价

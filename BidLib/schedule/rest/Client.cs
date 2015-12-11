@@ -28,6 +28,7 @@ namespace tobid.rest
         public String priceTime { get; set; }
         public String captchaTime { get; set; }
         public String submitTime { get; set; }
+        public int submitReachPrice { get; set; }
     }
 
     /// <summary>

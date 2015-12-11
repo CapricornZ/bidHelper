@@ -81,7 +81,7 @@ namespace tobid.util.hook {
         private bool isAllow(Keys keyData) {
             return (keyData >= Keys.D0 && keyData <= Keys.D9)
                 || (keyData >= Keys.NumPad0 && keyData <= Keys.NumPad9)
-                //|| (keyData >= Keys.A && keyData <= Keys.Z)
+                || (keyData >= Keys.Left && keyData <= Keys.Right)
                 || keyData == (Keys)231//packet
                 || keyData == Keys.Oemcomma || keyData == Keys.OemPeriod
                 || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete;

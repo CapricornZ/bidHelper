@@ -12,12 +12,12 @@ namespace tobid.scheduler.jobs {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(CustomJob));
         private static Object lockObj = new Object();
 
-        private List<Task> tasks;
+        private List<ITask> tasks;
         private int nextTask = -1;
 
-        public CustomJob(List<Task> tasks) {
+        public CustomJob(List<ITask> tasks) {
             if (null != tasks && tasks.Count > 0) {
-                tasks.Sort();
+                //tasks.Sort();
                 this.tasks = tasks;
                 this.nextTask = 0;
             } else
@@ -31,7 +31,8 @@ namespace tobid.scheduler.jobs {
                 if (this.nextTask < this.tasks.Count) {
 
                     if (this.tasks[this.nextTask].execute()) {
-                        Console.WriteLine("Execute OK");
+                        
+                        Console.WriteLine( this.tasks[this.nextTask] + " Execute OK");
                         this.nextTask++;
                     }
 

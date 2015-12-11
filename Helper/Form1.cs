@@ -610,6 +610,17 @@ namespace Helper
                     this.checkBoxSubmitCaptcha.Checked = null != trigger.submitTime;
                     if (null != trigger.submitTime)
                         this.dateTimePickerCustomSubmitCaptcha.Text = trigger.submitTime;
+
+                    if (trigger.submitReachPrice > 0) {
+                        this.checkBoxReachPrice.Checked = true;
+                        this.comboBoxReachPrice.Enabled = true;
+                        int index = trigger.submitReachPrice / 100 - 1;
+                        this.comboBoxReachPrice.SelectedItem = this.comboBoxReachPrice.Items[index];
+
+                    } else {
+                        this.checkBoxReachPrice.Checked = false;
+                        this.comboBoxReachPrice.Enabled = false;
+                    }
                 }
                 //MessageBoxButtons messButton = MessageBoxButtons.OK;
                 //DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);
@@ -884,15 +895,15 @@ namespace Helper
                 String fire1 = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 String fire2 = DateTime.Now.AddSeconds(2).ToString("yyyy-MM-dd HH:mm:ss");
 
-                List<Task> tasks = new List<Task>();
-                Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
+                List<ITask> tasks = new List<ITask>();
+                TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(
                     action: new tobid.scheduler.jobs.action.InputPriceAction(delta: delta, repo: this),
                     notify: this,
                     fireTime: fire1);
                 tasks.Add(taskInputPrice);
 
                 ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
-                Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2);
+                TaskTimeBased taskInputCaptcha = new TaskTimeBased(action: actionInputCaptcha, notify: this, fireTime: fire2);
                 tasks.Add(taskInputCaptcha);
 
                 CustomJob job = new CustomJob(tasks: tasks);
@@ -1075,32 +1086,60 @@ namespace Helper
             String fire2 = this.dateTimePickerCustomInputCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
             String fire3 = this.dateTimePickerCustomSubmitCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
-            List<Task> tasks = new List<Task>();
-            Task taskInputPrice = new tobid.scheduler.jobs.action.Task(
-                action: new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this),
-                notify: this,
-                fireTime: fire1);
+            List<ITask> tasks = new List<ITask>();
+            InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this);
+            TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: fire1);
             tasks.Add(taskInputPrice);
 
             if (checkBoxInputCaptcha.Checked) {
 
                 ProcessCaptchaAction actionInputCaptcha = new tobid.scheduler.jobs.action.ProcessCaptchaAction(repo: this);
                 SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskInputCaptcha = new TaskTimeBased(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
                 if (checkBoxSubmitCaptcha.Checked) {
-                    Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
-                    Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
+                    TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fire3); 
+                    if (checkBoxReachPrice.Checked) {
+
+                        TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(
+                            action: actionSubmitCaptcha,
+                            inputPriceAction: inputPriceAction, 
+                            submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), 
+                            repository: this);
+                        ComboTask comboTask = new ComboTask(new List<ITask>() {
+                            taskSubmitCaptchaTimeBased, taskSubmitCaptchaPriceBased
+                        });
+                        tasks.Add(comboTask);
+                    } else {
+                        tasks.Add(taskSubmitCaptchaTimeBased);
+                    }
                 } else {
 
-                    //SequenceAction actionSeq = new SequenceAction(new List<IBidAction>() { actionInputCaptcha, actionSubmitCaptcha });
-                    //Task taskCaptcha = new Task(action: actionSeq, notify: this, fireTime: fire2); tasks.Add(taskCaptcha);
-                    Task taskInputCaptcha = new Task(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
+                    if (checkBoxReachPrice.Checked) {
+                        TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
+                        tasks.Add(taskSubmitCaptchaPriceBased);
+                    }
                 }
 
             } else {
 
                 SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                if (checkBoxSubmitCaptcha.Checked) {
-                    Task taskSubmitCaptcha = new Task(action: actionSubmitCaptcha, notify: this, fireTime: fire3); tasks.Add(taskSubmitCaptcha);
+                TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fire3);
+                TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
+                if (checkBoxSubmitCaptcha.Checked) {//定时提交
+
+                    if (checkBoxReachPrice.Checked) {//定时提交&按三边价格提交
+                        ComboTask comboTask = new ComboTask(new List<ITask>() {
+                            taskSubmitCaptchaTimeBased, taskSubmitCaptchaPriceBased
+                        });
+                        tasks.Add(comboTask);
+                    } else {//仅定时提交
+                        tasks.Add(taskSubmitCaptchaTimeBased);
+                    }
+                    
+                } else {//不用定时提交
+
+                    if (checkBoxReachPrice.Checked)//不定时提交，但按三边价格提交
+                        tasks.Add(taskSubmitCaptchaPriceBased);
                 }
             }
 
@@ -1115,7 +1154,6 @@ namespace Helper
             this.customThread = new System.Threading.Thread(customThreadStart);
             this.customThread.Name = "customThread";
             this.customThread.Start();
-
         }
 
         private void buttonUpdateCustom_Click(object sender, EventArgs e) {
@@ -1228,13 +1266,13 @@ namespace Helper
                     else
                         actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha});
 
-                    Task scheduledTask = new Task(action: actions, notify: this, fireTime: fireTime);
+                    TaskTimeBased scheduledTask = new TaskTimeBased(action: actions, notify: this, fireTime: fireTime);
 
                     if (null != this.submitPriceStep2Thread)
                         this.submitPriceStep2Thread.Abort();
 
                     SchedulerConfiguration customConf = new SchedulerConfiguration(500);
-                    customConf.Job = new CustomJob(tasks: new List<Task>() { scheduledTask });
+                    customConf.Job = new CustomJob(tasks: new List<ITask>() { scheduledTask });
                     Scheduler schedulerCustom = new Scheduler(customConf);
 
                     System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(schedulerCustom.Start);
@@ -1511,6 +1549,13 @@ namespace Helper
             else
                 this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
         }
+
+        private void checkBoxReachPrice_CheckedChanged(object sender, EventArgs e) {
+            if (this.checkBoxReachPrice.Checked)
+                this.comboBoxReachPrice.Enabled = true;
+            else
+                this.comboBoxReachPrice.Enabled = false;
+        }
         #endregion
 
         #region 北京时间
@@ -1542,5 +1587,7 @@ namespace Helper
             SystemTimeUtil.addMilliSecond(-500);
         }
         #endregion
+
+        
     }
 }

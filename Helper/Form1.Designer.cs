@@ -84,6 +84,8 @@
             this.textBoxBNO = new System.Windows.Forms.TextBox();
             this.panelIE = new System.Windows.Forms.Panel();
             this.groupBoxCustom = new System.Windows.Forms.GroupBox();
+            this.comboBoxReachPrice = new System.Windows.Forms.ComboBox();
+            this.checkBoxReachPrice = new System.Windows.Forms.CheckBox();
             this.checkBoxInputCaptcha = new System.Windows.Forms.CheckBox();
             this.checkBoxSubmitCaptcha = new System.Windows.Forms.CheckBox();
             this.buttonUpdateCustom = new System.Windows.Forms.Button();
@@ -138,7 +140,7 @@
             this.groupBoxLocal.Enabled = false;
             this.groupBoxLocal.Location = new System.Drawing.Point(20, 14);
             this.groupBoxLocal.Name = "groupBoxLocal";
-            this.groupBoxLocal.Size = new System.Drawing.Size(219, 143);
+            this.groupBoxLocal.Size = new System.Drawing.Size(219, 170);
             this.groupBoxLocal.TabIndex = 5;
             this.groupBoxLocal.TabStop = false;
             this.groupBoxLocal.Text = "策略V1";
@@ -190,7 +192,7 @@
             // 
             this.btnUpdatePolicy.Location = new System.Drawing.Point(89, 115);
             this.btnUpdatePolicy.Name = "btnUpdatePolicy";
-            this.btnUpdatePolicy.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdatePolicy.Size = new System.Drawing.Size(82, 23);
             this.btnUpdatePolicy.TabIndex = 4;
             this.btnUpdatePolicy.Text = "更新策略(&s)";
             this.btnUpdatePolicy.UseVisualStyleBackColor = true;
@@ -264,7 +266,7 @@
             this.groupBoxLocalV2.Enabled = false;
             this.groupBoxLocalV2.Location = new System.Drawing.Point(20, 14);
             this.groupBoxLocalV2.Name = "groupBoxLocalV2";
-            this.groupBoxLocalV2.Size = new System.Drawing.Size(222, 147);
+            this.groupBoxLocalV2.Size = new System.Drawing.Size(222, 170);
             this.groupBoxLocalV2.TabIndex = 9;
             this.groupBoxLocalV2.TabStop = false;
             this.groupBoxLocalV2.Text = "策略V2";
@@ -291,7 +293,7 @@
             // 
             this.btnUpdateV2.Location = new System.Drawing.Point(93, 118);
             this.btnUpdateV2.Name = "btnUpdateV2";
-            this.btnUpdateV2.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateV2.Size = new System.Drawing.Size(82, 23);
             this.btnUpdateV2.TabIndex = 3;
             this.btnUpdateV2.Text = "更新策略(&s)";
             this.btnUpdateV2.UseVisualStyleBackColor = true;
@@ -415,7 +417,7 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 289);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 307);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(499, 24);
             this.statusStrip1.TabIndex = 6;
@@ -525,14 +527,14 @@
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -638,13 +640,15 @@
             this.panelIE.Controls.Add(this.buttonLogin);
             this.panelIE.Controls.Add(this.buttonIE);
             this.panelIE.Controls.Add(this.buttonURL);
-            this.panelIE.Location = new System.Drawing.Point(228, 252);
+            this.panelIE.Location = new System.Drawing.Point(228, 261);
             this.panelIE.Name = "panelIE";
             this.panelIE.Size = new System.Drawing.Size(188, 29);
             this.panelIE.TabIndex = 15;
             // 
             // groupBoxCustom
             // 
+            this.groupBoxCustom.Controls.Add(this.comboBoxReachPrice);
+            this.groupBoxCustom.Controls.Add(this.checkBoxReachPrice);
             this.groupBoxCustom.Controls.Add(this.checkBoxInputCaptcha);
             this.groupBoxCustom.Controls.Add(this.checkBoxSubmitCaptcha);
             this.groupBoxCustom.Controls.Add(this.buttonUpdateCustom);
@@ -656,15 +660,45 @@
             this.groupBoxCustom.Controls.Add(this.label7);
             this.groupBoxCustom.Location = new System.Drawing.Point(20, 13);
             this.groupBoxCustom.Name = "groupBoxCustom";
-            this.groupBoxCustom.Size = new System.Drawing.Size(224, 162);
+            this.groupBoxCustom.Size = new System.Drawing.Size(224, 177);
             this.groupBoxCustom.TabIndex = 16;
             this.groupBoxCustom.TabStop = false;
             this.groupBoxCustom.Text = "策略(自定义)";
             // 
+            // comboBoxReachPrice
+            // 
+            this.comboBoxReachPrice.Enabled = false;
+            this.comboBoxReachPrice.FormattingEnabled = true;
+            this.comboBoxReachPrice.Items.AddRange(new object[] {
+            "+100",
+            "+200",
+            "+300",
+            "+400",
+            "+500",
+            "+600",
+            "+700",
+            "+800",
+            "+900"});
+            this.comboBoxReachPrice.Location = new System.Drawing.Point(112, 116);
+            this.comboBoxReachPrice.Name = "comboBoxReachPrice";
+            this.comboBoxReachPrice.Size = new System.Drawing.Size(82, 21);
+            this.comboBoxReachPrice.TabIndex = 14;
+            // 
+            // checkBoxReachPrice
+            // 
+            this.checkBoxReachPrice.AutoSize = true;
+            this.checkBoxReachPrice.Location = new System.Drawing.Point(24, 118);
+            this.checkBoxReachPrice.Name = "checkBoxReachPrice";
+            this.checkBoxReachPrice.Size = new System.Drawing.Size(74, 17);
+            this.checkBoxReachPrice.TabIndex = 13;
+            this.checkBoxReachPrice.Text = "提交价格";
+            this.checkBoxReachPrice.UseVisualStyleBackColor = true;
+            this.checkBoxReachPrice.CheckedChanged += new System.EventHandler(this.checkBoxReachPrice_CheckedChanged);
+            // 
             // checkBoxInputCaptcha
             // 
             this.checkBoxInputCaptcha.AutoSize = true;
-            this.checkBoxInputCaptcha.Location = new System.Drawing.Point(24, 75);
+            this.checkBoxInputCaptcha.Location = new System.Drawing.Point(24, 69);
             this.checkBoxInputCaptcha.Name = "checkBoxInputCaptcha";
             this.checkBoxInputCaptcha.Size = new System.Drawing.Size(86, 17);
             this.checkBoxInputCaptcha.TabIndex = 2;
@@ -675,7 +709,7 @@
             // checkBoxSubmitCaptcha
             // 
             this.checkBoxSubmitCaptcha.AutoSize = true;
-            this.checkBoxSubmitCaptcha.Location = new System.Drawing.Point(24, 104);
+            this.checkBoxSubmitCaptcha.Location = new System.Drawing.Point(24, 95);
             this.checkBoxSubmitCaptcha.Name = "checkBoxSubmitCaptcha";
             this.checkBoxSubmitCaptcha.Size = new System.Drawing.Size(74, 17);
             this.checkBoxSubmitCaptcha.TabIndex = 4;
@@ -685,9 +719,9 @@
             // 
             // buttonUpdateCustom
             // 
-            this.buttonUpdateCustom.Location = new System.Drawing.Point(112, 130);
+            this.buttonUpdateCustom.Location = new System.Drawing.Point(112, 144);
             this.buttonUpdateCustom.Name = "buttonUpdateCustom";
-            this.buttonUpdateCustom.Size = new System.Drawing.Size(75, 23);
+            this.buttonUpdateCustom.Size = new System.Drawing.Size(82, 23);
             this.buttonUpdateCustom.TabIndex = 6;
             this.buttonUpdateCustom.Text = "更新策略(&s)";
             this.buttonUpdateCustom.UseVisualStyleBackColor = true;
@@ -698,7 +732,7 @@
             this.dateTimePickerCustomSubmitCaptcha.CustomFormat = "";
             this.dateTimePickerCustomSubmitCaptcha.Enabled = false;
             this.dateTimePickerCustomSubmitCaptcha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomSubmitCaptcha.Location = new System.Drawing.Point(112, 102);
+            this.dateTimePickerCustomSubmitCaptcha.Location = new System.Drawing.Point(112, 93);
             this.dateTimePickerCustomSubmitCaptcha.Name = "dateTimePickerCustomSubmitCaptcha";
             this.dateTimePickerCustomSubmitCaptcha.ShowUpDown = true;
             this.dateTimePickerCustomSubmitCaptcha.Size = new System.Drawing.Size(82, 20);
@@ -710,7 +744,7 @@
             this.dateTimePickerCustomInputCaptcha.CustomFormat = "";
             this.dateTimePickerCustomInputCaptcha.Enabled = false;
             this.dateTimePickerCustomInputCaptcha.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomInputCaptcha.Location = new System.Drawing.Point(112, 74);
+            this.dateTimePickerCustomInputCaptcha.Location = new System.Drawing.Point(112, 68);
             this.dateTimePickerCustomInputCaptcha.Name = "dateTimePickerCustomInputCaptcha";
             this.dateTimePickerCustomInputCaptcha.ShowUpDown = true;
             this.dateTimePickerCustomInputCaptcha.Size = new System.Drawing.Size(82, 20);
@@ -721,7 +755,7 @@
             // 
             this.dateTimePickerCustomPrice.CustomFormat = "";
             this.dateTimePickerCustomPrice.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustomPrice.Location = new System.Drawing.Point(112, 46);
+            this.dateTimePickerCustomPrice.Location = new System.Drawing.Point(112, 43);
             this.dateTimePickerCustomPrice.Name = "dateTimePickerCustomPrice";
             this.dateTimePickerCustomPrice.ShowUpDown = true;
             this.dateTimePickerCustomPrice.Size = new System.Drawing.Size(82, 20);
@@ -731,7 +765,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(43, 47);
+            this.label8.Location = new System.Drawing.Point(43, 44);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(55, 13);
             this.label8.TabIndex = 12;
@@ -774,7 +808,7 @@
             this.tabControl1.Location = new System.Drawing.Point(228, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(266, 215);
+            this.tabControl1.Size = new System.Drawing.Size(266, 228);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
@@ -785,7 +819,7 @@
             this.tabPageManual.Controls.Add(this.groupBox2);
             this.tabPageManual.Location = new System.Drawing.Point(4, 22);
             this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(258, 189);
+            this.tabPageManual.Size = new System.Drawing.Size(258, 202);
             this.tabPageManual.TabIndex = 3;
             this.tabPageManual.Text = "手动";
             // 
@@ -797,7 +831,7 @@
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Location = new System.Drawing.Point(20, 14);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(227, 160);
+            this.groupBox2.Size = new System.Drawing.Size(227, 170);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "手动";
@@ -845,7 +879,7 @@
             this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV1.Name = "tabPagePolicyV1";
             this.tabPagePolicyV1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV1.Size = new System.Drawing.Size(258, 189);
+            this.tabPagePolicyV1.Size = new System.Drawing.Size(258, 202);
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
             // 
@@ -856,7 +890,7 @@
             this.tabPagePolicyV2.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV2.Name = "tabPagePolicyV2";
             this.tabPagePolicyV2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 189);
+            this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 202);
             this.tabPagePolicyV2.TabIndex = 1;
             this.tabPagePolicyV2.Text = "策略V2";
             // 
@@ -866,7 +900,7 @@
             this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
             this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
-            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 189);
+            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 202);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
             // 
@@ -881,7 +915,7 @@
             this.groupBoxInternetTime.Controls.Add(this.buttonMinus);
             this.groupBoxInternetTime.Controls.Add(this.buttonAdd);
             this.groupBoxInternetTime.Controls.Add(this.buttonSync);
-            this.groupBoxInternetTime.Location = new System.Drawing.Point(8, 239);
+            this.groupBoxInternetTime.Location = new System.Drawing.Point(8, 246);
             this.groupBoxInternetTime.Name = "groupBoxInternetTime";
             this.groupBoxInternetTime.Size = new System.Drawing.Size(197, 45);
             this.groupBoxInternetTime.TabIndex = 18;
@@ -922,7 +956,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(499, 313);
+            this.ClientSize = new System.Drawing.Size(499, 331);
             this.Controls.Add(this.groupBoxInternetTime);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelIE);
@@ -1051,6 +1085,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioPrice;
         private System.Windows.Forms.TextBox textPrice2;
+        private System.Windows.Forms.ComboBox comboBoxReachPrice;
+        private System.Windows.Forms.CheckBox checkBoxReachPrice;
     }
 }
 
