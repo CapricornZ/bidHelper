@@ -33,12 +33,12 @@
             this.radioNormal = new System.Windows.Forms.RadioButton();
             this.radioEasy = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemRegister = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -47,6 +47,7 @@
             // 
             // button1
             // 
+            this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(236, 129);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 55);
@@ -62,6 +63,7 @@
             this.groupBox2.Controls.Add(this.radioHard);
             this.groupBox2.Controls.Add(this.radioNormal);
             this.groupBox2.Controls.Add(this.radioEasy);
+            this.groupBox2.Enabled = false;
             this.groupBox2.Location = new System.Drawing.Point(33, 35);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(260, 68);
@@ -82,7 +84,7 @@
             // 
             this.hScrollBar1.Location = new System.Drawing.Point(51, 44);
             this.hScrollBar1.Maximum = 50;
-            this.hScrollBar1.Minimum = 15;
+            this.hScrollBar1.Minimum = 5;
             this.hScrollBar1.Name = "hScrollBar1";
             this.hScrollBar1.Size = new System.Drawing.Size(80, 17);
             this.hScrollBar1.TabIndex = 7;
@@ -129,14 +131,6 @@
             this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 5;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(23, 129);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(56, 50);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -150,10 +144,18 @@
             // toolStripMenuItemRegister
             // 
             this.toolStripMenuItemRegister.Name = "toolStripMenuItemRegister";
-            this.toolStripMenuItemRegister.Size = new System.Drawing.Size(52, 20);
-            this.toolStripMenuItemRegister.Text = "注册...";
+            this.toolStripMenuItemRegister.Size = new System.Drawing.Size(79, 20);
+            this.toolStripMenuItemRegister.Text = "登录。。。";
             this.toolStripMenuItemRegister.ToolTipText = "授权码";
             this.toolStripMenuItemRegister.Click += new System.EventHandler(this.toolStripMenuItemRegister_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(23, 129);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(56, 50);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
@@ -172,9 +174,9 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

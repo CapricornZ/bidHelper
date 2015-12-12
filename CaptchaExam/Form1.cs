@@ -20,6 +20,7 @@ namespace CaptchaExam {
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
+        private FormLogin formLogin = new FormLogin();
         private Captcha[] repository;
         private String endPoint = "http://139.196.24.58/captcha.server";
 
@@ -29,26 +30,6 @@ namespace CaptchaExam {
             //RestClient rest = new RestClient(this.endPoint + "/repository.json", HttpVerb.GET);
             //String repository = rest.MakeRequest(false);
             //this.repository = Newtonsoft.Json.JsonConvert.DeserializeObject<Captcha[]>(repository);
-
-            String credential = ConfigurationManager.AppSettings["credential"];
-            String hostName = System.Net.Dns.GetHostName();
-            String epKeepAlive = this.endPoint + "/rest/service/simulate/keepAlive/" + hostName;
-            RestClient rest = new RestClient(epKeepAlive, HttpVerb.PUT, hostName+":"+credential);
-            try {
-                String rtn = rest.MakeRequest(null, true);
-
-                this.groupBox2.Enabled = true;
-                this.button1.Enabled = true;
-            }
-            catch (Exception ex) {
-
-                this.groupBox2.Enabled = false;
-                this.button1.Enabled = false;
-
-                MessageBoxButtons messButton = MessageBoxButtons.OK;
-                DialogResult dr = MessageBox.Show("无效或已过期，请输入正确的授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-            }
-
             
             this.label2.Text = String.Format("训练数量:{0}", this.hScrollBar1.Value);
         }
@@ -92,6 +73,23 @@ namespace CaptchaExam {
             else
                 this.pictureBox1.Image = Properties.Resources.dislike;
             this.button1.Enabled = true;
+
+            ExamRecord record = new ExamRecord();
+            if (this.radioEasy.Checked)
+                record.level = "EASY";
+            if (this.radioHard.Checked)
+                record.level = "HARD";
+            if (this.radioNormal.Checked)
+                record.level = "NORMAL";
+            record.total = max;
+            record.correct = result;
+            record.avgCost = (float)avgMS;
+
+            //String hostName = System.Net.Dns.GetHostName();
+            String hostName = this.formLogin.userName;
+            String epKeepAlive = this.endPoint + "/rest/service/exam/client/" + hostName + "/record";
+            RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, record);
+            String rtn = rest.MakeRequest(null, false);
         }
 
         Random rd = new Random();
@@ -122,7 +120,28 @@ namespace CaptchaExam {
 
         private void toolStripMenuItemRegister_Click(object sender, EventArgs e) {
 
-            String credential = ConfigurationManager.AppSettings["credential"];
+            this.formLogin.ShowDialog(this);
+            if (!this.formLogin.isCancel) {
+
+                String credential = this.formLogin.passWord;
+                String hostName = this.formLogin.userName;
+                String epKeepAlive = this.endPoint + "/rest/service/simulate/keepAlive/" + hostName;
+                RestClient rest = new RestClient(epKeepAlive, HttpVerb.PUT, hostName + ":" + credential);
+                try {
+                    String rtn = rest.MakeRequest(null, true);
+
+                    this.groupBox2.Enabled = true;
+                    this.button1.Enabled = true;
+                } catch (Exception ex) {
+
+                    this.groupBox2.Enabled = false;
+                    this.button1.Enabled = false;
+
+                    MessageBoxButtons messButton = MessageBoxButtons.OK;
+                    DialogResult dr = MessageBox.Show("无效或已过期，请输入正确的授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                }
+            }
+            /*String credential = ConfigurationManager.AppSettings["credential"];
             String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入授权码", "", credential);
             if (!String.IsNullOrEmpty(authCode)) {
 
@@ -146,7 +165,7 @@ namespace CaptchaExam {
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
                     DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
-            }
+            }*/
         }
 
     }
