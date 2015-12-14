@@ -159,7 +159,8 @@ namespace Helper
             Hotkey.UnregisterHotKey(this.Handle, 224);
             Hotkey.UnregisterHotKey(this.Handle, 225);
 
-            kh.UnHook();
+            if(null != kh)
+                kh.UnHook();
 
             logger.Info("Application Form Closed");
         }
@@ -264,9 +265,9 @@ namespace Helper
 
             //关闭KK录像机
             {
-                System.Diagnostics.Process[] myProcesses = System.Diagnostics.Process.GetProcessesByName("KK");
-                foreach (System.Diagnostics.Process instance in myProcesses)
-                    instance.Kill();
+                //System.Diagnostics.Process[] myProcesses = System.Diagnostics.Process.GetProcessesByName("KK");
+                //foreach (System.Diagnostics.Process instance in myProcesses)
+                //    instance.Kill();
             }
 
             this.triggerF11 = ConfigurationManager.AppSettings["triggerF11"];
@@ -358,6 +359,8 @@ namespace Helper
             configStepV2.Job = new SubmitPriceV2Job(repository: this, notify: this);
             m_schedulerSubmitStepV2 = new Scheduler(configStepV2);
 
+            this.floatingForm.StartPosition = FormStartPosition.Manual;
+            this.floatingForm.Location = this.TimePos;
             this.floatingForm.Show();
         }
 
@@ -392,7 +395,8 @@ namespace Helper
                         
                         this.toolStripStatusLabelStatus.BackColor = Color.Red;
                         this.toolStripStatusLabelStatus.Text = "[离线]";
-                        this.notifyIcon1.ShowBalloonTip(5000, "国拍", "检测到掉线，F5刷新或重新登录", ToolTipIcon.Warning);
+                        IEUtil.findBrowser().Refresh();
+                        this.notifyIcon1.ShowBalloonTip(60000, "国拍", "检测到掉线，已自动F5刷新或关掉IE重新登录", ToolTipIcon.Warning);
                     }
                     else {
                         this.toolStripStatusLabelStatus.BackColor = Color.Lime;

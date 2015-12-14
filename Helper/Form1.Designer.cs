@@ -801,10 +801,10 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
             this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
             this.tabControl1.Controls.Add(this.tabPagePolicyV2);
-            this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
             this.tabControl1.Location = new System.Drawing.Point(228, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;

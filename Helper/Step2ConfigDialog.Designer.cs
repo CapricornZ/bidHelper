@@ -134,7 +134,7 @@
             this.textDeltaButton.Location = new System.Drawing.Point(96, 112);
             this.textDeltaButton.Name = "textDeltaButton";
             this.textDeltaButton.Size = new System.Drawing.Size(100, 20);
-            this.textDeltaButton.TabIndex = 15;
+            this.textDeltaButton.TabIndex = 5;
             // 
             // textDeltaInput
             // 
@@ -142,7 +142,7 @@
             this.textDeltaInput.Location = new System.Drawing.Point(96, 89);
             this.textDeltaInput.Name = "textDeltaInput";
             this.textDeltaInput.Size = new System.Drawing.Size(100, 20);
-            this.textDeltaInput.TabIndex = 14;
+            this.textDeltaInput.TabIndex = 4;
             // 
             // label13
             // 
@@ -198,28 +198,28 @@
             this.textBox1.Location = new System.Drawing.Point(96, 20);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 2;
+            this.textBox1.TabIndex = 1;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(96, 43);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
+            this.textBox2.TabIndex = 2;
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(96, 66);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 4;
+            this.textBox3.TabIndex = 3;
             // 
             // btnPrice
             // 
             this.btnPrice.Location = new System.Drawing.Point(214, 19);
             this.btnPrice.Name = "btnPrice";
             this.btnPrice.Size = new System.Drawing.Size(49, 23);
-            this.btnPrice.TabIndex = 12;
+            this.btnPrice.TabIndex = 16;
             this.btnPrice.Text = "测(&P)";
             this.btnPrice.UseVisualStyleBackColor = true;
             this.btnPrice.Click += new System.EventHandler(this.btnPrice_Click);
@@ -249,7 +249,7 @@
             this.btnConfirm.Location = new System.Drawing.Point(169, 102);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(49, 23);
-            this.btnConfirm.TabIndex = 18;
+            this.btnConfirm.TabIndex = 23;
             this.btnConfirm.Text = "测(&T)";
             this.btnConfirm.UseVisualStyleBackColor = true;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
@@ -259,35 +259,37 @@
             this.textBox7.Location = new System.Drawing.Point(92, 104);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(73, 20);
-            this.textBox7.TabIndex = 8;
+            this.textBox7.TabIndex = 14;
             // 
             // textBox6
             // 
             this.textBox6.Location = new System.Drawing.Point(92, 77);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(73, 20);
-            this.textBox6.TabIndex = 7;
+            this.textBox6.TabIndex = 13;
             // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(92, 50);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(73, 20);
-            this.textBox5.TabIndex = 6;
+            this.textBox5.TabIndex = 12;
             // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(92, 23);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(73, 20);
-            this.textBox4.TabIndex = 5;
+            this.textBox4.TabIndex = 11;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Red;
             this.label7.Location = new System.Drawing.Point(14, 107);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 13);
+            this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 17;
             this.label7.Text = "“确定”按钮：";
             // 
@@ -327,7 +329,7 @@
             this.btnTips.Location = new System.Drawing.Point(169, 49);
             this.btnTips.Name = "btnTips";
             this.btnTips.Size = new System.Drawing.Size(49, 23);
-            this.btnTips.TabIndex = 14;
+            this.btnTips.TabIndex = 22;
             this.btnTips.Text = "测(&T)";
             this.btnTips.UseVisualStyleBackColor = true;
             this.btnTips.Click += new System.EventHandler(this.btnTips_Click);
@@ -337,7 +339,7 @@
             this.btnCaptcha.Location = new System.Drawing.Point(169, 22);
             this.btnCaptcha.Name = "btnCaptcha";
             this.btnCaptcha.Size = new System.Drawing.Size(49, 23);
-            this.btnCaptcha.TabIndex = 13;
+            this.btnCaptcha.TabIndex = 21;
             this.btnCaptcha.Text = "测&A)";
             this.btnCaptcha.UseVisualStyleBackColor = true;
             this.btnCaptcha.Click += new System.EventHandler(this.btnCaptcha_Click);
@@ -370,7 +372,7 @@
             this.buttonDialog.Location = new System.Drawing.Point(175, 19);
             this.buttonDialog.Name = "buttonDialog";
             this.buttonDialog.Size = new System.Drawing.Size(49, 23);
-            this.buttonDialog.TabIndex = 23;
+            this.buttonDialog.TabIndex = 17;
             this.buttonDialog.Text = "测(&d)";
             this.buttonDialog.UseVisualStyleBackColor = true;
             this.buttonDialog.Click += new System.EventHandler(this.buttonDialog_Click);
@@ -380,7 +382,7 @@
             this.buttonTime.Location = new System.Drawing.Point(175, 66);
             this.buttonTime.Name = "buttonTime";
             this.buttonTime.Size = new System.Drawing.Size(49, 23);
-            this.buttonTime.TabIndex = 21;
+            this.buttonTime.TabIndex = 18;
             this.buttonTime.Text = "测(&i)";
             this.buttonTime.UseVisualStyleBackColor = true;
             this.buttonTime.Click += new System.EventHandler(this.buttonTime_Click);
@@ -390,7 +392,7 @@
             this.btnWifi.Location = new System.Drawing.Point(175, 111);
             this.btnWifi.Name = "btnWifi";
             this.btnWifi.Size = new System.Drawing.Size(49, 23);
-            this.btnWifi.TabIndex = 22;
+            this.btnWifi.TabIndex = 20;
             this.btnWifi.Text = "测(&w)";
             this.btnWifi.UseVisualStyleBackColor = true;
             this.btnWifi.Click += new System.EventHandler(this.btnWifi_Click);
@@ -400,7 +402,7 @@
             this.btnPriceSM.Location = new System.Drawing.Point(175, 89);
             this.btnPriceSM.Name = "btnPriceSM";
             this.btnPriceSM.Size = new System.Drawing.Size(49, 23);
-            this.btnPriceSM.TabIndex = 20;
+            this.btnPriceSM.TabIndex = 19;
             this.btnPriceSM.Text = "测(&s)";
             this.btnPriceSM.UseVisualStyleBackColor = true;
             this.btnPriceSM.Click += new System.EventHandler(this.btnPriceSM_Click);
@@ -410,7 +412,7 @@
             this.textBoxWifi.Location = new System.Drawing.Point(96, 112);
             this.textBoxWifi.Name = "textBoxWifi";
             this.textBoxWifi.Size = new System.Drawing.Size(73, 20);
-            this.textBoxWifi.TabIndex = 21;
+            this.textBoxWifi.TabIndex = 10;
             // 
             // label15
             // 
@@ -428,7 +430,7 @@
             this.textBoxTime.Location = new System.Drawing.Point(96, 67);
             this.textBoxTime.Name = "textBoxTime";
             this.textBoxTime.Size = new System.Drawing.Size(73, 20);
-            this.textBoxTime.TabIndex = 19;
+            this.textBoxTime.TabIndex = 8;
             // 
             // label14
             // 
@@ -446,7 +448,7 @@
             this.textBoxPriceSM.Location = new System.Drawing.Point(96, 90);
             this.textBoxPriceSM.Name = "textBoxPriceSM";
             this.textBoxPriceSM.Size = new System.Drawing.Size(73, 20);
-            this.textBoxPriceSM.TabIndex = 17;
+            this.textBoxPriceSM.TabIndex = 9;
             // 
             // label11
             // 
@@ -473,7 +475,7 @@
             this.textBoxTitleOk.Location = new System.Drawing.Point(96, 44);
             this.textBoxTitleOk.Name = "textBoxTitleOk";
             this.textBoxTitleOk.Size = new System.Drawing.Size(73, 20);
-            this.textBoxTitleOk.TabIndex = 14;
+            this.textBoxTitleOk.TabIndex = 7;
             // 
             // label8
             // 
@@ -489,14 +491,14 @@
             this.textBoxTitle.Location = new System.Drawing.Point(96, 21);
             this.textBoxTitle.Name = "textBoxTitle";
             this.textBoxTitle.Size = new System.Drawing.Size(73, 20);
-            this.textBoxTitle.TabIndex = 1;
+            this.textBoxTitle.TabIndex = 6;
             // 
             // buttonOK
             // 
             this.buttonOK.Location = new System.Drawing.Point(313, 289);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 3;
+            this.buttonOK.TabIndex = 25;
             this.buttonOK.Text = "确定(&O)";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -506,7 +508,7 @@
             this.buttonCancel.Location = new System.Drawing.Point(406, 289);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 4;
+            this.buttonCancel.TabIndex = 26;
             this.buttonCancel.Text = "取消(&C)";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -630,7 +632,7 @@
             this.btnGoto.Location = new System.Drawing.Point(109, 87);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
-            this.btnGoto.TabIndex = 18;
+            this.btnGoto.TabIndex = 24;
             this.btnGoto.Text = "&goto";
             this.btnGoto.UseVisualStyleBackColor = true;
             this.btnGoto.Click += new System.EventHandler(this.btnGoto_Click);
@@ -640,7 +642,7 @@
             this.textBox8.Location = new System.Drawing.Point(28, 89);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(75, 20);
-            this.textBox8.TabIndex = 17;
+            this.textBox8.TabIndex = 15;
             // 
             // Step2ConfigDialog
             // 
