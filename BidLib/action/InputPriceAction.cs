@@ -40,6 +40,10 @@ namespace tobid.scheduler.jobs.action {
             int price = 0;
             if (this.repository.deltaPriceOnUI && givePrice.delta != null)
             {
+
+                logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
+                byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
+
                 logger.Info("\tBEGIN make delta PRICE blank...");
                 ScreenUtil.SetCursorPos(x + givePrice.delta.inputBox.x, y + givePrice.delta.inputBox.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -47,6 +51,9 @@ namespace tobid.scheduler.jobs.action {
 
                 //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
                 logger.Info("\tEND   make delta PRICE blank...");
+
+                String txtPrice = this.repository.orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+                price = Int32.Parse(txtPrice) + delta;
 
                 logger.Info("\tBEGIN input delta PRICE...");
                 KeyBoardUtil.sendMessage(Convert.ToString(delta), interval:this.repository.interval, needClean:true);
@@ -57,7 +64,6 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.SetCursorPos(x + givePrice.delta.button.x, y + givePrice.delta.button.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 logger.Info("\tEND   click delta PRICE button");
-                
             }
             else
             {

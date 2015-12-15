@@ -86,10 +86,12 @@ namespace CaptchaExam {
             record.avgCost = (float)avgMS;
 
             //String hostName = System.Net.Dns.GetHostName();
-            String hostName = this.formLogin.userName;
-            String epKeepAlive = this.endPoint + "/rest/service/exam/client/" + hostName + "/record";
-            RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, record);
-            String rtn = rest.MakeRequest(null, false);
+            if (result > 0) {
+                String hostName = this.formLogin.userName;
+                String epKeepAlive = this.endPoint + "/rest/service/exam/client/" + hostName + "/record";
+                RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, record);
+                String rtn = rest.MakeRequest(null, false);
+            }
         }
 
         Random rd = new Random();

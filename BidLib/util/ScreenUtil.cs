@@ -137,8 +137,8 @@ namespace tobid.util
                 System.Console.WriteLine("HWND:" + Browser.HWND);
                 System.Console.WriteLine("PROCESS:" + process);
 
-                if(process == IEUtil.processID)
-                //if (rtn == null && (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")))
+                //if(process == IEUtil.processID)
+                if (rtn == null && (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")))
                     rtn = Browser;
             }
             return rtn;

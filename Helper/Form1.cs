@@ -115,6 +115,7 @@ namespace Helper
         private String triggerF11;
         private String triggerSetPolicy;
         private String triggerLoadResource;
+        private String wifiRefreshBefore;
         private String m_submitHotKey;
 
         private IDictionary<int, int> m_F9Strategy;
@@ -286,6 +287,7 @@ namespace Helper
             this.triggerF11 = ConfigurationManager.AppSettings["triggerF11"];
             this.triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
             this.triggerLoadResource = ConfigurationManager.AppSettings["triggerLoadResource"];
+            this.wifiRefreshBefore = ConfigurationManager.AppSettings["forbiddenWifiRefresh"];
 
             //键盘HOOK
             kh = new KeyboardHook();
@@ -379,6 +381,8 @@ namespace Helper
 
         void monitorWifi() {
 
+            DateTime before = DateTime.ParseExact(this.wifiRefreshBefore, "HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture);
+            System.Console.WriteLine(before);
             BidStep2 step2 = SubmitPriceStep2Job.getPosition();
 
             Point origin = findOrigin();
@@ -404,12 +408,25 @@ namespace Helper
 
                     byte[] wifiSpot = screenUtil.screenCaptureAsByte(x, y, 6, 5);
                     File.WriteAllBytes(@"wifi-spot.bmp", wifiSpot);
-                    if (CaptchaHelper.isWifiRed(Bitmap.FromStream(new MemoryStream(wifiSpot)) as Bitmap)) {
+                    Boolean isRed = true;
+                    try {
+                        isRed = CaptchaHelper.isWifiRed(Bitmap.FromStream(new MemoryStream(wifiSpot)) as Bitmap);
+                    }
+                    catch (Exception ex) {
+                        logger.Error(ex.ToString());
+                    }
+
+                    if (isRed) {
                         
                         this.toolStripStatusLabelStatus.BackColor = Color.Red;
                         this.toolStripStatusLabelStatus.Text = "[离线]";
-                        IEUtil.findBrowser().Refresh();
-                        this.notifyIcon1.ShowBalloonTip(60000, "国拍", "检测到掉线，已自动F5刷新或关掉IE重新登录", ToolTipIcon.Warning);
+                        TimeSpan diff = DateTime.Now - before;
+                        this.notifyIcon1.ShowBalloonTip(15000, "国拍", "检测到掉线，已自动F5刷新或关掉IE重新登录", ToolTipIcon.Warning);
+                        if (diff.TotalSeconds <= 0) {
+                            SHDocVw.InternetExplorer ie = IEUtil.findBrowser();
+                            if(null != ie)
+                                ie.Refresh();
+                        }
                     }
                     else {
                         this.toolStripStatusLabelStatus.BackColor = Color.Lime;
@@ -663,7 +680,8 @@ namespace Helper
             String current = now.ToString("HH:mm:ss");
             this.toolStripStatusLabel2.Text = String.Format("NOW:{0}", current);
 
-            if (current.Equals(this.triggerF11)) {//F11
+            if(this.triggerF11.Contains(current)){//F11
+            //if (current.Equals(this.triggerF11)) {//F11
                 logger.InfoFormat("@{0} auto F11 triggered", current);
                 this.fire(SubmitPriceStep2Job.getPosition(), 1200);
             }
@@ -903,6 +921,10 @@ namespace Helper
                 //IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha, actionInputCaptcha });
                 IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
                 actions.execute();
+
+                IBidAction actionCancelSubmit = new CancelSubmitCaptchaAction(repo: this);
+                System.Threading.Thread.Sleep(2500);
+                actionCancelSubmit.execute();
             });
             startFire.Start();
         }

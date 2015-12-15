@@ -96,6 +96,7 @@
             this.comboBoxCustomDelta = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.tabPageManual = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -104,7 +105,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
-            this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
             this.buttonMinus = new System.Windows.Forms.Button();
@@ -120,11 +120,11 @@
             this.panelIE.SuspendLayout();
             this.groupBoxCustom.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPagePolicyCustom.SuspendLayout();
             this.tabPageManual.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPagePolicyV1.SuspendLayout();
             this.tabPagePolicyV2.SuspendLayout();
-            this.tabPagePolicyCustom.SuspendLayout();
             this.groupBoxInternetTime.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -500,7 +500,7 @@
             this.stepToolStripMenuItem,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
-            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.配置ToolStripMenuItem.Text = "配置(&P)";
             // 
             // stepToolStripMenuItem
@@ -513,7 +513,7 @@
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
-            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 21);
             // 
             // AboutToolStripMenuItem
             // 
@@ -521,20 +521,20 @@
             this.CheckUpdateToolStripMenuItem,
             this.AuthCodeToolStripMenuItem});
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.AboutToolStripMenuItem.Text = "关于(&A)";
             // 
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -813,6 +813,16 @@
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
             // 
+            // tabPagePolicyCustom
+            // 
+            this.tabPagePolicyCustom.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
+            this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
+            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 202);
+            this.tabPagePolicyCustom.TabIndex = 2;
+            this.tabPagePolicyCustom.Text = "策略(自定义)";
+            // 
             // tabPageManual
             // 
             this.tabPageManual.BackColor = System.Drawing.SystemColors.Control;
@@ -893,16 +903,6 @@
             this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 202);
             this.tabPagePolicyV2.TabIndex = 1;
             this.tabPagePolicyV2.Text = "策略V2";
-            // 
-            // tabPagePolicyCustom
-            // 
-            this.tabPagePolicyCustom.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
-            this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
-            this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
-            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 202);
-            this.tabPagePolicyCustom.TabIndex = 2;
-            this.tabPagePolicyCustom.Text = "策略(自定义)";
             // 
             // notifyIcon1
             // 
@@ -993,12 +993,12 @@
             this.groupBoxCustom.ResumeLayout(false);
             this.groupBoxCustom.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPagePolicyCustom.ResumeLayout(false);
             this.tabPageManual.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPagePolicyV1.ResumeLayout(false);
             this.tabPagePolicyV2.ResumeLayout(false);
-            this.tabPagePolicyCustom.ResumeLayout(false);
             this.groupBoxInternetTime.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

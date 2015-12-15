@@ -10,6 +10,40 @@ using tobid.util.orc;
 namespace tobid.scheduler.jobs.action {
 
     /// <summary>
+    /// 仅点击出价“取消”按钮
+    /// </summary>
+    public class CancelSubmitCaptchaAction : IBidAction {
+
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(CancelSubmitCaptchaAction));
+
+        private IRepository repository;
+        public CancelSubmitCaptchaAction(IRepository repo) {
+            this.repository = repo;
+        }
+
+        public void notify(string message) {
+            logger.Debug(message);
+        }
+
+        public bool execute() {
+
+            Point origin = IEUtil.findOrigin();
+            int x = origin.X;
+            int y = origin.Y;
+
+            SubmitPrice submitPrice = this.repository.submitPrice;
+
+            this.repository.lastSubmit = DateTime.Now;
+            logger.Info("BEGIN click BUTTON[取消]");
+            logger.DebugFormat("BUTTON[取消]({0}, {1})", x + submitPrice.buttons[1].x, y + submitPrice.buttons[1].y);
+            ScreenUtil.SetCursorPos(x + submitPrice.buttons[1].x, y + submitPrice.buttons[1].y);
+            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+            logger.Info("END   click BUTTON[取消]");
+
+            return true;
+        }
+    }
+    /// <summary>
     /// 仅点击出价“确定”按钮
     /// </summary>
     public class SubmitCaptchaPureAction : IBidAction{
