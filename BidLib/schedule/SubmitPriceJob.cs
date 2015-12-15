@@ -36,6 +36,15 @@ namespace tobid.scheduler.jobs
 
         GivePriceStep2 givePriceStep2 { get; }
         SubmitPrice submitPrice { get; }
+
+        /// <summary>
+        /// 上一次提交验证码的时间
+        /// </summary>
+        DateTime lastSubmit { get; set; }
+        /// <summary>
+        /// 上一次提交验证码到别服务器接受或返回的耗时
+        /// </summary>
+        TimeSpan lastCost { get; set; }
     }
 
     public interface INotify {

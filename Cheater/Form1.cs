@@ -44,6 +44,7 @@ namespace Cheater {
         private Entry[] m_entries;
         private CaptchaUtil m_orcCaptchaTipsUtil;
 
+
         #region IRepository
         public Boolean deltaPriceOnUI { get; set; }
         public Point TimePos { get; set; }
@@ -62,6 +63,9 @@ namespace Cheater {
 
         public GivePriceStep2 givePriceStep2 { get { return SubmitPriceStep2Job.getPosition().give; } }
         public SubmitPrice submitPrice { get { return SubmitPriceStep2Job.getPosition().submit; } }
+
+        public DateTime lastSubmit { get; set; }
+        public TimeSpan lastCost { get; set; }
         #endregion
 
         private void loadResource(String category) {

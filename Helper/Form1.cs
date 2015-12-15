@@ -76,12 +76,11 @@ namespace Helper
             }
         }
 
-        public GivePriceStep2 givePriceStep2 { get {
-            return SubmitPriceStep2Job.getPosition().give;
-        } }
-        public SubmitPrice submitPrice { get {
-            return SubmitPriceStep2Job.getPosition().submit;
-        } }
+        public GivePriceStep2 givePriceStep2 { get { return SubmitPriceStep2Job.getPosition().give; } }
+        public SubmitPrice submitPrice { get { return SubmitPriceStep2Job.getPosition().submit; } }
+
+        public DateTime lastSubmit { get; set; }
+        public TimeSpan lastCost { get; set; }
         #endregion
 
         private IOrc m_orcLogin;
@@ -117,6 +116,8 @@ namespace Helper
         private String triggerSetPolicy;
         private String triggerLoadResource;
         private String m_submitHotKey;
+
+        private IDictionary<int, int> m_F9Strategy;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -179,6 +180,18 @@ namespace Helper
         }
 
         private void loadResource(String category){
+
+            this.m_F9Strategy = new Dictionary<int, int>();
+            this.m_F9Strategy.Add(50, 500);
+            this.m_F9Strategy.Add(51, 500);
+            this.m_F9Strategy.Add(52, 400);
+            this.m_F9Strategy.Add(53, 400);
+            this.m_F9Strategy.Add(54, 300);
+            this.m_F9Strategy.Add(55, 300);
+            this.m_F9Strategy.Add(56, 300);
+            this.m_F9Strategy.Add(57, 300);
+            this.m_F9Strategy.Add(58, 300);
+            this.m_F9Strategy.Add(59, 300);
 
             //加载配置项1
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
@@ -462,8 +475,9 @@ namespace Helper
                     this.stopCurrentJob();
                     break;
                 case Keys.F9:
-                    logger.InfoFormat("HOT KEY [F9] trigger : +300");
-                    this.fire(SubmitPriceStep2Job.getPosition(), 300);
+                    //logger.InfoFormat("HOT KEY [F9] trigger");
+                    //this.fire(SubmitPriceStep2Job.getPosition(), 300);
+                    this.fireAutoSubmit(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.F11:
                     logger.InfoFormat("HOT KEY [F11] trigger : +1000");
@@ -893,6 +907,52 @@ namespace Helper
             startFire.Start();
         }
 
+        private void fireAutoSubmit(tobid.rest.position.BidStep2 bid)
+        {
+            System.Threading.Thread startFire = new System.Threading.Thread(delegate()
+            {
+                Point origin = findOrigin();
+                int x = origin.X;
+                int y = origin.Y;
+
+                ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                System.Threading.Thread.Sleep(50);
+
+                DateTime now = DateTime.Now;
+                int delta = 300;
+                if(this.m_F9Strategy.ContainsKey(now.Second))
+                    delta = this.m_F9Strategy[now.Second];
+                logger.DebugFormat("trigger Delta Price : {0}", delta);
+                IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
+                IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
+                IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
+                IBidAction actionSubmitCaptcha = new SubmitCaptchaPureAction(repo:this);
+                actions.execute();
+                
+
+                //x<=1.5 提交时间超过(5500)ms
+                //x>1.5 提交时间为(4000+x)ms
+                int maxWait = 5500;
+                if (this.lastCost != null && this.lastCost.TotalMilliseconds > 1500)
+                        maxWait += (int)this.lastCost.TotalMilliseconds - 1500;
+                    //maxWait = 4000 + (this.lastCost.TotalMilliseconds > this.lastCost.TotalMilliseconds - 1500 ? (int)this.lastCost.TotalMilliseconds - 1500 : 1500);
+                logger.DebugFormat("lastCost : {0}, maxWait : {1}", this.lastCost == null ? 0 : this.lastCost.TotalMilliseconds, maxWait);
+                while (true)
+                {
+                    System.Threading.Thread.Sleep(100);
+                    TimeSpan diff = DateTime.Now - this.lastSubmit;
+                    logger.DebugFormat("lastSubmit : {0}, left : {1}", lastSubmit.ToString("HH:mm:ss.ffff"), diff.TotalMilliseconds);
+                    if (diff.TotalMilliseconds > maxWait)
+                    {
+                        actionSubmitCaptcha.execute();
+                        break;
+                    }
+                }
+            });
+            startFire.Start();
+        }
+
         private void exam4Fire(int delta) {
 
             System.Threading.Thread startExam = new System.Threading.Thread(delegate() {
@@ -1128,10 +1188,10 @@ namespace Helper
 
                 SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
                 TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fire3);
-                TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
                 if (checkBoxSubmitCaptcha.Checked) {//定时提交
 
                     if (checkBoxReachPrice.Checked) {//定时提交&按三边价格提交
+                        TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
                         ComboTask comboTask = new ComboTask(new List<ITask>() {
                             taskSubmitCaptchaTimeBased, taskSubmitCaptchaPriceBased
                         });
@@ -1142,8 +1202,11 @@ namespace Helper
                     
                 } else {//不用定时提交
 
-                    if (checkBoxReachPrice.Checked)//不定时提交，但按三边价格提交
+                    if (checkBoxReachPrice.Checked)
+                    {//不定时提交，但按三边价格提交
+                        TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
                         tasks.Add(taskSubmitCaptchaPriceBased);
+                    }
                 }
             }
 
