@@ -13,10 +13,11 @@ namespace CaptchaExam
 {
     public partial class Form2 : Form
     {
-        public Form2(int ms)
+        public Form2(int ms, Proxy proxy)
         {
             InitializeComponent();
             this.max = ms;
+            this.proxySetting = proxy;
         }
 
         private Captcha[] repository;
@@ -27,6 +28,7 @@ namespace CaptchaExam
         private DateTime start = DateTime.Now;
         private DateTime end = DateTime.Now;
         private int max;
+        private Proxy proxySetting;
 
         public Boolean Result { get; set; }
         public TimeSpan Cost { get { return end - start; } }
@@ -80,12 +82,12 @@ namespace CaptchaExam
             ShowCpatcha:
 
                 RestClient rest = new RestClient(this.endPoint + "/rest/service/simulate/captcha", HttpVerb.GET);
-                String repository = rest.MakeRequest(false);
+                String repository = rest.MakeRequest(false, this.proxySetting);
                 Captcha captcha = Newtonsoft.Json.JsonConvert.DeserializeObject<Captcha>(repository);
 
                 String url = String.Format("{0}/{1}", this.endPoint, captcha.url);
                 HttpUtil httpReq = new HttpUtil();
-                System.IO.Stream ms = httpReq.getAsBinary(url);
+                System.IO.Stream ms = httpReq.getAsBinary(url, this.proxySetting);
                 
                 this.pictureBoxCaptcha.Image = new Bitmap(ms);
                 this.captcha = captcha.value;

@@ -23,10 +23,17 @@ namespace tobid.util.http
         /// </summary>
         /// <param name="address">url地址</param>
         /// <returns></returns>
-        public Stream getAsBinary(String address)
+        public Stream getAsBinary(String address, Proxy proxySetting = null)
         {
             HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
-            httpReq.Proxy = null;//程序启动后第一次Request非常慢的解决法
+            if (null == proxySetting)
+                httpReq.Proxy = null;//程序启动后第一次Request非常慢的解决法
+            else {
+
+                WebProxy proxy = (WebProxy)WebProxy.GetDefaultProxy();
+                proxy.Credentials = new System.Net.NetworkCredential(proxySetting.user, proxySetting.pass, proxySetting.domain);
+                httpReq.Proxy = new System.Net.WebProxy(new Uri(proxySetting.proxy), proxy.BypassProxyOnLocal, proxy.BypassList, proxy.Credentials);
+            }
 
             httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             httpReq.Method = "GET";
@@ -37,9 +44,18 @@ namespace tobid.util.http
             return s;
         }
 
-        public String getAsPlain(String address) {
+        public String getAsPlain(String address, Proxy proxySetting = null) {
 
             HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(new Uri(address));
+            if (null == proxySetting)
+                httpReq.Proxy = null;//程序启动后第一次Request非常慢的解决法
+            else {
+
+                WebProxy proxy = (WebProxy)WebProxy.GetDefaultProxy();
+                proxy.Credentials = new System.Net.NetworkCredential(proxySetting.user, proxySetting.pass, proxySetting.domain);
+                httpReq.Proxy = new System.Net.WebProxy(new Uri(proxySetting.proxy), proxy.BypassProxyOnLocal, proxy.BypassList, proxy.Credentials);
+            }
+
             httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth)));
             httpReq.Method = "GET";
             httpReq.Timeout = 1000 * 30;

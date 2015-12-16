@@ -8,24 +8,37 @@ using System.IO;
 
 namespace tobid.util.http
 {
-    public enum HttpVerb
-    {
+    public class Proxy {
+        public String proxy { get; set; }
+        public String domain { get; set; }
+        public String user { get; set; }
+        public String pass { get; set; }
+
+        public Proxy(String domain, String user, String pass, String proxy) {
+            this.pass = pass;
+            this.user = user;
+            this.proxy = proxy;
+            this.domain = domain;
+        }
+    }
+
+    public enum HttpVerb {
         GET,
         POST,
         PUT,
         DELETE
     }
 
-    public class RestClient
-    {
+    public class RestClient {
+
         public string EndPoint { get; set; }
         public HttpVerb Method { get; set; }
         public string ContentType { get; set; }
         public string PostData { get; set; }
         private string basicAuth;
 
-        public RestClient(string endpoint, HttpVerb method)
-        {
+        public RestClient(string endpoint, HttpVerb method) {
+
             this.EndPoint = endpoint;
             this.Method = method;
             this.ContentType = "text/xml";
@@ -36,16 +49,8 @@ namespace tobid.util.http
             this.basicAuth = user + ":" + pass;
         }
 
-        /*public RestClient(string endpoint, HttpVerb method, string postData)
-        {
-            this.EndPoint = endpoint;
-            this.Method = method;
-            this.ContentType = "text/xml";
-            this.PostData = postData;
-        }*/
+        public RestClient(string endpoint, HttpVerb method, Object postObj) {
 
-        public RestClient(string endpoint, HttpVerb method, Object postObj)
-        {
             this.EndPoint = endpoint;
             this.Method = method;
             this.ContentType = "application/json;charset=UTF-8";
@@ -62,15 +67,22 @@ namespace tobid.util.http
             this.basicAuth = basicAuth;
         }
 
-        public string MakeRequest(Boolean isBasicAuth=true)
-        {
-            return MakeRequest(null, isBasicAuth:isBasicAuth);
+        public string MakeRequest(Boolean isBasicAuth=true, Proxy proxySetting = null) {
+            return MakeRequest(null, isBasicAuth: isBasicAuth, proxySetting:proxySetting);
         }
 
-        public string MakeRequest(string parameters, Boolean isBasicAuth=true)
+        public string MakeRequest(string parameters, Boolean isBasicAuth=true, Proxy proxySetting = null)
         {
             WebRequest request = WebRequest.Create(parameters == null ? EndPoint : EndPoint + parameters);
-            request.Proxy = null;//程序启动后第一次Request非常慢解决法
+            if (null == proxySetting)
+                request.Proxy = null;//程序启动后第一次Request非常慢解决法
+            else {
+                WebProxy proxy = (WebProxy)WebProxy.GetDefaultProxy();
+                proxy.Credentials = new System.Net.NetworkCredential(proxySetting.user, proxySetting.pass, proxySetting.domain);
+                request.Proxy = new System.Net.WebProxy(new Uri(proxySetting.proxy), proxy.BypassProxyOnLocal, proxy.BypassList, proxy.Credentials);
+            }
+            //request.Proxy = null;
+
             //WebProxy proxy = new WebProxy(new Uri("10.16.95.12:80"));
             //proxy.Credentials = new NetworkCredential("hq\0392xl", "Pass2012");
             //request.Proxy = proxy;

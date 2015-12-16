@@ -15,11 +15,27 @@ using tobid.rest;
 namespace CaptchaExam {
     
     public partial class Form1 : Form {
+
         public Form1() {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
+
+            this.formProxy = new FormProxy();
         }
 
+        public Form1(string domain, string user, string password, string proxy) {
+            InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false;
+            
+            this.formProxy = new FormProxy();
+            formProxy.user = user;
+            formProxy.password = password;
+            formProxy.proxy = proxy;
+            formProxy.domain = domain;
+            this.formProxy.proxySetting = new Proxy(domain, user, password, proxy);
+        }
+
+        private FormProxy formProxy;
         private FormLogin formLogin = new FormLogin();
         private Captcha[] repository;
         private String endPoint = "http://139.196.24.58/captcha.server";
@@ -50,7 +66,7 @@ namespace CaptchaExam {
                 if (radioHard.Checked)
                     maxMS = 1500;
 
-                Form2 frm = new Form2(maxMS);
+                Form2 frm = new Form2(maxMS, this.formProxy.proxySetting);
                 frm.ShowDialog();
                 System.Console.WriteLine("COST:{0}, RESULT:{1}", frm.Cost.TotalMilliseconds, frm.Result);
 
@@ -90,7 +106,7 @@ namespace CaptchaExam {
                 String hostName = this.formLogin.userName;
                 String epKeepAlive = this.endPoint + "/rest/service/exam/client/" + hostName + "/record";
                 RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, record);
-                String rtn = rest.MakeRequest(null, false);
+                String rtn = rest.MakeRequest(null, false, this.formProxy.proxySetting);
             }
         }
 
@@ -130,7 +146,7 @@ namespace CaptchaExam {
                 String epKeepAlive = this.endPoint + "/rest/service/simulate/keepAlive/" + hostName;
                 RestClient rest = new RestClient(epKeepAlive, HttpVerb.PUT, hostName + ":" + credential);
                 try {
-                    String rtn = rest.MakeRequest(null, true);
+                    String rtn = rest.MakeRequest(null, true, this.formProxy.proxySetting);
 
                     this.groupBox2.Enabled = true;
                     this.button1.Enabled = true;
@@ -140,34 +156,14 @@ namespace CaptchaExam {
                     this.button1.Enabled = false;
 
                     MessageBoxButtons messButton = MessageBoxButtons.OK;
-                    DialogResult dr = MessageBox.Show("无效或已过期，请输入正确的授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                    DialogResult dr = MessageBox.Show("无效或已过期，请输入正确的授权码!\r\n" + ex.ToString(), "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
             }
-            /*String credential = ConfigurationManager.AppSettings["credential"];
-            String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入授权码", "", credential);
-            if (!String.IsNullOrEmpty(authCode)) {
+        }
 
-                Warrant warrant = new Warrant(authCode);
-                String hostName = System.Net.Dns.GetHostName();
-                String epKeepAlive = this.endPoint + "/rest/service/simulate/register/" + hostName;
-                RestClient rest = new RestClient(epKeepAlive, HttpVerb.POST, warrant);
-                try {
-                    String rtn = rest.MakeRequest(null, false);
+        private void ToolStripMenuItemProxy_Click(object sender, EventArgs e) {
 
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    config.AppSettings.Settings["credential"].Value = authCode;
-                    config.Save();
-                    ConfigurationManager.RefreshSection("appSettings");
-
-                    MessageBoxButtons messButton = MessageBoxButtons.OK;
-                    DialogResult dr = MessageBox.Show(String.Format("请重新启动应用程序!\r\n主机名:{0}\r\n授权码:{1}", hostName, authCode), "授权成功", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                }
-                catch (Exception ex) {
-                    System.Console.WriteLine(ex);
-                    MessageBoxButtons messButton = MessageBoxButtons.OK;
-                    DialogResult dr = MessageBox.Show("请重新输入授权码!", "授权失败", messButton, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                }
-            }*/
+            DialogResult dr = this.formProxy.ShowDialog(this);
         }
 
     }

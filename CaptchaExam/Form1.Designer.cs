@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemRegister = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemProxy = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -134,7 +135,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemRegister});
+            this.toolStripMenuItemRegister,
+            this.ToolStripMenuItemProxy});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(323, 24);
@@ -144,10 +146,17 @@
             // toolStripMenuItemRegister
             // 
             this.toolStripMenuItemRegister.Name = "toolStripMenuItemRegister";
-            this.toolStripMenuItemRegister.Size = new System.Drawing.Size(79, 20);
-            this.toolStripMenuItemRegister.Text = "登录。。。";
+            this.toolStripMenuItemRegister.Size = new System.Drawing.Size(52, 20);
+            this.toolStripMenuItemRegister.Text = "登录...";
             this.toolStripMenuItemRegister.ToolTipText = "授权码";
             this.toolStripMenuItemRegister.Click += new System.EventHandler(this.toolStripMenuItemRegister_Click);
+            // 
+            // ToolStripMenuItemProxy
+            // 
+            this.ToolStripMenuItemProxy.Name = "ToolStripMenuItemProxy";
+            this.ToolStripMenuItemProxy.Size = new System.Drawing.Size(76, 20);
+            this.ToolStripMenuItemProxy.Text = "代理设置...";
+            this.ToolStripMenuItemProxy.Click += new System.EventHandler(this.ToolStripMenuItemProxy_Click);
             // 
             // pictureBox1
             // 
@@ -196,6 +205,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRegister;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemProxy;
     }
 }
 
