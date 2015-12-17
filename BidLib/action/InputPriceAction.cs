@@ -101,6 +101,29 @@ namespace tobid.scheduler.jobs.action {
             logger.Info("\tEND   click BUTTON[出价]");
             logger.Info("END   givePRICE");
 
+            System.Threading.Thread capture = new System.Threading.Thread(delegate() {
+
+                if (!System.IO.Directory.Exists("Captchas"))
+                    System.IO.Directory.CreateDirectory("Captchas");
+
+                SubmitPrice submitPrice = this.repository.submitPrice;
+                ScreenUtil screen = new ScreenUtil();
+
+                try {
+                    for (int i = 0; i < 8; i++) {
+                        String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
+                        byte[] captcha = screen.screenCaptureAsByte(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, 128, 28);
+                        System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-{0}.bmp", fileName), captcha);
+                        byte[] captchaTip = screen.screenCaptureAsByte(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y, 112, 16);
+                        System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-TIP-{0}.bmp", fileName), captchaTip);
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
+                catch (Exception ex){
+                    System.Console.WriteLine(ex.ToString());
+                }
+            });
+            capture.Start();
             return true;
         }
     }

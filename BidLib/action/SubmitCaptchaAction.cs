@@ -107,7 +107,6 @@ namespace tobid.scheduler.jobs.action {
             ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("END   click BUTTON[确定]");
-            
 
             BidStatus status = BidStatus.INPROGRESS;
             DateTime start = this.repository.lastSubmit;
@@ -117,9 +116,12 @@ namespace tobid.scheduler.jobs.action {
 
                 if (status == BidStatus.INPROGRESS) {
 
-                    byte[] content = new ScreenUtil().screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
+                    ScreenUtil screen = new ScreenUtil();
+                    byte[] content = screen.screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
                     Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
                     status = CaptchaHelper.detectBidStatus(bitmap);
+                    String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
+                    System.IO.File.WriteAllBytes(String.Format("Captchas/AUTO-BUTTON-{0}.bmp", fileName), content);
                 }
 
                 TimeSpan diff = DateTime.Now - start;
