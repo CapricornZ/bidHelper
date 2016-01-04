@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="action\Action.cs" />
+    <Compile Include="action\InputPrice2Action.cs" />
     <Compile Include="action\InputPriceAction.cs" />
     <Compile Include="action\InputCaptchaAction.cs" />
     <Compile Include="action\SubmitCaptchaAction.cs" />

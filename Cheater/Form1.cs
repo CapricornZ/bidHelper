@@ -61,6 +61,7 @@ namespace Cheater {
         public int interval { get { return 0; } }
         public String category { get { return "simulate"; } }
 
+        public BidStep2 bidStep2 { get { return SubmitPriceStep2Job.getPosition(); } }
         public GivePriceStep2 givePriceStep2 { get { return SubmitPriceStep2Job.getPosition().give; } }
         public SubmitPrice submitPrice { get { return SubmitPriceStep2Job.getPosition().submit; } }
 

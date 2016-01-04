@@ -76,6 +76,7 @@ namespace Helper
             }
         }
 
+        public BidStep2 bidStep2 { get { return SubmitPriceStep2Job.getPosition(); } }
         public GivePriceStep2 givePriceStep2 { get { return SubmitPriceStep2Job.getPosition().give; } }
         public SubmitPrice submitPrice { get { return SubmitPriceStep2Job.getPosition().submit; } }
 
@@ -479,11 +480,11 @@ namespace Helper
                     logger.Info("HOT KEY [CTRL + UP|DOWN] trigger");
                     this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.MIDDLE);
                     break;
-                case Keys.Control|Keys.Enter:
+                case Keys.Control | Keys.Enter:
                     logger.Info("HOT KEY [CTRL + ENTER] trigger");
                     this.submit(this.EndPoint, SubmitPriceStep2Job.getPosition(), CaptchaInput.AUTO);
                     break;
-                case Keys.Control|Keys.R:
+                case Keys.Control | Keys.R:
                     logger.Info("HOT KEY [CTRL + R] trigger");
                     this.refreshCaptcha(SubmitPriceStep2Job.getPosition());
                     break;

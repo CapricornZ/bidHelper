@@ -20,6 +20,9 @@ namespace Helper
             String debug = ConfigurationManager.AppSettings["DEBUG"];
             String timePos = ConfigurationManager.AppSettings["TimePosition"];
 
+            if (!System.IO.Directory.Exists("Captchas"))
+                System.IO.Directory.CreateDirectory("Captchas");
+
             if (args.Length == 2) {
                 Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 config.AppSettings.Settings["principal"].Value = args[0];

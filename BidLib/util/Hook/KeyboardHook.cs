@@ -84,7 +84,8 @@ namespace tobid.util.hook {
                 || (keyData >= Keys.Left && keyData <= Keys.Down)
                 || keyData == (Keys)231//packet
                 || keyData == Keys.Oemcomma || keyData == Keys.OemPeriod || keyData == Keys.Tab
-                || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete;
+                || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete
+                || keyData == Keys.RControlKey || keyData == Keys.LControlKey || keyData == Keys.V || keyData == Keys.C;
         }
 
         //根据已经按下的控制键生成key

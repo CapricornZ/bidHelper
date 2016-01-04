@@ -18,6 +18,9 @@ namespace tobid.scheduler.jobs
 {
     public interface IRepository
     {
+        /// <summary>
+        /// 是否用加价功能
+        /// </summary>
         Boolean deltaPriceOnUI { get; set; }
         Point TimePos { get; set; }
         IOrc orcTitle { get; }
@@ -36,6 +39,7 @@ namespace tobid.scheduler.jobs
 
         GivePriceStep2 givePriceStep2 { get; }
         SubmitPrice submitPrice { get; }
+        BidStep2 bidStep2 { get; }
 
         /// <summary>
         /// 上一次提交验证码的时间
