@@ -41,7 +41,7 @@ namespace tobid.scheduler.jobs.action {
 
             logger.DebugFormat("CAPTURE PRICE-sm({0}, {1})", x + bidStep2.price.x, y + bidStep2.price.y);
             byte[] content = new ScreenUtil().screenCaptureAsByte(x + bidStep2.price.x, y + bidStep2.price.y, 52, 18);
-            String txtPrice = this.repository.orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+            String txtPrice = this.repository.orcPriceSM.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
             int price = Int32.Parse(txtPrice) + this.delta;
 
             int min = Int32.Parse(txtPrice) + 500;
@@ -52,6 +52,17 @@ namespace tobid.scheduler.jobs.action {
                 logger.Info("Cancel and Re-Input price!");
                 
                 //点取消按钮
+                logger.Info("\tBEGIN click CANCEL button");
+                ScreenUtil.SetCursorPos(x + bidStep2.submit.buttons[1].x, y + bidStep2.submit.buttons[1].y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                logger.Info("\tEND   click CANCEL button");
+
+                System.Threading.Thread.Sleep(500);
+
+                logger.InfoFormat("\tBEGIN invoke InputPriceAction(+{0})", this.delta);
+                InputPriceAction inputPrice = new InputPriceAction(this.delta, this.repository);
+                inputPrice.execute();
+                logger.Info("\tEND   invoke InputPriceAction");
             }
             return true;
         }

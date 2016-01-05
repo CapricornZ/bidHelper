@@ -297,10 +297,14 @@ namespace Helper
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
-            this.dateTimePicker2.Value = DateTime.Now;
             this.dateTimePickerCustomInputCaptcha.Value = DateTime.Now;
             this.dateTimePickerCustomPrice.Value = DateTime.Now;
             this.dateTimePickerCustomSubmitCaptcha.Value = DateTime.Now;
+
+            this.dateTimePickerCustom2Price1.Value = DateTime.Now;
+            this.dateTimePickerCustom2Cancel.Value = DateTime.Now;
+            this.dateTimePickerCustom2Submit1.Value = DateTime.Now;
+            this.dateTimePickerCustom2Submit2.Value = DateTime.Now;
 
             this.step2Dialog = new Step2ConfigDialog(this);
             this.floatingForm = new FloatingForm();
@@ -1267,6 +1271,42 @@ namespace Helper
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (dr == DialogResult.OK) {
+
+                this.textBox1.Text = this.dateTimePickerCustom2Price1.Value.ToString("MM/dd HH:mm:ss");
+                this.textBox2.Text = this.comboBoxCustom2Delta1.Text;
+
+                String firePrice1 = this.dateTimePickerCustom2Price1.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                String fireSubmit1 = this.dateTimePickerCustom2Submit1.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                String fireSubmit2 = this.dateTimePickerCustom2Submit2.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                String fireCancel = this.dateTimePickerCustom2Cancel.Value.ToString("yyyy-MM-dd HH:mm:ss");
+
+                List<ITask> tasks = new List<ITask>();
+                InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);
+                TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
+                tasks.Add(taskInputPrice);
+
+                InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction);
+                TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
+                tasks.Add(taskInputPrice2Time);
+
+                SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fireSubmit1);
+                tasks.Add(taskSubmitCaptchaTimeBased);
+
+                if (null != this.customThread)
+                    this.customThread.Abort();
+
+                SchedulerConfiguration customConf = new SchedulerConfiguration(500);
+                customConf.Job = new CustomJob(tasks: tasks);
+                this.m_schedulerCustom = new Scheduler(customConf);
+
+                System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
+                this.customThread = new System.Threading.Thread(customThreadStart);
+                this.customThread.Name = "customV2Thread";
+                this.customThread.Start();
+            }
+            /*
             if (dr == DialogResult.OK)
             {
                 Step2Operation bidOps = SubmitPriceStep2Job.bidOperation;
@@ -1297,7 +1337,7 @@ namespace Helper
                 this.submitPriceV2Thread.Name = "submitPriceV2Thread";
                 this.submitPriceV2Thread.Start();
             }
-
+            */
         }
 
         private void button_updatePolicy_Click(object sender, EventArgs e) {
@@ -1570,11 +1610,11 @@ namespace Helper
             //}
 
             //214,203
-            Point origin = findOrigin();
-            int x = origin.X;
-            int y = origin.Y;
-            byte[] content = new ScreenUtil().screenCaptureAsByte(x+214, y+203, 6, 5);
-            File.WriteAllBytes(@"e:\point.bmp", content);
+            //Point origin = findOrigin();
+            //int x = origin.X;
+            //int y = origin.Y;
+            //byte[] content = new ScreenUtil().screenCaptureAsByte(x+214, y+203, 6, 5);
+            //File.WriteAllBytes(@"e:\point.bmp", content);
             //H:143-184
         }
         #endregion
@@ -1682,7 +1722,5 @@ namespace Helper
             SystemTimeUtil.addMilliSecond(-500);
         }
         #endregion
-
-        
     }
 }

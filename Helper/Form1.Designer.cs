@@ -42,13 +42,19 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBoxLocalV2 = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.dateTimePickerCustom2Submit2 = new System.Windows.Forms.DateTimePicker();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.dateTimePickerCustom2Submit1 = new System.Windows.Forms.DateTimePicker();
+            this.label17 = new System.Windows.Forms.Label();
+            this.dateTimePickerCustom2Cancel = new System.Windows.Forms.DateTimePicker();
+            this.comboBoxCustom2Delta2 = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.btnUpdateV2 = new System.Windows.Forms.Button();
-            this.textBoxDelay = new System.Windows.Forms.TextBox();
-            this.comboBoxDelta = new System.Windows.Forms.ComboBox();
+            this.dateTimePickerCustom2Price1 = new System.Windows.Forms.DateTimePicker();
             this.label4 = new System.Windows.Forms.Label();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnUpdateV2 = new System.Windows.Forms.Button();
+            this.comboBoxCustom2Delta1 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -256,61 +262,91 @@
             // 
             // groupBoxLocalV2
             // 
-            this.groupBoxLocalV2.Controls.Add(this.label6);
+            this.groupBoxLocalV2.Controls.Add(this.dateTimePickerCustom2Submit2);
+            this.groupBoxLocalV2.Controls.Add(this.label19);
+            this.groupBoxLocalV2.Controls.Add(this.label18);
+            this.groupBoxLocalV2.Controls.Add(this.dateTimePickerCustom2Submit1);
+            this.groupBoxLocalV2.Controls.Add(this.label17);
+            this.groupBoxLocalV2.Controls.Add(this.dateTimePickerCustom2Cancel);
+            this.groupBoxLocalV2.Controls.Add(this.comboBoxCustom2Delta2);
             this.groupBoxLocalV2.Controls.Add(this.label5);
-            this.groupBoxLocalV2.Controls.Add(this.btnUpdateV2);
-            this.groupBoxLocalV2.Controls.Add(this.textBoxDelay);
-            this.groupBoxLocalV2.Controls.Add(this.comboBoxDelta);
+            this.groupBoxLocalV2.Controls.Add(this.dateTimePickerCustom2Price1);
             this.groupBoxLocalV2.Controls.Add(this.label4);
-            this.groupBoxLocalV2.Controls.Add(this.dateTimePicker2);
+            this.groupBoxLocalV2.Controls.Add(this.label6);
+            this.groupBoxLocalV2.Controls.Add(this.btnUpdateV2);
+            this.groupBoxLocalV2.Controls.Add(this.comboBoxCustom2Delta1);
             this.groupBoxLocalV2.Enabled = false;
-            this.groupBoxLocalV2.Location = new System.Drawing.Point(20, 14);
+            this.groupBoxLocalV2.Location = new System.Drawing.Point(6, 14);
             this.groupBoxLocalV2.Name = "groupBoxLocalV2";
-            this.groupBoxLocalV2.Size = new System.Drawing.Size(222, 170);
+            this.groupBoxLocalV2.Size = new System.Drawing.Size(263, 170);
             this.groupBoxLocalV2.TabIndex = 9;
             this.groupBoxLocalV2.TabStop = false;
-            this.groupBoxLocalV2.Text = "策略V2";
+            this.groupBoxLocalV2.Text = "策略(自定义)V2";
             // 
-            // label6
+            // dateTimePickerCustom2Submit2
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(10, 92);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(43, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "加价格";
+            this.dateTimePickerCustom2Submit2.CustomFormat = "";
+            this.dateTimePickerCustom2Submit2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom2Submit2.Location = new System.Drawing.Point(183, 84);
+            this.dateTimePickerCustom2Submit2.Name = "dateTimePickerCustom2Submit2";
+            this.dateTimePickerCustom2Submit2.ShowUpDown = true;
+            this.dateTimePickerCustom2Submit2.Size = new System.Drawing.Size(74, 20);
+            this.dateTimePickerCustom2Submit2.TabIndex = 24;
+            this.dateTimePickerCustom2Submit2.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
             // 
-            // label5
+            // label19
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 55);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(85, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "验证码延时(秒)";
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(140, 88);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(37, 13);
+            this.label19.TabIndex = 23;
+            this.label19.Text = "提交2";
             // 
-            // btnUpdateV2
+            // label18
             // 
-            this.btnUpdateV2.Location = new System.Drawing.Point(93, 118);
-            this.btnUpdateV2.Name = "btnUpdateV2";
-            this.btnUpdateV2.Size = new System.Drawing.Size(82, 23);
-            this.btnUpdateV2.TabIndex = 3;
-            this.btnUpdateV2.Text = "更新策略(&s)";
-            this.btnUpdateV2.UseVisualStyleBackColor = true;
-            this.btnUpdateV2.Click += new System.EventHandler(this.btnUpdateV2_Click);
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(12, 88);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(37, 13);
+            this.label18.TabIndex = 22;
+            this.label18.Text = "提交1";
             // 
-            // textBoxDelay
+            // dateTimePickerCustom2Submit1
             // 
-            this.textBoxDelay.Location = new System.Drawing.Point(93, 53);
-            this.textBoxDelay.Name = "textBoxDelay";
-            this.textBoxDelay.Size = new System.Drawing.Size(82, 20);
-            this.textBoxDelay.TabIndex = 1;
-            this.textBoxDelay.Text = "0";
+            this.dateTimePickerCustom2Submit1.CustomFormat = "";
+            this.dateTimePickerCustom2Submit1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom2Submit1.Location = new System.Drawing.Point(55, 84);
+            this.dateTimePickerCustom2Submit1.Name = "dateTimePickerCustom2Submit1";
+            this.dateTimePickerCustom2Submit1.ShowUpDown = true;
+            this.dateTimePickerCustom2Submit1.Size = new System.Drawing.Size(74, 20);
+            this.dateTimePickerCustom2Submit1.TabIndex = 21;
+            this.dateTimePickerCustom2Submit1.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
             // 
-            // comboBoxDelta
+            // label17
             // 
-            this.comboBoxDelta.FormattingEnabled = true;
-            this.comboBoxDelta.Items.AddRange(new object[] {
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(140, 24);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(31, 13);
+            this.label17.TabIndex = 20;
+            this.label17.Text = "矫正";
+            // 
+            // dateTimePickerCustom2Cancel
+            // 
+            this.dateTimePickerCustom2Cancel.CustomFormat = "";
+            this.dateTimePickerCustom2Cancel.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom2Cancel.Location = new System.Drawing.Point(183, 20);
+            this.dateTimePickerCustom2Cancel.Name = "dateTimePickerCustom2Cancel";
+            this.dateTimePickerCustom2Cancel.ShowUpDown = true;
+            this.dateTimePickerCustom2Cancel.Size = new System.Drawing.Size(74, 20);
+            this.dateTimePickerCustom2Cancel.TabIndex = 19;
+            this.dateTimePickerCustom2Cancel.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
+            // 
+            // comboBoxCustom2Delta2
+            // 
+            this.comboBoxCustom2Delta2.FormattingEnabled = true;
+            this.comboBoxCustom2Delta2.Items.AddRange(new object[] {
             "+100",
             "+200",
             "+300",
@@ -321,30 +357,77 @@
             "+800",
             "+900",
             "+1000"});
-            this.comboBoxDelta.Location = new System.Drawing.Point(93, 88);
-            this.comboBoxDelta.Name = "comboBoxDelta";
-            this.comboBoxDelta.Size = new System.Drawing.Size(82, 21);
-            this.comboBoxDelta.TabIndex = 2;
+            this.comboBoxCustom2Delta2.Location = new System.Drawing.Point(183, 52);
+            this.comboBoxCustom2Delta2.Name = "comboBoxCustom2Delta2";
+            this.comboBoxCustom2Delta2.Size = new System.Drawing.Size(74, 21);
+            this.comboBoxCustom2Delta2.TabIndex = 16;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(135, 55);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "加价格2";
+            // 
+            // dateTimePickerCustom2Price1
+            // 
+            this.dateTimePickerCustom2Price1.CustomFormat = "";
+            this.dateTimePickerCustom2Price1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom2Price1.Location = new System.Drawing.Point(55, 51);
+            this.dateTimePickerCustom2Price1.Name = "dateTimePickerCustom2Price1";
+            this.dateTimePickerCustom2Price1.ShowUpDown = true;
+            this.dateTimePickerCustom2Price1.Size = new System.Drawing.Size(74, 20);
+            this.dateTimePickerCustom2Price1.TabIndex = 13;
+            this.dateTimePickerCustom2Price1.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 22);
+            this.label4.Location = new System.Drawing.Point(12, 54);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "出价时间";
+            this.label4.Size = new System.Drawing.Size(37, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "出价1";
             // 
-            // dateTimePicker2
+            // label6
             // 
-            this.dateTimePicker2.CustomFormat = "";
-            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker2.Location = new System.Drawing.Point(93, 19);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.ShowUpDown = true;
-            this.dateTimePicker2.Size = new System.Drawing.Size(82, 20);
-            this.dateTimePicker2.TabIndex = 0;
-            this.dateTimePicker2.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "加价格1";
+            // 
+            // btnUpdateV2
+            // 
+            this.btnUpdateV2.Location = new System.Drawing.Point(93, 141);
+            this.btnUpdateV2.Name = "btnUpdateV2";
+            this.btnUpdateV2.Size = new System.Drawing.Size(82, 23);
+            this.btnUpdateV2.TabIndex = 3;
+            this.btnUpdateV2.Text = "更新策略(&s)";
+            this.btnUpdateV2.UseVisualStyleBackColor = true;
+            this.btnUpdateV2.Click += new System.EventHandler(this.btnUpdateV2_Click);
+            // 
+            // comboBoxCustom2Delta1
+            // 
+            this.comboBoxCustom2Delta1.FormattingEnabled = true;
+            this.comboBoxCustom2Delta1.Items.AddRange(new object[] {
+            "+100",
+            "+200",
+            "+300",
+            "+400",
+            "+500",
+            "+600",
+            "+700",
+            "+800",
+            "+900",
+            "+1000"});
+            this.comboBoxCustom2Delta1.Location = new System.Drawing.Point(55, 19);
+            this.comboBoxCustom2Delta1.Name = "comboBoxCustom2Delta1";
+            this.comboBoxCustom2Delta1.Size = new System.Drawing.Size(74, 21);
+            this.comboBoxCustom2Delta1.TabIndex = 2;
             // 
             // label3
             // 
@@ -500,7 +583,7 @@
             this.stepToolStripMenuItem,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
-            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.配置ToolStripMenuItem.Text = "配置(&P)";
             // 
             // stepToolStripMenuItem
@@ -513,7 +596,7 @@
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
-            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 21);
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
             // 
             // AboutToolStripMenuItem
             // 
@@ -521,20 +604,20 @@
             this.CheckUpdateToolStripMenuItem,
             this.AuthCodeToolStripMenuItem});
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.AboutToolStripMenuItem.Text = "关于(&A)";
             // 
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -805,10 +888,10 @@
             this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
             this.tabControl1.Controls.Add(this.tabPagePolicyV2);
-            this.tabControl1.Location = new System.Drawing.Point(228, 27);
+            this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(266, 228);
+            this.tabControl1.Size = new System.Drawing.Size(283, 228);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
@@ -819,7 +902,7 @@
             this.tabPagePolicyCustom.Controls.Add(this.groupBoxCustom);
             this.tabPagePolicyCustom.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
-            this.tabPagePolicyCustom.Size = new System.Drawing.Size(258, 202);
+            this.tabPagePolicyCustom.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
             // 
@@ -829,7 +912,7 @@
             this.tabPageManual.Controls.Add(this.groupBox2);
             this.tabPageManual.Location = new System.Drawing.Point(4, 22);
             this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(258, 202);
+            this.tabPageManual.Size = new System.Drawing.Size(275, 202);
             this.tabPageManual.TabIndex = 3;
             this.tabPageManual.Text = "手动";
             // 
@@ -889,7 +972,7 @@
             this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV1.Name = "tabPagePolicyV1";
             this.tabPagePolicyV1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV1.Size = new System.Drawing.Size(258, 202);
+            this.tabPagePolicyV1.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
             // 
@@ -900,9 +983,9 @@
             this.tabPagePolicyV2.Location = new System.Drawing.Point(4, 22);
             this.tabPagePolicyV2.Name = "tabPagePolicyV2";
             this.tabPagePolicyV2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV2.Size = new System.Drawing.Size(258, 202);
+            this.tabPagePolicyV2.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyV2.TabIndex = 1;
-            this.tabPagePolicyV2.Text = "策略V2";
+            this.tabPagePolicyV2.Text = "策略(自定义)V2";
             // 
             // notifyIcon1
             // 
@@ -1034,13 +1117,7 @@
         private System.Windows.Forms.Button buttonURL;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxInterval;
         private System.Windows.Forms.Button buttonLogin;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.Button btnUpdateV2;
-        private System.Windows.Forms.TextBox textBoxDelay;
-        private System.Windows.Forms.ComboBox comboBoxDelta;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBoxPID;
         private System.Windows.Forms.TextBox textBoxBPass;
@@ -1087,6 +1164,18 @@
         private System.Windows.Forms.TextBox textPrice2;
         private System.Windows.Forms.ComboBox comboBoxReachPrice;
         private System.Windows.Forms.CheckBox checkBoxReachPrice;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom2Cancel;
+        private System.Windows.Forms.ComboBox comboBoxCustom2Delta2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom2Price1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBoxCustom2Delta1;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom2Submit2;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom2Submit1;
     }
 }
 
