@@ -24,9 +24,7 @@ namespace tobid.scheduler.jobs.action {
 
         public int BasePrice { get; set; }
 
-        public void notify(String message) {
-            logger.Debug(message);
-        }
+        public void notify(String message) { logger.Debug(message); }
 
         public bool execute() {
 
@@ -38,8 +36,7 @@ namespace tobid.scheduler.jobs.action {
             logger.InfoFormat("BEGIN givePRICE(delta : {0})", delta);
 
             int price = 0;
-            if (this.repository.deltaPriceOnUI && givePrice.delta != null)
-            {
+            if (this.repository.deltaPriceOnUI && givePrice.delta != null){
 
                 logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
                 byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
@@ -48,8 +45,6 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.SetCursorPos(x + givePrice.delta.inputBox.x, y + givePrice.delta.inputBox.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
-
-                //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 3}{DEL 3}");
                 logger.Info("\tEND   make delta PRICE blank...");
 
                 String txtPrice = this.repository.orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
@@ -64,9 +59,8 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.SetCursorPos(x + givePrice.delta.button.x, y + givePrice.delta.button.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 logger.Info("\tEND   click delta PRICE button");
-            }
-            else
-            {
+            } else {
+
                 logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
                 byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
 
@@ -75,8 +69,6 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.SetCursorPos(x + givePrice.inputBox.x, y + givePrice.inputBox.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
-
-                //System.Windows.Forms.SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
                 logger.Info("\tEND   make PRICE blank...");
 
                 logger.Info("\tBEGIN identify PRICE...");
@@ -91,7 +83,9 @@ namespace tobid.scheduler.jobs.action {
             }
             this.BasePrice = price;
 
+            this.repository.isReady = false;//等待用户输入验证码
             System.Threading.Thread.Sleep(50);
+
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
             logger.DebugFormat("\t\tBUTTON[出价]({0}, {1})", x + givePrice.button.x, y + givePrice.button.y);

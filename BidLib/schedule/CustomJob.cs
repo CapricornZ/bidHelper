@@ -17,7 +17,6 @@ namespace tobid.scheduler.jobs {
 
         public CustomJob(List<ITask> tasks) {
             if (null != tasks && tasks.Count > 0) {
-                //tasks.Sort();
                 this.tasks = tasks;
                 this.nextTask = 0;
             } else

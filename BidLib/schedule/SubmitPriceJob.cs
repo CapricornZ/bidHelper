@@ -49,6 +49,10 @@ namespace tobid.scheduler.jobs
         /// 上一次提交验证码到别服务器接受或返回的耗时
         /// </summary>
         TimeSpan lastCost { get; set; }
+        /// <summary>
+        /// Operator是否空格（输完验证码）标志
+        /// </summary>
+        Boolean isReady { get; set; }
     }
 
     public interface INotify {

@@ -101,6 +101,12 @@ namespace tobid.scheduler.jobs.action {
 
             SubmitPrice submitPrice = this.repository.submitPrice;
 
+            if (!this.repository.isReady) {
+                //如果验证码还没ready
+                logger.Info("已到提交时间，等待用户输入验证码");
+                return false;
+            }
+
             logger.Info("BEGIN click BUTTON[确定]");
             logger.DebugFormat("BUTTON[确定]({0}, {1})", x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             this.repository.lastSubmit = DateTime.Now;

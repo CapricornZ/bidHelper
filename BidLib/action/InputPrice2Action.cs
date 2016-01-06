@@ -20,10 +20,12 @@ namespace tobid.scheduler.jobs.action {
         private int delta;
         private IRepository repository;
         private InputPriceAction inputPrice;
-        public InputPrice2Action(int delta, IRepository repo, InputPriceAction inputPrice) {
+        private TaskSwitchable switcher;
+        public InputPrice2Action(int delta, IRepository repo, InputPriceAction inputPrice, TaskSwitchable switchTask) {
             this.delta = delta;
             this.repository = repo;
             this.inputPrice = inputPrice;
+            this.switcher = switchTask;
         }
 
         public int BasePrice { get; set; }
@@ -51,13 +53,16 @@ namespace tobid.scheduler.jobs.action {
                 //需要取消重新出价
                 logger.Info("Cancel and Re-Input price!");
                 
+                logger.Info("Update new submit trigger");
+                this.switcher.toggle();
+                
                 //点取消按钮
                 logger.Info("\tBEGIN click CANCEL button");
                 ScreenUtil.SetCursorPos(x + bidStep2.submit.buttons[1].x, y + bidStep2.submit.buttons[1].y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 logger.Info("\tEND   click CANCEL button");
 
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(250);
 
                 logger.InfoFormat("\tBEGIN invoke InputPriceAction(+{0})", this.delta);
                 InputPriceAction inputPrice = new InputPriceAction(this.delta, this.repository);

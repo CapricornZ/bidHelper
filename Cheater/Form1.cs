@@ -67,6 +67,7 @@ namespace Cheater {
 
         public DateTime lastSubmit { get; set; }
         public TimeSpan lastCost { get; set; }
+        public Boolean isReady { get; set; }
         #endregion
 
         private void loadResource(String category) {

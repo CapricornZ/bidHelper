@@ -86,6 +86,26 @@ namespace tobid.scheduler.jobs.action {
         }
     }
 
+    public class TaskSwitchable : ITask {
+
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(TaskSwitchable));
+
+        private ITask[] tasks;
+        private int activeTask;
+        public TaskSwitchable(ITask[] tasks) {
+            activeTask = 0;
+            this.tasks = tasks;
+        }
+
+        public void toggle() {
+            this.activeTask = (this.activeTask + 1) % this.tasks.Length;
+        }
+
+        public bool execute() {
+            return this.tasks[this.activeTask].execute();
+        }
+    }
+
     /// <summary>
     /// TimeBased
     /// </summary>
@@ -121,12 +141,11 @@ namespace tobid.scheduler.jobs.action {
                 //if (diffFire.TotalSeconds >= 0) {
                 logger.Warn(msg);
                 if (diffExpire.TotalSeconds <= 0)
-                    this.action.execute();
-                rtn = true;
+                    rtn = this.action.execute();
+                //rtn = true;
             }
             else {
 
-                
                 if (null != this.notify)
                     this.notify.acceptMessage(String.Format("SECs:{0:f3}", -diffFire.TotalSeconds));
                 this.action.notify(msg);

@@ -62,9 +62,7 @@ namespace Helper
         public IOrc[] orcCaptchaTip { get { return this.m_orcCaptchaTip; } }
         public Entry[] entries { get { return this.m_entries; } }
         public CaptchaUtil orcCaptchaTipsUtil { get { return this.m_orcCaptchaTipsUtil;} }
-        public int interval { get { 
-            return Int16.Parse(this.toolStripTextBoxInterval.Text); 
-        } }
+        public int interval { get {  return Int16.Parse(this.toolStripTextBoxInterval.Text);  } }
         public String category
         {
             get
@@ -82,6 +80,7 @@ namespace Helper
 
         public DateTime lastSubmit { get; set; }
         public TimeSpan lastCost { get; set; }
+        public Boolean isReady { get; set; }
         #endregion
 
         private IOrc m_orcLogin;
@@ -384,6 +383,7 @@ namespace Helper
             this.floatingForm.Show();
         }
 
+        #region monitorWIFI
         void monitorWifi() {
 
             DateTime before = DateTime.ParseExact(this.wifiRefreshBefore, "HH:mm:ss", System.Globalization.CultureInfo.CurrentCulture);
@@ -454,11 +454,11 @@ namespace Helper
                 System.Threading.Thread.Sleep(30000);
             }
         }
+        #endregion
 
         void kh_OnKeyDownEvent(object sender, KeyEventArgs e) {
 
             System.Console.WriteLine(e.KeyCode);
-            //System.Console.WriteLine("," + e.KeyData);
             switch (e.KeyData) {
                 case Keys.Control | Keys.D3:
                 case Keys.Control | Keys.D4:
@@ -497,8 +497,7 @@ namespace Helper
                     this.stopCurrentJob();
                     break;
                 case Keys.F9:
-                    //logger.InfoFormat("HOT KEY [F9] trigger");
-                    //this.fire(SubmitPriceStep2Job.getPosition(), 300);
+                    logger.InfoFormat("HOT KEY [F9] trigger");
                     this.fireAutoSubmit(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.F11:
@@ -507,13 +506,15 @@ namespace Helper
                     break;
                 case Keys.Enter:
                     logger.InfoFormat("HOT KEY [ENTER] trigger : submit CAPTCHA");
-                    if(this.m_submitHotKey.Equals("ENTER"))
+                    //if(this.m_submitHotKey.Equals("ENTER"))
+                        this.isReady = true;
                         this.processEnter(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.Space:
-                    logger.InfoFormat("HOT KEY [SPACE] trigger : submit CAPTCHA");
-                    if (this.m_submitHotKey.Equals("SPACE"))
-                        this.processEnter(SubmitPriceStep2Job.getPosition());
+                    logger.InfoFormat("HOT KEY [SPACE] trigger : set CAPTCHA READY");
+                    //if (this.m_submitHotKey.Equals("SPACE"))
+                        this.isReady = true;
+                        //this.processEnter(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.Escape:
                     logger.InfoFormat("HOT KEY [ESCAPE] trigger : close DIALOG");
@@ -1251,7 +1252,7 @@ namespace Helper
 
             System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
             this.customThread = new System.Threading.Thread(customThreadStart);
-            this.customThread.Name = "customThread";
+            this.customThread.Name = "custom";
             this.customThread.Start();
         }
 
@@ -1282,16 +1283,23 @@ namespace Helper
                 String fireCancel = this.dateTimePickerCustom2Cancel.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
                 List<ITask> tasks = new List<ITask>();
-                InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);
+                InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);//策略1，输入价格
                 TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
                 tasks.Add(taskInputPrice);
 
-                InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction);
+                //两个策略的提交任务
+                SubmitCaptchaAction actionSubmitCaptcha1 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskSubmitCaptchaTimeBased1 = new TaskTimeBased(action: actionSubmitCaptcha1, notify: this, fireTime: fireSubmit1);
+                SubmitCaptchaAction actionSubmitCaptcha2 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskSubmitCaptchaTimeBased2 = new TaskTimeBased(action: actionSubmitCaptcha2, notify: this, fireTime: fireSubmit2);
+
+                TaskSwitchable taskSubmitCaptchaTimeBased = new TaskSwitchable(new ITask[] { taskSubmitCaptchaTimeBased1, taskSubmitCaptchaTimeBased2 });//inputPrice2会根据情况，选择策略1或策略2
+
+                //策略2的出价时间
+                InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction, switchTask: taskSubmitCaptchaTimeBased);//策略1，输入价格
                 TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
                 tasks.Add(taskInputPrice2Time);
-
-                SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fireSubmit1);
+                
                 tasks.Add(taskSubmitCaptchaTimeBased);
 
                 if (null != this.customThread)
@@ -1303,7 +1311,7 @@ namespace Helper
 
                 System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
                 this.customThread = new System.Threading.Thread(customThreadStart);
-                this.customThread.Name = "customV2Thread";
+                this.customThread.Name = "customV2";
                 this.customThread.Start();
             }
             /*
