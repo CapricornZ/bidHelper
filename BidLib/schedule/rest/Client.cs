@@ -20,18 +20,6 @@ namespace tobid.rest
     }
 
     /// <summary>
-    /// 自定义Trigger配置
-    /// </summary>
-    public class Trigger
-    {
-        public int deltaPrice { get; set; }
-        public String priceTime { get; set; }
-        public String captchaTime { get; set; }
-        public String submitTime { get; set; }
-        public int submitReachPrice { get; set; }
-    }
-
-    /// <summary>
     /// 配置信息
     /// </summary>
     public class Config {

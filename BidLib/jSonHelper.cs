@@ -7,6 +7,21 @@ using Newtonsoft.Json.Linq;
 
 namespace tobid.rest.json
 {
+    public class TriggerConvert : JsonCreationConverter<ITrigger> {
+
+        protected override ITrigger Create(Type objectType, JObject jObject) {
+
+            JValue category = (JValue)jObject["category"];
+            String value = category.ToString();
+            if ("V1".Equals(value))
+                return new Trigger();
+            else if ("V2".Equals(value))
+                return new TriggerV2();
+            else
+                return null;
+        }
+    }
+
     public class ConfigConvert : JsonCreationConverter<IOrcConfig> {
 
         protected override IOrcConfig Create(Type objectType, JObject jObject) {

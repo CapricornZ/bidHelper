@@ -74,6 +74,9 @@ namespace tobid.scheduler.jobs
             String rtn = restKeepAlive.MakeRequest(String.Format("?ip={0}", hostName));
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
             client = Filter.remain(this.repository.category, client);
+            
+            //var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<rest.ITrigger>(client.tips, new TriggerConvert());
+            //System.Console.WriteLine(obj);
 
             rest.Trigger trigger = null;
             if(!String.IsNullOrEmpty(client.tips))

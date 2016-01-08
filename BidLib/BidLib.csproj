@@ -68,6 +68,7 @@
     <Compile Include="Computer.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
+    <Compile Include="schedule\rest\Policy.cs" />
     <Compile Include="util\Hook\KeyboardHook.cs" />
     <Compile Include="util\Hook\MouseHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
