@@ -616,7 +616,7 @@ namespace Helper
             base.WndProc(ref m);
         }
 
-        private void receiveLogin(Client client, Trigger trigger) {
+        private void receiveLogin(Client client, ITrigger trigger) {
 
             Config config = client.config;
             if ( config != null) {
@@ -626,6 +626,10 @@ namespace Helper
                 this.textBoxBNO.Text = config.no;
                 this.textBoxBPass.Text = config.passwd;
                 this.textBoxPID.Text = config.pid;
+
+                logger.Info("标书 : " + config.no);
+                logger.Info("姓名 : " + config.pname);
+                logger.Info("身份证 : " + config.pid);
 
             } else {
 
@@ -640,27 +644,33 @@ namespace Helper
 
                 this.toolStripStatusLabel3.Text = client.memo.Replace("\r\n", ";");
                 if (null != trigger) {
-                    int idx = trigger.deltaPrice / 100 - 1;
-                    this.comboBoxCustomDelta.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+                    if ("V1".Equals(trigger.category)) {//TRIGGER V1
+                        Trigger instance = (Trigger)trigger;
+                        int idx = instance.deltaPrice / 100 - 1;
+                        this.comboBoxCustomDelta.SelectedItem = this.comboBoxCustomDelta.Items[idx];
 
-                    this.dateTimePickerCustomPrice.Text = trigger.priceTime;
-                    this.checkBoxInputCaptcha.Checked = null != trigger.captchaTime;
-                    if (null != trigger.captchaTime)
-                        this.dateTimePickerCustomInputCaptcha.Text = trigger.captchaTime;
+                        this.dateTimePickerCustomPrice.Text = instance.priceTime;
+                        this.checkBoxInputCaptcha.Checked = null != instance.captchaTime;
+                        if (null != instance.captchaTime)
+                            this.dateTimePickerCustomInputCaptcha.Text = instance.captchaTime;
 
-                    this.checkBoxSubmitCaptcha.Checked = null != trigger.submitTime;
-                    if (null != trigger.submitTime)
-                        this.dateTimePickerCustomSubmitCaptcha.Text = trigger.submitTime;
+                        this.checkBoxSubmitCaptcha.Checked = null != instance.submitTime;
+                        if (null != instance.submitTime)
+                            this.dateTimePickerCustomSubmitCaptcha.Text = instance.submitTime;
 
-                    if (trigger.submitReachPrice > 0) {
-                        this.checkBoxReachPrice.Checked = true;
-                        this.comboBoxReachPrice.Enabled = true;
-                        int index = trigger.submitReachPrice / 100 - 1;
-                        this.comboBoxReachPrice.SelectedItem = this.comboBoxReachPrice.Items[index];
+                        if (instance.submitReachPrice > 0) {
+                            this.checkBoxReachPrice.Checked = true;
+                            this.comboBoxReachPrice.Enabled = true;
+                            int index = instance.submitReachPrice / 100 - 1;
+                            this.comboBoxReachPrice.SelectedItem = this.comboBoxReachPrice.Items[index];
+                        }
+                        else {
+                            this.checkBoxReachPrice.Checked = false;
+                            this.comboBoxReachPrice.Enabled = false;
+                        }
+                    }
 
-                    } else {
-                        this.checkBoxReachPrice.Checked = false;
-                        this.comboBoxReachPrice.Enabled = false;
+                    if ("V2".Equals(trigger.category)) {//TRIGGER V2
                     }
                 }
                 //MessageBoxButtons messButton = MessageBoxButtons.OK;
@@ -1606,8 +1616,12 @@ namespace Helper
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
-            //LoginJob job = new LoginJob(m_orcLogin);
-            //job.Execute();
+            LoginJob job = new LoginJob(m_orcLogin);
+            job.Execute();
+
+            //this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+            //this.tabControl1.SelectTab(1);
+            //this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
 
             //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
 
@@ -1629,16 +1643,19 @@ namespace Helper
 
         #region tabControl事件
         private TabPage lastSelTab;
+        private DialogResult drSwitchTab;
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e) {
 
             String selecting = this.tabControl1.SelectedTab.Text;
             System.Console.WriteLine("selecting " + selecting);
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
-            DialogResult dr = MessageBox.Show(this, String.Format("确定使用{0}吗?", selecting), "策略选择",
-                messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-            if (dr == DialogResult.OK) {
+            if (this.drSwitchTab != DialogResult.OK)
+                drSwitchTab = MessageBox.Show(this, String.Format("确定使用{0}吗?", selecting), "策略选择",
+                    messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (drSwitchTab == DialogResult.OK) {
 
+                this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
                 if(this.groupBoxLocal.Text.Equals(selecting)){
                     this.groupBoxLocal.Enabled = true;
                     this.groupBoxLocalV2.Enabled = false;

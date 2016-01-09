@@ -583,7 +583,7 @@
             this.stepToolStripMenuItem,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
-            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.配置ToolStripMenuItem.Text = "配置(&P)";
             // 
             // stepToolStripMenuItem
@@ -596,7 +596,7 @@
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
-            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 21);
             // 
             // AboutToolStripMenuItem
             // 
@@ -604,20 +604,20 @@
             this.CheckUpdateToolStripMenuItem,
             this.AuthCodeToolStripMenuItem});
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.AboutToolStripMenuItem.Text = "关于(&A)";
             // 
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -905,6 +905,7 @@
             this.tabPagePolicyCustom.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
+
             // 
             // tabPageManual
             // 
