@@ -671,6 +671,21 @@ namespace Helper
                     }
 
                     if ("V2".Equals(trigger.category)) {//TRIGGER V2
+
+                        TriggerV2 instance = (TriggerV2)trigger;
+                        int idx = instance.triggers[0].deltaPrice / 100 - 1;
+                        this.comboBoxCustom2Delta1.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+                        this.dateTimePickerCustom2Price1.Text = instance.triggers[0].priceTime;
+                        this.dateTimePickerCustom2Submit1.Text = instance.triggers[0].submitTime;
+
+                        idx = instance.triggers[1].deltaPrice / 100 - 1;
+                        this.comboBoxCustom2Delta2.SelectedItem = this.comboBoxCustom2Delta2.Items[idx];
+                        this.dateTimePickerCustom2Cancel.Text = instance.triggers[1].priceTime;
+                        this.dateTimePickerCustom2Submit2.Text = instance.triggers[1].submitTime;
+
+                        this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                        this.tabControl1.SelectTab(1);
+                        this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
                     }
                 }
                 //MessageBoxButtons messButton = MessageBoxButtons.OK;
@@ -1618,10 +1633,6 @@ namespace Helper
 
             LoginJob job = new LoginJob(m_orcLogin);
             job.Execute();
-
-            //this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
-            //this.tabControl1.SelectTab(1);
-            //this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
 
             //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
 

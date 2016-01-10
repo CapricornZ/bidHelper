@@ -110,7 +110,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
-            this.tabPagePolicyV2 = new System.Windows.Forms.TabPage();
+            this.tabPagePolicyCustomV2 = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
             this.buttonMinus = new System.Windows.Forms.Button();
@@ -130,7 +130,7 @@
             this.tabPageManual.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPagePolicyV1.SuspendLayout();
-            this.tabPagePolicyV2.SuspendLayout();
+            this.tabPagePolicyCustomV2.SuspendLayout();
             this.groupBoxInternetTime.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -885,9 +885,9 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
+            this.tabControl1.Controls.Add(this.tabPagePolicyCustomV2);
             this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
-            this.tabControl1.Controls.Add(this.tabPagePolicyV2);
             this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -905,7 +905,6 @@
             this.tabPagePolicyCustom.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyCustom.TabIndex = 2;
             this.tabPagePolicyCustom.Text = "策略(自定义)";
-
             // 
             // tabPageManual
             // 
@@ -977,16 +976,16 @@
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
             // 
-            // tabPagePolicyV2
+            // tabPagePolicyCustomV2
             // 
-            this.tabPagePolicyV2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPagePolicyV2.Controls.Add(this.groupBoxLocalV2);
-            this.tabPagePolicyV2.Location = new System.Drawing.Point(4, 22);
-            this.tabPagePolicyV2.Name = "tabPagePolicyV2";
-            this.tabPagePolicyV2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV2.Size = new System.Drawing.Size(275, 202);
-            this.tabPagePolicyV2.TabIndex = 1;
-            this.tabPagePolicyV2.Text = "策略(自定义)V2";
+            this.tabPagePolicyCustomV2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPagePolicyCustomV2.Controls.Add(this.groupBoxLocalV2);
+            this.tabPagePolicyCustomV2.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePolicyCustomV2.Name = "tabPagePolicyCustomV2";
+            this.tabPagePolicyCustomV2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePolicyCustomV2.Size = new System.Drawing.Size(275, 202);
+            this.tabPagePolicyCustomV2.TabIndex = 1;
+            this.tabPagePolicyCustomV2.Text = "策略(自定义)V2";
             // 
             // notifyIcon1
             // 
@@ -1082,7 +1081,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPagePolicyV1.ResumeLayout(false);
-            this.tabPagePolicyV2.ResumeLayout(false);
+            this.tabPagePolicyCustomV2.ResumeLayout(false);
             this.groupBoxInternetTime.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1134,7 +1133,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPagePolicyV1;
-        private System.Windows.Forms.TabPage tabPagePolicyV2;
+        private System.Windows.Forms.TabPage tabPagePolicyCustomV2;
         private System.Windows.Forms.TabPage tabPagePolicyCustom;
         private System.Windows.Forms.TabPage tabPageManual;
         private System.Windows.Forms.GroupBox groupBox2;
