@@ -17,6 +17,8 @@ namespace tobid.rest.json
                 return new Trigger();
             else if ("V2".Equals(value))
                 return new TriggerV2();
+            else if ("V3".Equals(value))
+                return new TriggerV3();
             else
                 return null;
         }
