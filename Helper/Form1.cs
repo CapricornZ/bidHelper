@@ -230,6 +230,12 @@ namespace Helper
             Rectangle rectX = new Rectangle();
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+
+                String fileName = Path.GetFileNameWithoutExtension(Browser.FullName).ToLower();
+                System.Console.WriteLine(fileName);
+                if (!"iexplore".Equals(fileName))
+                    continue;
+
                 if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
 
                     IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);

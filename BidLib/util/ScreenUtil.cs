@@ -131,6 +131,7 @@ namespace tobid.util
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows)
             {
+                System.Console.WriteLine(Path.GetFileNameWithoutExtension(Browser.FullName));
                 uint process = 0;
                 GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
 
@@ -149,6 +150,12 @@ namespace tobid.util
             Rectangle rectX = new Rectangle();
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
+
+                String fileName = Path.GetFileNameWithoutExtension(Browser.FullName).ToLower();
+                System.Console.WriteLine(fileName);
+                if (!"iexplore".Equals(fileName))
+                    continue;
+
                 if (Browser.LocationURL.StartsWith("http://") || Browser.LocationURL.StartsWith("https://")) {
 
                     IntPtr frameTab = FindWindowEx((IntPtr)Browser.HWND, IntPtr.Zero, "Frame Tab", String.Empty);
@@ -193,8 +200,12 @@ namespace tobid.util
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
 
                 uint process = 0;
-                GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
+                String fileName = Path.GetFileNameWithoutExtension(Browser.FullName).ToLower();
+                System.Console.WriteLine(fileName);
+                if (!"iexplore".Equals(fileName))
+                    continue;
 
+                GetWindowThreadProcessId((IntPtr)Browser.HWND, out process);
                 System.Console.WriteLine("HWND:" + Browser.HWND);
                 System.Console.WriteLine("PROCESS:" + process);
                 //if (Browser.LocationURL.Contains("about:blank")) {
