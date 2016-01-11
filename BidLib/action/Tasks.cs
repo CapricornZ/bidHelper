@@ -129,6 +129,18 @@ namespace tobid.scheduler.jobs.action {
             this.notify = notify;
         }
 
+        public TaskTimeBased(IBidAction action, INotify notify, RandomScope random, String expireTime = null){
+
+            String date = DateTime.Now.ToString("yyyy-MM-dd");
+            this.fireTime = Convert.ToDateTime(date + " " + random.randomTime());
+            logger.DebugFormat("RANDOM fireTime : {0}", this.fireTime);
+            if (String.IsNullOrEmpty(expireTime))
+                this.expireTime = this.fireTime.AddMinutes(5);
+            else
+                this.expireTime = Convert.ToDateTime(expireTime);
+            this.action = action;
+            this.notify = notify;
+        }
 
         public bool execute() {
 

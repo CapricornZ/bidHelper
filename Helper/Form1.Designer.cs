@@ -103,19 +103,30 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
+            this.tabPagePolicyCustomV2 = new System.Windows.Forms.TabPage();
+            this.tabPagePolicyCustomV3 = new System.Windows.Forms.TabPage();
+            this.groupBoxCustomV3 = new System.Windows.Forms.GroupBox();
+            this.dateTimePickerCustom3Price = new System.Windows.Forms.DateTimePicker();
+            this.label20 = new System.Windows.Forms.Label();
+            this.comboBoxCustom3Delta = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.btnUpdateV3 = new System.Windows.Forms.Button();
+            this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.tabPageManual = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
-            this.tabPagePolicyCustomV2 = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
             this.buttonMinus = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonSync = new System.Windows.Forms.Button();
+            this.dateTimePickerCustom3Submit = new System.Windows.Forms.DateTimePicker();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBoxCustom3Check = new System.Windows.Forms.TextBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -127,10 +138,12 @@
             this.groupBoxCustom.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPagePolicyCustom.SuspendLayout();
+            this.tabPagePolicyCustomV2.SuspendLayout();
+            this.tabPagePolicyCustomV3.SuspendLayout();
+            this.groupBoxCustomV3.SuspendLayout();
+            this.tabPagePolicyV1.SuspendLayout();
             this.tabPageManual.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabPagePolicyV1.SuspendLayout();
-            this.tabPagePolicyCustomV2.SuspendLayout();
             this.groupBoxInternetTime.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -281,7 +294,7 @@
             this.groupBoxLocalV2.Size = new System.Drawing.Size(263, 170);
             this.groupBoxLocalV2.TabIndex = 9;
             this.groupBoxLocalV2.TabStop = false;
-            this.groupBoxLocalV2.Text = "策略(自定义)V2";
+            this.groupBoxLocalV2.Text = "自定义V2";
             // 
             // dateTimePickerCustom2Submit2
             // 
@@ -402,7 +415,7 @@
             // 
             // btnUpdateV2
             // 
-            this.btnUpdateV2.Location = new System.Drawing.Point(93, 141);
+            this.btnUpdateV2.Location = new System.Drawing.Point(95, 128);
             this.btnUpdateV2.Name = "btnUpdateV2";
             this.btnUpdateV2.Size = new System.Drawing.Size(82, 23);
             this.btnUpdateV2.TabIndex = 3;
@@ -746,7 +759,7 @@
             this.groupBoxCustom.Size = new System.Drawing.Size(224, 177);
             this.groupBoxCustom.TabIndex = 16;
             this.groupBoxCustom.TabStop = false;
-            this.groupBoxCustom.Text = "策略(自定义)";
+            this.groupBoxCustom.Text = "自定义";
             // 
             // comboBoxReachPrice
             // 
@@ -886,8 +899,9 @@
             // 
             this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustomV2);
-            this.tabControl1.Controls.Add(this.tabPageManual);
+            this.tabControl1.Controls.Add(this.tabPagePolicyCustomV3);
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
+            this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -904,7 +918,118 @@
             this.tabPagePolicyCustom.Name = "tabPagePolicyCustom";
             this.tabPagePolicyCustom.Size = new System.Drawing.Size(275, 202);
             this.tabPagePolicyCustom.TabIndex = 2;
-            this.tabPagePolicyCustom.Text = "策略(自定义)";
+            this.tabPagePolicyCustom.Text = "自定义";
+            // 
+            // tabPagePolicyCustomV2
+            // 
+            this.tabPagePolicyCustomV2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPagePolicyCustomV2.Controls.Add(this.groupBoxLocalV2);
+            this.tabPagePolicyCustomV2.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePolicyCustomV2.Name = "tabPagePolicyCustomV2";
+            this.tabPagePolicyCustomV2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePolicyCustomV2.Size = new System.Drawing.Size(275, 202);
+            this.tabPagePolicyCustomV2.TabIndex = 1;
+            this.tabPagePolicyCustomV2.Text = "自定义V2";
+            // 
+            // tabPagePolicyCustomV3
+            // 
+            this.tabPagePolicyCustomV3.Controls.Add(this.groupBoxCustomV3);
+            this.tabPagePolicyCustomV3.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePolicyCustomV3.Name = "tabPagePolicyCustomV3";
+            this.tabPagePolicyCustomV3.Size = new System.Drawing.Size(275, 202);
+            this.tabPagePolicyCustomV3.TabIndex = 4;
+            this.tabPagePolicyCustomV3.Text = "自定义V3";
+            this.tabPagePolicyCustomV3.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxCustomV3
+            // 
+            this.groupBoxCustomV3.Controls.Add(this.textBoxCustom3Check);
+            this.groupBoxCustomV3.Controls.Add(this.label22);
+            this.groupBoxCustomV3.Controls.Add(this.label21);
+            this.groupBoxCustomV3.Controls.Add(this.dateTimePickerCustom3Submit);
+            this.groupBoxCustomV3.Controls.Add(this.dateTimePickerCustom3Price);
+            this.groupBoxCustomV3.Controls.Add(this.label20);
+            this.groupBoxCustomV3.Controls.Add(this.comboBoxCustom3Delta);
+            this.groupBoxCustomV3.Controls.Add(this.label16);
+            this.groupBoxCustomV3.Controls.Add(this.btnUpdateV3);
+            this.groupBoxCustomV3.Location = new System.Drawing.Point(21, 17);
+            this.groupBoxCustomV3.Name = "groupBoxCustomV3";
+            this.groupBoxCustomV3.Size = new System.Drawing.Size(225, 167);
+            this.groupBoxCustomV3.TabIndex = 5;
+            this.groupBoxCustomV3.TabStop = false;
+            this.groupBoxCustomV3.Text = "自定义V3";
+            // 
+            // dateTimePickerCustom3Price
+            // 
+            this.dateTimePickerCustom3Price.CustomFormat = "";
+            this.dateTimePickerCustom3Price.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom3Price.Location = new System.Drawing.Point(98, 50);
+            this.dateTimePickerCustom3Price.Name = "dateTimePickerCustom3Price";
+            this.dateTimePickerCustom3Price.ShowUpDown = true;
+            this.dateTimePickerCustom3Price.Size = new System.Drawing.Size(82, 20);
+            this.dateTimePickerCustom3Price.TabIndex = 15;
+            this.dateTimePickerCustom3Price.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(35, 53);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(55, 13);
+            this.label20.TabIndex = 16;
+            this.label20.Text = "出价时间";
+            // 
+            // comboBoxCustom3Delta
+            // 
+            this.comboBoxCustom3Delta.FormattingEnabled = true;
+            this.comboBoxCustom3Delta.Items.AddRange(new object[] {
+            "+100",
+            "+200",
+            "+300",
+            "+400",
+            "+500",
+            "+600",
+            "+700",
+            "+800",
+            "+900",
+            "+1000",
+            "+1100",
+            "+1200",
+            "+1300"});
+            this.comboBoxCustom3Delta.Location = new System.Drawing.Point(98, 22);
+            this.comboBoxCustom3Delta.Name = "comboBoxCustom3Delta";
+            this.comboBoxCustom3Delta.Size = new System.Drawing.Size(82, 21);
+            this.comboBoxCustom3Delta.TabIndex = 14;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(39, 25);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(43, 13);
+            this.label16.TabIndex = 13;
+            this.label16.Text = "加价格";
+            // 
+            // btnUpdateV3
+            // 
+            this.btnUpdateV3.Location = new System.Drawing.Point(77, 132);
+            this.btnUpdateV3.Name = "btnUpdateV3";
+            this.btnUpdateV3.Size = new System.Drawing.Size(82, 23);
+            this.btnUpdateV3.TabIndex = 4;
+            this.btnUpdateV3.Text = "更新策略(&s)";
+            this.btnUpdateV3.UseVisualStyleBackColor = true;
+            this.btnUpdateV3.Click += new System.EventHandler(this.btnUpdateV3_Click);
+            // 
+            // tabPagePolicyV1
+            // 
+            this.tabPagePolicyV1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPagePolicyV1.Controls.Add(this.groupBoxLocal);
+            this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePolicyV1.Name = "tabPagePolicyV1";
+            this.tabPagePolicyV1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePolicyV1.Size = new System.Drawing.Size(275, 202);
+            this.tabPagePolicyV1.TabIndex = 0;
+            this.tabPagePolicyV1.Text = "策略V1";
             // 
             // tabPageManual
             // 
@@ -965,28 +1090,6 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "CTRL+Num3~Num9：+300-+900";
             // 
-            // tabPagePolicyV1
-            // 
-            this.tabPagePolicyV1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPagePolicyV1.Controls.Add(this.groupBoxLocal);
-            this.tabPagePolicyV1.Location = new System.Drawing.Point(4, 22);
-            this.tabPagePolicyV1.Name = "tabPagePolicyV1";
-            this.tabPagePolicyV1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyV1.Size = new System.Drawing.Size(275, 202);
-            this.tabPagePolicyV1.TabIndex = 0;
-            this.tabPagePolicyV1.Text = "策略V1";
-            // 
-            // tabPagePolicyCustomV2
-            // 
-            this.tabPagePolicyCustomV2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPagePolicyCustomV2.Controls.Add(this.groupBoxLocalV2);
-            this.tabPagePolicyCustomV2.Location = new System.Drawing.Point(4, 22);
-            this.tabPagePolicyCustomV2.Name = "tabPagePolicyCustomV2";
-            this.tabPagePolicyCustomV2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePolicyCustomV2.Size = new System.Drawing.Size(275, 202);
-            this.tabPagePolicyCustomV2.TabIndex = 1;
-            this.tabPagePolicyCustomV2.Text = "策略(自定义)V2";
-            // 
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
@@ -1035,6 +1138,42 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
+            // dateTimePickerCustom3Submit
+            // 
+            this.dateTimePickerCustom3Submit.CustomFormat = "";
+            this.dateTimePickerCustom3Submit.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom3Submit.Location = new System.Drawing.Point(98, 77);
+            this.dateTimePickerCustom3Submit.Name = "dateTimePickerCustom3Submit";
+            this.dateTimePickerCustom3Submit.ShowUpDown = true;
+            this.dateTimePickerCustom3Submit.Size = new System.Drawing.Size(82, 20);
+            this.dateTimePickerCustom3Submit.TabIndex = 17;
+            this.dateTimePickerCustom3Submit.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(35, 80);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(55, 13);
+            this.label21.TabIndex = 18;
+            this.label21.Text = "提交时间";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(35, 106);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(55, 13);
+            this.label22.TabIndex = 19;
+            this.label22.Text = "矫正时间";
+            // 
+            // textBoxCustom3Check
+            // 
+            this.textBoxCustom3Check.Location = new System.Drawing.Point(98, 104);
+            this.textBoxCustom3Check.Name = "textBoxCustom3Check";
+            this.textBoxCustom3Check.Size = new System.Drawing.Size(82, 20);
+            this.textBoxCustom3Check.TabIndex = 20;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1077,11 +1216,14 @@
             this.groupBoxCustom.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPagePolicyCustom.ResumeLayout(false);
+            this.tabPagePolicyCustomV2.ResumeLayout(false);
+            this.tabPagePolicyCustomV3.ResumeLayout(false);
+            this.groupBoxCustomV3.ResumeLayout(false);
+            this.groupBoxCustomV3.PerformLayout();
+            this.tabPagePolicyV1.ResumeLayout(false);
             this.tabPageManual.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabPagePolicyV1.ResumeLayout(false);
-            this.tabPagePolicyCustomV2.ResumeLayout(false);
             this.groupBoxInternetTime.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1176,6 +1318,17 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.DateTimePicker dateTimePickerCustom2Submit1;
+        private System.Windows.Forms.TabPage tabPagePolicyCustomV3;
+        private System.Windows.Forms.GroupBox groupBoxCustomV3;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom3Price;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox comboBoxCustom3Delta;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btnUpdateV3;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.DateTimePicker dateTimePickerCustom3Submit;
+        private System.Windows.Forms.TextBox textBoxCustom3Check;
+        private System.Windows.Forms.Label label22;
     }
 }
 

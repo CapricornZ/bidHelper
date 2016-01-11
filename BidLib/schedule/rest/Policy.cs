@@ -45,6 +45,7 @@ namespace tobid.rest {
     }
 
     public class V3Common {
+        public static V3Common commonConf { get; set; }
 
         public class Submit {
             public String submitTime { get; set; }

@@ -20,6 +20,7 @@ using tobid.rest.position;
 using tobid.scheduler.jobs.action;
 using tobid.util.hook;
 using System.Threading;
+using System.Globalization;
 
 namespace Helper
 {
@@ -646,9 +647,9 @@ namespace Helper
                 this.textBoxPID.Text = "";
             }
 
-            if (!String.IsNullOrEmpty(client.memo)) {
+            if (!String.IsNullOrEmpty(client.tips)) {
 
-                this.toolStripStatusLabel3.Text = client.memo.Replace("\r\n", ";");
+                this.toolStripStatusLabel3.Text = client.memo != null ? client.memo.Replace("\r\n", ";") : "BLANK";
                 if (null != trigger) {
                     if ("V1".Equals(trigger.category)) {//TRIGGER V1
                         Trigger instance = (Trigger)trigger;
@@ -693,10 +694,26 @@ namespace Helper
                         this.tabControl1.SelectTab(1);
                         this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
                     }
+
+                    if ("V3".Equals(trigger.category)) {//TRIGGER V3
+
+                        TriggerV3 instance = (TriggerV3)trigger;
+                        int idx = instance.deltaPrice / 100 - 1;
+                        this.comboBoxCustom3Delta.SelectedItem = this.comboBoxCustom3Delta.Items[idx];
+                        this.dateTimePickerCustom3Price.Text = instance.priceTime;
+                        this.dateTimePickerCustom3Submit.Text = instance.submitTime;
+                        this.textBoxCustom3Check.Text = instance.common.checkTime;
+
+                        V3Common.commonConf = instance.common;
+
+                        this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                        this.tabControl1.SelectTab(2);
+                        this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+                    }
                 }
                 //MessageBoxButtons messButton = MessageBoxButtons.OK;
                 //DialogResult dr = MessageBox.Show(client.memo, "操作策略", messButton);
-                this.notifyIcon1.ShowBalloonTip(5000, "操作提示", client.memo, ToolTipIcon.Info);
+                this.notifyIcon1.ShowBalloonTip(5000, "操作提示", client.memo != null ? client.memo : "BLANK!", ToolTipIcon.Info);
             }else
                 this.toolStripStatusLabel3.Text = "";
         }
@@ -1379,6 +1396,56 @@ namespace Helper
             */
         }
 
+        private void btnUpdateV3_Click(object sender, EventArgs e) {
+
+            MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
+            DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
+                messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (dr == DialogResult.OK) {
+
+                this.textBox1.Text = this.dateTimePickerCustom3Price.Value.ToString("MM/dd HH:mm:ss");
+                this.textBox2.Text = this.comboBoxCustom3Delta.Text;
+
+                String firePrice1 = this.dateTimePickerCustom3Price.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                String fireSubmit1 = this.dateTimePickerCustom3Submit.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                String fireCancel = DateTime.Now.ToString("yyyy-MM-dd") + " " + this.textBoxCustom3Check.Text;
+
+                RandomScope random = new RandomScope(V3Common.commonConf, 500);
+
+                List<ITask> tasks = new List<ITask>();
+                InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom3Delta.Text), repo: this);//策略1，输入价格
+                TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
+                tasks.Add(taskInputPrice);
+
+                //两个策略的提交任务
+                SubmitCaptchaAction actionSubmitCaptcha1 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskSubmitCaptchaTimeBased1 = new TaskTimeBased(action: actionSubmitCaptcha1, notify: this, fireTime: fireSubmit1);
+                SubmitCaptchaAction actionSubmitCaptcha2 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+                TaskTimeBased taskSubmitCaptchaTimeBased2 = new TaskTimeBased(action: actionSubmitCaptcha2, notify: this, random: random);//fireTime==null，从V3Common随机取
+
+                TaskSwitchable taskSubmitCaptchaTimeBased = new TaskSwitchable(new ITask[] { taskSubmitCaptchaTimeBased1, taskSubmitCaptchaTimeBased2 });//inputPrice2会根据情况，选择策略1或策略2
+
+                //策略2的出价时间
+                InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: random.getDelta(), repo: this, inputPrice: inputPriceAction, switchTask: taskSubmitCaptchaTimeBased);//策略1，输入价格
+                TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
+                tasks.Add(taskInputPrice2Time);
+
+                tasks.Add(taskSubmitCaptchaTimeBased);
+
+                if (null != this.customThread)
+                    this.customThread.Abort();
+
+                SchedulerConfiguration customConf = new SchedulerConfiguration(500);
+                customConf.Job = new CustomJob(tasks: tasks);
+                this.m_schedulerCustom = new Scheduler(customConf);
+
+                System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
+                this.customThread = new System.Threading.Thread(customThreadStart);
+                this.customThread.Name = "customV3";
+                this.customThread.Start();
+            }
+        }
+
         private void button_updatePolicy_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
@@ -1454,10 +1521,7 @@ namespace Helper
                     this.submitPriceStep2Thread.Name = "submitV1";
                     this.submitPriceStep2Thread.Start();                
                 }
-                
             }
-
-            
         }
 
         private void textInputPrice_KeyPress(object sender, KeyPressEventArgs e) {
@@ -1676,18 +1740,28 @@ namespace Helper
                 if(this.groupBoxLocal.Text.Equals(selecting)){
                     this.groupBoxLocal.Enabled = true;
                     this.groupBoxLocalV2.Enabled = false;
+                    this.groupBoxCustomV3.Enabled = false;
                     this.groupBoxCustom.Enabled = false;
-                } 
+                }
+                if (this.groupBoxCustomV3.Text.Equals(selecting)) {
+
+                    this.groupBoxLocal.Enabled = false;
+                    this.groupBoxLocalV2.Enabled = false;
+                    this.groupBoxCustomV3.Enabled = true;
+                    this.groupBoxCustom.Enabled = false;
+                }
                 if(this.groupBoxLocalV2.Text.Equals(selecting)){
 
                     this.groupBoxLocal.Enabled = false;
                     this.groupBoxLocalV2.Enabled = true;
+                    this.groupBoxCustomV3.Enabled = false;
                     this.groupBoxCustom.Enabled = false;
                 }
                 if (this.groupBoxCustom.Text.Equals(selecting)) {
 
                     this.groupBoxLocal.Enabled = false;
                     this.groupBoxLocalV2.Enabled = false;
+                    this.groupBoxCustomV3.Enabled = false;
                     this.groupBoxCustom.Enabled = true;
                 }
 
