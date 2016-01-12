@@ -47,7 +47,7 @@ namespace tobid.scheduler.jobs.action {
             int price = Int32.Parse(txtPrice) + this.delta;
 
             int min = Int32.Parse(txtPrice) + 500;
-            int max = Int32.Parse(txtPrice) + 700;
+            int max = Int32.Parse(txtPrice) + 500;
             logger.DebugFormat("Last Price : {0}, RANGE({1} - {2})", this.inputPrice.BasePrice, min, max);
             if (this.inputPrice.BasePrice < min || this.inputPrice.BasePrice > max) {
                 //需要取消重新出价

@@ -991,6 +991,8 @@ namespace Helper
 
         private void fireAutoSubmit(tobid.rest.position.BidStep2 bid)
         {
+            int second = DateTime.Now.Second;
+
             System.Threading.Thread startFire = new System.Threading.Thread(delegate()
             {
                 Point origin = findOrigin();
@@ -1025,11 +1027,23 @@ namespace Helper
                     System.Threading.Thread.Sleep(100);
                     TimeSpan diff = DateTime.Now - this.lastSubmit;
                     logger.DebugFormat("lastSubmit : {0}, left : {1}", lastSubmit.ToString("HH:mm:ss.ffff"), diff.TotalMilliseconds);
-                    if (diff.TotalMilliseconds > maxWait || this.isReady )
-                    {
-                        actionSubmitCaptcha.execute();
-                        break;
+                    if (second >= 53) {
+                        if (this.isReady) {
+                            actionSubmitCaptcha.execute();
+                            break;
+                        }
                     }
+                    else {
+                        if (diff.TotalMilliseconds > maxWait && this.isReady) {
+                            actionSubmitCaptcha.execute();
+                            break;
+                        }
+                    }
+                    //if (diff.TotalMilliseconds > maxWait || this.isReady )
+                    //{
+                    //    actionSubmitCaptcha.execute();
+                    //    break;
+                    //}
                 }
             });
             startFire.Name = "F9Thread";
