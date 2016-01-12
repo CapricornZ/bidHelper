@@ -195,6 +195,7 @@ namespace tobid.util
             const long WS_MINIMIZEBOX = 0x00020000L;
             const long WS_MAXIMIZEBOX = 0x00010000L;
             const long WS_VSCROLL = 0x00200000L;
+            const long WS_THICKFRAME = 0x00040000L;
 
             SHDocVw.ShellWindows shellWindows = new SHDocVw.ShellWindowsClass();
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
@@ -226,7 +227,9 @@ namespace tobid.util
                     Browser.Left = 0;
                     Browser.Height = 800;
                     Browser.Width = 1100;
-                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX));
+                    //SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX));
+                    SetWindowLong((IntPtr)Browser.HWND, GWL_STYLE, (int)(value & ~WS_MINIMIZEBOX & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME));
+                    
 
                     Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     System.Console.WriteLine("Openning {0},{1}", entry.description, entry.url);

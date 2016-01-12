@@ -38,13 +38,14 @@ namespace tobid.util.hook {
                 //按下控制键
                 if ((OnKeyDownEvent != null || OnKeyPressEvent != null) && (wParam == Win32Api.WM_KEYDOWN || wParam == Win32Api.WM_SYSKEYDOWN)) {
                     if (IsCtrlAltShiftKeys(keyData) && preKeysList.IndexOf(keyData) == -1) {
-                        preKeysList.Add(keyData);
+                        preKeysList.Add(keyData); System.Console.WriteLine("ADD " + keyData);
                     }
                 }
                 //WM_KEYDOWN和WM_SYSKEYDOWN消息，将会引发OnKeyDownEvent事件
                 if (OnKeyDownEvent != null && (wParam == Win32Api.WM_KEYDOWN || wParam == Win32Api.WM_SYSKEYDOWN)) {
+                    
                     KeyEventArgs e = new KeyEventArgs(GetDownKeys(keyData));
-
+                    //System.Console.WriteLine(GetDownKeys(keyData));
                     OnKeyDownEvent(this, e);
                 }
                 //WM_KEYDOWN消息将引发OnKeyPressEvent 
@@ -61,7 +62,7 @@ namespace tobid.util.hook {
                 if ((OnKeyDownEvent != null || OnKeyPressEvent != null) && (wParam == Win32Api.WM_KEYUP || wParam == Win32Api.WM_SYSKEYUP)) {
                     if (IsCtrlAltShiftKeys(keyData)) {
                         for (int i = preKeysList.Count - 1; i >= 0; i--) {
-                            if (preKeysList[i] == keyData) { preKeysList.RemoveAt(i); }
+                            if (preKeysList[i] == keyData) { preKeysList.RemoveAt(i); System.Console.WriteLine("REMOVE " + keyData); }
                         }
                     }
                 }
@@ -79,14 +80,15 @@ namespace tobid.util.hook {
         }
 
         private bool isAllow(Keys keyData) {
-            return (keyData >= Keys.D0 && keyData <= Keys.D9)
-                || (keyData >= Keys.NumPad0 && keyData <= Keys.NumPad9)
-                || (keyData >= Keys.A && keyData <= Keys.Z)
+
+            return (keyData >= Keys.D0 && keyData <= Keys.D9) || (keyData >= Keys.NumPad0 && keyData <= Keys.NumPad9)
+                || (keyData >= Keys.A && keyData <= Keys.Q)
+                || (keyData == Keys.R && (preKeysList.IndexOf(Keys.LControlKey) == -1 && preKeysList.IndexOf(Keys.RControlKey) == -1))//R允许，CTRL+R不允许
+                || (keyData >= Keys.S && keyData <= Keys.Z)
                 || (keyData >= Keys.Left && keyData <= Keys.Down)
                 || keyData == (Keys)231//packet
-                || keyData == Keys.Oemcomma || keyData == Keys.OemPeriod || keyData == Keys.Tab
-                || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Back || keyData == Keys.Delete
-                || keyData == Keys.RControlKey || keyData == Keys.LControlKey || keyData == Keys.V || keyData == Keys.C;
+                || keyData == Keys.Oemcomma || keyData == Keys.OemPeriod
+                || keyData == Keys.Tab || keyData == Keys.Back || keyData == Keys.Delete || keyData == Keys.RControlKey || keyData == Keys.LControlKey;
         }
 
         //根据已经按下的控制键生成key

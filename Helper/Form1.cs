@@ -743,7 +743,7 @@ namespace Helper
             if (current.Equals(this.triggerSetPolicy)) {//设置策略
                 if (now.Millisecond > 500) {//避免触发两次
                     logger.InfoFormat("@{0} auto SET Custom Policy triggered", current);
-                    this.updateCustomPolicy();
+                    //this.updateCustomPolicy();
                 }
             }
             if (current.Equals(this.triggerLoadResource)) {//加载配置
@@ -985,6 +985,7 @@ namespace Helper
                 System.Threading.Thread.Sleep(2500);
                 actionCancelSubmit.execute();
             });
+            startFire.Name = "F11";
             startFire.Start();
         }
 
@@ -1010,7 +1011,6 @@ namespace Helper
                 IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
                 IBidAction actionSubmitCaptcha = new SubmitCaptchaPureAction(repo:this);
                 actions.execute();
-                
 
                 //x<=1.5 提交时间超过(5500)ms
                 //x>1.5 提交时间为(4000+x)ms
@@ -1018,19 +1018,21 @@ namespace Helper
                 if (this.lastCost != null && this.lastCost.TotalMilliseconds > 1500)
                         maxWait += (int)this.lastCost.TotalMilliseconds - 1500;
                     //maxWait = 4000 + (this.lastCost.TotalMilliseconds > this.lastCost.TotalMilliseconds - 1500 ? (int)this.lastCost.TotalMilliseconds - 1500 : 1500);
-                logger.DebugFormat("lastCost : {0}, maxWait : {1}", this.lastCost == null ? 0 : this.lastCost.TotalMilliseconds, maxWait);
+                logger.DebugFormat("lastsubmit : {2}, lastCost : {0}, maxWait : {1}", 
+                    this.lastCost == null ? 0 : this.lastCost.TotalMilliseconds, maxWait, this.lastSubmit);
                 while (true)
                 {
                     System.Threading.Thread.Sleep(100);
                     TimeSpan diff = DateTime.Now - this.lastSubmit;
                     logger.DebugFormat("lastSubmit : {0}, left : {1}", lastSubmit.ToString("HH:mm:ss.ffff"), diff.TotalMilliseconds);
-                    if (diff.TotalMilliseconds > maxWait)
+                    if (diff.TotalMilliseconds > maxWait || this.isReady )
                     {
                         actionSubmitCaptcha.execute();
                         break;
                     }
                 }
             });
+            startFire.Name = "F9Thread";
             startFire.Start();
         }
 
