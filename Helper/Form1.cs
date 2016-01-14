@@ -743,7 +743,15 @@ namespace Helper
             if (current.Equals(this.triggerSetPolicy)) {//设置策略
                 if (now.Millisecond > 500) {//避免触发两次
                     logger.InfoFormat("@{0} auto SET Custom Policy triggered", current);
-                    //this.updateCustomPolicy();
+                    //
+                    if (this.tabControl1.SelectedIndex == 0) {//策略V1
+                        logger.Info("自定义V1");
+                        this.updateCustomPolicyV1();
+                    }
+                    if (this.tabControl1.SelectedIndex == 1) {//策略V2
+                        logger.Info("自定义V2");
+                        this.updateCustomPolicyV2();
+                    }
                 }
             }
             if (current.Equals(this.triggerLoadResource)) {//加载配置
@@ -982,7 +990,7 @@ namespace Helper
                 actions.execute();
 
                 IBidAction actionCancelSubmit = new CancelSubmitCaptchaAction(repo: this);
-                System.Threading.Thread.Sleep(2500);
+                System.Threading.Thread.Sleep(10000);
                 actionCancelSubmit.execute();
             });
             startFire.Name = "F11";
@@ -1232,7 +1240,49 @@ namespace Helper
                 e.Handled = true;
         }
 
-        void updateCustomPolicy() {
+        void updateCustomPolicyV2() {
+
+            this.textBox1.Text = this.dateTimePickerCustom2Price1.Value.ToString("MM/dd HH:mm:ss");
+            this.textBox2.Text = this.comboBoxCustom2Delta1.Text;
+
+            String firePrice1 = this.dateTimePickerCustom2Price1.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            String fireSubmit1 = this.dateTimePickerCustom2Submit1.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            String fireSubmit2 = this.dateTimePickerCustom2Submit2.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            String fireCancel = this.dateTimePickerCustom2Cancel.Value.ToString("yyyy-MM-dd HH:mm:ss");
+
+            List<ITask> tasks = new List<ITask>();
+            InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);//策略1，输入价格
+            TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
+            tasks.Add(taskInputPrice);
+
+            //两个策略的提交任务
+            SubmitCaptchaAction actionSubmitCaptcha1 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+            TaskTimeBased taskSubmitCaptchaTimeBased1 = new TaskTimeBased(action: actionSubmitCaptcha1, notify: this, fireTime: fireSubmit1);
+            SubmitCaptchaAction actionSubmitCaptcha2 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
+            TaskTimeBased taskSubmitCaptchaTimeBased2 = new TaskTimeBased(action: actionSubmitCaptcha2, notify: this, fireTime: fireSubmit2);
+
+            TaskSwitchable taskSubmitCaptchaTimeBased = new TaskSwitchable(new ITask[] { taskSubmitCaptchaTimeBased1, taskSubmitCaptchaTimeBased2 });//inputPrice2会根据情况，选择策略1或策略2
+
+            //策略2的出价时间
+            InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction, switchTask: taskSubmitCaptchaTimeBased);//策略1，输入价格
+            TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
+            tasks.Add(taskInputPrice2Time);
+
+            tasks.Add(taskSubmitCaptchaTimeBased);
+
+            if (null != this.customThread)
+                this.customThread.Abort();
+
+            SchedulerConfiguration customConf = new SchedulerConfiguration(500);
+            customConf.Job = new CustomJob(tasks: tasks);
+            this.m_schedulerCustom = new Scheduler(customConf);
+
+            System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
+            this.customThread = new System.Threading.Thread(customThreadStart);
+            this.customThread.Name = "customV2";
+            this.customThread.Start();
+        }
+        void updateCustomPolicyV1() {
 
             this.textBox1.Text = this.dateTimePickerCustomPrice.Value.ToString("MM/dd HH:mm:ss");
             object obj = this.comboBoxCustomDelta.SelectedItem;
@@ -1327,7 +1377,7 @@ namespace Helper
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK){
 
-                this.updateCustomPolicy();
+                this.updateCustomPolicyV1();
             }
         }
 
@@ -1337,46 +1387,7 @@ namespace Helper
             DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
                 messButton, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
             if (dr == DialogResult.OK) {
-
-                this.textBox1.Text = this.dateTimePickerCustom2Price1.Value.ToString("MM/dd HH:mm:ss");
-                this.textBox2.Text = this.comboBoxCustom2Delta1.Text;
-
-                String firePrice1 = this.dateTimePickerCustom2Price1.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                String fireSubmit1 = this.dateTimePickerCustom2Submit1.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                String fireSubmit2 = this.dateTimePickerCustom2Submit2.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                String fireCancel = this.dateTimePickerCustom2Cancel.Value.ToString("yyyy-MM-dd HH:mm:ss");
-
-                List<ITask> tasks = new List<ITask>();
-                InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);//策略1，输入价格
-                TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
-                tasks.Add(taskInputPrice);
-
-                //两个策略的提交任务
-                SubmitCaptchaAction actionSubmitCaptcha1 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                TaskTimeBased taskSubmitCaptchaTimeBased1 = new TaskTimeBased(action: actionSubmitCaptcha1, notify: this, fireTime: fireSubmit1);
-                SubmitCaptchaAction actionSubmitCaptcha2 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
-                TaskTimeBased taskSubmitCaptchaTimeBased2 = new TaskTimeBased(action: actionSubmitCaptcha2, notify: this, fireTime: fireSubmit2);
-
-                TaskSwitchable taskSubmitCaptchaTimeBased = new TaskSwitchable(new ITask[] { taskSubmitCaptchaTimeBased1, taskSubmitCaptchaTimeBased2 });//inputPrice2会根据情况，选择策略1或策略2
-
-                //策略2的出价时间
-                InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction, switchTask: taskSubmitCaptchaTimeBased);//策略1，输入价格
-                TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
-                tasks.Add(taskInputPrice2Time);
-                
-                tasks.Add(taskSubmitCaptchaTimeBased);
-
-                if (null != this.customThread)
-                    this.customThread.Abort();
-
-                SchedulerConfiguration customConf = new SchedulerConfiguration(500);
-                customConf.Job = new CustomJob(tasks: tasks);
-                this.m_schedulerCustom = new Scheduler(customConf);
-
-                System.Threading.ThreadStart customThreadStart = new System.Threading.ThreadStart(this.m_schedulerCustom.Start);
-                this.customThread = new System.Threading.Thread(customThreadStart);
-                this.customThread.Name = "customV2";
-                this.customThread.Start();
+                this.updateCustomPolicyV2();
             }
             /*
             if (dr == DialogResult.OK)

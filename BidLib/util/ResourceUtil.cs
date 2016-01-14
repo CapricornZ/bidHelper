@@ -61,7 +61,8 @@ namespace tobid.util
             }
 
             try {
-                urlResource = endPoint + global.repository;
+                //urlResource = endPoint + global.repository;
+                urlResource = global.repository;
                 logger.DebugFormat("获取全局配置资源...【{0}】", urlResource);
                 stream = new HttpUtil().getAsBinary(urlResource);
             } catch (Exception ex) {
