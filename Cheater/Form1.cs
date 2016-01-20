@@ -16,6 +16,7 @@ using System.IO;
 using tobid.util.orc;
 using tobid.util;
 using tobid.rest.position;
+using Microsoft.Win32;
 
 namespace Cheater {
     public partial class Form1 : Form, IRepository {
@@ -226,12 +227,25 @@ namespace Cheater {
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //WinIOLab.Initialize(); // 注册
-            //WinIOLab.KeyDown(Keys.A); // 按下A
-            //WinIOLab.KeyUp(Keys.A); // 松开A
-            //WinIOLab.Shutdown(); // 用完后注销
 
+            String ieVer = Convert.ToString(new WebBrowser().Version.Major);
+
+            System.Console.WriteLine(System.Environment.OSVersion.Version);
+            String ver = Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.MajorRevision;
+
+            verRepo.Add("10.0", "win10");
+            verRepo.Add("6.3", "win8.1");
+            verRepo.Add("6.2", "win8");
+            verRepo.Add("6.1", "win7");
+            verRepo.Add("6.0", "winVista");
+            verRepo.Add("5.2", "win2003");
+            verRepo.Add("5.1", "winXP");
+            verRepo.Add("5.0", "win2000");
+
+            String readableVer = verRepo[ver];
+            System.Console.WriteLine("ie" + ieVer + "," + readableVer);
         }
-        
+
+        IDictionary<String, String> verRepo = new Dictionary<String, String>();
     }
 }

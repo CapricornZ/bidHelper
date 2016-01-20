@@ -102,31 +102,31 @@
             this.comboBoxCustomDelta = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
-            this.tabPagePolicyCustomV2 = new System.Windows.Forms.TabPage();
-            this.tabPagePolicyCustomV3 = new System.Windows.Forms.TabPage();
-            this.groupBoxCustomV3 = new System.Windows.Forms.GroupBox();
-            this.dateTimePickerCustom3Price = new System.Windows.Forms.DateTimePicker();
-            this.label20 = new System.Windows.Forms.Label();
-            this.comboBoxCustom3Delta = new System.Windows.Forms.ComboBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.btnUpdateV3 = new System.Windows.Forms.Button();
-            this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.tabPageManual = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.tabPagePolicyCustom = new System.Windows.Forms.TabPage();
+            this.tabPagePolicyCustomV2 = new System.Windows.Forms.TabPage();
+            this.tabPagePolicyCustomV3 = new System.Windows.Forms.TabPage();
+            this.groupBoxCustomV3 = new System.Windows.Forms.GroupBox();
+            this.textBoxCustom3Check = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.dateTimePickerCustom3Submit = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerCustom3Price = new System.Windows.Forms.DateTimePicker();
+            this.label20 = new System.Windows.Forms.Label();
+            this.comboBoxCustom3Delta = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.btnUpdateV3 = new System.Windows.Forms.Button();
+            this.tabPagePolicyV1 = new System.Windows.Forms.TabPage();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.groupBoxInternetTime = new System.Windows.Forms.GroupBox();
             this.buttonMinus = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonSync = new System.Windows.Forms.Button();
-            this.dateTimePickerCustom3Submit = new System.Windows.Forms.DateTimePicker();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.textBoxCustom3Check = new System.Windows.Forms.TextBox();
             this.groupBoxLocal.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxLocalV2.SuspendLayout();
@@ -137,13 +137,13 @@
             this.panelIE.SuspendLayout();
             this.groupBoxCustom.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPageManual.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tabPagePolicyCustom.SuspendLayout();
             this.tabPagePolicyCustomV2.SuspendLayout();
             this.tabPagePolicyCustomV3.SuspendLayout();
             this.groupBoxCustomV3.SuspendLayout();
             this.tabPagePolicyV1.SuspendLayout();
-            this.tabPageManual.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBoxInternetTime.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -596,7 +596,7 @@
             this.stepToolStripMenuItem,
             this.toolStripTextBoxInterval});
             this.配置ToolStripMenuItem.Name = "配置ToolStripMenuItem";
-            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.配置ToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.配置ToolStripMenuItem.Text = "配置(&P)";
             // 
             // stepToolStripMenuItem
@@ -609,7 +609,7 @@
             // toolStripTextBoxInterval
             // 
             this.toolStripTextBoxInterval.Name = "toolStripTextBoxInterval";
-            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 21);
+            this.toolStripTextBoxInterval.Size = new System.Drawing.Size(100, 23);
             // 
             // AboutToolStripMenuItem
             // 
@@ -617,20 +617,20 @@
             this.CheckUpdateToolStripMenuItem,
             this.AuthCodeToolStripMenuItem});
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.AboutToolStripMenuItem.Text = "关于(&A)";
             // 
             // CheckUpdateToolStripMenuItem
             // 
             this.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem";
-            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.CheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.CheckUpdateToolStripMenuItem.Text = "检查更新(&C)";
             this.CheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckUpdateToolStripMenuItem_Click);
             // 
             // AuthCodeToolStripMenuItem
             // 
             this.AuthCodeToolStripMenuItem.Name = "AuthCodeToolStripMenuItem";
-            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.AuthCodeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.AuthCodeToolStripMenuItem.Text = "授权码(&A)";
             this.AuthCodeToolStripMenuItem.Click += new System.EventHandler(this.AuthCodeToolStripMenuItem_Click);
             // 
@@ -897,11 +897,11 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustom);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustomV2);
             this.tabControl1.Controls.Add(this.tabPagePolicyCustomV3);
             this.tabControl1.Controls.Add(this.tabPagePolicyV1);
-            this.tabControl1.Controls.Add(this.tabPageManual);
             this.tabControl1.Location = new System.Drawing.Point(211, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -909,6 +909,65 @@
             this.tabControl1.TabIndex = 17;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.tabControl1.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Deselected);
+            // 
+            // tabPageManual
+            // 
+            this.tabPageManual.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageManual.Controls.Add(this.groupBox2);
+            this.tabPageManual.Location = new System.Drawing.Point(4, 22);
+            this.tabPageManual.Name = "tabPageManual";
+            this.tabPageManual.Size = new System.Drawing.Size(275, 202);
+            this.tabPageManual.TabIndex = 3;
+            this.tabPageManual.Text = "手动";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Location = new System.Drawing.Point(20, 14);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(227, 170);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "手动";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 114);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(143, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Enter | Space：提交验证码";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 62);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(214, 13);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "CTRL+LEFT|UP|RIGHT：验证码左|中|右4";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 89);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(162, 13);
+            this.label12.TabIndex = 1;
+            this.label12.Text = "CTRL+Enter：自动识别验证码";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 34);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(167, 13);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "CTRL+Num3~Num9：+300-+900";
             // 
             // tabPagePolicyCustom
             // 
@@ -958,6 +1017,43 @@
             this.groupBoxCustomV3.TabIndex = 5;
             this.groupBoxCustomV3.TabStop = false;
             this.groupBoxCustomV3.Text = "自定义V3";
+            // 
+            // textBoxCustom3Check
+            // 
+            this.textBoxCustom3Check.Location = new System.Drawing.Point(98, 104);
+            this.textBoxCustom3Check.Name = "textBoxCustom3Check";
+            this.textBoxCustom3Check.Size = new System.Drawing.Size(82, 20);
+            this.textBoxCustom3Check.TabIndex = 20;
+            this.textBoxCustom3Check.Text = "00:00:00";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(35, 106);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(55, 13);
+            this.label22.TabIndex = 19;
+            this.label22.Text = "矫正时间";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(35, 80);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(55, 13);
+            this.label21.TabIndex = 18;
+            this.label21.Text = "提交时间";
+            // 
+            // dateTimePickerCustom3Submit
+            // 
+            this.dateTimePickerCustom3Submit.CustomFormat = "";
+            this.dateTimePickerCustom3Submit.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerCustom3Submit.Location = new System.Drawing.Point(98, 77);
+            this.dateTimePickerCustom3Submit.Name = "dateTimePickerCustom3Submit";
+            this.dateTimePickerCustom3Submit.ShowUpDown = true;
+            this.dateTimePickerCustom3Submit.Size = new System.Drawing.Size(82, 20);
+            this.dateTimePickerCustom3Submit.TabIndex = 17;
+            this.dateTimePickerCustom3Submit.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
             // 
             // dateTimePickerCustom3Price
             // 
@@ -1031,65 +1127,6 @@
             this.tabPagePolicyV1.TabIndex = 0;
             this.tabPagePolicyV1.Text = "策略V1";
             // 
-            // tabPageManual
-            // 
-            this.tabPageManual.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPageManual.Controls.Add(this.groupBox2);
-            this.tabPageManual.Location = new System.Drawing.Point(4, 22);
-            this.tabPageManual.Name = "tabPageManual";
-            this.tabPageManual.Size = new System.Drawing.Size(275, 202);
-            this.tabPageManual.TabIndex = 3;
-            this.tabPageManual.Text = "手动";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Location = new System.Drawing.Point(20, 14);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(227, 170);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "手动";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 114);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(143, 13);
-            this.label15.TabIndex = 3;
-            this.label15.Text = "Enter | Space：提交验证码";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 62);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(214, 13);
-            this.label13.TabIndex = 2;
-            this.label13.Text = "CTRL+LEFT|UP|RIGHT：验证码左|中|右4";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 89);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(162, 13);
-            this.label12.TabIndex = 1;
-            this.label12.Text = "CTRL+Enter：自动识别验证码";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 34);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(167, 13);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "CTRL+Num3~Num9：+300-+900";
-            // 
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
@@ -1138,42 +1175,6 @@
             this.buttonSync.UseVisualStyleBackColor = true;
             this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
             // 
-            // dateTimePickerCustom3Submit
-            // 
-            this.dateTimePickerCustom3Submit.CustomFormat = "";
-            this.dateTimePickerCustom3Submit.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerCustom3Submit.Location = new System.Drawing.Point(98, 77);
-            this.dateTimePickerCustom3Submit.Name = "dateTimePickerCustom3Submit";
-            this.dateTimePickerCustom3Submit.ShowUpDown = true;
-            this.dateTimePickerCustom3Submit.Size = new System.Drawing.Size(82, 20);
-            this.dateTimePickerCustom3Submit.TabIndex = 17;
-            this.dateTimePickerCustom3Submit.Value = new System.DateTime(2015, 8, 10, 11, 34, 9, 0);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(35, 80);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(55, 13);
-            this.label21.TabIndex = 18;
-            this.label21.Text = "提交时间";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(35, 106);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(55, 13);
-            this.label22.TabIndex = 19;
-            this.label22.Text = "矫正时间";
-            // 
-            // textBoxCustom3Check
-            // 
-            this.textBoxCustom3Check.Location = new System.Drawing.Point(98, 104);
-            this.textBoxCustom3Check.Name = "textBoxCustom3Check";
-            this.textBoxCustom3Check.Size = new System.Drawing.Size(82, 20);
-            this.textBoxCustom3Check.TabIndex = 20;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1215,15 +1216,15 @@
             this.groupBoxCustom.ResumeLayout(false);
             this.groupBoxCustom.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPageManual.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.tabPagePolicyCustom.ResumeLayout(false);
             this.tabPagePolicyCustomV2.ResumeLayout(false);
             this.tabPagePolicyCustomV3.ResumeLayout(false);
             this.groupBoxCustomV3.ResumeLayout(false);
             this.groupBoxCustomV3.PerformLayout();
             this.tabPagePolicyV1.ResumeLayout(false);
-            this.tabPageManual.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBoxInternetTime.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

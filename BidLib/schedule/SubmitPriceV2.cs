@@ -38,8 +38,8 @@ namespace tobid.scheduler.jobs
                 {
                     logger.DebugFormat("PRICE     : {0}", operation.price);
                     logger.DebugFormat("DELAY     : {0}", delay);
-                    logger.DebugFormat("startTime : {0}", operation.startTime);
-                    logger.DebugFormat("expireTime: {0}", operation.expireTime);
+                    //logger.DebugFormat("startTime : {0}", operation.startTime);
+                    //logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
                     SubmitPriceV2Job.delay = delay;
                     SubmitPriceV2Job.executeCount = 0;
@@ -152,15 +152,15 @@ namespace tobid.scheduler.jobs
                 logger.Error(String.Format("{{Count:{0}}}", SubmitPriceV2Job.executeCount));
             else
             {
-                TimeSpan diff = SubmitPriceStep2Job.bidOperation.startTime - now;
-                if (SubmitPriceV2Job.executeCount == 0)
-                    this.notify.acceptMessage(String.Format("SECS:{0}", (int)diff.TotalSeconds));
+                //TimeSpan diff = SubmitPriceStep2Job.bidOperation.startTime - now;
+                //if (SubmitPriceV2Job.executeCount == 0)
+                //    this.notify.acceptMessage(String.Format("SECS:{0}", (int)diff.TotalSeconds));
             }
 
             if (Monitor.TryEnter(SubmitPriceV2Job.lockObj, 500))
             {
-                if (null != SubmitPriceStep2Job.bidOperation &&
-                    now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceV2Job.executeCount == 0)
+                if (null != SubmitPriceStep2Job.bidOperation)
+                    //&& now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceV2Job.executeCount == 0)
                 {
                     SubmitPriceV2Job.executeCount++;
                     this.Fire(0);

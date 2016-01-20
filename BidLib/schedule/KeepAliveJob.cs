@@ -62,24 +62,41 @@ namespace tobid.scheduler.jobs
                 }
                 return client;
             }
+
+            public static List<Operation> remain(String tag, List<Operation> ops) {
+
+                for (int i = ops.Count - 1; i >= 0; i--) {
+                    if (!ops[i].tag.Equals(tag))
+                        ops.RemoveAt(i);
+                }
+                return ops;
+            }
         }
 
         public void Execute() {
 
             logger.Debug("KeepAliveJob.Execute()");
             string hostName = System.Net.Dns.GetHostName();
-            //String epKeepAlive = this.EndPoint + "/command/keepAlive.do";
+            string filter = tobid.util.Util.ieVersion() + "," + Util.osVersion();
+
             String epKeepAlive = this.EndPoint + "/rest/service/command/keepAlive";
             RestClient restKeepAlive = new RestClient(endpoint: epKeepAlive, method: HttpVerb.POST);
-            String rtn = restKeepAlive.MakeRequest(String.Format("?ip={0}", hostName));
+            String rtn = restKeepAlive.MakeRequest(String.Format("?ip={0}&ENV={1}", hostName, filter));
+
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
             client = Filter.remain(this.repository.category, client);
-            
-            rest.ITrigger trigger = null;
-            if(!String.IsNullOrEmpty(client.tips))
-                trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<rest.ITrigger>(client.tips, new TriggerConvert());
-            this.receiveLogin(client, trigger);
+
+            //RestClient rest = new RestClient(endpoint: this.EndPoint + "/rest/service/command/operation/filter/" + filter, method: HttpVerb.GET);
+            //rtn = rest.MakeRequest();
+            //List<Operation> ops = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Operation>>(rtn, new OperationConvert());
+            //ops = Filter.remain(this.repository.category, ops);
+
+            //rest.ITrigger trigger = null;
+            //if(!String.IsNullOrEmpty(client.tips))
+            //    trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<rest.ITrigger>(client.tips, new TriggerConvert());
+            //this.receiveLogin(client, trigger);
             if (!this.isManual && client.operation != null && client.operation.Count > 0)
+            //if(ops != null)
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {

@@ -623,6 +623,98 @@ namespace Helper
             base.WndProc(ref m);
         }
 
+        private void receiveLogin(Config config) {
+
+            if (config != null) {
+
+                this.groupBox1.Text = String.Format("标书:{0}", config.pname);
+                this.groupBox1.Enabled = true;
+                this.textBoxBNO.Text = config.no;
+                this.textBoxBPass.Text = config.passwd;
+                this.textBoxPID.Text = config.pid;
+
+                logger.Info("标书 : " + config.no);
+                logger.Info("姓名 : " + config.pname);
+                logger.Info("身份证 : " + config.pid);
+            } else {
+
+                this.groupBox1.Text = "标书:NULL";
+                this.groupBox1.Enabled = false;
+                this.textBoxBNO.Text = "";
+                this.textBoxBPass.Text = "";
+                this.textBoxPID.Text = "";
+            }
+
+            if (null != config && !String.IsNullOrEmpty(config.policy)) {
+
+                ITrigger trigger = trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<ITrigger>(config.policy, new tobid.rest.json.TriggerConvert());
+                if ("V1".Equals(trigger.category)) {//TRIGGER V1
+                    Trigger instance = (Trigger)trigger;
+                    int idx = instance.deltaPrice / 100 - 1;
+                    this.comboBoxCustomDelta.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+
+                    this.dateTimePickerCustomPrice.Text = instance.priceTime;
+                    this.checkBoxInputCaptcha.Checked = null != instance.captchaTime;
+                    if (null != instance.captchaTime)
+                        this.dateTimePickerCustomInputCaptcha.Text = instance.captchaTime;
+
+                    this.checkBoxSubmitCaptcha.Checked = null != instance.submitTime;
+                    if (null != instance.submitTime)
+                        this.dateTimePickerCustomSubmitCaptcha.Text = instance.submitTime;
+
+                    if (instance.submitReachPrice > 0) {
+                        this.checkBoxReachPrice.Checked = true;
+                        this.comboBoxReachPrice.Enabled = true;
+                        int index = instance.submitReachPrice / 100 - 1;
+                        this.comboBoxReachPrice.SelectedItem = this.comboBoxReachPrice.Items[index];
+                    } else {
+                        this.checkBoxReachPrice.Checked = false;
+                        this.comboBoxReachPrice.Enabled = false;
+                    }
+
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                    this.tabControl1.SelectTab(1);
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+
+                } else if ("V2".Equals(trigger.category)) {//TRIGGER V2
+
+                    TriggerV2 instance = (TriggerV2)trigger;
+                    int idx = instance.triggers[0].deltaPrice / 100 - 1;
+                    this.comboBoxCustom2Delta1.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+                    this.dateTimePickerCustom2Price1.Text = instance.triggers[0].priceTime;
+                    this.dateTimePickerCustom2Submit1.Text = instance.triggers[0].submitTime;
+
+                    idx = instance.triggers[1].deltaPrice / 100 - 1;
+                    this.comboBoxCustom2Delta2.SelectedItem = this.comboBoxCustom2Delta2.Items[idx];
+                    this.dateTimePickerCustom2Cancel.Text = instance.triggers[1].priceTime;
+                    this.dateTimePickerCustom2Submit2.Text = instance.triggers[1].submitTime;
+
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                    this.tabControl1.SelectTab(2);
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+                } else if ("V3".Equals(trigger.category)) {//TRIGGER V3
+
+                    TriggerV3 instance = (TriggerV3)trigger;
+                    int idx = instance.deltaPrice / 100 - 1;
+                    this.comboBoxCustom3Delta.SelectedItem = this.comboBoxCustom3Delta.Items[idx];
+                    this.dateTimePickerCustom3Price.Text = instance.priceTime;
+                    this.dateTimePickerCustom3Submit.Text = instance.submitTime;
+                    this.textBoxCustom3Check.Text = instance.common.checkTime;
+
+                    V3Common.commonConf = instance.common;
+
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                    this.tabControl1.SelectTab(3);
+                    this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+                }
+            } else {
+
+                this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                this.tabControl1.SelectTab(0);
+                this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+            }
+        }
+
         private void receiveLogin(Client client, ITrigger trigger) {
 
             Config config = client.config;
@@ -723,8 +815,8 @@ namespace Helper
             Step2Operation bid = operation as Step2Operation;
             if (null != bid) {
                 
-                this.textBox1.Text = bid.startTime.ToString("MM/dd HH:mm:ss");
-                this.textBox2.Text = String.Format("+{0}", bid.price);
+                //this.textBox1.Text = bid.startTime.ToString("MM/dd HH:mm:ss");
+                //this.textBox2.Text = String.Format("+{0}", bid.price);
             }
         }
 
@@ -1484,8 +1576,8 @@ namespace Helper
 
                 Step2Operation bidOps = SubmitPriceStep2Job.getConfig();
                 bidOps.updateTime = DateTime.Now;
-                bidOps.startTime = this.dateTimePicker1.Value;
-                bidOps.expireTime = bidOps.startTime.AddHours(1);
+                //bidOps.startTime = this.dateTimePicker1.Value;
+                //bidOps.expireTime = bidOps.startTime.AddHours(1);
 
                 String fireTime = this.dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 this.textBox1.Text = this.dateTimePicker1.Value.ToString("MM/dd HH:mm:ss");
@@ -1728,8 +1820,21 @@ namespace Helper
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
-            LoginJob job = new LoginJob(m_orcLogin);
-            job.Execute();
+            //LoginJob job = new LoginJob(m_orcLogin);
+            //job.Execute();
+
+            String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入标书号", "标书登陆", "");
+            if (!String.IsNullOrEmpty(authCode)) {
+
+                String epKeepAlive = this.EndPoint + "/rest/service/command/config/" + authCode;
+                RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
+                String rtn = restGetConfig.MakeRequest();
+                System.Console.WriteLine(rtn);
+
+                Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
+                this.receiveLogin(config);
+                
+            }
 
             //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
 

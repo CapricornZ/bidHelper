@@ -120,6 +120,7 @@
     <Compile Include="Step2ConfigDialog.Designer.cs">
       <DependentUpon>Step2ConfigDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util.cs" />
     <Compile Include="WindowHelper.cs" />
     <EmbeddedResource Include="EntrySelForm.resx">
       <DependentUpon>EntrySelForm.cs</DependentUpon>

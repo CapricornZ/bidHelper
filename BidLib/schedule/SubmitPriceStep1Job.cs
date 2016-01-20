@@ -44,8 +44,8 @@ namespace tobid.scheduler.jobs {
                     || (operation.updateTime > SubmitPriceStep1Job.bidOperation.updateTime)) { //确保同一个版本（修改）的Operation只被配置并执行一次，避免多次执行
                 
                     logger.DebugFormat("PRICE     : {0}", operation.price);
-                    logger.DebugFormat("startTime : {0}", operation.startTime);
-                    logger.DebugFormat("expireTime: {0}", operation.expireTime);
+                    //logger.DebugFormat("startTime : {0}", operation.startTime);
+                    //logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
                     SubmitPriceStep1Job.executeCount = 0;
                     SubmitPriceStep1Job.bidOperation = operation;
@@ -65,14 +65,13 @@ namespace tobid.scheduler.jobs {
             if (null == SubmitPriceStep1Job.bidOperation)
                 logger.Debug(String.Format("{{Count:{0}}}", SubmitPriceStep1Job.executeCount));
             else
-                logger.Debug(String.Format("{{Start:{0}, Expire:{1}, Count:{2}}}",
-                    SubmitPriceStep1Job.bidOperation.startTime, SubmitPriceStep1Job.bidOperation.expireTime,
+                logger.Debug(String.Format("{Count:{2}}}",
                     SubmitPriceStep1Job.executeCount));
 
             if (Monitor.TryEnter(SubmitPriceStep1Job.lockObj, 500)) {
 
-                if (null != SubmitPriceStep1Job.bidOperation &&
-                    now >= SubmitPriceStep1Job.bidOperation.startTime && now <= SubmitPriceStep1Job.bidOperation.expireTime && SubmitPriceStep1Job.executeCount == 0) {
+                if (null != SubmitPriceStep1Job.bidOperation){
+                    //&& now >= SubmitPriceStep1Job.bidOperation.startTime && now <= SubmitPriceStep1Job.bidOperation.expireTime && SubmitPriceStep1Job.executeCount == 0) {
 
                     SubmitPriceStep1Job.executeCount++;
                     logger.Warn("trigger Fired");

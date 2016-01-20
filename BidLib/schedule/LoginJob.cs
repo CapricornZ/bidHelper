@@ -41,9 +41,9 @@ namespace tobid.scheduler.jobs
 
                     logger.DebugFormat("{{ bidNO:{0}, bidPassword:{1}, idCard:{2} }}",
                         config.no, config.passwd, config.pid);
-                    logger.DebugFormat("startTime:{0} - expireTime:{1}",
-                        LoginJob.operation.startTime,
-                        LoginJob.operation.expireTime);
+                    //logger.DebugFormat("startTime:{0} - expireTime:{1}",
+                    //    LoginJob.operation.startTime,
+                    //    LoginJob.operation.expireTime);
 
                     rtn = true;
                 }
@@ -69,8 +69,7 @@ namespace tobid.scheduler.jobs
             if (LoginJob.operation == null)
                 logger.Debug("LoginJob.OPERATION NOT SET");
             else
-                logger.Debug(String.Format("{0} {{Start:{1}, Expire:{2}, Count:{3}}}",
-                    LoginJob.config.pname, LoginJob.operation.startTime, LoginJob.operation.expireTime,
+                logger.Debug(String.Format("{0} {Count:{3}}}",
                     LoginJob.executeCount));
 
             if (Monitor.TryEnter(LoginJob.lockObj, 500))

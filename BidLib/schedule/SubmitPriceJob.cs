@@ -85,8 +85,8 @@ namespace tobid.scheduler.jobs
         public static Step2Operation getConfig() {
 
             Step2Operation ops = new Step2Operation();
-            ops.expireTime = SubmitPriceStep2Job.bidOperation.expireTime;
-            ops.startTime = SubmitPriceStep2Job.bidOperation.startTime;
+            //ops.expireTime = SubmitPriceStep2Job.bidOperation.expireTime;
+            //ops.startTime = SubmitPriceStep2Job.bidOperation.startTime;
             ops.content = SubmitPriceStep2Job.bidOperation.content;
             ops.id = SubmitPriceStep2Job.bidOperation.id;
             ops.price = SubmitPriceStep2Job.bidOperation.price;
@@ -115,8 +115,8 @@ namespace tobid.scheduler.jobs
                     || (operation.updateTime > SubmitPriceStep2Job.bidOperation.updateTime))//确保同一个版本（修改）的Operation只被配置并执行一次，避免多次执行
                 {
                     logger.DebugFormat("PRICE     : {0}", operation.price);
-                    logger.DebugFormat("startTime : {0}", operation.startTime);
-                    logger.DebugFormat("expireTime: {0}", operation.expireTime);
+                    //logger.DebugFormat("startTime : {0}", operation.startTime);
+                    //logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
                     SubmitPriceStep2Job.priceOnly = priceOnly;
                     SubmitPriceStep2Job.price = Price;
@@ -142,8 +142,8 @@ namespace tobid.scheduler.jobs
                 //    || (operation.updateTime > SubmitPriceStep2Job.bidOperation.updateTime))//确保同一个版本（修改）的Operation只被配置并执行一次，避免多次执行
                 {
                     logger.DebugFormat("PRICE     : {0}", operation.price);
-                    logger.DebugFormat("startTime : {0}", operation.startTime);
-                    logger.DebugFormat("expireTime: {0}", operation.expireTime);
+                    //logger.DebugFormat("startTime : {0}", operation.startTime);
+                    //logger.DebugFormat("expireTime: {0}", operation.expireTime);
 
                     SubmitPriceStep2Job.priceOnly = priceOnly;
                     SubmitPriceStep2Job.price = 0;
@@ -208,15 +208,15 @@ namespace tobid.scheduler.jobs
                 //logger.Debug(String.Format("{{Start:{0}, Expire:{1}, Count:{2}}}",
                 //    SubmitPriceStep2Job.bidOperation.startTime, SubmitPriceStep2Job.bidOperation.expireTime,
                 //    SubmitPriceStep2Job.executeCount));
-                TimeSpan diff = SubmitPriceStep2Job.bidOperation.startTime - now;
-                if(SubmitPriceStep2Job.executeCount == 0)
-                    this.notify.acceptMessage(String.Format("SECS:{0}", (int)diff.TotalSeconds));
+                //TimeSpan diff = SubmitPriceStep2Job.bidOperation.startTime - now;
+                //if(SubmitPriceStep2Job.executeCount == 0)
+                //    this.notify.acceptMessage(String.Format("SECS:{0}", (int)diff.TotalSeconds));
             }
 
             if (Monitor.TryEnter(SubmitPriceStep2Job.lockObj, 500))
             {
-                if (null != SubmitPriceStep2Job.bidOperation && 
-                    now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceStep2Job.executeCount == 0)
+                if (null != SubmitPriceStep2Job.bidOperation)
+                    //&& now >= SubmitPriceStep2Job.bidOperation.startTime && now <= SubmitPriceStep2Job.bidOperation.expireTime && SubmitPriceStep2Job.executeCount == 0)
                 {
                     SubmitPriceStep2Job.executeCount++;
                     this.Fire(0);
