@@ -86,17 +86,7 @@ namespace tobid.scheduler.jobs
             tobid.rest.Client client = Newtonsoft.Json.JsonConvert.DeserializeObject<tobid.rest.Client>(rtn, new OperationConvert());
             client = Filter.remain(this.repository.category, client);
 
-            //RestClient rest = new RestClient(endpoint: this.EndPoint + "/rest/service/command/operation/filter/" + filter, method: HttpVerb.GET);
-            //rtn = rest.MakeRequest();
-            //List<Operation> ops = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Operation>>(rtn, new OperationConvert());
-            //ops = Filter.remain(this.repository.category, ops);
-
-            //rest.ITrigger trigger = null;
-            //if(!String.IsNullOrEmpty(client.tips))
-            //    trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<rest.ITrigger>(client.tips, new TriggerConvert());
-            //this.receiveLogin(client, trigger);
             if (!this.isManual && client.operation != null && client.operation.Count > 0)
-            //if(ops != null)
             {
                 foreach (tobid.rest.Operation operation in client.operation)
                 {

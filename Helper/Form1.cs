@@ -119,6 +119,7 @@ namespace Helper
         private String wifiRefreshBefore;
         private String m_submitHotKey;
 
+        private ITrigger m_trigger;
         private IDictionary<int, int> m_F9Strategy;
 
         private void Form1_Activated(object sender, EventArgs e) {
@@ -311,6 +312,8 @@ namespace Helper
             this.dateTimePickerCustom2Cancel.Value = DateTime.Now;
             this.dateTimePickerCustom2Submit1.Value = DateTime.Now;
             this.dateTimePickerCustom2Submit2.Value = DateTime.Now;
+            this.dateTimePickerCustom3Submit.Value = DateTime.Now;
+            this.dateTimePickerCustom3Price.Value = DateTime.Now;
 
             this.step2Dialog = new Step2ConfigDialog(this);
             this.floatingForm = new FloatingForm();
@@ -648,6 +651,8 @@ namespace Helper
             if (null != config && !String.IsNullOrEmpty(config.policy)) {
 
                 ITrigger trigger = trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<ITrigger>(config.policy, new tobid.rest.json.TriggerConvert());
+                this.m_trigger = trigger;
+
                 if ("V1".Equals(trigger.category)) {//TRIGGER V1
                     Trigger instance = (Trigger)trigger;
                     int idx = instance.deltaPrice / 100 - 1;
@@ -1529,6 +1534,14 @@ namespace Helper
                 String fireSubmit1 = this.dateTimePickerCustom3Submit.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 String fireCancel = DateTime.Now.ToString("yyyy-MM-dd") + " " + this.textBoxCustom3Check.Text;
 
+                if (this.m_trigger == null || "V3".Equals(this.m_trigger.category)) {
+                    
+                    String epKeepAlive = this.EndPoint + "/rest/service/command/config/common/v3";
+                    RestClient restKeepAlive = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
+                    String rtn = restKeepAlive.MakeRequest();
+                    V3Common v3 = Newtonsoft.Json.JsonConvert.DeserializeObject<V3Common>(rtn);
+                    V3Common.commonConf = v3;
+                }
                 RandomScope random = new RandomScope(V3Common.commonConf, 500);
 
                 List<ITask> tasks = new List<ITask>();
@@ -1833,7 +1846,6 @@ namespace Helper
 
                 Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
                 this.receiveLogin(config);
-                
             }
 
             //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
@@ -1970,5 +1982,6 @@ namespace Helper
             SystemTimeUtil.addMilliSecond(-500);
         }
         #endregion
+
     }
 }
