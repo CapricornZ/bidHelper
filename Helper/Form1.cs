@@ -274,15 +274,14 @@ namespace Helper
                     String endPoint = ConfigurationManager.AppSettings["CHECKUPDATE"];
                     String ver = new HttpUtil().getAsPlain(endPoint + "/Release.ver");
                     remoteVer = new Version(ver);
+
+                    if (remoteVer.CompareTo(localVer) > 0)
+                        MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 }
                 catch (Exception ex) {
                     System.Console.WriteLine(ex);
                     MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                    return;
                 }
-
-                if (remoteVer.CompareTo(localVer) > 0)
-                    MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             }
 
             //关闭KK录像机
@@ -296,11 +295,6 @@ namespace Helper
             this.triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
             this.triggerLoadResource = ConfigurationManager.AppSettings["triggerLoadResource"];
             this.wifiRefreshBefore = ConfigurationManager.AppSettings["forbiddenWifiRefresh"];
-
-            //键盘HOOK
-            kh = new KeyboardHook();
-            kh.SetHook();
-            kh.OnKeyDownEvent += kh_OnKeyDownEvent;
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
@@ -391,6 +385,13 @@ namespace Helper
             this.floatingForm.StartPosition = FormStartPosition.Manual;
             this.floatingForm.Location = this.TimePos;
             this.floatingForm.Show();
+
+            //键盘HOOK
+            kh = new KeyboardHook();
+            kh.SetHook();
+            kh.OnKeyDownEvent += kh_OnKeyDownEvent;
+
+            this.timer1.Enabled = true;
         }
 
         #region monitorWIFI
@@ -1005,18 +1006,18 @@ namespace Helper
                 String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
                 logger.Debug(strTitle);
 
-                if ("系统提示".Equals(strTitle)) {
+                //if ("系统提示".Equals(strTitle)) {
 
                     logger.Info("proces ESC in [系统提示]");
                     ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                }
-                else if ("投标拍卖".Equals(strTitle)) {
+                //}
+                //else if ("投标拍卖".Equals(strTitle)) {
 
                     logger.Info("proces ESC in [投标拍卖]");
                     ScreenUtil.SetCursorPos(x + bid.submit.buttons[1].x, y + bid.submit.buttons[1].y);//取消按钮
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                }
+                //}
             });
             processEsc.Start();
         }

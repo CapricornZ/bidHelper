@@ -91,6 +91,7 @@
     <Compile Include="util\ImageTool.cs" />
     <Compile Include="util\INIUtil.cs" />
     <Compile Include="util\OrcUtil.cs" />
+    <Compile Include="util\OSInfo.cs" />
     <Compile Include="util\RandomScope.cs" />
     <Compile Include="util\ResourceUtil.cs" />
     <Compile Include="util\RestClient.cs" />

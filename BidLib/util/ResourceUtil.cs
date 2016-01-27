@@ -52,8 +52,9 @@ namespace tobid.util
             Stream stream = null;
             String urlResource = null;
             try {
+                string evn = tobid.util.Util.ieVersion() + "," + Util.osVersion();
                 logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?fromHost={1}", epKeepAlive, hostName));
-                String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}", hostName));
+                String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}&env={1}", hostName, evn));
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
             } catch (Exception ex) {
                 logger.ErrorFormat("获取全局配置异常:{0}", ex);
@@ -131,7 +132,7 @@ namespace tobid.util
                 rtn.m_captcha = OrcUtil.getInstance(global.captcha, dictCaptcha);
             else
                 rtn.m_captcha = DynamicOrcUtil.getInstance(global.captcha, dictCaptcha);
-            rtn.m_title = DynamicOrcUtil.getInstance(global.title, dictTitle);
+            //rtn.m_title = DynamicOrcUtil.getInstance(global.title, dictTitle);
             rtn.m_price = OrcUtil.getInstance(global.price, dictPrice);
             rtn.m_priceSM = OrcUtil.getInstance(global.priceSM, dictPriceSM);
             rtn.m_time = OrcUtil.getInstance(global.time, dictTime);
