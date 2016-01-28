@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace tobid.rest.position
-{
-    public class Position
-    {
-        public Position(int x, int y)
-        {
+namespace tobid.rest.position {
+
+    public class Position {
+
+        public Position(int x, int y) {
             this.x = x;
             this.y = y;
         }
         public int x { get; set; }
         public int y { get; set; }
+    }
+
+    public class Rect {
+
+        public int x { get; set; }
+        public int y { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
     }
 
     /// <summary>
@@ -28,16 +35,16 @@ namespace tobid.rest.position
     /// <summary>
     /// 出价的坐标
     /// </summary>
-    public class GivePriceStep2
-    {
+    public class GivePriceStep2 {
+
         public Position price { get; set; }
         public Position inputBox { get; set; }
         public Position button { get; set; }
         public Delta delta { get; set; }
     }
 
-    public class Delta
-    {
+    public class Delta {
+
         public Position inputBox { get; set; }
         public Position button { get; set; }
     }

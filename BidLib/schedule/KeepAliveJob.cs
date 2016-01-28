@@ -77,7 +77,7 @@ namespace tobid.scheduler.jobs
 
             logger.Debug("KeepAliveJob.Execute()");
             string hostName = System.Net.Dns.GetHostName();
-            string filter = tobid.util.Util.ieVersion() + "," + Util.osVersion();
+            string filter = tobid.util.Util.ieVersion();
 
             String epKeepAlive = this.EndPoint + "/rest/service/command/keepAlive";
             RestClient restKeepAlive = new RestClient(endpoint: epKeepAlive, method: HttpVerb.POST);

@@ -52,8 +52,8 @@ namespace tobid.util
             Stream stream = null;
             String urlResource = null;
             try {
-                string evn = tobid.util.Util.ieVersion() + "," + Util.osVersion();
-                logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?fromHost={1}", epKeepAlive, hostName));
+                string evn = tobid.util.Util.ieVersion();
+                logger.DebugFormat("获取全局配置...【{0}】", String.Format("{0}?fromHost={1}&env={1}", epKeepAlive, hostName, evn));
                 String jsonResponse = restGlobalConfig.MakeRequest(String.Format("?fromHost={0}&env={1}", hostName, evn));
                 global = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalConfig>(jsonResponse, new ConfigConvert());
             } catch (Exception ex) {

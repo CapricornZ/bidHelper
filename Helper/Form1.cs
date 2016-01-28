@@ -631,18 +631,19 @@ namespace Helper
 
             if (config != null) {
 
-                this.groupBox1.Text = String.Format("标书:{0}", config.pname);
+                this.groupBox1.Text = String.Format("投标人:{0}", config.pname);
                 this.groupBox1.Enabled = true;
                 this.textBoxBNO.Text = config.no;
                 this.textBoxBPass.Text = config.passwd;
                 this.textBoxPID.Text = config.pid;
 
-                logger.Info("标书 : " + config.no);
-                logger.Info("姓名 : " + config.pname);
-                logger.Info("身份证 : " + config.pid);
+                logger.Info("标  书: " + config.no);
+                logger.Info("密  码: " + config.passwd);
+                logger.Info("姓  名: " + config.pname);
+                logger.Info("身份证: " + config.pid);
             } else {
 
-                this.groupBox1.Text = "标书:NULL";
+                this.groupBox1.Text = "投标人:NULL";
                 this.groupBox1.Enabled = false;
                 this.textBoxBNO.Text = "";
                 this.textBoxBPass.Text = "";
@@ -726,19 +727,20 @@ namespace Helper
             Config config = client.config;
             if ( config != null) {
 
-                this.groupBox1.Text = String.Format("标书:{0}", config.pname);
+                this.groupBox1.Text = String.Format("投标人:{0}", config.pname);
                 this.groupBox1.Enabled = true;
                 this.textBoxBNO.Text = config.no;
                 this.textBoxBPass.Text = config.passwd;
                 this.textBoxPID.Text = config.pid;
 
-                logger.Info("标书 : " + config.no);
-                logger.Info("姓名 : " + config.pname);
-                logger.Info("身份证 : " + config.pid);
+                logger.Info("标  书: " + config.no);
+                logger.Info("密  码: " + config.passwd);
+                logger.Info("姓  名: " + config.pname);
+                logger.Info("身份证: " + config.pid);
 
             } else {
 
-                this.groupBox1.Text = "标书:NULL";
+                this.groupBox1.Text = "投标人:NULL";
                 this.groupBox1.Enabled = false;
                 this.textBoxBNO.Text = "";
                 this.textBoxBPass.Text = "";
