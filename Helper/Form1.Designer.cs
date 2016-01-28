@@ -82,6 +82,7 @@
             this.buttonURL = new System.Windows.Forms.Button();
             this.buttonLogin = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonMyProfile = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -672,12 +673,22 @@
             this.groupBox1.Controls.Add(this.textBoxBPass);
             this.groupBox1.Controls.Add(this.textBoxBNO);
             this.groupBox1.Enabled = false;
-            this.groupBox1.Location = new System.Drawing.Point(8, 131);
+            this.groupBox1.Location = new System.Drawing.Point(8, 119);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(197, 102);
+            this.groupBox1.Size = new System.Drawing.Size(197, 92);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "标书信息";
+            // 
+            // buttonMyProfile
+            // 
+            this.buttonMyProfile.Location = new System.Drawing.Point(116, 217);
+            this.buttonMyProfile.Name = "buttonMyProfile";
+            this.buttonMyProfile.Size = new System.Drawing.Size(75, 23);
+            this.buttonMyProfile.TabIndex = 7;
+            this.buttonMyProfile.Text = "我的标书";
+            this.buttonMyProfile.UseVisualStyleBackColor = true;
+            this.buttonMyProfile.Click += new System.EventHandler(this.buttonMyProfile_Click);
             // 
             // label14
             // 
@@ -1137,7 +1148,7 @@
             this.groupBoxInternetTime.Controls.Add(this.buttonMinus);
             this.groupBoxInternetTime.Controls.Add(this.buttonAdd);
             this.groupBoxInternetTime.Controls.Add(this.buttonSync);
-            this.groupBoxInternetTime.Location = new System.Drawing.Point(8, 246);
+            this.groupBoxInternetTime.Location = new System.Drawing.Point(8, 247);
             this.groupBoxInternetTime.Name = "groupBoxInternetTime";
             this.groupBoxInternetTime.Size = new System.Drawing.Size(197, 45);
             this.groupBoxInternetTime.TabIndex = 18;
@@ -1179,6 +1190,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(499, 331);
+            this.Controls.Add(this.buttonMyProfile);
             this.Controls.Add(this.groupBoxInternetTime);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelIE);
@@ -1329,6 +1341,7 @@
         private System.Windows.Forms.DateTimePicker dateTimePickerCustom3Submit;
         private System.Windows.Forms.TextBox textBoxCustom3Check;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Button buttonMyProfile;
     }
 }
 

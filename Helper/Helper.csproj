@@ -94,6 +94,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaptchaDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaptchaDlg.Designer.cs">
+      <DependentUpon>CaptchaDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="EntrySelForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +128,9 @@
     </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="WindowHelper.cs" />
+    <EmbeddedResource Include="CaptchaDlg.resx">
+      <DependentUpon>CaptchaDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EntrySelForm.resx">
       <DependentUpon>EntrySelForm.cs</DependentUpon>
     </EmbeddedResource>

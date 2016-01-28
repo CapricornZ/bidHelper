@@ -375,6 +375,6 @@ namespace Helper
             this.pictureBox1.Image = tmpbmp;
             g.Dispose();
             this.pictureBox1.Update();
-        }        
+        }
     }
 }

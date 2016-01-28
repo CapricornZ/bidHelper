@@ -106,6 +106,7 @@ namespace Helper
         private System.Threading.Thread customThread;
         private System.Threading.Thread wifiMonitorThread;
 
+        private CaptchaDlg captchaDialog;
         private Step2ConfigDialog step2Dialog;
         private FloatingForm floatingForm;
         private EntrySelForm entryForm;
@@ -144,24 +145,24 @@ namespace Helper
             if (null != this.wifiMonitorThread)
                 this.wifiMonitorThread.Abort();
 
-            Hotkey.UnregisterHotKey(this.Handle, 103);
-            Hotkey.UnregisterHotKey(this.Handle, 104);
-            Hotkey.UnregisterHotKey(this.Handle, 105);
-            Hotkey.UnregisterHotKey(this.Handle, 106);
-            Hotkey.UnregisterHotKey(this.Handle, 107);
-            Hotkey.UnregisterHotKey(this.Handle, 108);
-            Hotkey.UnregisterHotKey(this.Handle, 109);
+            //Hotkey.UnregisterHotKey(this.Handle, 103);
+            //Hotkey.UnregisterHotKey(this.Handle, 104);
+            //Hotkey.UnregisterHotKey(this.Handle, 105);
+            //Hotkey.UnregisterHotKey(this.Handle, 106);
+            //Hotkey.UnregisterHotKey(this.Handle, 107);
+            //Hotkey.UnregisterHotKey(this.Handle, 108);
+            //Hotkey.UnregisterHotKey(this.Handle, 109);
 
-            Hotkey.UnregisterHotKey(this.Handle, 201);
-            Hotkey.UnregisterHotKey(this.Handle, 202);
-            Hotkey.UnregisterHotKey(this.Handle, 203);
-            Hotkey.UnregisterHotKey(this.Handle, 204);
+            //Hotkey.UnregisterHotKey(this.Handle, 201);
+            //Hotkey.UnregisterHotKey(this.Handle, 202);
+            //Hotkey.UnregisterHotKey(this.Handle, 203);
+            //Hotkey.UnregisterHotKey(this.Handle, 204);
 
-            Hotkey.UnregisterHotKey(this.Handle, 221);
-            Hotkey.UnregisterHotKey(this.Handle, 222);
-            Hotkey.UnregisterHotKey(this.Handle, 223);
-            Hotkey.UnregisterHotKey(this.Handle, 224);
-            Hotkey.UnregisterHotKey(this.Handle, 225);
+            //Hotkey.UnregisterHotKey(this.Handle, 221);
+            //Hotkey.UnregisterHotKey(this.Handle, 222);
+            //Hotkey.UnregisterHotKey(this.Handle, 223);
+            //Hotkey.UnregisterHotKey(this.Handle, 224);
+            //Hotkey.UnregisterHotKey(this.Handle, 225);
 
             if(null != kh)
                 kh.UnHook();
@@ -309,6 +310,7 @@ namespace Helper
             this.dateTimePickerCustom3Submit.Value = DateTime.Now;
             this.dateTimePickerCustom3Price.Value = DateTime.Now;
 
+            this.captchaDialog = new CaptchaDlg(this);
             this.step2Dialog = new Step2ConfigDialog(this);
             this.floatingForm = new FloatingForm();
             this.entryForm = new EntrySelForm();
@@ -385,6 +387,8 @@ namespace Helper
             this.floatingForm.StartPosition = FormStartPosition.Manual;
             this.floatingForm.Location = this.TimePos;
             this.floatingForm.Show();
+
+            this.captchaDialog.Show();
 
             //键盘HOOK
             kh = new KeyboardHook();
@@ -844,11 +848,11 @@ namespace Helper
                 if (now.Millisecond > 500) {//避免触发两次
                     logger.InfoFormat("@{0} auto SET Custom Policy triggered", current);
                     //
-                    if (this.tabControl1.SelectedIndex == 0) {//策略V1
+                    if (this.tabControl1.SelectedIndex == 1) {//策略V1
                         logger.Info("自定义V1");
                         this.updateCustomPolicyV1();
                     }
-                    if (this.tabControl1.SelectedIndex == 1) {//策略V2
+                    if (this.tabControl1.SelectedIndex == 2) {//策略V2
                         logger.Info("自定义V2");
                         this.updateCustomPolicyV2();
                     }
@@ -1485,38 +1489,6 @@ namespace Helper
             if (dr == DialogResult.OK) {
                 this.updateCustomPolicyV2();
             }
-            /*
-            if (dr == DialogResult.OK)
-            {
-                Step2Operation bidOps = SubmitPriceStep2Job.bidOperation;
-                bidOps.updateTime = DateTime.Now;
-                bidOps.startTime = this.dateTimePicker2.Value;
-                bidOps.expireTime = bidOps.startTime.AddHours(1);
-
-                this.textBox1.Text = this.dateTimePicker2.Value.ToString("MM/dd HH:mm:ss");
-                int delay = Int32.Parse(this.textBoxDelay.Text);
-
-                {
-                    object obj = this.comboBoxDelta.SelectedItem;
-                    if (obj == null)
-                    {
-                        MessageBox.Show("请选择价格");
-                        this.comboBoxDelta.Focus();
-                        return;
-                    }
-                    this.textBox2.Text = this.comboBoxDelta.Text;
-                    bidOps.price = Int32.Parse(this.comboBoxDelta.Text);
-                    SubmitPriceV2Job.setConfig(bidOps, delay * 1000);
-                }
-
-                if (null != this.submitPriceV2Thread)
-                    this.submitPriceV2Thread.Abort();
-                System.Threading.ThreadStart submitPriceThreadStart = new System.Threading.ThreadStart(this.m_schedulerSubmitStepV2.Start);
-                this.submitPriceV2Thread = new System.Threading.Thread(submitPriceThreadStart);
-                this.submitPriceV2Thread.Name = "submitPriceV2Thread";
-                this.submitPriceV2Thread.Start();
-            }
-            */
         }
 
         private void btnUpdateV3_Click(object sender, EventArgs e) {
@@ -1832,20 +1804,8 @@ namespace Helper
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
-            //LoginJob job = new LoginJob(m_orcLogin);
-            //job.Execute();
-
-            String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入标书号", "标书登陆", "");
-            if (!String.IsNullOrEmpty(authCode)) {
-
-                String epKeepAlive = this.EndPoint + "/rest/service/command/config/" + authCode;
-                RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
-                String rtn = restGetConfig.MakeRequest();
-                System.Console.WriteLine(rtn);
-
-                Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
-                this.receiveLogin(config);
-            }
+            LoginJob job = new LoginJob(m_orcLogin);
+            job.Execute();
 
             //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
 
@@ -1862,6 +1822,21 @@ namespace Helper
             //byte[] content = new ScreenUtil().screenCaptureAsByte(x+214, y+203, 6, 5);
             //File.WriteAllBytes(@"e:\point.bmp", content);
             //H:143-184
+        }
+
+        private void buttonMyProfile_Click(object sender, EventArgs e) {
+
+            String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入标书号", "标书登陆", "");
+            if (!String.IsNullOrEmpty(authCode)) {
+
+                String epKeepAlive = this.EndPoint + "/rest/service/command/config/" + authCode;
+                RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
+                String rtn = restGetConfig.MakeRequest();
+                System.Console.WriteLine(rtn);
+
+                Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
+                this.receiveLogin(config);
+            }
         }
         #endregion
 
