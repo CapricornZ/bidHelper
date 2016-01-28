@@ -17,6 +17,13 @@ namespace tobid.rest.position {
 
     public class Rect {
 
+        public Rect(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
         public int x { get; set; }
         public int y { get; set; }
         public int width { get; set; }
@@ -37,7 +44,8 @@ namespace tobid.rest.position {
     /// </summary>
     public class GivePriceStep2 {
 
-        public Position price { get; set; }
+        //public Position price { get; set; }
+        public Rect price { get; set; }
         public Position inputBox { get; set; }
         public Position button { get; set; }
         public Delta delta { get; set; }
@@ -54,7 +62,8 @@ namespace tobid.rest.position {
     /// </summary>
     public class SubmitPrice
     {
-        public Position[] captcha { get; set; }
+        //public Position[] captcha { get; set; }
+        public tobid.rest.position.Rect[] captcha { get; set; }
         public Position inputBox { get; set; }
         public Position[] buttons { get; set; }
     }

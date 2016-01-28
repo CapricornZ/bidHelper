@@ -39,7 +39,7 @@ namespace tobid.scheduler.jobs.action {
             if (this.repository.deltaPriceOnUI && givePrice.delta != null){
 
                 logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
-                byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
+                byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, givePrice.price.width, givePrice.price.height);
 
                 logger.Info("\tBEGIN make delta PRICE blank...");
                 ScreenUtil.SetCursorPos(x + givePrice.delta.inputBox.x, y + givePrice.delta.inputBox.y);
@@ -59,10 +59,11 @@ namespace tobid.scheduler.jobs.action {
                 ScreenUtil.SetCursorPos(x + givePrice.delta.button.x, y + givePrice.delta.button.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 logger.Info("\tEND   click delta PRICE button");
+
             } else {
 
                 logger.DebugFormat("CAPTURE PRICE({0}, {1})", x + givePrice.price.x, y + givePrice.price.y);
-                byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, 52, 18);
+                byte[] content = new ScreenUtil().screenCaptureAsByte(x + givePrice.price.x, y + givePrice.price.y, givePrice.price.width, givePrice.price.height);
 
                 logger.Info("\tBEGIN make PRICE blank...");
                 logger.DebugFormat("\t\tINPUT BOX({0}, {1})", x + givePrice.inputBox.x, y + givePrice.inputBox.y);
@@ -89,7 +90,6 @@ namespace tobid.scheduler.jobs.action {
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
             logger.DebugFormat("\t\tBUTTON[出价]({0}, {1})", x + givePrice.button.x, y + givePrice.button.y);
-            System.Threading.Thread.Sleep(100);
             ScreenUtil.SetCursorPos(x + givePrice.button.x, y + givePrice.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");
@@ -106,9 +106,9 @@ namespace tobid.scheduler.jobs.action {
                 try {
                     for (int i = 0; i < 8; i++) {
                         String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
-                        byte[] captcha = screen.screenCaptureAsByte(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, 128, 28);
+                        byte[] captcha = screen.screenCaptureAsByte(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, submitPrice.captcha[0].width, submitPrice.captcha[0].height);
                         System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-{0}.bmp", fileName), captcha);
-                        byte[] captchaTip = screen.screenCaptureAsByte(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y, 112, 16);
+                        byte[] captchaTip = screen.screenCaptureAsByte(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y, submitPrice.captcha[1].width, submitPrice.captcha[1].height);
                         System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-TIP-{0}.bmp", fileName), captchaTip);
                         System.Threading.Thread.Sleep(500);
                     }

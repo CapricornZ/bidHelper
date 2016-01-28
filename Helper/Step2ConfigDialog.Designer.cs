@@ -239,14 +239,14 @@
             this.groupBoxCaptcha.Controls.Add(this.btnCaptcha);
             this.groupBoxCaptcha.Location = new System.Drawing.Point(323, 12);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
-            this.groupBoxCaptcha.Size = new System.Drawing.Size(224, 141);
+            this.groupBoxCaptcha.Size = new System.Drawing.Size(270, 141);
             this.groupBoxCaptcha.TabIndex = 1;
             this.groupBoxCaptcha.TabStop = false;
             this.groupBoxCaptcha.Text = "校验码";
             // 
             // btnConfirm
             // 
-            this.btnConfirm.Location = new System.Drawing.Point(169, 102);
+            this.btnConfirm.Location = new System.Drawing.Point(199, 102);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(49, 23);
             this.btnConfirm.TabIndex = 23;
@@ -258,28 +258,28 @@
             // 
             this.textBox7.Location = new System.Drawing.Point(92, 104);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(73, 20);
+            this.textBox7.Size = new System.Drawing.Size(101, 20);
             this.textBox7.TabIndex = 14;
             // 
             // textBox6
             // 
             this.textBox6.Location = new System.Drawing.Point(92, 77);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(73, 20);
+            this.textBox6.Size = new System.Drawing.Size(101, 20);
             this.textBox6.TabIndex = 13;
             // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(92, 50);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(73, 20);
+            this.textBox5.Size = new System.Drawing.Size(101, 20);
             this.textBox5.TabIndex = 12;
             // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(92, 23);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(73, 20);
+            this.textBox4.Size = new System.Drawing.Size(101, 20);
             this.textBox4.TabIndex = 11;
             // 
             // label7
@@ -326,7 +326,7 @@
             // 
             // btnTips
             // 
-            this.btnTips.Location = new System.Drawing.Point(169, 49);
+            this.btnTips.Location = new System.Drawing.Point(199, 49);
             this.btnTips.Name = "btnTips";
             this.btnTips.Size = new System.Drawing.Size(49, 23);
             this.btnTips.TabIndex = 22;
@@ -336,7 +336,7 @@
             // 
             // btnCaptcha
             // 
-            this.btnCaptcha.Location = new System.Drawing.Point(169, 22);
+            this.btnCaptcha.Location = new System.Drawing.Point(199, 22);
             this.btnCaptcha.Name = "btnCaptcha";
             this.btnCaptcha.Size = new System.Drawing.Size(49, 23);
             this.btnCaptcha.TabIndex = 21;
@@ -610,7 +610,7 @@
             this.groupBox1.Controls.Add(this.pictureSub4);
             this.groupBox1.Controls.Add(this.pictureSub5);
             this.groupBox1.Controls.Add(this.pictureSub6);
-            this.groupBox1.Location = new System.Drawing.Point(260, 159);
+            this.groupBox1.Location = new System.Drawing.Point(302, 159);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(291, 124);
             this.groupBox1.TabIndex = 17;
@@ -648,7 +648,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 319);
+            this.ClientSize = new System.Drawing.Size(607, 319);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);

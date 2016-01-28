@@ -892,8 +892,8 @@ namespace Helper
                     int y = origin.Y;
 
                     logger.WarnFormat("BEGIN givePRICE(delta : {0})", delta);
-                    if(this.deltaPriceOnUI && bid.give.delta != null)
-                    {
+                    if(this.deltaPriceOnUI && bid.give.delta != null) {
+
                         logger.Info("\tBEGIN make delta PRICE blank...");
                         ScreenUtil.SetCursorPos(x + bid.give.delta.inputBox.x, y + bid.give.delta.inputBox.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -909,10 +909,8 @@ namespace Helper
                         ScreenUtil.SetCursorPos(x + bid.give.delta.button.x, y + bid.give.delta.button.y);
                         ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                         logger.Info("\tEND   click delta PRICE button");
-                        
-                    }
-                    else
-                    {
+                    } else {
+
                         //INPUT BOX
                         logger.Info("\tBEGIN click INPUTBOX");
                         ScreenUtil.SetCursorPos(x + bid.give.inputBox.x, y + bid.give.inputBox.y);
@@ -920,11 +918,8 @@ namespace Helper
                         System.Threading.Thread.Sleep(50);
                         logger.Info("\tEND   click INPUTBOX.");
 
-                        //SendKeys.SendWait("{BACKSPACE 5}{DEL 5}");
-                        //System.Threading.Thread.Sleep(50);
-
                         logger.Info("\tBEGIN identify PRICE...");
-                        byte[] content = new ScreenUtil().screenCaptureAsByte(x + bid.give.price.x, y + bid.give.price.y, 52, 18);
+                        byte[] content = new ScreenUtil().screenCaptureAsByte(x + bid.give.price.x, y + bid.give.price.y, bid.give.price.width, bid.give.price.height);
                         String txtPrice = this.m_orcPrice.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
                         int price = Int32.Parse(txtPrice);
                         price += delta;
@@ -1003,10 +998,10 @@ namespace Helper
                 int x = origin.X;
                 int y = origin.Y;
 
-                byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
-                Bitmap bitTitle = new Bitmap(new MemoryStream(title));
-                String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
-                logger.Debug(strTitle);
+                //byte[] title = new ScreenUtil().screenCaptureAsByte(x + bid.title.x, y + bid.title.y, 170, 50);
+                //Bitmap bitTitle = new Bitmap(new MemoryStream(title));
+                //String strTitle = this.m_orcTitle.IdentifyStringFromPic(bitTitle);
+                //logger.Debug(strTitle);
 
                 //if ("系统提示".Equals(strTitle)) {
 
@@ -1382,6 +1377,7 @@ namespace Helper
             this.customThread.Name = "customV2";
             this.customThread.Start();
         }
+
         void updateCustomPolicyV1() {
 
             this.textBox1.Text = this.dateTimePickerCustomPrice.Value.ToString("MM/dd HH:mm:ss");
@@ -1959,9 +1955,6 @@ namespace Helper
         #region 北京时间
         private void buttonSync_Click(object sender, EventArgs e) {
             
-            //logger.Debug("internet time sync");
-            //SystemTimeUtil.SetInternetTime();
-
             logger.Debug("bid time sync");
             BidStep2 bidStep = SubmitPriceStep2Job.getPosition();
             Point origin = tobid.util.IEUtil.findOrigin();

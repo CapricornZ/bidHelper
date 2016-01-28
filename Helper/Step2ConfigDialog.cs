@@ -37,49 +37,61 @@ namespace Helper
             };
         }
 
-        private void object2InputBox(System.Windows.Forms.TextBox textBox, Position pos)
-        {
+        private void object2InputBox(TextBox textBox, tobid.rest.position.Rect rect) {
+
+            if (rect != null)
+                textBox.Text = rect.x + "," + rect.y + "," + rect.width + "," + rect.height;
+            else
+                textBox.Text = "0,0,0,0";
+        }
+
+        private tobid.rest.position.Rect inputBox2Rect(TextBox textBox) {
+
+            string[] pos = textBox.Text.Split(new char[] { ',' });
+            return new tobid.rest.position.Rect(Int16.Parse(pos[0]), Int16.Parse(pos[1]), Int16.Parse(pos[2]), Int16.Parse(pos[3]));
+        }
+
+        private void object2InputBox(System.Windows.Forms.TextBox textBox, Position pos) {
+
             if (pos != null)
                 textBox.Text = pos.x + "," + pos.y;
             else
                 textBox.Text = "0,0";
         }
 
-        private Position inputBox2Object(System.Windows.Forms.TextBox textBox)
-        {
+        private Position inputBox2Position(System.Windows.Forms.TextBox textBox) {
+
             string[] pos = textBox.Text.Split(new char[] { ',' });
             return new Position(Int16.Parse(pos[0]), Int16.Parse(pos[1]));
         }
 
-        private Position inputBox2Object(System.Windows.Forms.TextBox textBox, int offsetX, int offsetY)
-        {
-            Position pos = this.inputBox2Object(textBox);
+        private Position inputBox2Object(System.Windows.Forms.TextBox textBox, int offsetX, int offsetY) {
+
+            Position pos = this.inputBox2Position(textBox);
             pos.x += offsetX;
             pos.y += offsetY;
             return pos;
         }
 
-        public BidStep2 BidStep2
-        {
+        public BidStep2 BidStep2 {
             get;
             set;
         }
 
-        private void Step2ConfigDialog_Load(object sender, EventArgs e)
-        {
+        private void Step2ConfigDialog_Load(object sender, EventArgs e) {
+
             BidStep2 bid = SubmitPriceStep2Job.getPosition();
             this.checkboxDelta.Checked = this.m_repository.deltaPriceOnUI;
             if (bid != null) {
                 this.object2InputBox(this.textBox1, bid.give.price);
                 this.object2InputBox(this.textBox2, bid.give.inputBox);
                 this.object2InputBox(this.textBox3, bid.give.button);
-                if (bid.give.delta != null)
-                {
+                if (bid.give.delta != null) {
+
                     this.object2InputBox(this.textDeltaInput, bid.give.delta.inputBox);
                     this.object2InputBox(this.textDeltaButton, bid.give.delta.button);
-                }
-                else
-                {
+                } else {
+
                     this.object2InputBox(this.textDeltaButton, new Position(0, 0));
                     this.object2InputBox(this.textDeltaInput, new Position(0, 0));
                 }
@@ -119,25 +131,30 @@ namespace Helper
         private void buttonOK_Click(object sender, EventArgs e) {
 
             Delta delta = new Delta();
-            delta.inputBox = this.inputBox2Object(this.textDeltaInput);
-            delta.button = this.inputBox2Object(this.textDeltaButton);
+            delta.inputBox = this.inputBox2Position(this.textDeltaInput);
+            delta.button = this.inputBox2Position(this.textDeltaButton);
 
             GivePriceStep2 givePrice = new GivePriceStep2();
-            givePrice.price = this.inputBox2Object(this.textBox1);//价格
-            givePrice.inputBox = this.inputBox2Object(this.textBox2);//输入价格
-            givePrice.button = this.inputBox2Object(this.textBox3);//出价按钮
+            //givePrice.price = this.inputBox2Object(this.textBox1);//价格
+            givePrice.price = this.inputBox2Rect(this.textBox1);
+            givePrice.inputBox = this.inputBox2Position(this.textBox2);//输入价格
+            givePrice.button = this.inputBox2Position(this.textBox3);//出价按钮
             givePrice.delta = delta;//
 
             SubmitPrice submit = new SubmitPrice();
-            submit.captcha = new Position[]{
-                this.inputBox2Object(this.textBox4),//校验码
-                this.inputBox2Object(this.textBox5)//校验码提示
+            //submit.captcha = new Position[]{
+            //    this.inputBox2Position(this.textBox4),//校验码
+            //    this.inputBox2Position(this.textBox5)//校验码提示
+            //};
+            submit.captcha = new tobid.rest.position.Rect[]{
+                this.inputBox2Rect(this.textBox4),//校验码
+                this.inputBox2Rect(this.textBox5)//校验码提示
             };
-            submit.inputBox = this.inputBox2Object(this.textBox6);//输入校验码
+            submit.inputBox = this.inputBox2Position(this.textBox6);//输入校验码
 
             string[] posBtnOK = this.textBox7.Text.Split(new char[] { ',' });
             submit.buttons = new Position[]{
-                this.inputBox2Object(this.textBox7),//确定按钮
+                this.inputBox2Position(this.textBox7),//确定按钮
                 this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
 
@@ -145,11 +162,11 @@ namespace Helper
             bid.give = givePrice;
             bid.submit = submit;
             //bid.Origin = this.inputBox2Object(this.textBoxOrigin);
-            bid.title = this.inputBox2Object(this.textBoxTitle);
-            bid.okButton = this.inputBox2Object(this.textBoxTitleOk);
-            bid.price = this.inputBox2Object(this.textBoxPriceSM);
-            bid.time = this.inputBox2Object(this.textBoxTime);
-            bid.wifi = this.inputBox2Object(this.textBoxWifi);
+            bid.title = this.inputBox2Position(this.textBoxTitle);
+            bid.okButton = this.inputBox2Position(this.textBoxTitleOk);
+            bid.price = this.inputBox2Position(this.textBoxPriceSM);
+            bid.time = this.inputBox2Position(this.textBoxTime);
+            bid.wifi = this.inputBox2Position(this.textBoxWifi);
             SubmitPriceStep2Job.setPosition(bid);
 
             this.BidStep2 = bid;
@@ -170,12 +187,13 @@ namespace Helper
         private void btnPrice_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBox1);
+            //Position pos = this.inputBox2Position(this.textBox1);
+            tobid.rest.position.Rect rect = this.inputBox2Rect(this.textBox1);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
-            
-            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 100, 24);
+
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rect.x, origin.Y + rect.y, rect.width, rect.height);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             String txtPrice = this.m_repository.orcPrice.IdentifyStringFromPic(new Bitmap(this.pictureBox1.Image));
             for (int i = 0; i < this.m_repository.orcPrice.SubImgs.Count; i++)
@@ -183,10 +201,10 @@ namespace Helper
             this.labelResult.Text = txtPrice;
         }
 
-        private void btnPriceSM_Click(object sender, EventArgs e)
-        {
+        private void btnPriceSM_Click(object sender, EventArgs e) {
+
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBoxPriceSM);
+            Position pos = this.inputBox2Position(this.textBoxPriceSM);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
@@ -202,16 +220,15 @@ namespace Helper
         private void btnCaptcha_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBox4);
+            tobid.rest.position.Rect rect = this.inputBox2Rect(this.textBox4);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
 
-            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 128, 28);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rect.x, origin.Y + rect.y, rect.width, rect.height);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
             File.WriteAllBytes("CAPTCHA.BMP", content);
             String strCaptcha = this.m_repository.orcCaptcha.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
-            //String[] array = Newtonsoft.Json.JsonConvert.DeserializeObject<String[]>(strCaptcha);
 
             for (int i = 0; i < 6; i++)
                 this.m_pictureSubs[i].Image = this.m_repository.orcCaptcha.SubImgs[i];
@@ -221,12 +238,12 @@ namespace Helper
         private void btnTips_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBox5);
+            tobid.rest.position.Rect rect = this.inputBox2Rect(this.textBox5);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
 
-            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
+            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rect.x, origin.Y + rect.y, rect.width, rect.height);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
             this.labelTips.Text = this.m_repository.orcCaptchaTipsUtil.getActive("一二三四五六", new Bitmap(new System.IO.MemoryStream(content)));
@@ -237,7 +254,7 @@ namespace Helper
         private void btnConfirm_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBox7);
+            Position pos = this.inputBox2Position(this.textBox7);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
@@ -252,7 +269,7 @@ namespace Helper
         private void buttonTime_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBoxTime);
+            Position pos = this.inputBox2Position(this.textBoxTime);
 
             foreach (PictureBox picBox in this.m_pictureSubs)
                 picBox.Image = null;
@@ -270,7 +287,7 @@ namespace Helper
         private void btnWifi_Click(object sender, EventArgs e) {
 
             Point origin = tobid.util.IEUtil.findOrigin();
-            Position pos = this.inputBox2Object(this.textBoxWifi);
+            Position pos = this.inputBox2Position(this.textBoxWifi);
 
             ScreenUtil screenUtil = new ScreenUtil();
             int x = origin.X + pos.x;
@@ -297,7 +314,7 @@ namespace Helper
             Point origin = tobid.util.IEUtil.findOrigin();
             int x = origin.X;
             int y = origin.Y;
-            Position pos = this.inputBox2Object(this.textBoxTitle);
+            Position pos = this.inputBox2Position(this.textBoxTitle);
 
             byte[] title = new ScreenUtil().screenCaptureAsByte(x + pos.x, y + pos.y, 170, 50);
             Bitmap bitTitle = new Bitmap(new MemoryStream(title));
@@ -314,7 +331,7 @@ namespace Helper
 
         private void btnGoto_Click(object sender, EventArgs e)
         {
-            Position pos = this.inputBox2Object(this.textBox8);
+            Position pos = this.inputBox2Position(this.textBox8);
             Point origin = tobid.util.IEUtil.findOrigin();
             System.Console.WriteLine(String.Format("origin : {{ x:{0}, y:{1} }}", origin.X, origin.Y));
 
