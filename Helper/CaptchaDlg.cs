@@ -57,22 +57,27 @@ namespace Helper {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            Point origin = tobid.util.IEUtil.findOrigin();
-            tobid.rest.position.Rect rectCaptcha = this.repository.bidStep2.submit.captcha[0];
-            byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rectCaptcha.x, origin.Y + rectCaptcha.y, rectCaptcha.width, rectCaptcha.height);
-            
-            Bitmap bmp = new Bitmap(new MemoryStream(content));
-            Bitmap tmpbmp = new Bitmap(rectCaptcha.width * 2, rectCaptcha.height * 2);
+            try {
+                Point origin = tobid.util.IEUtil.findOrigin();
+                tobid.rest.position.Rect rectCaptcha = this.repository.bidStep2.submit.captcha[0];
+                byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rectCaptcha.x, origin.Y + rectCaptcha.y, rectCaptcha.width, rectCaptcha.height);
 
-            Graphics g = Graphics.FromImage(tmpbmp);
-            Rectangle oldrct = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            Rectangle newrct = new Rectangle(0, 0, tmpbmp.Width, tmpbmp.Height);
+                Bitmap bmp = new Bitmap(new MemoryStream(content));
+                Bitmap tmpbmp = new Bitmap(rectCaptcha.width * 2, rectCaptcha.height * 2);
 
-            g.DrawImage(bmp, newrct, oldrct, GraphicsUnit.Pixel);//newrct是你的目标矩形位置，oldrct是你原始图片的起始矩形位置 
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            this.pictureBox1.Image = tmpbmp;
-            g.Dispose();
-            this.pictureBox1.Update();
+                Graphics g = Graphics.FromImage(tmpbmp);
+                Rectangle oldrct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                Rectangle newrct = new Rectangle(0, 0, tmpbmp.Width, tmpbmp.Height);
+
+                g.DrawImage(bmp, newrct, oldrct, GraphicsUnit.Pixel);//newrct是你的目标矩形位置，oldrct是你原始图片的起始矩形位置 
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                this.pictureBox1.Image = tmpbmp;
+                g.Dispose();
+                this.pictureBox1.Update();
+            }
+            catch (Exception ex) {
+                this.timer1.Enabled = false;
+            }
         }
     }
 }

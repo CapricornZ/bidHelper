@@ -6,6 +6,8 @@ using tobid.util;
 using System.Drawing;
 using tobid.rest.position;
 using System.IO;
+using System.Collections.Specialized;
+using tobid.util.http;
 
 namespace tobid.scheduler.jobs.action {
 
@@ -179,9 +181,32 @@ namespace tobid.scheduler.jobs.action {
                     break;
                 }
             }
+
             logger.Info("\tEND[REFRESH]   identify");
             logger.Info("END   CAPTCHA dialog");
             System.Threading.Thread.Sleep(250);
+
+            System.Threading.Thread.Sleep(500);
+            byte[] captcha = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y,
+                submitPrice.captcha[0].width, submitPrice.captcha[0].height);
+            byte[] tip = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y,
+                submitPrice.captcha[1].width, submitPrice.captcha[1].height);
+
+            NameValueCollection nvc = new NameValueCollection();
+            nvc.Add("uid", System.Guid.NewGuid().ToString());
+            UploadFile uf1 = new UploadFile {
+                Name = "captchaImg",
+                FileName = "captcha.jpg",
+                ContentType = "image/jpeg",
+                Stream = new MemoryStream(captcha)
+            };
+            UploadFile uf2 = new UploadFile {
+                Name = "tipImg", FileName = "tip.jpg",
+                ContentType = "image/jpeg",
+                Stream = new MemoryStream(tip)
+            };
+            String s = new tobid.util.http.HttpUtil().postFiles("http://10.228.89.102:8080/im/web/home/request", new UploadFile[] { uf1, uf2 }, nvc);
+            System.Console.WriteLine("CAPTCHA : " + s);
             return rtn;
         }
     }
