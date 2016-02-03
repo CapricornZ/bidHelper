@@ -152,7 +152,7 @@ namespace tobid.util
             foreach (SHDocVw.InternetExplorer Browser in shellWindows) {
 
                 String fileName = Path.GetFileNameWithoutExtension(Browser.FullName).ToLower();
-                System.Console.WriteLine(fileName);
+                //System.Console.WriteLine(fileName);
                 if (!"iexplore".Equals(fileName))
                     continue;
 

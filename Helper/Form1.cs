@@ -1398,9 +1398,16 @@ namespace Helper
             String fire3 = this.dateTimePickerCustomSubmitCaptcha.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
             List<ITask> tasks = new List<ITask>();
+            IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
             InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this);
             TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: fire1);
-            tasks.Add(taskInputPrice);
+            //TODO:测试
+            {
+                IBidAction actions = new SequenceAction(new List<IBidAction>() { inputPriceAction, actionPreCaptcha });
+                TaskTimeBased taskInputPrice1 = new tobid.scheduler.jobs.action.TaskTimeBased(action: actions, notify: this, fireTime: fire1);
+                tasks.Add(taskInputPrice1);
+            }
+            //tasks.Add(taskInputPrice);
 
             if (checkBoxInputCaptcha.Checked) {
 
@@ -1408,13 +1415,13 @@ namespace Helper
                 SubmitCaptchaAction actionSubmitCaptcha = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
                 TaskTimeBased taskInputCaptcha = new TaskTimeBased(action: actionInputCaptcha, notify: this, fireTime: fire2); tasks.Add(taskInputCaptcha);
                 if (checkBoxSubmitCaptcha.Checked) {
-                    TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fire3); 
+                    TaskTimeBased taskSubmitCaptchaTimeBased = new TaskTimeBased(action: actionSubmitCaptcha, notify: this, fireTime: fire3);
                     if (checkBoxReachPrice.Checked) {
 
                         TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(
                             action: actionSubmitCaptcha,
-                            inputPriceAction: inputPriceAction, 
-                            submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), 
+                            inputPriceAction: inputPriceAction,
+                            submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text),
                             repository: this);
                         ComboTask comboTask = new ComboTask(new List<ITask>() {
                             taskSubmitCaptchaTimeBased, taskSubmitCaptchaPriceBased
@@ -1446,11 +1453,10 @@ namespace Helper
                     } else {//仅定时提交
                         tasks.Add(taskSubmitCaptchaTimeBased);
                     }
-                    
+
                 } else {//不用定时提交
 
-                    if (checkBoxReachPrice.Checked)
-                    {//不定时提交，但按三边价格提交
+                    if (checkBoxReachPrice.Checked) {//不定时提交，但按三边价格提交
                         TaskPriceBased taskSubmitCaptchaPriceBased = new TaskPriceBased(action: actionSubmitCaptcha, inputPriceAction: inputPriceAction, submitReachPrice: Int32.Parse(this.comboBoxReachPrice.Text), repository: this);
                         tasks.Add(taskSubmitCaptchaPriceBased);
                     }

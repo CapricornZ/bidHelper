@@ -187,6 +187,7 @@ namespace tobid.scheduler.jobs.action {
             System.Threading.Thread.Sleep(250);
 
             System.Threading.Thread.Sleep(500);
+            
             byte[] captcha = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y,
                 submitPrice.captcha[0].width, submitPrice.captcha[0].height);
             byte[] tip = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y,
@@ -205,8 +206,24 @@ namespace tobid.scheduler.jobs.action {
                 ContentType = "image/jpeg",
                 Stream = new MemoryStream(tip)
             };
-            String s = new tobid.util.http.HttpUtil().postFiles("http://10.228.89.102:8080/im/web/home/request", new UploadFile[] { uf1, uf2 }, nvc);
-            System.Console.WriteLine("CAPTCHA : " + s);
+            try {
+
+                logger.DebugFormat("sending request to {0}", "http://192.168.1.177/im/web/home/request");
+                String strCaptcha = new tobid.util.http.HttpUtil().postFiles("http://192.168.1.177/im/web/home/request", new UploadFile[] { uf1, uf2 }, nvc);
+                logger.InfoFormat("get respond CAPTCHA : {0}", strCaptcha);
+
+                ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);
+                ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                System.Threading.Thread.Sleep(50);
+
+                KeyBoardUtil.sendMessage(strCaptcha, interval: this.repository.interval, needClean: true);
+
+                System.Threading.Thread.Sleep(50);
+                this.repository.isReady = true;
+
+            } catch (Exception ex){
+                logger.Error(ex.ToString());
+            }
             return rtn;
         }
     }
