@@ -247,5 +247,10 @@ namespace Cheater {
         }
 
         IDictionary<String, String> verRepo = new Dictionary<String, String>();
+
+
+        public string submitCaptcha(Stream captcha, Stream tips) {
+            throw new NotImplementedException();
+        }
     }
 }

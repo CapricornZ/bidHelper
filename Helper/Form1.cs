@@ -48,6 +48,7 @@ namespace Helper
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
+        private String AssistantEndPoint { get; set; }
         private IntPtr ConsoleHWND { get; set; }
 
         #region IRepository
@@ -82,6 +83,35 @@ namespace Helper
         public DateTime lastSubmit { get; set; }
         public TimeSpan lastCost { get; set; }
         public Boolean isReady { get; set; }
+
+        public string submitCaptcha(Stream captcha, Stream tips) {
+
+            System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
+            nvc.Add("uid", System.Guid.NewGuid().ToString());
+            UploadFile uf1 = new UploadFile {
+                Name = "captchaImg",
+                FileName = "captcha.jpg",
+                ContentType = "image/jpeg",
+                Stream = captcha
+            };
+            UploadFile uf2 = new UploadFile {
+                Name = "tipImg",
+                FileName = "tip.jpg",
+                ContentType = "image/jpeg",
+                Stream = tips
+            };
+
+            try {
+                logger.DebugFormat("submiting CAPTCHA request to {0}", this.AssistantEndPoint);
+                String strCaptcha = new tobid.util.http.HttpUtil().postFiles(this.AssistantEndPoint, new UploadFile[] { uf1, uf2 }, nvc);
+                logger.InfoFormat("get respond CAPTCHA : {0}", strCaptcha);
+                return strCaptcha;
+            } catch (Exception ex) {
+
+                logger.Error(ex.ToString());
+            }
+            return "ERROR";
+        }
         #endregion
 
         private IOrc m_orcLogin;
@@ -296,6 +326,8 @@ namespace Helper
             this.triggerSetPolicy = ConfigurationManager.AppSettings["triggerSetPolicyCustom"];
             this.triggerLoadResource = ConfigurationManager.AppSettings["triggerLoadResource"];
             this.wifiRefreshBefore = ConfigurationManager.AppSettings["forbiddenWifiRefresh"];
+            
+            this.AssistantEndPoint = ConfigurationManager.AppSettings["ASSISTANT"];
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;

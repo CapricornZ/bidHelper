@@ -16,8 +16,8 @@ using tobid.scheduler;
 
 namespace tobid.scheduler.jobs
 {
-    public interface IRepository
-    {
+    public interface IRepository {
+        
         /// <summary>
         /// 是否用加价功能
         /// </summary>
@@ -53,6 +53,8 @@ namespace tobid.scheduler.jobs
         /// Operator是否空格（输完验证码）标志
         /// </summary>
         Boolean isReady { get; set; }
+
+        String submitCaptcha(Stream captcha, Stream tips);
     }
 
     public interface INotify {
