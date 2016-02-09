@@ -13,6 +13,29 @@ namespace tobid.scheduler.jobs.action {
         void notify(String message);
     }
 
+    public class IfThenAction : IBidAction {
+        private IBidAction first, second;
+
+        public IfThenAction(IBidAction first, IBidAction second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public void notify(string message) {
+
+            first.notify(message);
+            //second.notify(message);
+        }
+
+        public bool execute() {
+
+            bool rtn = this.first.execute();
+            if (rtn)
+                rtn = this.second.execute();
+            return true;
+        }
+    }
+
     /// <summary>
     /// 顺序执行
     /// </summary>
@@ -27,8 +50,9 @@ namespace tobid.scheduler.jobs.action {
 
         public void notify(string message) {
 
-            foreach(IBidAction action in this.tasks)
-                action.notify(message);
+            this.tasks[0].notify(message);
+            //foreach(IBidAction action in this.tasks)
+                //action.notify(message);
         }
 
         public bool execute() {

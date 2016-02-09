@@ -57,19 +57,20 @@ namespace tobid.scheduler.jobs.action {
                 this.switcher.toggle();
                 
                 //点取消按钮
-                logger.Info("\tBEGIN click CANCEL button");
+                logger.Info("BEGIN click CANCEL button");
                 ScreenUtil.SetCursorPos(x + bidStep2.submit.buttons[1].x, y + bidStep2.submit.buttons[1].y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                logger.Info("\tEND   click CANCEL button");
+                logger.Info("END   click CANCEL button");
 
-                System.Threading.Thread.Sleep(250);
+                System.Threading.Thread.Sleep(150);
 
-                logger.InfoFormat("\tBEGIN invoke InputPriceAction(+{0})", this.delta);
+                logger.InfoFormat("BEGIN invoke InputPriceAction(+{0})", this.delta);
                 InputPriceAction inputPrice = new InputPriceAction(this.delta, this.repository);
                 inputPrice.execute();
-                logger.Info("\tEND   invoke InputPriceAction");
+                logger.Info("END   invoke InputPriceAction");
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }

@@ -52,10 +52,14 @@ namespace tobid.util.http
             httpReq.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(new ASCIIEncoding().GetBytes(this.basicAuth))); 
             httpReq.Method = "GET";
             httpReq.Timeout = 1000 * 30;
-            
+
+            MemoryStream ms = new MemoryStream();
             WebResponse webRespon = httpReq.GetResponse();
             Stream s = webRespon.GetResponseStream();
-            return s;
+            s.CopyTo(ms); ms.Seek(0, SeekOrigin.Begin);
+            httpReq.Abort();
+
+            return ms;
         }
 
         public String getAsPlain(String address, Proxy proxySetting = null) {
@@ -77,7 +81,9 @@ namespace tobid.util.http
             WebResponse webRespon = httpReq.GetResponse();
             Stream s = webRespon.GetResponseStream();
             StreamReader sr = new StreamReader(s);
-            return sr.ReadToEnd();
+            String rtn = sr.ReadToEnd();
+            httpReq.Abort();
+            return rtn;
         }
 
         /// <summary>
@@ -144,6 +150,7 @@ namespace tobid.util.http
 
                 //读取服务器端返回的消息   
                 String sReturnString = sr.ReadLine();
+                httpReq.Abort();
                 s.Close();
                 sr.Close();
                 returnValue = sReturnString;
@@ -243,6 +250,7 @@ namespace tobid.util.http
 
                 //读取服务器端返回的消息   
                 String sReturnString = sr.ReadLine();
+                httpReq.Abort();
                 s.Close();
                 sr.Close();
                 returnValue = sReturnString;
@@ -329,6 +337,7 @@ namespace tobid.util.http
 
                 //读取服务器端返回的消息
                 String sReturnString = sr.ReadLine();
+                httpReq.Abort();
                 s.Close();
                 sr.Close();
                 returnValue = sReturnString;

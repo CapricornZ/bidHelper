@@ -63,7 +63,7 @@ namespace Helper {
                 byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rectCaptcha.x, origin.Y + rectCaptcha.y, rectCaptcha.width, rectCaptcha.height);
 
                 Bitmap bmp = new Bitmap(new MemoryStream(content));
-                Bitmap tmpbmp = new Bitmap(rectCaptcha.width * 2, rectCaptcha.height * 2);
+                Bitmap tmpbmp = new Bitmap((int)(rectCaptcha.width * 1.5), (int)(rectCaptcha.height * 1.5));
 
                 Graphics g = Graphics.FromImage(tmpbmp);
                 Rectangle oldrct = new Rectangle(0, 0, bmp.Width, bmp.Height);

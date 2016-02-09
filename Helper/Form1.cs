@@ -558,7 +558,7 @@ namespace Helper
                         this.processEnter(SubmitPriceStep2Job.getPosition());
                     break;
                 case Keys.Space:
-                    logger.InfoFormat("HOT KEY [SPACE] trigger : set CAPTCHA READY");
+                    logger.InfoFormat("HOT KEY [SPACE] trigger : set CAPTCHA READY!");
                     //if (this.m_submitHotKey.Equals("SPACE"))
                         this.isReady = true;
                         //this.processEnter(SubmitPriceStep2Job.getPosition());
@@ -1151,7 +1151,11 @@ namespace Helper
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
                 IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
                 IBidAction actionSubmitCaptcha = new SubmitCaptchaPureAction(repo:this);
-                actions.execute();
+                //actions.execute();
+                if(this.checkBoxRemoteCaptchaV1.Checked || this.checkBoxRemoteCaptchaV2.Checked)
+                    actions.execute();
+                else
+                    actionInputPrice.execute();
 
                 //x<=1.5 提交时间超过(5500)ms
                 //x>1.5 提交时间为(4000+x)ms
@@ -1382,9 +1386,16 @@ namespace Helper
             String fireCancel = this.dateTimePickerCustom2Cancel.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
             List<ITask> tasks = new List<ITask>();
+            IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
             InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustom2Delta1.Text), repo: this);//策略1，输入价格
             TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: firePrice1);
-            tasks.Add(taskInputPrice);
+            //TODO:测试
+            if (this.checkBoxRemoteCaptchaV2.Checked) {
+                IBidAction seqAction = new SequenceAction(new List<IBidAction>() { inputPriceAction, actionPreCaptcha });
+                TaskTimeBased taskInputPrice1 = new tobid.scheduler.jobs.action.TaskTimeBased(action: seqAction, notify: this, fireTime: firePrice1);
+                tasks.Add(taskInputPrice1);
+            } else
+                tasks.Add(taskInputPrice);
 
             //两个策略的提交任务
             SubmitCaptchaAction actionSubmitCaptcha1 = new tobid.scheduler.jobs.action.SubmitCaptchaAction(repo: this);
@@ -1397,7 +1408,15 @@ namespace Helper
             //策略2的出价时间
             InputPrice2Action inputPrice2Action = new InputPrice2Action(delta: Int32.Parse(this.comboBoxCustom2Delta2.Text), repo: this, inputPrice: inputPriceAction, switchTask: taskSubmitCaptchaTimeBased);//策略1，输入价格
             TaskTimeBased taskInputPrice2Time = new TaskTimeBased(action: inputPrice2Action, notify: this, fireTime: fireCancel);
-            tasks.Add(taskInputPrice2Time);
+            //TODO:测试
+            if (this.checkBoxRemoteCaptchaV2.Checked)
+            {
+                IBidAction ifThenAction = new IfThenAction(inputPrice2Action, actionPreCaptcha);
+                TaskTimeBased taskInputPrice1 = new tobid.scheduler.jobs.action.TaskTimeBased(action: ifThenAction, notify: this, fireTime: fireCancel);
+                tasks.Add(taskInputPrice1);
+            }
+            else
+                tasks.Add(taskInputPrice2Time);
 
             tasks.Add(taskSubmitCaptchaTimeBased);
 
@@ -1433,13 +1452,13 @@ namespace Helper
             IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
             InputPriceAction inputPriceAction = new tobid.scheduler.jobs.action.InputPriceAction(delta: Int32.Parse(this.comboBoxCustomDelta.Text), repo: this);
             TaskTimeBased taskInputPrice = new tobid.scheduler.jobs.action.TaskTimeBased(action: inputPriceAction, notify: this, fireTime: fire1);
-            //TODO:测试
-            {
+            
+            if(this.checkBoxRemoteCaptchaV1.Checked) {
                 IBidAction actions = new SequenceAction(new List<IBidAction>() { inputPriceAction, actionPreCaptcha });
                 TaskTimeBased taskInputPrice1 = new tobid.scheduler.jobs.action.TaskTimeBased(action: actions, notify: this, fireTime: fire1);
                 tasks.Add(taskInputPrice1);
-            }
-            //tasks.Add(taskInputPrice);
+            }else
+                tasks.Add(taskInputPrice);
 
             if (checkBoxInputCaptcha.Checked) {
 
@@ -1508,7 +1527,8 @@ namespace Helper
             this.customThread.Start();
         }
 
-        private void buttonUpdateCustom_Click(object sender, EventArgs e) {
+        private void btnUpdateV1_Click(object sender, EventArgs e) {
+        //private void buttonUpdateCustom_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OKCancel;
             DialogResult dr = MessageBox.Show(this, "确定要更新出价策略吗?", "更新策略",
@@ -1709,19 +1729,20 @@ namespace Helper
         private void CheckUpdateToolStripMenuItem_Click(object sender, EventArgs e) {
 
             MessageBoxButtons messButton = MessageBoxButtons.OK;
-            String localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Version localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             String remoteVer = null;
             try {
 
                 String endPoint = ConfigurationManager.AppSettings["CHECKUPDATE"];
                 remoteVer = new HttpUtil().getAsPlain(endPoint + "/Release.ver");
+
             } catch (Exception ex) {
                 System.Console.WriteLine(ex);
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 return;
             }
 
-            if (!localVer.Equals(remoteVer))
+            if (new Version(remoteVer).CompareTo(localVer) > 0)
                 MessageBox.Show(String.Format("请更新软件\r\nREMOTE:{0}\r\nLOCAL:{1}", remoteVer, localVer), "发现新版本", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
             else
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);

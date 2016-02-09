@@ -68,7 +68,7 @@ namespace tobid.scheduler.jobs.action {
 
             this.repository.lastSubmit = DateTime.Now;
             logger.Info("BEGIN click BUTTON[确定]");
-            logger.DebugFormat("BUTTON[确定]({0}, {1})", x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
+            logger.DebugFormat("\tBUTTON[确定]({0}, {1})", x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("END   click BUTTON[确定]");
@@ -103,12 +103,12 @@ namespace tobid.scheduler.jobs.action {
 
             if (!this.repository.isReady) {
                 //如果验证码还没ready
-                logger.Info("已到提交时间，等待用户输入验证码");
+                logger.Info("已到提交时间，等待输入验证码");
                 return false;
             }
 
             logger.Info("BEGIN click BUTTON[确定]");
-            logger.DebugFormat("BUTTON[确定]({0}, {1})", x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
+            logger.DebugFormat("\tBUTTON[确定]({0}, {1})", x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             this.repository.lastSubmit = DateTime.Now;
             ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x, y + submitPrice.buttons[0].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
@@ -125,7 +125,7 @@ namespace tobid.scheduler.jobs.action {
                     ScreenUtil screen = new ScreenUtil();
                     byte[] content = screen.screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
                     Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
-                    status = CaptchaHelper.detectBidStatus(bitmap);
+                    status = CaptchaHelper.detectBidStatus(bitmap, 75);
                     String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
                     System.IO.File.WriteAllBytes(String.Format("Captchas/AUTO-BUTTON-{0}.bmp", fileName), content);
                 }
@@ -142,8 +142,10 @@ namespace tobid.scheduler.jobs.action {
                 //if (diff.TotalMilliseconds >= 5000)
                 //    break;//超过5秒
 
-                //if (diff.TotalMilliseconds > 10000)//超过10s也停止
-                //    break;
+                if (diff.TotalMilliseconds > 10000){//超过10s也停止
+                    logger.Error("超时 10s");
+                    break;
+                }
             }
 
             System.Threading.Thread.Sleep(100);

@@ -114,7 +114,7 @@ namespace tobid.util.orc {
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        public static BidStatus detectBidStatus(Bitmap bitmap) {
+        public static BidStatus detectBidStatus(Bitmap bitmap, int threshold) {
             
             int blue = 0;
             for(int x=0; x < bitmap.Width; x++)
@@ -130,7 +130,7 @@ namespace tobid.util.orc {
             int percent = blue * 100 / bitmap.Width / bitmap.Height;
             logger.DebugFormat("detect BidStatus blue percent : {0}% - {1}", percent, percent > 75 ? BidStatus.FINISH : BidStatus.INPROGRESS);
 
-            return percent > 75 ? BidStatus.FINISH : BidStatus.INPROGRESS;
+            return percent > threshold ? BidStatus.FINISH : BidStatus.INPROGRESS;
         }
 
         /// <summary>

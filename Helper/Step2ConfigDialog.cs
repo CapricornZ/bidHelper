@@ -262,8 +262,7 @@ namespace Helper
             byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x + 50, origin.Y + pos.y - 22, 76, 29);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
-
-            tobid.util.orc.CaptchaHelper.detectBidStatus(Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap);
+            tobid.util.orc.CaptchaHelper.detectBidStatus(Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap, 75);
         }
 
         private void buttonTime_Click(object sender, EventArgs e) {

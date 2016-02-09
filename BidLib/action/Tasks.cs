@@ -148,7 +148,7 @@ namespace tobid.scheduler.jobs.action {
             DateTime now = DateTime.Now;
             TimeSpan diffFire = now - this.fireTime;
             TimeSpan diffExpire = now - this.expireTime;
-            String msg = String.Format("剩(s):{0:f3}", -diffFire.TotalSeconds);
+            String msg = String.Format("剩(s):{0:f3}, fireTime:{1}", -diffFire.TotalSeconds, this.fireTime);
             if (diffFire.TotalMilliseconds >= 500) {
                 //if (diffFire.TotalSeconds >= 0) {
                 logger.Warn(msg);
