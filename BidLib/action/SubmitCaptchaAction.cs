@@ -125,7 +125,7 @@ namespace tobid.scheduler.jobs.action {
                     ScreenUtil screen = new ScreenUtil();
                     byte[] content = screen.screenCaptureAsByte(x + submitPrice.buttons[0].x + 50, y + submitPrice.buttons[1].y - 22, 76, 29);
                     Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
-                    status = CaptchaHelper.detectBidStatus(bitmap, 75);
+                    status = CaptchaHelper.detectBidStatus(bitmap, submitPrice.retryThreshold);
                     String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
                     System.IO.File.WriteAllBytes(String.Format("Captchas/AUTO-BUTTON-{0}.bmp", fileName), content);
                 }

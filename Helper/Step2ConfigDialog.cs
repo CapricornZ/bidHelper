@@ -253,6 +253,8 @@ namespace Helper
 
         private void btnConfirm_Click(object sender, EventArgs e) {
 
+            BidStep2 bid2 = SubmitPriceStep2Job.getPosition();
+
             Point origin = tobid.util.IEUtil.findOrigin();
             Position pos = this.inputBox2Position(this.textBox7);
 
@@ -262,7 +264,7 @@ namespace Helper
             byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x + 50, origin.Y + pos.y - 22, 76, 29);
             this.pictureBox1.Image = Bitmap.FromStream(new System.IO.MemoryStream(content));
 
-            tobid.util.orc.CaptchaHelper.detectBidStatus(Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap, 75);
+            tobid.util.orc.CaptchaHelper.detectBidStatus(Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap, bid2.submit.retryThreshold);
         }
 
         private void buttonTime_Click(object sender, EventArgs e) {

@@ -128,7 +128,8 @@ namespace tobid.util.orc {
                 }
 
             int percent = blue * 100 / bitmap.Width / bitmap.Height;
-            logger.DebugFormat("detect BidStatus blue percent : {0}% - {1}", percent, percent > 75 ? BidStatus.FINISH : BidStatus.INPROGRESS);
+            logger.DebugFormat("detect BidStatus blue percent : {0}% - {1},thresheld:{2}", percent, 
+                percent > threshold ? BidStatus.FINISH : BidStatus.INPROGRESS, threshold);
 
             return percent > threshold ? BidStatus.FINISH : BidStatus.INPROGRESS;
         }
@@ -138,7 +139,7 @@ namespace tobid.util.orc {
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        public static Boolean isRefresh(Bitmap bitmap) {
+        public static Boolean isRefresh(Bitmap bitmap, int threshold=60) {
 
             double h, s, l;
             int active = 0;
@@ -159,8 +160,8 @@ namespace tobid.util.orc {
                     }
                 }
             percent = active * 100 / width / height;
-            logger.DebugFormat("is Refresh blue percent : {0}%", percent);
-            return percent > 60;
+            logger.DebugFormat("is Refresh blue percent : {0}% - {1},threshold:{2}", percent, percent > threshold, threshold);
+            return percent > threshold;
         }
 
         /// <summary>
@@ -168,7 +169,7 @@ namespace tobid.util.orc {
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        public static Boolean isLoading(Bitmap bitmap) {
+        public static Boolean isLoading(Bitmap bitmap, int threshold=500) {
 
             int count = 0;
             for (int nX = 0; nX < bitmap.Width; nX++)
@@ -178,11 +179,11 @@ namespace tobid.util.orc {
                         count++;
                 }
 
-            logger.DebugFormat("is Loading black count : {0}", count);
-            return count > 500;
+            logger.DebugFormat("is Loading black count : {0} - {1},threshold:{2}", count, count > threshold, threshold);
+            return count > threshold;
         }
 
-        public static Boolean isWifiRed(Bitmap bitmap) {
+        public static Boolean isWifiRed(Bitmap bitmap, int threshold=80) {
 
             int red = 0;
             for (int x = 0; x < bitmap.Width; x++)
@@ -198,8 +199,8 @@ namespace tobid.util.orc {
             int pixel = bitmap.Width * bitmap.Height;
             int percent = red * 100 / pixel;
 
-            logger.DebugFormat("is WifiRed red percent : {0}%", percent);
-            return percent >= 80;
+            logger.DebugFormat("is WifiRed red percent : {0}% - {1},threshold:{2}", percent, percent >= threshold, threshold);
+            return percent >= threshold;
         }
     }
 }

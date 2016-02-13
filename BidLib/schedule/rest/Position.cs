@@ -60,15 +60,19 @@ namespace tobid.rest.position {
     /// <summary>
     /// 出价验证码坐标
     /// </summary>
-    public class SubmitPrice
-    {
+    public class SubmitPrice{
         //public Position[] captcha { get; set; }
         public tobid.rest.position.Rect[] captcha { get; set; }
         public Position inputBox { get; set; }
         public Position[] buttons { get; set; }
+        /// <summary>
+        /// 出价后，按钮的蓝色百分比
+        /// </summary>
+        public int retryThreshold { get; set; }
     }
 
     public class Login {
+
         public GivePriceStep1 give { get; set; }
         public SubmitPrice submit { get; set; }
     }
@@ -85,8 +89,8 @@ namespace tobid.rest.position {
     /// <summary>
     /// 竞价坐标
     /// </summary>
-    public class BidStep2
-    {
+    public class BidStep2 {
+
         public GivePriceStep2 give { get; set; }
         public SubmitPrice submit { get; set; }
         public Position title { get; set; }
