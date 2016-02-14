@@ -1888,7 +1888,7 @@ namespace Helper
             String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入标书号", "标书登陆", "");
             if (!String.IsNullOrEmpty(authCode)) {
 
-                String epKeepAlive = this.EndPoint + "/rest/service/command/config/" + authCode;
+                String epKeepAlive = this.EndPoint + "/rest/service/command/bid/" + authCode;
                 RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
                 String rtn = restGetConfig.MakeRequest();
                 System.Console.WriteLine(rtn);
