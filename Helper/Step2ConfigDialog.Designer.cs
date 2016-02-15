@@ -80,6 +80,8 @@
             this.labelResult = new System.Windows.Forms.Label();
             this.labelTips = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxAssistantEndPoint = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.buttonSaveAs = new System.Windows.Forms.Button();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -239,7 +241,7 @@
             this.groupBoxCaptcha.Controls.Add(this.btnCaptcha);
             this.groupBoxCaptcha.Location = new System.Drawing.Point(323, 12);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
-            this.groupBoxCaptcha.Size = new System.Drawing.Size(270, 141);
+            this.groupBoxCaptcha.Size = new System.Drawing.Size(257, 141);
             this.groupBoxCaptcha.TabIndex = 1;
             this.groupBoxCaptcha.TabStop = false;
             this.groupBoxCaptcha.Text = "校验码";
@@ -495,7 +497,7 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(313, 289);
+            this.buttonOK.Location = new System.Drawing.Point(313, 306);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 25;
@@ -505,7 +507,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(406, 289);
+            this.buttonCancel.Location = new System.Drawing.Point(406, 306);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 26;
@@ -598,6 +600,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBoxAssistantEndPoint);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.buttonSaveAs);
             this.groupBox1.Controls.Add(this.btnGoto);
             this.groupBox1.Controls.Add(this.textBox8);
@@ -610,12 +614,28 @@
             this.groupBox1.Controls.Add(this.pictureSub4);
             this.groupBox1.Controls.Add(this.pictureSub5);
             this.groupBox1.Controls.Add(this.pictureSub6);
-            this.groupBox1.Location = new System.Drawing.Point(302, 159);
+            this.groupBox1.Location = new System.Drawing.Point(259, 159);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(291, 124);
+            this.groupBox1.Size = new System.Drawing.Size(321, 141);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "验证";
+            // 
+            // textBoxAssistantEndPoint
+            // 
+            this.textBoxAssistantEndPoint.Location = new System.Drawing.Point(82, 114);
+            this.textBoxAssistantEndPoint.Name = "textBoxAssistantEndPoint";
+            this.textBoxAssistantEndPoint.Size = new System.Drawing.Size(230, 20);
+            this.textBoxAssistantEndPoint.TabIndex = 25;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(18, 118);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(67, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "远程助手：";
             // 
             // buttonSaveAs
             // 
@@ -629,7 +649,7 @@
             // 
             // btnGoto
             // 
-            this.btnGoto.Location = new System.Drawing.Point(109, 87);
+            this.btnGoto.Location = new System.Drawing.Point(146, 86);
             this.btnGoto.Name = "btnGoto";
             this.btnGoto.Size = new System.Drawing.Size(75, 23);
             this.btnGoto.TabIndex = 24;
@@ -639,16 +659,16 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(28, 89);
+            this.textBox8.Location = new System.Drawing.Point(17, 89);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(75, 20);
+            this.textBox8.Size = new System.Drawing.Size(121, 20);
             this.textBox8.TabIndex = 15;
             // 
             // Step2ConfigDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(607, 319);
+            this.ClientSize = new System.Drawing.Size(594, 337);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -735,5 +755,7 @@
         private System.Windows.Forms.Button buttonSaveAs;
         private System.Windows.Forms.Button buttonDialog;
         private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.TextBox textBoxAssistantEndPoint;
+        private System.Windows.Forms.Label label10;
     }
 }

@@ -54,6 +54,10 @@ namespace tobid.scheduler.jobs
         /// </summary>
         Boolean isReady { get; set; }
 
+        /// <summary>
+        /// 验证码远程接口
+        /// </summary>
+        String assistantEndPoint { get; set; }
         String submitCaptcha(Stream captcha, Stream tips);
     }
 

@@ -37,8 +37,5 @@ namespace Helper {
         private void timer1_Tick(object sender, EventArgs e) {
             this.labelTime.Text = DateTime.Now.ToString("HH:mm:ss.fff");
         }
-
-        private void FloatingForm_Load(object sender, EventArgs e) {
-        }
     }
 }

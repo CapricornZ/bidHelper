@@ -48,7 +48,6 @@ namespace Helper
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(Form1));
         private String EndPoint { get; set; }
-        private String AssistantEndPoint { get; set; }
         private IntPtr ConsoleHWND { get; set; }
 
         #region IRepository
@@ -83,7 +82,7 @@ namespace Helper
         public DateTime lastSubmit { get; set; }
         public TimeSpan lastCost { get; set; }
         public Boolean isReady { get; set; }
-
+        public String assistantEndPoint { get; set; }
         public string submitCaptcha(Stream captcha, Stream tips) {
 
             System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
@@ -102,8 +101,8 @@ namespace Helper
             };
 
             try {
-                logger.DebugFormat("submiting CAPTCHA request to {0}", this.AssistantEndPoint);
-                String strCaptcha = new tobid.util.http.HttpUtil().postFiles(this.AssistantEndPoint, new UploadFile[] { uf1, uf2 }, nvc);
+                logger.DebugFormat("submiting CAPTCHA request to {0}", this.assistantEndPoint);
+                String strCaptcha = new tobid.util.http.HttpUtil().postFiles(this.assistantEndPoint, new UploadFile[] { uf1, uf2 }, nvc);
                 logger.InfoFormat("get respond CAPTCHA : {0}", strCaptcha);
                 return strCaptcha;
             } catch (Exception ex) {
@@ -327,7 +326,7 @@ namespace Helper
             this.triggerLoadResource = ConfigurationManager.AppSettings["triggerLoadResource"];
             this.wifiRefreshBefore = ConfigurationManager.AppSettings["forbiddenWifiRefresh"];
             
-            this.AssistantEndPoint = ConfigurationManager.AppSettings["ASSISTANT"];
+            this.assistantEndPoint = ConfigurationManager.AppSettings["ASSISTANT"];
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;

@@ -80,6 +80,7 @@ namespace Helper
 
         private void Step2ConfigDialog_Load(object sender, EventArgs e) {
 
+            this.textBoxAssistantEndPoint.Text = this.m_repository.assistantEndPoint;
             BidStep2 bid = SubmitPriceStep2Job.getPosition();
             this.checkboxDelta.Checked = this.m_repository.deltaPriceOnUI;
             if (bid != null) {
@@ -172,6 +173,7 @@ namespace Helper
             this.BidStep2 = bid;
 
             this.m_repository.deltaPriceOnUI = this.checkboxDelta.Checked;
+            this.m_repository.assistantEndPoint = this.textBoxAssistantEndPoint.Text;
             
             this.cancel = false;
             this.Close();

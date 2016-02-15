@@ -31,9 +31,9 @@
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.BackColor = System.Drawing.Color.Black;
+            this.labelTime.BackColor = System.Drawing.Color.Silver;
             this.labelTime.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelTime.ForeColor = System.Drawing.Color.Red;
+            this.labelTime.ForeColor = System.Drawing.Color.Crimson;
             this.labelTime.Location = new System.Drawing.Point(10, 16);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(116, 16);
@@ -50,7 +50,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Red;
+            this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(137, 35);
             this.Controls.Add(this.labelTime);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -59,7 +59,6 @@
             this.Name = "FloatingForm";
             this.Text = "FloatingForm";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.FloatingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
