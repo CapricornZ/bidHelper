@@ -69,6 +69,7 @@
     <Compile Include="Computer.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="jSonHelper.cs" />
+    <Compile Include="schedule\rest\F9Common.cs" />
     <Compile Include="schedule\rest\Policy.cs" />
     <Compile Include="util\Helper.cs" />
     <Compile Include="util\Hook\KeyboardHook.cs" />

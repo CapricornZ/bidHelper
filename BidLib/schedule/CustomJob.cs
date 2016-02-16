@@ -31,7 +31,7 @@ namespace tobid.scheduler.jobs {
 
                     if (this.tasks[this.nextTask].execute()) {
                         
-                        Console.WriteLine( this.tasks[this.nextTask] + " Execute OK");
+                        logger.Debug(this.tasks[this.nextTask] + " Execute OK");
                         this.nextTask++;
                     }
 

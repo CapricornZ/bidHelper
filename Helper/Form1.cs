@@ -151,6 +151,7 @@ namespace Helper
 
         private ITrigger m_trigger;
         private IDictionary<int, int> m_F9Strategy;
+        private tobid.rest.f9.F9Common m_f9Repository;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -225,6 +226,8 @@ namespace Helper
             this.m_F9Strategy.Add(57, 300);
             this.m_F9Strategy.Add(58, 300);
             this.m_F9Strategy.Add(59, 300);
+
+            this.m_f9Repository = tobid.rest.f9.F9Common.getInstance(this.EndPoint);
 
             //加载配置项1
             IGlobalConfig configResource = Resource.getInstance(this.EndPoint, category);//加载配置
@@ -1127,6 +1130,43 @@ namespace Helper
             startFire.Start();
         }
 
+        private tobid.rest.f9.Action getF9Action() {
+
+            int second = DateTime.Now.Second;
+            bool bFound = false;
+            tobid.rest.f9.Action rtn = null;
+            tobid.rest.f9.Action[] actions = null;
+            for(int i=0; !bFound && i<this.m_f9Repository.triggers.Length; i++){
+                if (second == Convert.ToInt16(this.m_f9Repository.triggers[i].fire)) {
+                    logger.DebugFormat("select ACTION in trigger[{0}]", this.m_f9Repository.triggers[i].fire);
+                    actions = this.m_f9Repository.triggers[i].actions;
+                    bFound = true;
+                }
+            }
+
+            long tick = DateTime.Now.Ticks;
+            Random random = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
+            if (bFound) {
+
+                //按比例
+                int rand = random.Next(1, 100);
+                bool bStop = false;
+                int i = 0;
+                for (i = 0; !bStop && i < actions.Length; i++) {
+                    bStop = actions[i].percent >= rand;
+                }
+                rtn = actions[i-1];
+
+                //平分
+                //rtn = actions[random.Next(actions.Length)];
+                logger.DebugFormat("select ACTION:{{delta:{0}, submit:{1}}}", rtn.delta, rtn.submit);
+            }
+            return rtn;
+        }
+        /// <summary>
+        /// F9 Trigger procedure
+        /// </summary>
+        /// <param name="bid"></param>
         private void fireAutoSubmit(tobid.rest.position.BidStep2 bid)
         {
             int second = DateTime.Now.Second;
@@ -1143,8 +1183,12 @@ namespace Helper
 
                 DateTime now = DateTime.Now;
                 int delta = 300;
-                if(this.m_F9Strategy.ContainsKey(now.Second))
-                    delta = this.m_F9Strategy[now.Second];
+                //if(this.m_F9Strategy.ContainsKey(now.Second))
+                //    delta = this.m_F9Strategy[now.Second];
+                //tobid.rest.f9.Action f9Action = this.getF9Action();
+                tobid.rest.f9.Action f9Action = this.m_f9Repository.randomAction();
+                if (null != f9Action)
+                    delta = f9Action.delta;
                 logger.DebugFormat("trigger Delta Price : {0}", delta);
                 IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
