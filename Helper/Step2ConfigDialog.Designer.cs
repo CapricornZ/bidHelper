@@ -85,6 +85,9 @@
             this.buttonSaveAs = new System.Windows.Forms.Button();
             this.btnGoto = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.textBoxRetryThreshold = new System.Windows.Forms.TextBox();
             this.groupBoxPrice.SuspendLayout();
             this.groupBoxCaptcha.SuspendLayout();
             this.groupBoxOrigin.SuspendLayout();
@@ -228,6 +231,9 @@
             // 
             // groupBoxCaptcha
             // 
+            this.groupBoxCaptcha.Controls.Add(this.textBoxRetryThreshold);
+            this.groupBoxCaptcha.Controls.Add(this.textBox9);
+            this.groupBoxCaptcha.Controls.Add(this.label16);
             this.groupBoxCaptcha.Controls.Add(this.btnConfirm);
             this.groupBoxCaptcha.Controls.Add(this.textBox7);
             this.groupBoxCaptcha.Controls.Add(this.textBox6);
@@ -239,16 +245,16 @@
             this.groupBoxCaptcha.Controls.Add(this.label4);
             this.groupBoxCaptcha.Controls.Add(this.btnTips);
             this.groupBoxCaptcha.Controls.Add(this.btnCaptcha);
-            this.groupBoxCaptcha.Location = new System.Drawing.Point(323, 12);
+            this.groupBoxCaptcha.Location = new System.Drawing.Point(310, 12);
             this.groupBoxCaptcha.Name = "groupBoxCaptcha";
-            this.groupBoxCaptcha.Size = new System.Drawing.Size(257, 141);
+            this.groupBoxCaptcha.Size = new System.Drawing.Size(270, 141);
             this.groupBoxCaptcha.TabIndex = 1;
             this.groupBoxCaptcha.TabStop = false;
             this.groupBoxCaptcha.Text = "校验码";
             // 
             // btnConfirm
             // 
-            this.btnConfirm.Location = new System.Drawing.Point(199, 102);
+            this.btnConfirm.Location = new System.Drawing.Point(199, 87);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(49, 23);
             this.btnConfirm.TabIndex = 23;
@@ -258,21 +264,21 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(92, 104);
+            this.textBox7.Location = new System.Drawing.Point(92, 89);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(101, 20);
             this.textBox7.TabIndex = 14;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(92, 77);
+            this.textBox6.Location = new System.Drawing.Point(92, 67);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(101, 20);
             this.textBox6.TabIndex = 13;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(92, 50);
+            this.textBox5.Location = new System.Drawing.Point(92, 45);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(101, 20);
             this.textBox5.TabIndex = 12;
@@ -289,7 +295,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Red;
-            this.label7.Location = new System.Drawing.Point(14, 107);
+            this.label7.Location = new System.Drawing.Point(14, 92);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 17;
@@ -298,7 +304,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 80);
+            this.label6.Location = new System.Drawing.Point(15, 70);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(55, 13);
             this.label6.TabIndex = 16;
@@ -309,7 +315,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(14, 53);
+            this.label5.Location = new System.Drawing.Point(14, 48);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 13);
             this.label5.TabIndex = 15;
@@ -328,7 +334,7 @@
             // 
             // btnTips
             // 
-            this.btnTips.Location = new System.Drawing.Point(199, 49);
+            this.btnTips.Location = new System.Drawing.Point(199, 44);
             this.btnTips.Name = "btnTips";
             this.btnTips.Size = new System.Drawing.Size(49, 23);
             this.btnTips.TabIndex = 22;
@@ -664,6 +670,31 @@
             this.textBox8.Size = new System.Drawing.Size(121, 20);
             this.textBox8.TabIndex = 15;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.Red;
+            this.label16.Location = new System.Drawing.Point(15, 115);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(82, 13);
+            this.label16.TabIndex = 24;
+            this.label16.Text = "“取消”按钮：";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(92, 111);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(101, 20);
+            this.textBox9.TabIndex = 25;
+            // 
+            // textBoxRetryThreshold
+            // 
+            this.textBoxRetryThreshold.Location = new System.Drawing.Point(200, 111);
+            this.textBoxRetryThreshold.Name = "textBoxRetryThreshold";
+            this.textBoxRetryThreshold.Size = new System.Drawing.Size(48, 20);
+            this.textBoxRetryThreshold.TabIndex = 26;
+            // 
             // Step2ConfigDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -757,5 +788,8 @@
         private System.Windows.Forms.Button btnConfirm;
         private System.Windows.Forms.TextBox textBoxAssistantEndPoint;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBoxRetryThreshold;
     }
 }

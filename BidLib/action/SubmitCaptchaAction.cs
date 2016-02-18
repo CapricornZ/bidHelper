@@ -127,7 +127,7 @@ namespace tobid.scheduler.jobs.action {
                     Bitmap bitmap = Bitmap.FromStream(new System.IO.MemoryStream(content)) as Bitmap;
                     status = CaptchaHelper.detectBidStatus(bitmap, submitPrice.retryThreshold);
                     String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
-                    System.IO.File.WriteAllBytes(String.Format("Captchas/AUTO-BUTTON-{0}.bmp", fileName), content);
+                    ScreenUtil.saveAs(String.Format("Captchas/AUTO-BUTTON-{0}.bmp", fileName), content);
                 }
 
                 TimeSpan diff = DateTime.Now - start;

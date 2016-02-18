@@ -101,12 +101,15 @@ namespace Helper
                 this.object2InputBox(this.textBox5, bid.submit.captcha[1]);
                 this.object2InputBox(this.textBox6, bid.submit.inputBox);
                 this.object2InputBox(this.textBox7, bid.submit.buttons[0]);
+                this.object2InputBox(this.textBox9, bid.submit.buttons[1]);
+                this.textBoxRetryThreshold.Text = Convert.ToString(bid.submit.retryThreshold);
 
                 this.object2InputBox(this.textBoxTitle, bid.title);
                 this.object2InputBox(this.textBoxTitleOk, bid.okButton);
                 this.object2InputBox(this.textBoxPriceSM, bid.price);
                 this.object2InputBox(this.textBoxTime, bid.time);
                 this.object2InputBox(this.textBoxWifi, bid.wifi);
+                
 
             } else {
 
@@ -120,6 +123,8 @@ namespace Helper
                 this.object2InputBox(this.textBox5, new Position(0, 0));
                 this.object2InputBox(this.textBox6, new Position(0, 0));
                 this.object2InputBox(this.textBox7, new Position(0, 0));
+                this.object2InputBox(this.textBox9, new Position(0, 0));
+                this.textBoxRetryThreshold.Text = Convert.ToString(bid.submit.retryThreshold);
 
                 this.object2InputBox(this.textBoxTitle, new Position(0, 0));
                 this.object2InputBox(this.textBoxTitleOk, new Position(0, 0));
@@ -156,8 +161,10 @@ namespace Helper
             string[] posBtnOK = this.textBox7.Text.Split(new char[] { ',' });
             submit.buttons = new Position[]{
                 this.inputBox2Position(this.textBox7),//确定按钮
-                this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
+                this.inputBox2Position(this.textBox9),//取消按钮
+                //this.inputBox2Object(this.textBox7, offsetX:186, offsetY:0)//取消按钮
             };
+            submit.retryThreshold = Convert.ToInt16(this.textBoxRetryThreshold.Text);
 
             BidStep2 bid = new BidStep2();
             bid.give = givePrice;

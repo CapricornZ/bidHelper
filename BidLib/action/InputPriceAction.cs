@@ -107,9 +107,9 @@ namespace tobid.scheduler.jobs.action {
                     for (int i = 0; i < 8; i++) {
                         String fileName = DateTime.Now.ToString("MMdd-HHmmss-fff");
                         byte[] captcha = screen.screenCaptureAsByte(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, submitPrice.captcha[0].width, submitPrice.captcha[0].height);
-                        System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-{0}.bmp", fileName), captcha);
+                        ScreenUtil.saveAs(String.Format("Captchas/Auto-Captcha-{0}.bmp", fileName), captcha);
                         byte[] captchaTip = screen.screenCaptureAsByte(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y, submitPrice.captcha[1].width, submitPrice.captcha[1].height);
-                        System.IO.File.WriteAllBytes(String.Format("Captchas/Auto-Captcha-TIP-{0}.bmp", fileName), captchaTip);
+                        ScreenUtil.saveAs(String.Format("Captchas/Auto-Captcha-TIP-{0}.bmp", fileName), captchaTip);
                         System.Threading.Thread.Sleep(500);
                     }
                 }

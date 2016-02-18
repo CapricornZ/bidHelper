@@ -1104,6 +1104,11 @@ namespace Helper
             }
         }
 
+        /// <summary>
+        /// F11 Trigger procedure
+        /// </summary>
+        /// <param name="bid"></param>
+        /// <param name="delta"></param>
         private void fire(tobid.rest.position.BidStep2 bid, int delta) {
 
             System.Threading.Thread startFire = new System.Threading.Thread(delegate() {
@@ -1130,39 +1135,6 @@ namespace Helper
             startFire.Start();
         }
 
-        private tobid.rest.f9.Action getF9Action() {
-
-            int second = DateTime.Now.Second;
-            bool bFound = false;
-            tobid.rest.f9.Action rtn = null;
-            tobid.rest.f9.Action[] actions = null;
-            for(int i=0; !bFound && i<this.m_f9Repository.triggers.Length; i++){
-                if (second == Convert.ToInt16(this.m_f9Repository.triggers[i].fire)) {
-                    logger.DebugFormat("select ACTION in trigger[{0}]", this.m_f9Repository.triggers[i].fire);
-                    actions = this.m_f9Repository.triggers[i].actions;
-                    bFound = true;
-                }
-            }
-
-            long tick = DateTime.Now.Ticks;
-            Random random = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
-            if (bFound) {
-
-                //按比例
-                int rand = random.Next(1, 100);
-                bool bStop = false;
-                int i = 0;
-                for (i = 0; !bStop && i < actions.Length; i++) {
-                    bStop = actions[i].percent >= rand;
-                }
-                rtn = actions[i-1];
-
-                //平分
-                //rtn = actions[random.Next(actions.Length)];
-                logger.DebugFormat("select ACTION:{{delta:{0}, submit:{1}}}", rtn.delta, rtn.submit);
-            }
-            return rtn;
-        }
         /// <summary>
         /// F9 Trigger procedure
         /// </summary>

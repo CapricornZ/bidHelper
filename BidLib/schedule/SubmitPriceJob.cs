@@ -395,7 +395,7 @@ namespace tobid.scheduler.jobs
             while (isLoading)//重试3.5秒钟
             {   
                 binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + submitPoints.captcha[0].x, y + submitPoints.captcha[0].y, 128, 28);
-                File.WriteAllBytes(String.Format("AUTO-LOADING-{0}.BMP", retry), binaryCaptcha);
+                ScreenUtil.saveAs(String.Format("AUTO-LOADING-{0}.BMP", retry), binaryCaptcha);
                 Bitmap bitMap = new Bitmap(new MemoryStream(binaryCaptcha));
                 //if (this.orcRepository.orcCaptchaLoading.IsBlank(bitMap))
                 //{
@@ -424,11 +424,11 @@ namespace tobid.scheduler.jobs
                     isLoading = false;
             }
 
-            File.WriteAllBytes("AUTO-CAPTCHA.BMP", binaryCaptcha);
+            ScreenUtil.saveAs("AUTO-CAPTCHA.BMP", binaryCaptcha);
             String txtCaptcha = this.orcRepository.orcCaptcha.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(binaryCaptcha)));
             logger.DebugFormat("\t\tCAPTURE TIPS({0}, {1})", x + submitPoints.captcha[1].x, y + submitPoints.captcha[1].y);
             byte[] binaryTips = new ScreenUtil().screenCaptureAsByte(x + submitPoints.captcha[1].x, y + submitPoints.captcha[1].y, 112, 16);
-            File.WriteAllBytes("AUTO-TIPS.BMP", binaryCaptcha);
+            ScreenUtil.saveAs("AUTO-TIPS.BMP", binaryCaptcha);
             String strActive = this.orcRepository.orcCaptchaTipsUtil.getActive(txtCaptcha, new Bitmap(new System.IO.MemoryStream(binaryTips)));
             logger.InfoFormat("\tEND   identify CAPTCHA = {0}, ACTIVE = {1}", txtCaptcha, strActive);
 

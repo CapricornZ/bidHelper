@@ -68,7 +68,7 @@ namespace tobid.scheduler.jobs.action {
 
                         if (!System.IO.Directory.Exists("Captchas"))
                             System.IO.Directory.CreateDirectory("Captchas");
-                        File.WriteAllBytes(String.Format("Captchas/pre-CAPTCHA-LOADING-{0}-{1}.BMP", fileName, retry), binaryCaptcha);
+                        ScreenUtil.saveAs(String.Format("Captchas/pre-CAPTCHA-LOADING-{0}-{1}.BMP", fileName, retry), binaryCaptcha);
                     }
 
                     isLoading = tobid.util.orc.CaptchaHelper.isLoading(bitMap);
@@ -92,7 +92,7 @@ namespace tobid.scheduler.jobs.action {
                     logger.DebugFormat("\tretry[{2}] capture screen({0}, {1})", x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, retry);
                     binaryCaptcha = new ScreenUtil().screenCaptureAsByte(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y, 128, 28);
                     bitMap = new Bitmap(new MemoryStream(binaryCaptcha));
-                    File.WriteAllBytes(String.Format("Captchas/CAPTCHA-REFRESH-{0}-{1}.BMP", fileName, retry), binaryCaptcha);
+                    ScreenUtil.saveAs(String.Format("Captchas/CAPTCHA-REFRESH-{0}-{1}.BMP", fileName, retry), binaryCaptcha);
 
                     isRefresh = tobid.util.orc.CaptchaHelper.isRefresh(bitMap);
                     logger.DebugFormat("isRefresh : {0}", isRefresh);

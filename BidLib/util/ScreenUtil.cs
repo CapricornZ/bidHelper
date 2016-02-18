@@ -305,6 +305,14 @@ namespace tobid.util
             keycode.Add("+", 48);
         }
 
+        static public void saveAs(String destination, byte[] content) {
+            try {
+                File.WriteAllBytes(destination, content);
+            } catch (Exception Exception){
+                System.Console.WriteLine(Exception);
+            }
+        }
+
         public void drawSomething(int x, int y, String something)
         {
             System.IntPtr DesktopHandle = GetDC(System.IntPtr.Zero);
