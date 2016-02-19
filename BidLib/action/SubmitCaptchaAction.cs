@@ -134,7 +134,10 @@ namespace tobid.scheduler.jobs.action {
                 if (status == BidStatus.FINISH) {
                     this.repository.lastCost = diff;
                     System.Console.WriteLine(BidStatus.FINISH);
-                    ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x + 50 + 38, y + submitPrice.buttons[0].y);
+                    //ScreenUtil.SetCursorPos(x + submitPrice.buttons[0].x + 50 + 38, y + submitPrice.buttons[0].y);
+
+                    logger.DebugFormat("点击[确认]按钮 {x:{0},y:{1}}", x + this.repository.bidStep2.okButton.x, y + this.repository.bidStep2.okButton.y);
+                    ScreenUtil.SetCursorPos(x + this.repository.bidStep2.okButton.x, y + this.repository.bidStep2.okButton.y);
                     ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                     break;
                 }
@@ -142,8 +145,8 @@ namespace tobid.scheduler.jobs.action {
                 //if (diff.TotalMilliseconds >= 5000)
                 //    break;//超过5秒
 
-                if (diff.TotalMilliseconds > 10000){//超过10s也停止
-                    logger.Error("超时 10s");
+                if (diff.TotalMilliseconds > 30000){//超过30s也停止
+                    logger.Error("30秒超时，停止SubmitCaptchaAction");
                     break;
                 }
             }

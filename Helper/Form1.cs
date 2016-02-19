@@ -1149,23 +1149,23 @@ namespace Helper
                 int x = origin.X;
                 int y = origin.Y;
 
+                logger.DebugFormat("点击[确认]按钮 {x:{0},y:{1}}", x + bid.okButton.x, y + bid.okButton.y);
                 ScreenUtil.SetCursorPos(x + bid.okButton.x, y + bid.okButton.y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
                 System.Threading.Thread.Sleep(50);
 
                 DateTime now = DateTime.Now;
                 int delta = 300;
-                //if(this.m_F9Strategy.ContainsKey(now.Second))
-                //    delta = this.m_F9Strategy[now.Second];
-                //tobid.rest.f9.Action f9Action = this.getF9Action();
                 tobid.rest.f9.Action f9Action = this.m_f9Repository.randomAction();
                 if (null != f9Action)
                     delta = f9Action.delta;
+
                 logger.DebugFormat("trigger Delta Price : {0}", delta);
                 IBidAction actionInputPrice = new InputPriceAction(delta: delta, repo: this);
                 IBidAction actionPreCaptcha = new PreCaptchaAction(repo: this);
                 IAction actions = new SequenceAction(new List<IBidAction>() { actionInputPrice, actionPreCaptcha });
-                IBidAction actionSubmitCaptcha = new SubmitCaptchaPureAction(repo:this);
+                //IBidAction actionSubmitCaptcha = new SubmitCaptchaPureAction(repo:this);
+                IBidAction actionSubmitCaptcha = new SubmitCaptchaAction(repo: this);
                 //actions.execute();
                 if(this.checkBoxRemoteCaptchaV1.Checked || this.checkBoxRemoteCaptchaV2.Checked)
                     actions.execute();
@@ -1185,7 +1185,7 @@ namespace Helper
                     System.Threading.Thread.Sleep(100);
                     TimeSpan diff = DateTime.Now - this.lastSubmit;
                     logger.DebugFormat("lastSubmit : {0}, left : {1}", lastSubmit.ToString("HH:mm:ss.ffff"), diff.TotalMilliseconds);
-                    if (second >= 53) {
+                    if (second >= 55) {
                         if (this.isReady) {
                             actionSubmitCaptcha.execute();
                             break;
@@ -1202,6 +1202,10 @@ namespace Helper
                     //    actionSubmitCaptcha.execute();
                     //    break;
                     //}
+                    if (diff.TotalSeconds >= 30) {//30秒停止
+                        logger.Error("30秒超时，停止F9");
+                        break;
+                    }
                 }
             });
             startFire.Name = "F9Thread";

@@ -57,8 +57,9 @@ namespace Helper {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
+            Point origin = tobid.util.IEUtil.findOrigin();
             try {
-                Point origin = tobid.util.IEUtil.findOrigin();
+
                 tobid.rest.position.Rect rectCaptcha = this.repository.bidStep2.submit.captcha[0];
                 byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rectCaptcha.x, origin.Y + rectCaptcha.y, rectCaptcha.width, rectCaptcha.height);
 
@@ -76,6 +77,18 @@ namespace Helper {
                 this.pictureBox1.Update();
             }
             catch (Exception ex) {
+                this.timer1.Enabled = false;
+            }
+
+            try {
+
+                tobid.rest.position.Rect rectCaptcha = this.repository.bidStep2.submit.captcha[1];
+                byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + rectCaptcha.x, origin.Y + rectCaptcha.y, rectCaptcha.width, rectCaptcha.height);
+
+                Bitmap bmp = new Bitmap(new MemoryStream(content));
+                this.pictureBox2.Image = bmp;
+                this.pictureBox1.Update();
+            } catch (Exception ex) {
                 this.timer1.Enabled = false;
             }
         }
