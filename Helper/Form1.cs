@@ -22,6 +22,9 @@ using tobid.util.hook;
 using System.Threading;
 using System.Globalization;
 
+using tobid.util.http.ws;
+using tobid.util.http.ws.cmd;
+
 namespace Helper
 {
     enum CaptchaInput {
@@ -83,6 +86,7 @@ namespace Helper
         public TimeSpan lastCost { get; set; }
         public Boolean isReady { get; set; }
         public String assistantEndPoint { get; set; }
+        public String wsEndPoint { get; set; }
         public string submitCaptcha(Stream captcha, Stream tips) {
 
             System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
@@ -103,8 +107,15 @@ namespace Helper
             try {
                 logger.DebugFormat("submiting CAPTCHA request to {0}", this.assistantEndPoint);
                 String strCaptcha = new tobid.util.http.HttpUtil().postFiles(this.assistantEndPoint, new UploadFile[] { uf1, uf2 }, nvc);
+                logger.Debug(strCaptcha);
+                Command command = Newtonsoft.Json.JsonConvert.DeserializeObject<Command>(strCaptcha, new CommandConvert());
                 logger.InfoFormat("get respond CAPTCHA : {0}", strCaptcha);
-                return strCaptcha;
+                if (command is tobid.util.http.ws.Reply)
+                    return ((Reply)command).code;
+                else if (command is Retry)
+                    return "RETRY";
+                else
+                    return "OTHER";
             } catch (Exception ex) {
 
                 logger.Error(ex.ToString());
@@ -143,15 +154,17 @@ namespace Helper
         private Object lockPrice = new Object();
 
         private KeyboardHook kh;
-        private String triggerF11;
-        private String triggerSetPolicy;
-        private String triggerLoadResource;
+        private String triggerF11 { get; set; }
+        private String triggerSetPolicy { get; set; }
+        private String triggerLoadResource { get; set; }
         private String wifiRefreshBefore;
         private String m_submitHotKey;
 
         private ITrigger m_trigger;
         private IDictionary<int, int> m_F9Strategy;
         private tobid.rest.f9.F9Common m_f9Repository;
+
+        private SocketClient m_wsClient;
 
         private void Form1_Activated(object sender, EventArgs e) {
 
@@ -197,6 +210,7 @@ namespace Helper
             if(null != kh)
                 kh.UnHook();
 
+            this.offLine();
             logger.Info("Application Form Closed");
         }
 
@@ -281,7 +295,99 @@ namespace Helper
             return new Point(rectX.X, rectX.Y);
         }
 
-        
+        public void onLine() {
+
+            String hostName = System.Net.Dns.GetHostName();
+            this.m_wsClient = new SocketClient(this.wsEndPoint, hostName, this.ProcessMessage);
+            this.m_wsClient.start(30);
+        }
+
+        public void offLine() {
+            this.m_wsClient.stop();
+        }
+
+        private void ProcessMessage(Command command) {
+
+            if (command is tobid.util.http.ws.Message) {
+
+                tobid.util.http.ws.Message msg = command as tobid.util.http.ws.Message;
+                System.Console.WriteLine(msg.content);
+            } else if (command is SetTimerCmd){
+
+                logger.Debug("Process Message - Set Timer");
+                SetTimerCmd setTimer = command as SetTimerCmd;
+                foreach(String param in setTimer.param){
+
+                    logger.DebugFormat("SetTimer[{0}]", param);
+                    String[] array = param.Split('?');
+                    Type type = this.GetType();
+                    System.Reflection.BindingFlags flag = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                    System.Reflection.PropertyInfo fInfo = type.GetProperty(array[0], flag);
+                    fInfo.SetValue(this, array[1], null);
+                }
+
+            } else if (command is ReloadCmd) {
+
+                logger.Debug("Process Message - Load Resource");
+                if (this.国拍ToolStripMenuItem.Checked) {
+
+                    try {
+                        if (this.InvokeRequired) {
+                            Invoke(new MethodInvoker(delegate(){
+                                this.loadResource("real");
+                                this.enableForm();
+                            }));
+                        }
+                        
+                    } catch (Exception ex) {
+                        logger.Error(ex);
+                        this.disableForm();
+                    }
+                }
+                if (this.模拟ToolStripMenuItem.Checked) {
+
+                    try {
+                        if (this.InvokeRequired) {
+                            Invoke(new MethodInvoker(delegate() {
+                                this.loadResource("simulate");
+                                this.enableForm();
+                            }));
+                        }
+                    } catch (Exception ex) {
+                        logger.Error(ex);
+                        this.disableForm();
+                    }
+                }
+            } else if (command is TriggerF11Cmd) {
+
+                logger.Debug("Process Message - Trigger F11");
+                this.fire(SubmitPriceStep2Job.getPosition(), 1200);
+            } else if (command is UpdatePolicyCmd) {
+
+                logger.Debug("Process Message - Update Policy");
+                if (this.tabControl1.SelectedIndex == 1) {//策略V1
+                    logger.Info("自定义V1");
+                    this.updateCustomPolicyV1();
+                }
+                if (this.tabControl1.SelectedIndex == 2) {//策略V2
+                    logger.Info("自定义V2");
+                    this.updateCustomPolicyV2();
+                }
+            } else if (command is SetTriggerCmd) {
+
+                SetTriggerCmd cmd = command as SetTriggerCmd;
+
+                Config config = new Config();
+                config.policy = cmd.trigger;
+
+                if (this.InvokeRequired) {
+                    Invoke(new MethodInvoker(delegate() {
+                        this.receiveLogin(config, false);
+                    }));
+                }
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e) {
 
             Version localVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -330,6 +436,7 @@ namespace Helper
             this.wifiRefreshBefore = ConfigurationManager.AppSettings["forbiddenWifiRefresh"];
             
             this.assistantEndPoint = ConfigurationManager.AppSettings["ASSISTANT"];
+            this.wsEndPoint = ConfigurationManager.AppSettings["wsENDPOINT"];
 
             Form.CheckForIllegalCrossThreadCalls = false;
             this.dateTimePicker1.Value = DateTime.Now;
@@ -398,6 +505,7 @@ namespace Helper
             //isOk = Hotkey.RegisterHotKey(this.Handle, 225, Hotkey.KeyModifiers.None, Keys.F4);
             //isOk = Hotkey.RegisterHotKey(this.Handle, 226, Hotkey.KeyModifiers.Ctrl, Keys.R);
 
+            this.onLine();
 
             //keepAlive任务配置
             SchedulerConfiguration config1M = new SchedulerConfiguration(1000 * 60 * 1);
@@ -576,7 +684,7 @@ namespace Helper
         /// 处理快捷键
         /// </summary>
         /// <param name="m"></param>
-        protected override void WndProc(ref Message m) {
+        protected override void WndProc(ref System.Windows.Forms.Message m) {
             const int WM_HOTKEY = 0x0312;
             switch (m.Msg) {
                 case WM_HOTKEY:
@@ -665,20 +773,22 @@ namespace Helper
             base.WndProc(ref m);
         }
 
-        private void receiveLogin(Config config) {
+        private void receiveLogin(Config config, Boolean updateBID = true) {
 
             if (config != null) {
 
-                this.groupBox1.Text = String.Format("投标人:{0}", config.pname);
-                this.groupBox1.Enabled = true;
-                this.textBoxBNO.Text = config.no;
-                this.textBoxBPass.Text = config.passwd;
-                this.textBoxPID.Text = config.pid;
+                if (updateBID) {
+                    this.groupBox1.Text = String.Format("投标人:{0}", config.pname);
+                    this.groupBox1.Enabled = true;
+                    this.textBoxBNO.Text = config.no;
+                    this.textBoxBPass.Text = config.passwd;
+                    this.textBoxPID.Text = config.pid;
 
-                logger.Info("标  书: " + config.no);
-                logger.Info("密  码: " + config.passwd);
-                logger.Info("姓  名: " + config.pname);
-                logger.Info("身份证: " + config.pid);
+                    logger.Info("标  书: " + config.no);
+                    logger.Info("密  码: " + config.passwd);
+                    logger.Info("姓  名: " + config.pname);
+                    logger.Info("身份证: " + config.pid);
+                }
             } else {
 
                 this.groupBox1.Text = "投标人:NULL";
@@ -690,7 +800,7 @@ namespace Helper
 
             if (null != config && !String.IsNullOrEmpty(config.policy)) {
 
-                ITrigger trigger = trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<ITrigger>(config.policy, new tobid.rest.json.TriggerConvert());
+                ITrigger trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<ITrigger>(config.policy, new tobid.rest.json.TriggerConvert());
                 this.m_trigger = trigger;
 
                 if ("V1".Equals(trigger.category)) {//TRIGGER V1
@@ -1756,7 +1866,8 @@ namespace Helper
                 remoteVer = new HttpUtil().getAsPlain(endPoint + "/Release.ver");
 
             } catch (Exception ex) {
-                System.Console.WriteLine(ex);
+
+                logger.Error(ex);
                 MessageBox.Show(String.Format("软件为最新版. {0}", localVer), "UP TO DATE", messButton, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 return;
             }

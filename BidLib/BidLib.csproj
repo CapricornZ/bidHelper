@@ -99,7 +99,12 @@
     <Compile Include="util\RestClient.cs" />
     <Compile Include="util\ScreenUtil.cs" />
     <Compile Include="util\SendInput.cs" />
+    <Compile Include="util\websocket\Cmd.cs" />
+    <Compile Include="util\websocket\SetTriggerV1Cmd.cs" />
+    <Compile Include="util\websocket\SocketClient.cs" />
     <Compile Include="util\SystemTime.cs" />
+    <Compile Include="util\websocket\Command.cs" />
+    <Compile Include="util\websocket\CommandConvert.cs" />
     <Compile Include="util\WinIO.cs" />
     <Compile Include="util\Hook\Win32Api.cs" />
   </ItemGroup>
@@ -113,6 +118,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\websocket-sharp\websocket-sharp.csproj">
+      <Project>{B357BAC7-529E-4D81-A0D2-71041B19C8DE}</Project>
+      <Name>websocket-sharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

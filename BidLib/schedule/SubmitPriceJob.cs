@@ -16,6 +16,7 @@ using tobid.scheduler;
 
 namespace tobid.scheduler.jobs
 {
+
     public interface IRepository {
         
         /// <summary>

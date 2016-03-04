@@ -119,6 +119,7 @@ namespace tobid.scheduler.jobs.action {
                 logger.Info("\tEND[REFRESH]   identify");
                 logger.Info("END   CAPTCHA dialog");
                 
+                //4. remote CAPTCHA assistance
                 System.Threading.Thread.Sleep(500);
                 byte[] captcha = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y,
                     submitPrice.captcha[0].width, submitPrice.captcha[0].height);
@@ -128,16 +129,49 @@ namespace tobid.scheduler.jobs.action {
                 String strCaptcha = this.repository.submitCaptcha(captcha: new MemoryStream(captcha), tips: new MemoryStream(tip));
                 if (!"ERROR".Equals(strCaptcha)) {
 
-                    logger.InfoFormat("BEGIN input captcha {0}", strCaptcha);
-                    ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);
-                    ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-                    System.Threading.Thread.Sleep(25);
+                    if ("RETRY".Equals(strCaptcha)) {
 
-                    KeyBoardUtil.sendMessage(strCaptcha, interval: this.repository.interval, needClean: true);
-                    logger.Info("END   input captcha");
+                        logger.Info("BEGIN RETRY");
 
-                    logger.Info("set CAPTCHA READY!");
-                    this.repository.isReady = true;
+                            ScreenUtil.SetCursorPos(x + submitPrice.captcha[0].x + 55, y + submitPrice.captcha[0].y + 12);//校验码区域
+                            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
+                            ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);//校验码输入框
+                            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+
+                            System.Threading.Thread.Sleep(500);
+                            captcha = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[0].x, y + submitPrice.captcha[0].y,
+                                submitPrice.captcha[0].width, submitPrice.captcha[0].height);
+                            tip = new ScreenUtil().screenCaptureAsByteJPEG(x + submitPrice.captcha[1].x, y + submitPrice.captcha[1].y,
+                                submitPrice.captcha[1].width, submitPrice.captcha[1].height);
+
+                            strCaptcha = this.repository.submitCaptcha(captcha: new MemoryStream(captcha), tips: new MemoryStream(tip));
+
+                            logger.InfoFormat("BEGIN input captcha {0}", strCaptcha);
+                            ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);
+                            ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                            System.Threading.Thread.Sleep(25);
+
+                            KeyBoardUtil.sendMessage(strCaptcha, interval: this.repository.interval, needClean: true);
+                            logger.Info("END   input captcha");
+
+                            logger.Info("set CAPTCHA READY!");
+                            this.repository.isReady = true;
+
+                        logger.Info("END   RETRY");
+                    } else {
+
+                        logger.InfoFormat("BEGIN input captcha {0}", strCaptcha);
+                        ScreenUtil.SetCursorPos(x + submitPrice.inputBox.x, y + submitPrice.inputBox.y);
+                        ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
+                        System.Threading.Thread.Sleep(25);
+
+                        KeyBoardUtil.sendMessage(strCaptcha, interval: this.repository.interval, needClean: true);
+                        logger.Info("END   input captcha");
+
+                        logger.Info("set CAPTCHA READY!");
+                        this.repository.isReady = true;
+                    }
                 }
             });
 
