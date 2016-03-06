@@ -29,8 +29,6 @@ namespace tobid.rest
         public String pid { get; set; }
         public String pname { get; set; }
         public String policy { get; set; }
-        //public DateTime startTime { get; set; }
-        //public DateTime expireTime { get; set; }
         public DateTime updateTime { get; set; }
     }
 
@@ -43,8 +41,6 @@ namespace tobid.rest
         public String type { get; set; }
         public String tag { get; set; }
         public String content { get; set; }
-        //public DateTime startTime { get; set; }
-        //public DateTime expireTime { get; set; }
         public DateTime updateTime { get; set; }
     }
 

@@ -7,6 +7,7 @@ using System.Threading;
 using tobid.util.orc;
 using tobid.rest;
 using tobid.rest.position;
+using tobid.util.http.ws;
 
 namespace tobid.scheduler.jobs
 {
@@ -19,32 +20,30 @@ namespace tobid.scheduler.jobs
         private static int executeCount = 1;
 
         private IOrc orcCaptcha;
-        public LoginJob(IOrc orcCaptcha){
+        private IBidRepository bidRepo;
+        public LoginJob(IOrc orcCaptcha, IBidRepository bidRepo){
 
+            this.bidRepo = bidRepo;
             this.orcCaptcha = orcCaptcha;
         }
 
-        public static Boolean setConfig(Config config, LoginOperation operation)
-        {
+        public static Boolean setConfig(Config config, LoginOperation operation) {
+
             logger.Info("setConfig {...}");
             Boolean rtn = false;
-            if (Monitor.TryEnter(LoginJob.lockObj, 500))
-            {
+            if (Monitor.TryEnter(LoginJob.lockObj, 500)) {
+
                 if (config == null)
                     return false;
 
-                if ((null == LoginJob.operation) || (operation.updateTime > LoginJob.operation.updateTime))
-                {
+                if ((null == LoginJob.operation) || (operation.updateTime > LoginJob.operation.updateTime)) {
+
                     LoginJob.executeCount = 0;
                     LoginJob.config = config;
                     LoginJob.operation = operation;
 
                     logger.DebugFormat("{{ bidNO:{0}, bidPassword:{1}, idCard:{2} }}",
                         config.no, config.passwd, config.pid);
-                    //logger.DebugFormat("startTime:{0} - expireTime:{1}",
-                    //    LoginJob.operation.startTime,
-                    //    LoginJob.operation.expireTime);
-
                     rtn = true;
                 }
 
@@ -63,31 +62,18 @@ namespace tobid.scheduler.jobs
 
         private static System.Threading.AutoResetEvent DocComplete = new System.Threading.AutoResetEvent(false);
 
-        public void Execute()
-        {
+        public void Execute() {
+
             DateTime now = DateTime.Now;
-            if (LoginJob.operation == null)
-                logger.Debug("LoginJob.OPERATION NOT SET");
-            else
-                logger.Debug(String.Format("{0} {Count:{3}}}",
-                    LoginJob.executeCount));
+            if (Monitor.TryEnter(LoginJob.lockObj, 500)) {
 
-            if (Monitor.TryEnter(LoginJob.lockObj, 500))
-            {
-                //if (now >= LoginJob.operation.startTime && now <= LoginJob.operation.expireTime && LoginJob.executeCount == 0)
-                //{
-                //   LoginJob.executeCount++;
-                //    logger.Debug("trigger Fired");
-                //}
-                if (null == LoginJob.config) {
-
+                if( null == this.bidRepo.config) {
                     logger.Error("Corresponding config is not set");
                     return;
                 }
 
                 SHDocVw.InternetExplorer Browser = tobid.util.IEUtil.findBrowser();
-                if (null != Browser)
-                {
+                if (null != Browser) {
                     //Browser.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(ie_DocumentComplete);
                     //Browser.Navigate(LoginJob.operation.url);
                     //DocComplete.WaitOne();
@@ -123,23 +109,22 @@ namespace tobid.scheduler.jobs
                     mshtml.IHTMLElementCollection inputs = (mshtml.IHTMLElementCollection)doc2.all.tags("INPUT");
                     mshtml.HTMLInputElement input1 = (mshtml.HTMLInputElement)inputs.item("bidnumber");
                     if(null != input1)
-                        input1.value = LoginJob.config.no;
+                        input1.value = this.bidRepo.config.no;
                     mshtml.HTMLInputElement input2 = (mshtml.HTMLInputElement)inputs.item("bidpassword");
                     if (null != input2)
-                        input2.value = LoginJob.config.passwd;
+                        input2.value = this.bidRepo.config.passwd;
                     mshtml.HTMLInputElement input3 = (mshtml.HTMLInputElement)inputs.item("idcard");
                     if (null != input3)
-                        input3.value = LoginJob.config.pid;
+                        input3.value = this.bidRepo.config.pid;
                     mshtml.HTMLInputElement input4 = (mshtml.HTMLInputElement)inputs.item("imagenumber");
                     if (null != input4)
                         input4.value = strCaptcha;
 
-                    mshtml.IHTMLElement loginBtn = doc2.all.item("btnlogin") as mshtml.IHTMLElement;
-                    if (loginBtn != null)
-                        loginBtn.click();
+                    //mshtml.IHTMLElement loginBtn = doc2.all.item("btnlogin") as mshtml.IHTMLElement;
+                    //if (loginBtn != null)
+                    //    loginBtn.click();
                 }
-                else
-                {
+                else {
                     logger.Error("IE instance not found");
                 }
                 Monitor.Exit(LoginJob.lockObj);

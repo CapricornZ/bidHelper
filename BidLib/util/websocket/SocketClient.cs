@@ -5,9 +5,15 @@ using System.Text;
 using WebSocketSharp;
 using Newtonsoft.Json.Converters;
 using System.Threading;
+using tobid.rest;
 
 namespace tobid.util.http.ws {
-    
+
+    public interface IBidRepository {
+
+        Config config { get; }
+    }
+
     public class KeepAliveHandler {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(KeepAliveHandler));
@@ -16,6 +22,7 @@ namespace tobid.util.http.ws {
         public int interval { get; set; }
         public SocketClient session { get; set; }
         public Thread thread { get; set; }
+        public IBidRepository bidRepository { get; set; }
 
         public void abort() { this.interval = 0; }
 
@@ -28,7 +35,11 @@ namespace tobid.util.http.ws {
 
                 logger.DebugFormat("SLEEP {0}s, push Heartbeat", handler.interval);
                 Thread.Sleep(handler.interval * 1000);
-                handler.session.send(new HeartBeat());
+                if(handler.bidRepository.config == null)
+                    handler.session.send(new HeartBeat());
+                else
+                    handler.session.send(new HeartBeat(String.Format("{0}[{1}]", 
+                        handler.bidRepository.config.pname, handler.bidRepository.config.no)));
             }
             logger.InfoFormat("KeepAlive terminated!", handler.interval);
         }
@@ -49,16 +60,18 @@ namespace tobid.util.http.ws {
 
         private String url;
         private String user;
+        private IBidRepository bidRepository;
         private WebSocket webSocket;
         private ProcessMessage processMessage;
 
         private int interval;
         private KeepAliveHandler keepAlive;
 
-        public SocketClient(String url, String user, ProcessMessage processor) {
+        public SocketClient(String url, String user, ProcessMessage processor, IBidRepository bidRepo) {
 
             this.url = url;
             this.user = user;
+            this.bidRepository = bidRepo;
             this.processMessage = processor;
         }
 
@@ -121,6 +134,7 @@ namespace tobid.util.http.ws {
             this.keepAlive.session = this;
             this.keepAlive.interval = interval;
             this.keepAlive.user = this.user;
+            this.keepAlive.bidRepository = this.bidRepository;
             this.keepAlive.thread = new System.Threading.Thread(KeepAliveHandler.keepAliveThread);
             this.keepAlive.thread.Start(this.keepAlive);
         }

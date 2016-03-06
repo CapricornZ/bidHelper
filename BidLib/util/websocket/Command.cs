@@ -17,6 +17,14 @@ namespace tobid.util.http.ws {
             this.category = "HEARTBEAT";
             this.time = DateTime.Now;
         }
+
+        public HeartBeat(String content){
+            this.category = "HEARTBEAT";
+            this.time = DateTime.Now;
+            this.content = content;
+        }
+
+        public String content { get; set; }
     }
 
     public class Ready : Command {

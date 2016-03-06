@@ -32,7 +32,7 @@ namespace Helper
         AUTO
     }
 
-    public partial class Form1 : Form, IRepository, INotify
+    public partial class Form1 : Form, IRepository, INotify, IBidRepository
     {
         public Form1(){
 
@@ -121,6 +121,13 @@ namespace Helper
                 logger.Error(ex.ToString());
             }
             return "ERROR";
+        }
+        #endregion
+
+        #region IBidRepository
+        private Config m_config;
+        public Config config {
+            get { return this.m_config; }
         }
         #endregion
 
@@ -298,7 +305,7 @@ namespace Helper
         public void onLine() {
 
             String hostName = System.Net.Dns.GetHostName();
-            this.m_wsClient = new SocketClient(this.wsEndPoint, hostName, this.ProcessMessage);
+            this.m_wsClient = new SocketClient(this.wsEndPoint, hostName, this.ProcessMessage, bidRepo:this);
             this.m_wsClient.start(30);
         }
 
@@ -382,7 +389,9 @@ namespace Helper
 
                 if (this.InvokeRequired) {
                     Invoke(new MethodInvoker(delegate() {
-                        this.receiveLogin(config, false);
+                        this.receiveTriggerDebug(cmd.trigger);
+                        logger.Info("自定义V1");
+                        this.updateCustomPolicyV1();
                     }));
                 }
             }
@@ -773,9 +782,72 @@ namespace Helper
             base.WndProc(ref m);
         }
 
+        private void receiveTriggerDebug(String policy){
+
+            ITrigger trigger = Newtonsoft.Json.JsonConvert.DeserializeObject<ITrigger>(policy, new tobid.rest.json.TriggerConvert());
+            this.m_trigger = trigger;
+
+            if ("V1".Equals(trigger.category)) {//TRIGGER V1
+
+                Trigger instance = (Trigger)trigger;
+                int idx = instance.deltaPrice / 100 - 1;
+                this.comboBoxCustomDelta.SelectedItem = this.comboBoxCustomDelta.Items[idx];
+
+                if (!String.IsNullOrWhiteSpace(this.dateTimePickerCustomPrice.Text)) {
+
+                    String[] time1 = this.dateTimePickerCustomPrice.Text.Split(':');
+                    String[] time2 = instance.priceTime.Split(':');
+                    String time = String.Format("{0}:{1}:{2}", time2[0], time2[1], "--".Equals(time2[2]) ? time1[2] : time2[2]);
+                    this.dateTimePickerCustomPrice.Text = time;
+                } else
+                    this.dateTimePickerCustomPrice.Text = instance.priceTime;
+
+                this.checkBoxInputCaptcha.Checked = null != instance.captchaTime;
+                if (null != instance.captchaTime) {
+
+                    if (!String.IsNullOrWhiteSpace(this.dateTimePickerCustomInputCaptcha.Text)) {
+                        String[] time1 = this.dateTimePickerCustomInputCaptcha.Text.Split(':');
+                        String[] time2 = instance.captchaTime.Split(':');
+                        String time = String.Format("{0}:{1}:{2}", time2[0], time2[1], "--".Equals(time2[2]) ? time1[2] : time2[2]);
+                        this.dateTimePickerCustomInputCaptcha.Text = time;
+                    } else
+                        this.dateTimePickerCustomInputCaptcha.Text = instance.captchaTime;
+                }
+
+                this.checkBoxSubmitCaptcha.Checked = null != instance.submitTime;
+                if (null != instance.submitTime) {
+
+                    if (!String.IsNullOrWhiteSpace(this.dateTimePickerCustomSubmitCaptcha.Text)) {
+                        String[] time1 = this.dateTimePickerCustomSubmitCaptcha.Text.Split(':');
+                        String[] time2 = instance.submitTime.Split(':');
+                        String time = String.Format("{0}:{1}:{2}", time2[0], time2[1], "--".Equals(time2[2]) ? time1[2] : time2[2]);
+                        this.dateTimePickerCustomSubmitCaptcha.Text = time;
+                    } else
+                        this.dateTimePickerCustomSubmitCaptcha.Text = instance.submitTime;
+                }
+
+                if (instance.submitReachPrice > 0) {
+                    this.checkBoxReachPrice.Checked = true;
+                    this.comboBoxReachPrice.Enabled = true;
+                    int index = instance.submitReachPrice / 100 - 1;
+                    this.comboBoxReachPrice.SelectedItem = this.comboBoxReachPrice.Items[index];
+                } else {
+                    this.checkBoxReachPrice.Checked = false;
+                    this.comboBoxReachPrice.Enabled = false;
+                }
+
+                this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
+                this.tabControl1.SelectTab(1);
+                this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+
+            }
+        }
+
         private void receiveLogin(Config config, Boolean updateBID = true) {
 
             if (config != null) {
+
+                this.buttonLogin.Enabled = true;
 
                 if (updateBID) {
                     this.groupBox1.Text = String.Format("投标人:{0}", config.pname);
@@ -784,6 +856,8 @@ namespace Helper
                     this.textBoxBPass.Text = config.passwd;
                     this.textBoxPID.Text = config.pid;
 
+                    this.m_config = config;
+
                     logger.Info("标  书: " + config.no);
                     logger.Info("密  码: " + config.passwd);
                     logger.Info("姓  名: " + config.pname);
@@ -791,11 +865,15 @@ namespace Helper
                 }
             } else {
 
+                this.buttonLogin.Enabled = true;
+
                 this.groupBox1.Text = "投标人:NULL";
                 this.groupBox1.Enabled = false;
                 this.textBoxBNO.Text = "";
                 this.textBoxBPass.Text = "";
                 this.textBoxPID.Text = "";
+
+                this.m_config = null;
             }
 
             if (null != config && !String.IsNullOrEmpty(config.policy)) {
@@ -847,6 +925,7 @@ namespace Helper
                     this.drSwitchTab = System.Windows.Forms.DialogResult.OK;
                     this.tabControl1.SelectTab(2);
                     this.drSwitchTab = System.Windows.Forms.DialogResult.Cancel;
+
                 } else if ("V3".Equals(trigger.category)) {//TRIGGER V3
 
                     TriggerV3 instance = (TriggerV3)trigger;
@@ -1993,24 +2072,8 @@ namespace Helper
 
         private void buttonLogin_Click_1(object sender, EventArgs e){
 
-            LoginJob job = new LoginJob(m_orcLogin);
+            LoginJob job = new LoginJob(m_orcLogin, this);
             job.Execute();
-
-            //this.giveDeltaPrice(SubmitPriceStep2Job.getPosition(), 300);
-
-            //for (int i = 1; i < 22; i++) {
-            //    Image img = Image.FromFile(@"e:\captcha" + i + ".png");
-            //    String val = this.m_orcLogin.IdentifyStringFromPic((Bitmap)img);
-            //    System.Console.WriteLine(val);
-            //}
-
-            //214,203
-            //Point origin = findOrigin();
-            //int x = origin.X;
-            //int y = origin.Y;
-            //byte[] content = new ScreenUtil().screenCaptureAsByte(x+214, y+203, 6, 5);
-            //File.WriteAllBytes(@"e:\point.bmp", content);
-            //H:143-184
         }
 
         private void buttonMyProfile_Click(object sender, EventArgs e) {
@@ -2018,13 +2081,18 @@ namespace Helper
             String authCode = Microsoft.VisualBasic.Interaction.InputBox("请输入标书号", "标书登陆", "");
             if (!String.IsNullOrEmpty(authCode)) {
 
-                String epKeepAlive = this.EndPoint + "/rest/service/command/bid/" + authCode;
-                RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
-                String rtn = restGetConfig.MakeRequest();
-                System.Console.WriteLine(rtn);
+                try {
+                    String epKeepAlive = this.EndPoint + "/rest/service/command/bid/" + authCode;
+                    RestClient restGetConfig = new RestClient(endpoint: epKeepAlive, method: HttpVerb.GET);
+                    String rtn = restGetConfig.MakeRequest();
 
-                Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
-                this.receiveLogin(config);
+                    Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(rtn);
+                    this.receiveLogin(config);
+                } catch (Exception ex) {
+
+                    logger.Error(ex.ToString());
+                    MessageBox.Show("获取标书异常");
+                }
             }
         }
         #endregion
@@ -2142,6 +2210,5 @@ namespace Helper
             SystemTimeUtil.addMilliSecond(-500);
         }
         #endregion
-
     }
 }
