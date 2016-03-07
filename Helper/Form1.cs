@@ -171,8 +171,6 @@ namespace Helper
         private IDictionary<int, int> m_F9Strategy;
         private tobid.rest.f9.F9Common m_f9Repository;
 
-        private SocketClient m_wsClient;
-
         private void Form1_Activated(object sender, EventArgs e) {
 
             //logger.Info("Application Form Activated");
@@ -194,25 +192,6 @@ namespace Helper
 
             if (null != this.wifiMonitorThread)
                 this.wifiMonitorThread.Abort();
-
-            //Hotkey.UnregisterHotKey(this.Handle, 103);
-            //Hotkey.UnregisterHotKey(this.Handle, 104);
-            //Hotkey.UnregisterHotKey(this.Handle, 105);
-            //Hotkey.UnregisterHotKey(this.Handle, 106);
-            //Hotkey.UnregisterHotKey(this.Handle, 107);
-            //Hotkey.UnregisterHotKey(this.Handle, 108);
-            //Hotkey.UnregisterHotKey(this.Handle, 109);
-
-            //Hotkey.UnregisterHotKey(this.Handle, 201);
-            //Hotkey.UnregisterHotKey(this.Handle, 202);
-            //Hotkey.UnregisterHotKey(this.Handle, 203);
-            //Hotkey.UnregisterHotKey(this.Handle, 204);
-
-            //Hotkey.UnregisterHotKey(this.Handle, 221);
-            //Hotkey.UnregisterHotKey(this.Handle, 222);
-            //Hotkey.UnregisterHotKey(this.Handle, 223);
-            //Hotkey.UnregisterHotKey(this.Handle, 224);
-            //Hotkey.UnregisterHotKey(this.Handle, 225);
 
             if(null != kh)
                 kh.UnHook();
@@ -302,15 +281,68 @@ namespace Helper
             return new Point(rectX.X, rectX.Y);
         }
 
+        #region WebSocket
+
+        private SocketClient m_wsClient;
+        private KeepAliveHandler m_keepAlive;
+
         public void onLine() {
 
             String hostName = System.Net.Dns.GetHostName();
-            this.m_wsClient = new SocketClient(this.wsEndPoint, hostName, this.ProcessMessage, bidRepo:this);
+            this.m_wsClient = new SocketClient(this.wsEndPoint, hostName, bidRepo: this, 
+                processMessage: this.ProcessMessage, 
+                processConnect: this.ProcessConnect,
+                processError: this.ProcessError,
+                processClose: this.ProcessClose);
+            this.toolStripStatusWSocket.Text = "Connecting...";
             this.m_wsClient.start(30);
         }
 
         public void offLine() {
+
             this.m_wsClient.stop();
+            if (this.m_keepAlive != null)
+                this.m_keepAlive.abort();
+        }
+
+        private void toolStripStatusWSocket_Click(object sender, EventArgs e) {
+
+            if (!this.toolStripStatusWSocket.Text.Equals("Connected!")) {
+                this.onLine();
+            }
+        }
+
+        private void ProcessConnect() {
+
+            if (null != this.m_keepAlive)
+                this.m_keepAlive.abort();
+
+            this.toolStripStatusWSocket.Text = "Connected!";
+            this.toolStripStatusWSocket.BackColor = System.Drawing.Color.Lime;
+
+            String hostName = System.Net.Dns.GetHostName();
+            this.m_keepAlive = new KeepAliveHandler();
+            this.m_keepAlive.session = this.m_wsClient;
+            this.m_keepAlive.interval = this.m_wsClient.interval;
+            this.m_keepAlive.user = hostName;
+            this.m_keepAlive.bidRepository = this;
+            this.m_keepAlive.thread = new System.Threading.Thread(KeepAliveHandler.keepAliveThread);
+            this.m_keepAlive.thread.Start(this.m_keepAlive);
+        }
+
+        private void ProcessClose() {
+
+            logger.Info("Close:重连...");
+
+            this.toolStripStatusWSocket.Text = "Closed!";
+            this.toolStripStatusWSocket.BackColor = System.Drawing.Color.Red;
+            if (this.m_keepAlive != null)
+                this.m_keepAlive.abort();
+        }
+
+        private void ProcessError() {
+
+            this.toolStripStatusWSocket.BackColor = System.Drawing.Color.Yellow;
         }
 
         private void ProcessMessage(Command command) {
@@ -396,6 +428,7 @@ namespace Helper
                 }
             }
         }
+        #endregion
 
         private void Form1_Load(object sender, EventArgs e) {
 
@@ -1063,14 +1096,15 @@ namespace Helper
 
             if(this.triggerF11.Contains(current)){//F11
                 if (now.Millisecond > 500) {//避免触发两次
+                    
                     logger.InfoFormat("@{0} auto F11 triggered", now);
                     this.fire(SubmitPriceStep2Job.getPosition(), 1200);
                 }
             }
             if (current.Equals(this.triggerSetPolicy)) {//设置策略
                 if (now.Millisecond > 500) {//避免触发两次
+                    
                     logger.InfoFormat("@{0} auto SET Custom Policy triggered", current);
-                    //
                     if (this.tabControl1.SelectedIndex == 1) {//策略V1
                         logger.Info("自定义V1");
                         this.updateCustomPolicyV1();
@@ -1089,6 +1123,11 @@ namespace Helper
                     if (this.模拟ToolStripMenuItem.Checked)
                         this.loadResource("simulate");
                 }
+            }
+            if (now.Second == 0 && now.Minute % 5 == 0 && now.Millisecond < 500) {
+
+                logger.InfoFormat("@{0} reconnecting to command triggered", current);
+                this.toolStripStatusWSocket_Click(null, null);
             }
         }
 

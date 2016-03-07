@@ -33,13 +33,13 @@ namespace tobid.util.http.ws {
             logger.InfoFormat("KeepAlive initialize.", handler.interval);
             while (handler.interval > 0) {
 
-                logger.DebugFormat("SLEEP {0}s, push Heartbeat", handler.interval);
-                Thread.Sleep(handler.interval * 1000);
+                logger.DebugFormat("PUSH Heartbeat && SLEEP {0}s", handler.interval);
                 if(handler.bidRepository.config == null)
                     handler.session.send(new HeartBeat());
                 else
                     handler.session.send(new HeartBeat(String.Format("{0}[{1}]", 
                         handler.bidRepository.config.pname, handler.bidRepository.config.no)));
+                Thread.Sleep(handler.interval * 1000);
             }
             logger.InfoFormat("KeepAlive terminated!", handler.interval);
         }
@@ -53,6 +53,8 @@ namespace tobid.util.http.ws {
         public void Dispose() { this.stop(); }
 
         public delegate void ProcessMessage(Command command);
+        public delegate void ProcessConnect();
+        public delegate void ProcessError();
         public delegate void ProcessClose();
 
         public static String USER = "USER";
@@ -63,19 +65,25 @@ namespace tobid.util.http.ws {
         private IBidRepository bidRepository;
         private WebSocket webSocket;
         private ProcessMessage processMessage;
+        private ProcessError processError;
+        private ProcessConnect processConnect;
+        private ProcessClose processClose;
 
-        private int interval;
-        private KeepAliveHandler keepAlive;
+        public int interval { get; set; }
 
-        public SocketClient(String url, String user, ProcessMessage processor, IBidRepository bidRepo) {
+        public SocketClient(String url, String user, IBidRepository bidRepo, 
+            ProcessMessage processMessage, ProcessConnect processConnect = null, ProcessError processError = null, ProcessClose processClose = null) {
 
             this.url = url;
             this.user = user;
             this.bidRepository = bidRepo;
-            this.processMessage = processor;
+            this.processMessage = processMessage;
+            this.processConnect = processConnect;
+            this.processError = processError;
+            this.processClose = processClose;
         }
 
-        public void start(int interval = 30) {
+        public void start(int interval = 15) {
 
             logger.DebugFormat("connecting to {0}", this.url);
             logger.InfoFormat("START(keepAlive : {0})", interval);
@@ -86,10 +94,9 @@ namespace tobid.util.http.ws {
         public void stop() {
 
             logger.Info("STOP!");
-            if (null != this.keepAlive)
-                this.keepAlive.abort();
-
-            this.webSocket.Close(CloseStatusCode.Normal, "USER CLOSED");
+            if (this.webSocket.ReadyState == WebSocketState.Open || this.webSocket.ReadyState == WebSocketState.Connecting) {
+                this.webSocket.Close(CloseStatusCode.Normal, "USER CLOSED");
+            }
             ((IDisposable)this.webSocket).Dispose();
         }
 
@@ -102,6 +109,9 @@ namespace tobid.util.http.ws {
         private void OnError(Object sender, ErrorEventArgs msg) {
 
             logger.ErrorFormat("ERROR : {0}", msg.Message);
+            //TODO:重连
+            if (this.processError != null)
+                this.processError();
         }
 
         private void OnMessage(Object sender, MessageEventArgs msg) {
@@ -122,21 +132,15 @@ namespace tobid.util.http.ws {
 
             logger.InfoFormat("ON CLOSE code:{0} - {1}", msg.Code, msg.Reason);
             this.stop();
+            if (null != this.processClose)
+                this.processClose();
         }
 
         private void OnOpen(Object sender, EventArgs e) {
 
             logger.InfoFormat("ON CONNECT : {0}", this.user);
-            if (null != this.keepAlive)
-                this.keepAlive.abort();
-
-            this.keepAlive = new KeepAliveHandler();
-            this.keepAlive.session = this;
-            this.keepAlive.interval = interval;
-            this.keepAlive.user = this.user;
-            this.keepAlive.bidRepository = this.bidRepository;
-            this.keepAlive.thread = new System.Threading.Thread(KeepAliveHandler.keepAliveThread);
-            this.keepAlive.thread.Start(this.keepAlive);
+            if (this.processConnect != null)
+                this.processConnect();
         }
 
         private void connect() {
@@ -147,6 +151,7 @@ namespace tobid.util.http.ws {
             this.webSocket.OnError += new EventHandler<ErrorEventArgs>(OnError);
             this.webSocket.OnMessage += new EventHandler<MessageEventArgs>(OnMessage);
 
+            this.webSocket.SetCredentials("host", "Pass2010", true);
             this.webSocket.SetCookie(new WebSocketSharp.Net.Cookie(SocketClient.USER, String.IsNullOrEmpty(this.user)?"DEFAULT WSocket":this.user));
             this.webSocket.Log.Level = LogLevel.Debug;
             this.webSocket.Connect();
