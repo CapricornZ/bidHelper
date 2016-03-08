@@ -55,8 +55,10 @@ namespace tobid.util.http.ws {
                 return new Reply();
             else if ("SETTRIGGER".Equals(value))
                 return new SetTriggerCmd();
+            else if ("TIMESYNC".Equals(value))
+                return new TimeSyncCmd();
 
-            return null;
+            return new Other();
         }
 
         private Object GetType(String prop, JObject jObject) {

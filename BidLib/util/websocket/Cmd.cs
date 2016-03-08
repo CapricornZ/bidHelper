@@ -33,6 +33,14 @@ namespace tobid.util.http.ws.cmd {
         }
     }
 
+    public class TimeSyncCmd : Command {
+
+        public TimeSyncCmd() {
+            this.category = "TIMESYNC";
+            this.time = DateTime.Now;
+        }
+    }
+
     /// <summary>
     /// 设置定时器参数
     /// </summary>

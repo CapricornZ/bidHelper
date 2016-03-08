@@ -53,6 +53,15 @@ namespace tobid.util.http.ws {
         public String content { get; set; }
     }
 
+    public class Other : Command {
+
+        public Other() {
+            this.category = "OTHER";
+            this.time = DateTime.Now;
+        }
+
+        public String description { get; set; }
+    }
     
 
     #region 远程验证码

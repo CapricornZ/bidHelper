@@ -403,7 +403,7 @@ namespace Helper
                 this.fire(SubmitPriceStep2Job.getPosition(), 1200);
             } else if (command is UpdatePolicyCmd) {
 
-                logger.Debug("Process Message - Update Policy");
+                logger.Debug("Process Message - Trigger Update Policy");
                 if (this.tabControl1.SelectedIndex == 1) {//策略V1
                     logger.Info("自定义V1");
                     this.updateCustomPolicyV1();
@@ -414,6 +414,7 @@ namespace Helper
                 }
             } else if (command is SetTriggerCmd) {
 
+                logger.Debug("Process Message - Set Trigger");
                 SetTriggerCmd cmd = command as SetTriggerCmd;
 
                 Config config = new Config();
@@ -422,10 +423,23 @@ namespace Helper
                 if (this.InvokeRequired) {
                     Invoke(new MethodInvoker(delegate() {
                         this.receiveTriggerDebug(cmd.trigger);
-                        logger.Info("自定义V1");
-                        this.updateCustomPolicyV1();
+                        //logger.Info("自定义V1");
+                        //this.updateCustomPolicyV1();
                     }));
                 }
+            } else if (command is TimeSyncCmd) {
+
+                logger.Debug("Process Message - Trigger Time Sync");
+                BidStep2 bidStep = this.bidStep2;
+                Point origin = tobid.util.IEUtil.findOrigin();
+                Position pos = bidStep.time;
+
+                byte[] content = new ScreenUtil().screenCaptureAsByte(origin.X + pos.x, origin.Y + pos.y, 140, 24);
+                String strTime = this.orcTime.IdentifyStringFromPic(new Bitmap(new System.IO.MemoryStream(content)));
+
+                char[] array = strTime.ToArray<char>();
+                String timestamp = String.Format("{0}{1}:{2}{3}:{4}{5}", array[0], array[1], array[2], array[3], array[4], array[5]);
+                SystemTimeUtil.SetCustomTime(Int16.Parse(strTime.Substring(0, 2)), Int16.Parse(strTime.Substring(2, 2)), Int16.Parse(strTime.Substring(4, 2)));
             }
         }
         #endregion
