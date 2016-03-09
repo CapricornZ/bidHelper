@@ -26,12 +26,14 @@ namespace tobid.scheduler.jobs {
         private IOrc m_orcLoading;
         private CaptchaUtil m_captchaUtil;
         private IOrc m_orcCaptcha;
+        private IRepository m_repository;
 
-        public SubmitPriceStep1Job(IOrc orcLoading, CaptchaUtil captchaUtil, IOrc orcCaptcha) {
+        public SubmitPriceStep1Job(IOrc orcLoading, CaptchaUtil captchaUtil, IOrc orcCaptcha, IRepository repository) {
 
             this.m_orcLoading = orcLoading;
             this.m_captchaUtil = captchaUtil;
             this.m_orcCaptcha = orcCaptcha;
+            this.m_repository = repository;
         }
 
         public static Boolean setConfig(Step1Operation operation) {
@@ -62,17 +64,10 @@ namespace tobid.scheduler.jobs {
         public void Execute() {
 
             DateTime now = DateTime.Now;
-            if (null == SubmitPriceStep1Job.bidOperation)
-                logger.Debug(String.Format("{{Count:{0}}}", SubmitPriceStep1Job.executeCount));
-            else
-                logger.Debug(String.Format("{Count:{2}}}",
-                    SubmitPriceStep1Job.executeCount));
-
             if (Monitor.TryEnter(SubmitPriceStep1Job.lockObj, 500)) {
 
                 if (null != SubmitPriceStep1Job.bidOperation){
-                    //&& now >= SubmitPriceStep1Job.bidOperation.startTime && now <= SubmitPriceStep1Job.bidOperation.expireTime && SubmitPriceStep1Job.executeCount == 0) {
-
+                    
                     SubmitPriceStep1Job.executeCount++;
                     logger.Warn("trigger Fired");
 
@@ -82,7 +77,8 @@ namespace tobid.scheduler.jobs {
 
                         submitCount++;
                         this.givePrice(SubmitPriceStep1Job.operation.give, price: SubmitPriceStep1Job.bidOperation.price);//出价
-                        success = this.submit(SubmitPriceStep1Job.operation.submit);//提交
+                        //success = this.submit(SubmitPriceStep1Job.operation.submit);//提交
+                        success = true;
                         logger.WarnFormat("ROUND[{0}] {1}", submitCount, success ? "SUCCESS" : "FAILED");
                     }
 
@@ -117,29 +113,14 @@ namespace tobid.scheduler.jobs {
 
                 ScreenUtil.SetCursorPos(givePrice.inputBox[i].x, givePrice.inputBox[i].y);
                 ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
-
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["BACKSPACE"], 0, 0, 0);
-
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
-                System.Threading.Thread.Sleep(50); ScreenUtil.keybd_event(ScreenUtil.keycode["DELETE"], 0, 0, 0);
-
-                for (int j = 0; j < txtPrice.Length; j++) {
-                    System.Threading.Thread.Sleep(100);
-                    ScreenUtil.keybd_event(ScreenUtil.keycode[txtPrice[j].ToString()], 0, 0, 0);
-                }
+                KeyBoardUtil.sendMessage(txtPrice, interval: this.m_repository.interval, needClean: true);
+                Thread.Sleep(250);
             }
             logger.Info("\tEND   input PRICE");
 
             //点击出价
             logger.Info("\tBEGIN click BUTTON[出价]");
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(500);
             ScreenUtil.SetCursorPos(givePrice.button.x, givePrice.button.y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("\tEND   click BUTTON[出价]");

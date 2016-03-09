@@ -6,6 +6,7 @@ using System.Drawing;
 using tobid.util;
 using tobid.rest.position;
 using tobid.util.orc;
+using System.Threading;
 
 namespace tobid.scheduler.jobs.action {
 
@@ -39,6 +40,8 @@ namespace tobid.scheduler.jobs.action {
             ScreenUtil.SetCursorPos(x + submitPrice.buttons[1].x, y + submitPrice.buttons[1].y);
             ScreenUtil.mouse_event((int)(MouseEventFlags.Absolute | MouseEventFlags.LeftDown | MouseEventFlags.LeftUp), 0, 0, 0, IntPtr.Zero);
             logger.Info("END   click BUTTON[取消]");
+
+            Thread.Sleep(250);
 
             return true;
         }

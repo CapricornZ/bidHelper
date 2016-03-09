@@ -53,5 +53,27 @@ namespace tobid.util.http.ws.cmd {
 
         public List<String> param { get; set; }
     }
+
+    /// <summary>
+    /// 登录
+    /// </summary>
+    public class LoginCmd : Command {
+
+        public LoginCmd() {
+            this.category = "LOGIN";
+            this.time = DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// 第一阶段出价
+    /// </summary>
+    public class Submit1Cmd : Command {
+
+        public Submit1Cmd() {
+            this.category = "SUBMIT1";
+            this.time = DateTime.Now;
+        }
+    }
     #endregion
 }

@@ -56,7 +56,7 @@ namespace tobid.rest
     /// </summary>
     public class Step1Operation : Operation {
         /// <summary>
-        /// 第一阶段实际价格
+        /// 第一阶段价格
         /// </summary>
         public int price { get; set; }
     }

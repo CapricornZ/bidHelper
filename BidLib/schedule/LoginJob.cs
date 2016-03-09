@@ -69,6 +69,7 @@ namespace tobid.scheduler.jobs
 
                 if( null == this.bidRepo.config) {
                     logger.Error("Corresponding config is not set");
+                    Monitor.Exit(LoginJob.lockObj);
                     return;
                 }
 
@@ -81,12 +82,16 @@ namespace tobid.scheduler.jobs
                     //"protocolBtnConfirm";
                     mshtml.IHTMLDocument2 doc2 = (mshtml.IHTMLDocument2)Browser.Document;
                     mshtml.IHTMLElement confirm1 = doc2.all.item("testBtnConfirm") as mshtml.IHTMLElement;
-                    confirm1.click();
-                    System.Threading.Thread.Sleep(1000);
+                    if (null != confirm1) {
+                        confirm1.click();
+                        System.Threading.Thread.Sleep(1000);
+                    }
 
                     mshtml.IHTMLElement confirm2 = doc2.all.item("protocolBtnConfirm") as mshtml.IHTMLElement;
-                    confirm2.click();
-                    System.Threading.Thread.Sleep(1000);
+                    if (null != confirm2) {
+                        confirm2.click();
+                        System.Threading.Thread.Sleep(1000);
+                    }
 
                     //"bidnumber";
                     //"bidpassword";

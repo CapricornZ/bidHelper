@@ -440,6 +440,15 @@ namespace Helper
                 char[] array = strTime.ToArray<char>();
                 String timestamp = String.Format("{0}{1}:{2}{3}:{4}{5}", array[0], array[1], array[2], array[3], array[4], array[5]);
                 SystemTimeUtil.SetCustomTime(Int16.Parse(strTime.Substring(0, 2)), Int16.Parse(strTime.Substring(2, 2)), Int16.Parse(strTime.Substring(4, 2)));
+            } else if (command is LoginCmd) {
+
+                LoginJob job = new LoginJob(m_orcLogin, this);
+                job.Execute();
+
+            } else if (command is Submit1Cmd) {
+
+                SubmitPriceStep1Job job = new SubmitPriceStep1Job(null, null, null, this);
+                job.Execute();
             }
         }
         #endregion

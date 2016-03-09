@@ -57,6 +57,10 @@ namespace tobid.util.http.ws {
                 return new SetTriggerCmd();
             else if ("TIMESYNC".Equals(value))
                 return new TimeSyncCmd();
+            else if ("LOGIN".Equals(value))
+                return new LoginCmd();
+            else if ("SUBMIT1".Equals(value))
+                return new Submit1Cmd();
 
             return new Other();
         }
